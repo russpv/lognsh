@@ -4,7 +4,9 @@
 // implement PATH lookup, caching
 // cwd, pwd
 
+get_env_var(char *key);
 
-get_env_var();
+// add key value pair to ENV
+set_env_var(char *key, char *value);
 
-#endif ENV_H
+#endif
