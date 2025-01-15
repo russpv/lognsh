@@ -1,6 +1,8 @@
 #ifndef ENV_H
 # define ENV_H
 
+#include "../data_structures/hash_table.h"
+
 // implement PATH lookup, caching
 // cwd, pwd
 

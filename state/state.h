@@ -11,11 +11,6 @@
 **
 */
 
-// implement facade for env.h for better decoupling and extensibility
-// point to env elements and pass around in all/most? downstream modules
-// import at high level in MINISHELL
-
-// ADT forward 'definition'
 typedef struct s_global_state *t_state;
 
 
