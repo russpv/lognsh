@@ -3,15 +3,14 @@
 # define COMMAND_H
 
 # include "../data_structures/bin_tree.h"
-// Note: do not need to include state.h
+// Note: do not need to include state.h or parse.h
 
 /* COMMAND ADT 
-** represents single entered command's state and lifecycle
-** links to token, parsing, execution
-** does not manage global shell state or env, hist, multi-cmd
-*/
+ * Validates AST grammar and sequences execution
+ * Uses Strategy pattern to delegate atomic cmds to Execute 
+ * does not manage global shell state or env, hist, multi-cmd
+ */
 
-// TODO bonus globbing and var expansion in parse_command()
 
 typedef struct s_cmd	*t_cmd;
 // we need to access global state for expansion and globbing
