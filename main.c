@@ -1,7 +1,24 @@
 #include "minishell.h"
 
+int g_exit_code;
+
+char **parse(const char *input)
+{
+	int n = 0;
+	char **res = malloc(n * sizeof(char*));
+	return (res);
+}
+
+int	execute(char **args)
+{
+	printf("%s", *args);
+	return (1);
+}
+
 int main() {
-    // Set up a prompt string
+    // signal(SIGINT, sigint_handler); // Ctrl-C
+	// signal(SIG..., ..._handler); // Ctrl-...
+	// Set up a prompt string
     char *input = NULL;
 
     // Loop to read input until user exits
@@ -13,16 +30,18 @@ int main() {
             // User pressed Ctrl+D or another exit condition
             break;
         }
-
+		
         // If input is not empty, add it to history
         if (input[0] != '\0') {
             add_history(input);
         }
+		
+		// Run parser
+		char **args = parse(input);
 
-        // Print the input (for demonstration purposes)
-        printf("You entered: %s\n", input);
+        // Execute
+		int exit_code = execute(args);
 
-        // Free the memory allocated by readline
         free(input);
     }
 

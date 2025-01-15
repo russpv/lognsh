@@ -1,6 +1,13 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+#include "signal.h"
+#include "state.h" // << parse.h, command.h, execute.h, env.h
+//#include "parser.h" // << command.h (builds token string)
+//#include "command.h" //<< tree.h (builds the tree)
+//#include "execute.h" // << command.h (forks), 
+//#include 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
