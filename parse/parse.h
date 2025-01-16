@@ -1,11 +1,13 @@
 #ifndef PARSE_H
 # define PARSE_H
 
-#include "../data_structures/tree.h"
+#include "../data_structures/ast.h"
+#include "../data_structures/llist.h"
+#include "../state/state.h"
 
 /* PARSE
  * Converts user input into an AST
- * Tokenizes input, Expands variables, Does globbing
+ * Tokenizes input, Expands variables, Does globbing(?)
  *
  * cmd: echo $HOME/*.c | grep foo && echo "done"
  *
@@ -26,7 +28,7 @@
 // Builds the AST (Composite Pattern) where commands are leaf
 // nodes; pipes, conditionals and args are elsewhere
 // Command module interprets (processes) AST
-
+t_ast	parse(t_state s, char *input);
 
 /*  Expansions */
 // tilde ~ ?

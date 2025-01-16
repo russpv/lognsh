@@ -19,11 +19,6 @@ typedef struct s_state	*t_state; // forward declare instead of include state.h
 
 t_cmd	init_command(char *input);
 void	destroy_command(t_cmd c);
-
-// using integer return values to manage return scenarios
-int	tokenize_command(t_cmd c); // use btree and token to create AST
-int	parse_command(t_state s, t_cmd c); // test grammar: do globbing, var expansion
-									   // access ENV methods via t_state 
-void	exec_command(t_cmd c);
+void	cmd_execute(t_cmd c); //delegate to Execute. Must search builtins first.
 
 #endif
