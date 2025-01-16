@@ -15,16 +15,16 @@ int	execute(char **args)
 	return (1);
 }
 
+# define PROMPT "minish> "
+
 int main() {
+	// TODO t_state s = init_state();
     // signal(SIGINT, sigint_handler); // Ctrl-C
 	// signal(SIG..., ..._handler); // Ctrl-...
-	// Set up a prompt string
     char *input = NULL;
 
-    // Loop to read input until user exits
     while (1) {
-        // Use readline to get user input
-        input = readline("Enter a command: ");
+        input = readline(PROMPT);
         
         if (input == NULL) {
             // User pressed Ctrl+D or another exit condition
@@ -36,15 +36,13 @@ int main() {
             add_history(input);
         }
 		
-		// Run parser
-		char **args = parse(input);
+		char **args = parse(input); //TODO: t_ast ast = parse(s, input);
+		int exit_code = execute(args); //TODO: s.status = cmd_execute(s, ast);
 
-        // Execute
-		int exit_code = execute(args);
-
+		//parse_free_ast(ast);
         free(input);
     }
-
+	//TODO destroy_state(s);
     return 0;
 }
 
