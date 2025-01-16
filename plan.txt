@@ -1,0 +1,8 @@
+Main modules:
+- Parse: build AST (include tokenization defines?)
+- Command: orchestrate execution, grammar check
+- Execute: low level syscalls, set up pipes, redirects, builtins
+- State: contain global shell state, path/env lookup, fds, status, signals
+
+
+
