@@ -152,8 +152,19 @@
 
 typedef enum {
     TOK_WORD, // command names, built-ins
+			  // In the shell command language, a token other than 
+			  // an operator. In some cases a word is also a portion 
+			  // of a word token: in the various forms of parameter 
+			  // expansion, such as ${name-word}, and variable 
+			  // assignment, such as name=word, the word is the 
+			  // portion of the token depicted by word. The concept 
+			  // of a word is no longer applicable following word 
+			  // expansions-only fields remain. 
     TOK_ASSIGNMENT_WORD,
-    TOK_NAME,
+    TOK_NAME, // In the shell command language, a word consisting 
+			  // solely of underscores, digits, and alphabetics 
+			  // from the portable character set. The first character 
+			  // of a name is not a digit.
     TOK_NEWLINE,
     TOK_IO_NUMBER, // REDOUT/REDIN plus digits
     TOK_REDIRECT_IN,
@@ -214,6 +225,53 @@ t_tok	*create_token(int type, const char *s)
 	}
 	return (NULL);
 }
+// Use a hashtable on the tokens where entries identify 100% overlap
+// if overlap flag, lookahead and recheck hashtable
+// else return word or name using a helper func
+t_tok	*_match_char(const char *s, const char *delims)
+{
+	int i  = 0;
+	t_ht_node res = NULL;
+	buf = calloc(sizeof(char) * MAX_BUF_SZ);
+	if (buf)
+	{
+		while (s[i] && 0 != is_delim(s[i]))
+		{	
+			res = ht_lookup(buf);
+			if (res)
+			{
+				if (res->overlap)
+					continue;
+				else
+					break;
+			}
+			buf[i] = s[i++];
+		}
+		if (res)
+			return (create_token(res->type, buf)
+		else
+			return (create_token(give_type(buf), buf);
+	}
+	return (NULL);
+}
+
+tokenize_single_quotes(const char **input)
+{
+	// everything is a literal
+	// do spaces delimit? NO
+	match_char(input, SINGLE_QUOTE_DELIMS);
+}
+
+tokenize_double_quotes(const char **input)
+{
+	// everything except '$' is a literal, no reserved words
+	// do spaces and $ delimit? NO just $ and \
+}
+
+tokenize_normal(const char **input)
+{
+	
+}
 
 t_lex	*create_lexer(int start_state)
 {
@@ -231,6 +289,23 @@ t_lex	*create_lexer(int start_state)
 	}
 	return (NULL);
 }
+
+t_tok	*create_token(int type, const char *s)
+{
+	t_tok *token = malloc(sizeof(t_tok));
+	if (token)
+	{
+		token->e_tok_type = type;
+		token->raw = strdup(s);
+		return (token);
+	}
+	return (NULL);
+}
+
+// somehow need to recognize when quotes appear. 
+// quotes are a token.
+
+
 
 is_argument(const char *s)
 {
