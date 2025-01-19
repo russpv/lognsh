@@ -1,19 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   hashtable.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 17:23:07 by rpeavey           #+#    #+#             */
-/*   Updated: 2024/11/13 17:23:08 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef HASHTABLE_H
 # define HASHTABLE_H
 
-# include "libft/libft.h"
+# include "../include/libft.h"
 # include <fcntl.h>
 # include <limits.h>
 # include <stdarg.h>
@@ -23,15 +11,15 @@
 
 # define HASHSIZE 101
 
-struct				s_entry
-{
-	struct s_entry	*next;
-	char			*name;
-	char			*data;
-};
+/* Forward declaration */
+struct s_ht_entry;
+struct s_ht;
+typedef	struct	s_ht *t_ht;
 
-struct s_entry		*lookup(char *s);
-struct s_entry		*install(char *name, char *data);
-int					destroy_hasht(void);
+t_ht					ht_create();
+struct s_ht_entry		*ht_lookup(t_ht ht, char *s);
+void					*ht_get_payload(struct s_ht_entry *e);
+struct s_ht_entry		*ht_install(t_ht ht, char *name, void *data, void *(*cpy_data)(void *));
+int						ht_destroy(t_ht ht, void (*del_data)(void *));
 
 #endif

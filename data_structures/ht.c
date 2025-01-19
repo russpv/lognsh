@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ht.c                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 17:23:13 by rpeavey           #+#    #+#             */
-/*   Updated: 2024/11/13 17:23:14 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "hashtable.h"
 
 /* This defines an array of linked lists
@@ -19,7 +7,31 @@
  * Inspired by K&R Ch 6.6
  */
 
-static struct s_entry	*g_hasht[HASHSIZE];
+//static struct s_ht_entry	*g_hasht[HASHSIZE];
+
+struct s_ht_entry {
+	struct s_ht_entry *next;
+	char *name;
+	void *data;
+};
+
+struct s_ht {
+	struct s_ht_entry	*buckets[HASHSIZE];
+};
+
+t_ht	ht_create()
+{
+	int i;
+
+	i = -1;
+	t_ht hasht = malloc(sizeof(struct s_ht));
+	if (hasht)
+	{
+		while (++i < HASHSIZE)
+			hasht->buckets[i] = NULL;
+	}
+	return (hasht);
+}
 
 static unsigned int	hash(char *s)
 {
@@ -32,11 +44,11 @@ static unsigned int	hash(char *s)
 }
 
 /* Returns node of unique name */
-struct s_entry	*lookup(char *s)
+struct s_ht_entry	*lookup(t_ht ht, char *s)
 {
-	struct s_entry	*np;
+	struct s_ht_entry	*np;
 
-	np = g_hasht[hash(s)];
+	np = ht->buckets[hash(s)];
 	while (NULL != np)
 	{
 		if (0 == ft_strncmp(s, np->name, -1))
@@ -46,11 +58,11 @@ struct s_entry	*lookup(char *s)
 	return (NULL);
 }
 
-static int	_install_data(struct s_entry *np, char *data)
+static int	_install_data(struct s_ht_entry *np, void *data, void *(*cpy)(void *))
 {
 	if (NULL != data)
 	{
-		np->data = ft_strdup(data);
+		np->data = cpy(data);
 		if (NULL == np->data)
 			return (-1);
 	}
@@ -62,26 +74,26 @@ static int	_install_data(struct s_entry *np, char *data)
 /* Makes new entry the head for the hash bucket 
  * Returns NULL if name is already present
  */
-struct s_entry	*install(char *name, char *data)
+struct s_ht_entry	*install(t_ht ht, char *name, char *data, void *(*cpy)(void *))
 {
-	struct s_entry	*np;
+	struct s_ht_entry	*np;
 	unsigned int	hashval;
 
 	if (NULL == name)
 		return (NULL);
-	np = lookup(name);
+	np = lookup(ht, name);
 	if (NULL == np)
 	{
-		np = (struct s_entry *)malloc(sizeof(*np));
+		np = (struct s_ht_entry *)malloc(sizeof(*np));
 		if (NULL == np)
 			return (NULL);
 		np->name = ft_strdup(name);
 		if (NULL == np->name)
 			return (NULL);
 		hashval = hash(name);
-		np->next = g_hasht[hashval];
-		g_hasht[hashval] = np;
-		if (-1 == _install_data(np, data))
+		np->next = ht->buckets[hashval];
+		ht->buckets[hashval] = np;
+		if (-1 == _install_data(np, data, cpy))
 			return (NULL);
 	}
 	else
@@ -89,16 +101,16 @@ struct s_entry	*install(char *name, char *data)
 	return (np);
 }
 
-int	destroy_hasht(void)
+int	destroy_hasht(t_ht hasht, void (*del)(void *))
 {
-	struct s_entry	*np;
-	struct s_entry	*tmp;
+	struct s_ht_entry	*np;
+	struct s_ht_entry	*tmp;
 	size_t			i;
 
 	i = -1;
 	while (++i < HASHSIZE)
 	{
-		np = g_hasht[i];
+		np = hasht->buckets[i];
 		if (NULL == np)
 			continue ;
 		while (NULL != np)
@@ -106,10 +118,16 @@ int	destroy_hasht(void)
 			tmp = np->next;
 			free(np->name);
 			if (NULL != np->data)
-				free(np->data);
+				del(np->data);
 			free(np);
 			np = tmp;
 		}
 	}
 	return (0);
 }
+
+void *ht_get_payload(struct s_ht_entry *e)
+{
+	return (e->data);
+};
+

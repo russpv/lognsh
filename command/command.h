@@ -2,7 +2,7 @@
 #ifndef COMMAND_H
 # define COMMAND_H
 
-# include "../data_structures/bin_tree.h"
+# include "../data_structures/b_tree.h"
 // Note: do not need to include state.h or parse.h
 
 /* COMMAND ADT 

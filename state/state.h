@@ -11,7 +11,7 @@
 **
 */
 
-typedef struct s_global_state *t_state;
+typedef struct s_state *t_state;
 
 
 // TODO move this into sub header for ADT
@@ -24,7 +24,7 @@ struct s_global_state {
 	// TODO 
 	// no signals, too mcuh indirection	
 	// t_ht *env_cache; TODO LATER, add hash table to env.h for faster lookups
-}
+};
 
 // Methods
 t_state	*init_state(void);

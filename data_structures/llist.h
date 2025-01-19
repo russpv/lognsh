@@ -3,8 +3,28 @@
 
 /* LINKED LIST */
 
-typedef	struct s_llnode	*t_ll;
+//typedef	struct s_llnode	*t_ll;
+#include <stddef.h>
 
+typedef struct s_list
+{
+	void			*content;
+	size_t			content_size;
+	struct s_list	*next;
+}					t_list;
+
+void	ft_lstadd_back(t_list **lst, t_list *new);
+void	ft_lstadd_front(t_list **lst, t_list *new);
+void	ft_lstclear(t_list **lst, void (*del)(void *));
+void	ft_lstdelone(t_list *lst, void (*del)(void *));
+void	ft_lstiter(t_list *lst, void (*f)(void *));
+t_list	*ft_lstlast(t_list *lst);
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+t_list	*ft_lstnew(void *content);
+int	ft_lstsize(t_list *lst);
+
+
+/*
 t_ll	ll_create();
 //ll_clear(t_ll ll); //destroy all nodes except head
 ll_destroy(t_ll ll);
@@ -16,7 +36,6 @@ ll_remove_head(t_ll ll);
 //ll_remove_tail(t_ll ll);
 //ll_remove_idx(t_ll ll, size_t pos);
 
-/* Getters */
 ll_get_firstn(t_ll ll);
 ll_get_lastn(t_ll ll);
 ll_get_value();
@@ -24,8 +43,7 @@ ll_get_value();
 //ll_get_size(t_ll ll);
 //ll_is_empty(t_ll ll);
 
-/* Setters */
 //ll_update(t_ll ll, size_t pos);
 //ll_iter_do(t_ll ll, (*action)(void *));
-
+*/
 #endif
