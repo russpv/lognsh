@@ -1,10 +1,15 @@
 #include "parse.h"
+#include "../data_structures/llist.h"
+#include <stdbool.h>
 
 # define FAIL_TOKEN 10 //TODO group somewhere else
 
 /* chars that need to be quoted if meant literally */
 #define SPECCHARS "#$^*()=|{}[]`<>?~;&\n\t \\\'\""
-
+#define LEX_BUFSZ 1024
+#define DO_GLOBBING 2
+#define DO_EXPANSION 2
+#define	RESET 0
 
 /* PARSE
  * Returns AST object from user string input
@@ -166,16 +171,18 @@ typedef enum {
 			  // from the portable character set. The first character 
 			  // of a name is not a digit.
     TOK_NEWLINE,
-    TOK_IO_NUMBER, // REDOUT/REDIN plus digits
-    TOK_REDIRECT_IN,
-    TOK_REDIRECT_OUT,
-    TOK_REDIRECT_APPEND,
-    TOK_HEREDOC,
-    TOK_PIPE,
+    TOK_IO_NUMBER, // REDOUT/REDIN plus digits OVERLAP
+    TOK_REDIRECT_IN,//OVERLAP
+    TOK_REDIRECT_OUT, //OVERLAP
+    TOK_REDIRECT_APPEND, //OVERLAP
+    TOK_HEREDOC, //OVERLAP
+    TOK_PIPE, //OVERLAP
+	TOK_ANDIF,
+	TOK_ORIF, //OVERLAP
     TOK_SINGLE_QUOTE,
     TOK_DOUBLE_QUOTE,
-    TOK_ENV_VAR,
-    TOK_EXIT_STATUS,
+    TOK_ENV_VAR, //$
+    TOK_EXIT_STATUS, //$?
     TOK_IF,    // Reserved word "if"
     TOK_THEN,  // Reserved word "then"
     TOK_ELSE,  // Reserved word "else"
@@ -189,18 +196,21 @@ typedef enum {
     TOK_FOR,   // Reserved word "for"
     TOK_IN,    // Reserved word "in"
     TOK_EOF,
-    TOK_UNKNOWN
+    TOK_UNKNOWN,
+	TOK_ERR
 } e_tok_type;
 
 typedef enum {
 	NORMAL,
 	IN_SINGLE_QUOTES,
-	IN_DOUBLE_QUOTES
+	IN_DOUBLE_QUOTES,
+	DONE
 } e_lex_state;
 
 typedef struct s_tok {
 	e_tok_type type;
 	char *raw;
+	size_t	pos;
 } t_tok;
 
 typedef t_tok	*(*t_tokenizer)(const char **input); 
@@ -208,69 +218,223 @@ typedef t_tok	*(*t_tokenizer)(const char **input);
 t_tok	*tokenize_normal(const char **input);
 t_tok	*tokenize_single_quotes(const char **input);
 t_tok	*tokenize_double_quotes(const char **input);
+t_tok	*tokenize_escape(const char **input);
 
 typedef struct s_lex {
+	const char 	*raw_string;
+	char 		*ptr;
 	e_lex_state	state;
+	bool		escape_mode;
 	t_tokenizer	get_next_token;
+	t_list	**token_list;
+	char	*buf;
+	int		do_expansion;
+	int		do_globbing;
 } t_lex;
 
-t_tok	*create_token(int type, const char *s)
+int	_do_state_transition(t_lex *lexer)
 {
-	t_tok *token = malloc(sizeof(t_tok));
-	if (token)
+	if (!lexer->ptr || !*(++lexer->ptr))
+		lexer->state = DONE;
+	if (OP_DQUOTE == lexer->ptr)
 	{
-		token->e_tok_type = type;
-		token->raw = strdup(s);
-		return (token);
+		lexer->state = IN_DOUBLE_QUOTES;
+		lexer->tokenizer = tokenize_double_quotes;
 	}
-	return (NULL);
+	else if (OP_SQUOTE == lexer->ptr)
+	{
+		lexer->state = IN_SINGLE_QUOTES;
+		lexer->tokenizer = tokenize_single_quotes;
+	}
+	else
+	{
+		lexer->state = NORMAL;
+		lexer->tokenizer = tokenize_normal;
+	}
+	return (0);
 }
+
+/* Expected to add only one token to the llist */
+int	tokenize_single_quotes(t_lex *lexer)
+{
+	const char *start = lexer->ptr;
+
+	while (++lexer->ptr)
+	{
+		if ((unsigned char)OP_SQUOTE == lexer->ptr)
+			break;
+		else
+			lexer->buf[lexer->ptr - start - 1] = lexer->ptr;
+	}
+	if ((unsigned char)OP_NULL == lexer->ptr)
+		return (1);
+	else
+		add_token(lexer, TOK_WORD, start);
+	return (0);
+}
+
+/* Returns next token, doesn't flush buf
+ * if $, record it in the token record for later expansion
+ * if bs, skip it if next char is bs, dollar, double quote or backtick
+ */
+t_tok	*_match_double(t_lex *lexer)
+{
+	const char *start = lexer->ptr;
+	t_tok	*token = NULL;
+
+	if (lexer->ptr)
+	{
+		while (++lexer->ptr)
+		{
+			if ((unsigned char)TK_ESC == lexer->ptr)
+			{
+				if ((unsigned char)OP_BACKSLASH == lexer->ptr + 1 || \
+					(unsigned char)OP_ENV == lexer->ptr + 1 || \
+					(unsigned char)OP_DQUOTE == lexer->ptr + 1 || \
+					(unsigned char)OP_BACKTICK == lexer->ptr + 1)
+				{
+					lexer->escape_mode = true;
+					++lexer->ptr;
+				}
+			}
+			if ((unsigned char)OP_ENV == lexer->ptr && false == lexer->escape_mode)
+				lexer->do_expansion = DO_EXPANSION;
+			if ((unsigned char)OP_DQUOTE == lexer->ptr && false == lexer->escape_mode)
+				return(create_token(lexer, TOK_WORD));
+			lexer->escape_mode = false;
+			lexer->buf[lexer->ptr - start - 1] = lexer->ptr;
+		}
+	}
+	return (token);
+}
+
+/* Expected to add only one token to the llist */
+int	tokenize_double_quotes(t_lex *lexer)
+{
+	/* search rest of string until " found else err
+	 * if $, record it in the token record for later expansion
+	 * if bs, skip it if next char is bs, dollar, double quote or backtick
+	 * everything else is not a delimiter
+	 */
+	if (lexer)
+	{
+		t_tok *token = _match_double(lexer);
+		if (!token)
+			return (1);
+		if (0 != add_token(token))
+			return (1);
+	}
+	return (0);
+}
+
+int	_word_or_name(const char *s)
+{
+	if (!*s)
+		return (TOK_ERR);
+	while (*s)
+	{
+		if (!(ft_isalnum(*s) || '_' == *s))
+			return (TOK_WORD);
+		s++;
+	}
+	return (TOK_NAME);
+}
+
+
+/* Looks one char ahead to detect matches 
+ * that are superstrings of substrings, e.g. '||' vs '|'
+ * Updates lexer state if successful
+ */
+t_ht_node	_do_one_char_lookahead(t_lex *lexer, t_ht_node res)
+{
+	const size_t buflen = ft_strlen(lexer->buf);
+	char *s;
+
+	s = lexer->ptr;
+	if (!lexer->ptr || !*(s + 1) || 0 == buflen)
+		return (NULL);
+	lexer->buf[buflen] = *(s + 1);
+	test = ht_lookup(lexer->buf);
+	if (test)
+	{
+		lexer->ptr++;
+		return (test);
+	}
+	else	
+		lexer->buf[buflen] = 0;
+	return (res);
+}
+
 // Use a hashtable on the tokens where entries identify 100% overlap
-// if overlap flag, lookahead and recheck hashtable
+// if overlap flag, 1-char lookahead and recheck hashtable
 // else return word or name using a helper func
-t_tok	*_match_char(const char *s, const char *delims)
+// modifies input string location
+t_tok	*_match_normal(t_lex *lexer)
 {
 	int i  = 0;
 	t_ht_node res = NULL;
-	buf = calloc(sizeof(char) * MAX_BUF_SZ);
-	if (buf)
-	{
-		while (s[i] && 0 != is_delim(s[i]))
-		{	
-			res = ht_lookup(buf);
-			if (res)
-			{
-				if (res->overlap)
-					continue;
-				else
-					break;
-			}
-			buf[i] = s[i++];
+	const char *start = lexer->ptr;
+	char *s = lexer->ptr;
+
+	while (' ' == *s)
+		s++;
+	while (*s && false == is_normal_delim(*s))
+	{	
+		if ((unsigned char)TK_ESC == *s)
+		{
+			lexer->escape_mode = true;
+			++s;
 		}
+		if ((unsigned char)OP_ENV == lexer->ptr && false == lexer->escape_mode)
+			lexer->do_expansion = DO_EXPANSION;
+		if ((unsigned char)OP_STAR == lexer->ptr && false == lexer->escape_mode)
+			lexer->do_globbing = DO_GLOBBING;
+		lexer->escape_mode = false;
+		lexer->buf[lexer->ptr - start - 1] = *s++;
+		res = ht_lookup(lexer->buf);
 		if (res)
-			return (create_token(res->type, buf)
-		else
-			return (create_token(give_type(buf), buf);
+		{
+			if (true == res->is_substring)
+				res = _do_one_char_lookahead(lexer, res);	
+			return (create_token(lexer, res->type);
+		}
 	}
+	if (true == is_normal_delim(*s))
+		return (create_token(lexer, word_or_name(lexer->buf)));
+	if ((unsigned char)TOK_EOF == *s)
+		return (create_token(lexer, TOK_EOF));
 	return (NULL);
 }
 
-tokenize_single_quotes(const char **input)
+/* Expected to add multiple tokens to the llist */
+int	tokenize_normal(t_lex *lexer)
 {
-	// everything is a literal
-	// do spaces delimit? NO
-	match_char(input, SINGLE_QUOTE_DELIMS);
+	const char *start = lexer->ptr;
+
+	while (lexer->ptr && !is_transition_char(lexer->ptr))
+	{
+		t_tok *token = _match_normal(lexer)
+		if (token)
+			if (0 != add_token(lexer, token))
+				return (1);
+		if (token && token->type == TOK_EOF)
+			return (0);
+		else if (!token)
+			err();
+	}
+	return (0);
 }
 
-tokenize_double_quotes(const char **input)
+/* add to llist tail a new token, clear buf */
+int	add_token(t_lex *lexer, t_tok *token)
 {
-	// everything except '$' is a literal, no reserved words
-	// do spaces and $ delimit? NO just $ and \
-}
-
-tokenize_normal(const char **input)
-{
-	
+	if (token && lexer)
+	{
+		memset(lexer->buf, 0, LEX_BUFLEN);
+		ft_lst_addback(lexer->token_list, token);
+		return (0);
+	}
+	return (1);
 }
 
 t_lex	*create_lexer(int start_state)
@@ -285,55 +449,99 @@ t_lex	*create_lexer(int start_state)
 			lexer->get_next_token = tokenize_single_quotes;
 		if (IN_DOUBLE_QUOTES == start_state)
 			lexer->get_next_token = tokenize_double_quotes;
-		return (lexer);
+		if (IN_ESCAPE == start_state)
+			lexer->get_next_token = tokenize_escape;
+		lexer->buf = malloc(sizeof(char) * LEX_BUFLEN);
+		if (!lexer->buf)
+		{
+			free(lexer);
+			lexer = NULL;
+		}
 	}
-	return (NULL);
+	return (lexer);
 }
 
-t_tok	*create_token(int type, const char *s)
+void	destroy_lexer(t_lex *lexer)
 {
+	if (!lexer)
+		return ;
+	free(lexer->buf);
+	ft_lstclear(lexer->token_list, destroy_token);
+	free(lexer);
+	lexer = NULL;
+}
+
+t_tok	*create_token(t_lex *lexer, int type)
+{
+	if (!lexer)
+		return (NULL);
 	t_tok *token = malloc(sizeof(t_tok));
 	if (token)
 	{
 		token->e_tok_type = type;
-		token->raw = strdup(s);
-		return (token);
+		token->raw = strdup(lexer->buf);
+		token->pos = (size_t)(lexer->ptr - lexer->raw_string);
+		if (DO_GLOBBING == lexer->do_globbing)
+			token->do_globbing = DO_GLOBBING;
+		if (DO_EXPANSION == lexer->do_expansion)
+			token->do_expansion = DO_EXPANSION;
+		lexer->do_globbing = RESET;
+		lexer->do_expansion = RESET;
+		if (!token->raw)
+		{
+			free(token);
+			token = NULL;
+		}
 	}
-	return (NULL);
+	return (token);
 }
 
-// somehow need to recognize when quotes appear. 
-// quotes are a token.
-
-
-
-is_argument(const char *s)
+/* void star due to linked list destroy method */
+void	destroy_token(void *token)
 {
-	// flags '-' '--' and stuff until whitespace
-	// flags with args '-l 100'
-	//
+	if (!token)
+		return ;
+	free(token->raw);
+	free(token);
+	token = NULL;
 }
 
-
-is_operator(const char *s)
+// assumes non-empty string
+t_lex	*tokenize(char *input)
 {
+	e_lex_state state;
 
+	if ((unsigned char)OP_SQUOTE == *input)
+		state = IN_SINGLE_QUOTES;
+	else if ((unsigned char)OP_DQUOTE == *input)
+		state = IN_DOUBLE_QUOTES;
+	else
+		state = NORMAL;
+	lexer = create_lexer(state);
+	if (lexer)
+	{
+		while (DONE != lexer->state)
+		{
+			if (1 == lexer->tokenizer(lexer))
+			{
+				destroy_lexer(lexer);
+				break ;
+			}
+			_do_state_transition(lexer);
+		}
+	}
+	return (lexer);
 }
-
-
-tokenize()
-{
-
-}
-
 
 t_ast	parse(t_state s, char *input)
 {
 	// work with example: [builtcmd 'arg' && cmd -arg -arg "$VAR" > fn]
-	t_ll llist; //TODO define this
-	if (0 != tokenize(input, &llist))
-		return (null_and_stat(s, FAIL_TOKEN));
-
+	t_lex *lexer = tokenize(input);
+	if (NULL == lexer)
+		return (null_and_stat(s, ERR_TOKEN));
+	// TODO make AST and parse
+	// create_ast(lexer);
+	return (NULL);
 }
 
 // For debugging
