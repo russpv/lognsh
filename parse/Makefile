@@ -1,6 +1,6 @@
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
-SRC = lexer.c main.c utils.c
+SRC = lex.c tester.c
 OBJ = $(SRC:.c=.o)
 NAME = lexer
 
