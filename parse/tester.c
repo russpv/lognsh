@@ -23,7 +23,7 @@ const char *inputs[] = {
     "if [ -f file.txt ]; then echo \"File exists\"; else echo \"File not found\"; fi",
     "echo \"The current date is $(date)\"",
     "echo $HOME",
-    "echo \"The path is \\\"C:\\\\Program Files\\\\\"\"",
+    "echo \"The path is \\\"C:\\\\Program Files\\\\\\\"\"",
     "cat << EOF\nHello\nWorld\nEOF",
     "while [ \"$1\" -gt 0 ]; do echo \"Processing\"; done"
 };

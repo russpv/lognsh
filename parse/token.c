@@ -4,6 +4,7 @@ t_tok	*create_token(const char *s, int type, size_t pos)
 {
 	if (!s)
 		return (NULL);
+	debug_print("create_token: %s_\n", s);
 	t_tok *token = malloc(sizeof(t_tok));
 	if (token)
 	{

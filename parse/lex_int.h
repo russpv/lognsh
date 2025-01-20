@@ -1,12 +1,13 @@
 #include "lex.h"
 
-# define FAIL_TOKEN 10 //TODO group somewhere else
+#define FAIL_TOKEN 10 // TODO group somewhere else
 
 /* chars that need to be quoted if meant literally */
-#define NORMALDELIMS "#^*()=|{}[]`<>?~;&\n\t \\\'\"" //$ should not break tokens
+#define NORMALDELIMS "^*()=|{}[]`<>?~;&\n\t \'\"" //$ should not break tokens,
+	//backslash also, # is escape only
 #define NORMALTRANSITIONS "\'\"\0"
 #define LEX_BUFSZ 1024
-#define	RESET 0
+#define RESET 0
 
 /* LEX
  * Does these rules:
@@ -15,8 +16,8 @@
  * double quotes allow var expansion
  * escape sequences validated, even inside double quotes
  * looks ahead a few chars to identify multi-char operators
- * 
- */ 
+ *
+ */
 
 /* Finite State Machine rules
  * an operator cannot be followed by a flag, must be followed by a word
@@ -46,7 +47,7 @@
 
 /* On separators
  *
- * "A cornerstone of UNIX wisdom is that “plaintext is the 
+ * "A cornerstone of UNIX wisdom is that “plaintext is the
  * universal interface.” Hence, it is not strongly typed; it’s stringly typed."
  * - a grumpy programmer
  */
@@ -55,12 +56,14 @@
 // but continuation char not needed for pipes
 // continuation expected for heredocs
 // continuation is equivalent of ';'
-// 
-// Be careful of spaces var="name with space" will expand to a list, not a string
-// bash doesn't allow this to expand to two arguments: var='a "b c"', just 1 or 3
 //
-// Colon 
-// Could be in a dir or filename, but for simplicity will treat as a char, or 
+// Be careful of spaces var="name with space" will expand to a list, 
+	//not a string
+// bash doesn't allow this to expand to two arguments: var='a "b c"', 
+	//just 1 or 3
+//
+// Colon
+// Could be in a dir or filename, but for simplicity will treat as a char, or
 // the PATH delimiter
 //
 /* The State Machine
@@ -71,10 +74,10 @@
  * IN_QUOTE: Processing quoted text.
  * IN_SUBSTITUTION: Processing parameter, command, or arithmetic substitution.
  * IN_COMMENT: Discarding characters in a comment.
- * IN_HEREDOC: 
+ * IN_HEREDOC:
  * END: End of input.
  *
- * Use token buffer and token list 
+ * Use token buffer and token list
  *
  * Traverse input ONCE
  *
@@ -98,49 +101,60 @@
  * OR_IF
  * DLESS
  * DGREAT
- */ 
+ */
 
-typedef enum {
+typedef enum 
+{
 	NORMAL,
 	IN_SINGLE_QUOTES,
 	IN_DOUBLE_QUOTES,
 	ON_EOF,
 	DONE
-} e_lex_state;
+}							e_lex_state;
 
-typedef int	(*t_tokenizer)(t_lex *l); 
+typedef int					(*t_tokenizer)(t_lex *l);
 
-typedef struct s_lex {
-	const char 	*raw_string;
-	char 		*ptr;
-	e_lex_state	state;
-	bool		escape_mode;
-	t_tokenizer	tokenizer;
-	t_list	*token_list;
-	t_ht	hasht;
-	char	*buf;
-	int		do_expansion;
-	int		do_globbing;
-} t_lex;
+typedef struct s_lex
+{
+	const char				*raw_string;
+	char					*ptr;
+	e_lex_state				state;
+	bool					escape_mode;
+	t_tokenizer				tokenizer;
+	t_list					*token_list;
+	t_ht					hasht;
+	char					*buf;
+	int						do_expansion;
+	int						do_globbing;
+}							t_lex;
 
 /* This gets inserted as s_ht_entry->data */
-struct s_ht_data {
-	bool		is_substring;
-	e_tok_type	type;
+struct						s_ht_data
+{
+	bool					is_substring;
+	e_tok_type				type;
 };
 
-typedef	struct s_ht_data *t_ht_data;
+typedef struct s_ht_data	*t_ht_data;
 
-void	build_hasht(t_lex *lexer);
-t_ht_data	lex_create_ht_node(int is_substring, int type);
-void	lex_destroy_ht_node(void *node);
-void *lex_copy_ht_data(void *data);
+void						build_hasht(t_lex *lexer);
+t_ht_data					lex_create_ht_node(int is_substring, int type);
+void						lex_destroy_ht_node(void *node);
+void						*lex_copy_ht_data(void *data);
 
-int	tokenize_normal(t_lex *lexer);
-int	tokenize_single_quotes(t_lex *lexer);
-int	tokenize_double_quotes(t_lex *lexer);
-int	tokenize_null(t_lex *lexer);
-t_tok	*lex_create_token(t_lex *lexer, int type);
-int	add_token(t_lex *lexer, t_tok *token);
+int							tokenize_normal(t_lex *lexer);
+int							tokenize_single_quotes(t_lex *lexer);
+int							tokenize_double_quotes(t_lex *lexer);
+int							tokenize_null(t_lex *lexer);
+t_tok						*lex_create_token(t_lex *lexer, int type);
+int							add_token(t_lex *lexer, t_tok *token);
 
-void debug_detect_cycle(t_list *head);
+void						debug_detect_cycle(t_list *head);
+
+bool						is_normal_delim(unsigned char s);
+bool						is_transition_char(unsigned char s);
+int							word_or_name(const char *s);
+void						process_escape_sequence(t_lex *l);
+int							process_special_operators(t_lex *lexer);
+struct s_ht_entry	*do_one_char_lookahead(t_lex *lexer, struct s_ht_entry	*res);
+t_tok *lex_ht_lookup(t_lex *lexer);
