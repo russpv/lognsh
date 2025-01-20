@@ -1,15 +1,51 @@
 #include "lex_int.h"
 
+/* */
+static bool	_is_normal_delim(unsigned char s)
+{
+	debug_print( "_is_normal_delim:_%c_", s);
+	if (ft_strchr(NORMALDELIMS, s))
+	{
+		debug_print( "YES\n");
+		return (true);
+	}
+	debug_print( "NO\n");
+	return (false);
+}
+
+/* A subset of normal delimiters to trigger state 
+ * transition
+ */
+static bool	_is_transition_char(unsigned char s)
+{
+	debug_print( "_is_transition_char:_%c_", s);
+	if (s != 0 && ft_strchr(NORMALTRANSITIONS, s))
+	{
+		debug_print( "YES\n");
+		return (true);
+	}
+	debug_print( "NO\n");
+	return (false);
+}
+
 static int	_word_or_name(const char *s)
 {
+	debug_print( "_word_or_name:_%s_", s);
 	if (!*s)
+	{
+		debug_print( "ERR\n");
 		return (TOK_ERR);
+	}
 	while (*s)
 	{
 		if (!(ft_isalnum(*s) || '_' == *s))
+		{
+			debug_print( "WORD\n");
 			return (TOK_WORD);
+		}
 		s++;
 	}
+	debug_print( "NAME\n");
 	return (TOK_NAME);
 }
 
@@ -17,6 +53,7 @@ static int	_word_or_name(const char *s)
 /* Looks one char ahead to detect matches 
  * that are superstrings of substrings, e.g. '||' vs '|'
  * Updates lexer state if successful
+ * Pointer is already on next char
  */
 static struct s_ht_entry	*_do_one_char_lookahead(t_lex *lexer, struct s_ht_entry	*res)
 {
@@ -24,9 +61,10 @@ static struct s_ht_entry	*_do_one_char_lookahead(t_lex *lexer, struct s_ht_entry
 	char *s;
 
 	s = lexer->ptr;
-	if (!lexer->ptr || !*(s + 1) || 0 == buflen)
+	if (!lexer->ptr || !*(s) || 0 == buflen)
 		return (NULL);
-	lexer->buf[buflen] = *(s + 1);
+	lexer->buf[buflen] = *(s);
+	debug_print("_do_one_char_lookahead with:_%s_\n", lexer->buf);
 	struct s_ht_entry *test = ht_lookup(lexer->hasht, lexer->buf);
 	if (test)
 	{
@@ -42,58 +80,85 @@ static struct s_ht_entry	*_do_one_char_lookahead(t_lex *lexer, struct s_ht_entry
 // if overlap flag, 1-char lookahead and recheck hashtable
 // else return word or name using a helper func
 // modifies input string location
+/* Returns a new token of chars when points to a delimiter */
 static t_tok	*_match_normal(t_lex *lexer)
 {
-	int i  = 0;
+	debug_print( "_match_normal\n");
 	struct s_ht_entry *res = NULL;
 	const char *start = lexer->ptr;
-	char *s = lexer->ptr;
 
-	while (' ' == *s)
-		s++;
-	while (*s && false == is_normal_delim(*s))
+	while (' ' == *lexer->ptr)
+	{
+		start++;
+		lexer->ptr++;
+	}
+	if (true == _is_transition_char(*lexer->ptr))
+		return (NULL);
+	while (*lexer->ptr && false == _is_normal_delim(*lexer->ptr))
 	{	
-		if ((unsigned char)TK_ESC == *s)
+		if ((unsigned char)TK_ESC == *lexer->ptr)
 		{
 			lexer->escape_mode = true;
-			++s;
+			++lexer->ptr;
 		}
-		if ((unsigned char)OP_ENV == lexer->ptr && false == lexer->escape_mode)
+		if ((unsigned char)OP_ENV == *lexer->ptr && false == lexer->escape_mode)
 			lexer->do_expansion = DO_EXPANSION;
-		if ((unsigned char)OP_STAR == lexer->ptr && false == lexer->escape_mode)
+		if ((unsigned char)OP_STAR == *lexer->ptr && false == lexer->escape_mode)
 			lexer->do_globbing = DO_GLOBBING;
 		lexer->escape_mode = false;
-		lexer->buf[lexer->ptr - start - 1] = *s++;
+		lexer->buf[lexer->ptr - start] = *lexer->ptr;
+		lexer->ptr++;
+   		fprintf(stderr, "Buffer content: '%s'\n", lexer->buf);  // Expecting a string with a single character
 		res = ht_lookup(lexer->hasht, lexer->buf);
 		if (res)
 		{
 			if (true == ((t_ht_data)(ht_get_payload(res)))->is_substring)
 				res = _do_one_char_lookahead(lexer, res);	
-			return (lex_create_token(lexer->buf, ((t_ht_data)ht_get_payload(res))->type));
+			return (lex_create_token(lexer, ((t_ht_data)ht_get_payload(res))->type));
 		}
 	}
-	if (true == is_normal_delim(*s))
-		return (lex_create_token(lexer, word_or_name(lexer->buf)));
-	if ((unsigned char)TOK_EOF == *s)
-		return (lex_create_token(lexer, TOK_EOF));
+	if (true == _is_normal_delim(*lexer->ptr) && ft_strlen(lexer->buf) > 0)
+		return (lex_create_token(lexer, _word_or_name(lexer->buf)));
+	if ((unsigned char)OP_NULL == *lexer->ptr) // if delim is EOF
+	{
+		debug_print("##### FOUND NULL\n");
+		return (NULL);
+	}
+	if (true == _is_normal_delim(*lexer->ptr)) // check if operator
+	{
+		lexer->buf[0] = *lexer->ptr++;
+		res = ht_lookup(lexer->hasht, lexer->buf);
+		if (res)
+		{
+			if (true == ((t_ht_data)(ht_get_payload(res)))->is_substring)
+				res = _do_one_char_lookahead(lexer, res);	
+			return (lex_create_token(lexer, ((t_ht_data)ht_get_payload(res))->type));
+		}
+	}
 	return (NULL);
 }
 
-/* Expected to add multiple tokens to the llist */
+/* Expected to add multiple tokens to the llist 
+ * Adds token to llist when ptr advances to a 
+ * delimiter char, which includes transition chars.
+ * 
+*/
 int	tokenize_normal(t_lex *lexer)
 {
-	const char *start = lexer->ptr;
-
-	while (lexer->ptr && !is_transition_char(lexer->ptr))
+	debug_print( "tokenize_normal\n");
+	while (lexer->ptr && !_is_transition_char(*lexer->ptr))
 	{
 		t_tok *token = _match_normal(lexer);
+		debug_print( "ptr at:_%c_\n", *lexer->ptr);
 		if (token)
 			if (0 != add_token(lexer, token))
 				return (1);
-		if (token && token->type == TOK_EOF)
+		if (OP_NULL == *lexer->ptr)
+		{
+			debug_print( "##### TOK EOF FOUND\n");
 			return (0);
-		else if (!token)
-			err();
+		}
+
 	}
 	return (0);
 }

@@ -3,7 +3,8 @@
 # define FAIL_TOKEN 10 //TODO group somewhere else
 
 /* chars that need to be quoted if meant literally */
-#define SPECCHARS "#$^*()=|{}[]`<>?~;&\n\t \\\'\""
+#define NORMALDELIMS "#^*()=|{}[]`<>?~;&\n\t \\\'\"" //$ should not break tokens
+#define NORMALTRANSITIONS "\'\"\0"
 #define LEX_BUFSZ 1024
 #define	RESET 0
 
@@ -103,6 +104,7 @@ typedef enum {
 	NORMAL,
 	IN_SINGLE_QUOTES,
 	IN_DOUBLE_QUOTES,
+	ON_EOF,
 	DONE
 } e_lex_state;
 
@@ -114,7 +116,7 @@ typedef struct s_lex {
 	e_lex_state	state;
 	bool		escape_mode;
 	t_tokenizer	tokenizer;
-	t_list	**token_list;
+	t_list	*token_list;
 	t_ht	hasht;
 	char	*buf;
 	int		do_expansion;
@@ -129,40 +131,16 @@ struct s_ht_data {
 
 typedef	struct s_ht_data *t_ht_data;
 
-int	build_hasht(t_lex *lexer);
+void	build_hasht(t_lex *lexer);
+t_ht_data	lex_create_ht_node(int is_substring, int type);
+void	lex_destroy_ht_node(void *node);
+void *lex_copy_ht_data(void *data);
+
 int	tokenize_normal(t_lex *lexer);
 int	tokenize_single_quotes(t_lex *lexer);
 int	tokenize_double_quotes(t_lex *lexer);
+int	tokenize_null(t_lex *lexer);
+t_tok	*lex_create_token(t_lex *lexer, int type);
+int	add_token(t_lex *lexer, t_tok *token);
 
-/* add to llist tail a new token, clear buf */
-int	add_token(t_lex *lexer, t_tok *token)
-{
-	if (token && lexer)
-	{
-		memset(lexer->buf, 0, LEX_BUFSZ);
-		ft_lstadd_back(lexer->token_list, ft_lstnew(token));
-		return (0);
-	}
-	return (1);
-}
-
-t_tok	*lex_create_token(t_lex *lexer, int type)
-{
-	if (!lexer)
-		return (NULL);
-	t_tok *token = create_token(lexer->buf, type, (size_t)(lexer->ptr - lexer->raw_string));
-	if (token)
-	{
-		if (DO_GLOBBING == lexer->do_globbing)
-			tok_set_globbing(token);
-		if (DO_EXPANSION == lexer->do_expansion)
-			tok_set_expansion(token);
-		lexer->do_globbing = RESET;
-		lexer->do_expansion = RESET;
-	}
-	return (token);
-}
-void	lex_print(t_lex *lexer)
-{
-	ft_lstiter(*lexer->token_list, tok_print);
-}
+void debug_detect_cycle(t_list *head);

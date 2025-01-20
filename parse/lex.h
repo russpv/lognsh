@@ -6,8 +6,8 @@
 #include "../data_structures/hashtable.h"
 #include "../state/state.h"
 #include "token.h"
+#include "../debug.h"
 #include <stdbool.h>
-
 
 /* delimiter handling */
 // single vs double quotes
@@ -21,7 +21,7 @@
 struct s_lex;
 typedef struct s_lex t_lex;
 
-t_lex	*create_lexer(int start_state);
+t_lex	*create_lexer(int start_state, const char *s);
 void	destroy_lexer(t_lex *lexer);
 t_lex	*tokenize(const char *input);
 void	lex_print(t_lex *lexer);

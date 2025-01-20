@@ -10,6 +10,8 @@ t_tok	*create_token(const char *s, int type, size_t pos)
 		token->type = type;
 		token->raw = ft_strdup(s);
 		token->pos = pos;
+		token->do_expansion = RESET;
+		token->do_globbing = RESET;
 		if (!token->raw)
 		{
 			free(token);
@@ -17,6 +19,22 @@ t_tok	*create_token(const char *s, int type, size_t pos)
 		}
 	}
 	return (token);
+}
+
+void *copy_token_data(void *data) 
+{
+    t_tok *token = (t_tok *)data;
+    t_tok *new_token = malloc(sizeof(t_tok));
+    if (new_token == NULL) 
+		return NULL;
+
+    new_token->raw = strdup(token->raw);
+    new_token->type = token->type;
+	new_token->pos = token->pos;
+    new_token->do_globbing = token->do_globbing;
+    new_token->do_expansion = token->do_expansion;
+
+    return new_token; // Return the new token
 }
 
 int	tok_set_globbing(t_tok *token)
@@ -27,7 +45,7 @@ int	tok_set_globbing(t_tok *token)
 
 int	tok_set_expansion(t_tok *token)
 {
-	token->do_expansion(DO_EXPANSION);
+	token->do_expansion = DO_EXPANSION;
 	return (0);
 }
 
@@ -36,15 +54,17 @@ void	destroy_token(void *token)
 {
 	if (!token)
 		return ;
-	free(token->raw);
-	free(token);
+	if (((t_tok *)token)->raw)
+		free(((t_tok *)token)->raw);
+	free((t_tok *)token);
 	token = NULL;
 }
 
 void tok_print(void *content)
 {
-    t_tok *token = (t_tok *)content;  // Cast content to the correct type
-    if (token) {
-        printf("Token: %d Value: %s\n", token->type, token->raw);  // Print the value of the token
-    }
+	t_tok *token = (t_tok *)content;  // Cast content to the correct type
+	if (token) 
+	{
+		log_printf("Token: %d Exp: %d Value: %s \n", token->type, token->do_expansion, token->raw);  // Print the value of the token
+	}
 }

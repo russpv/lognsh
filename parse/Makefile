@@ -1,18 +1,23 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
-SRC = lex.c tester.c
+CFLAGS = -Wall -Wextra -Werror -g -DDEBUGMODE -fsanitize=address
+SRC = lex.c lex_normal.c lex_quotes.c token.c tester.c ../data_structures/llist.c ../data_structures/hashtable.c \
+      ../lib/ft_isalnum.c ../lib/ft_strchr.c ../lib/ft_strdup.c ../lib/ft_isalpha.c ../lib/ft_isdigit.c \
+      ../lib/ft_memcpy.c ../lib/ft_strlen.c ../lib/ft_strncmp.c ../lib/ft_memset.c \
+      ../debug.c lex_utils.c
 OBJ = $(SRC:.c=.o)
 NAME = lexer
 
-all: $(NAME)
-
+# The main build target
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
 
+# Clean up object files
 clean:
 	rm -f $(OBJ)
 
+# Clean everything, including the binary
 fclean: clean
 	rm -f $(NAME)
 
+# Rebuild everything
 re: fclean all

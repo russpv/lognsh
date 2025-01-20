@@ -2,6 +2,9 @@
 # define TOKEN_H
 
 #include <stddef.h>
+#include <stdlib.h>
+#include "../state/state.h"
+#include "../debug.h"
 
 #define DO_GLOBBING 2
 #define DO_EXPANSION 2
@@ -10,7 +13,7 @@
 #define TK_EOF '\0'
 #define TK_STAT "$?"
 #define TK_NEWL	'\n'
-#define TK_ESC "\\"
+#define TK_ESC '\\'
 
 #define OP_EQUALS '='
 #define OP_HASH '#' // skip everything till newline
@@ -25,6 +28,7 @@
 #define OP_ENV '$'  // this plus underscore or alphanumeric, an env_var
 #define OP_STAR '*'
 #define OP_SQUOTE '\''
+#define OP_NULL '\0'
 #define OP_DQUOTE '\"' // backslash retained if followed by [$`"\\n], " requires \ inside ""
 #define OP_DLESSDASH "<<-" // heredoc with opt tab trimming (not implemented)
 #define OP_CLOBBER ">|" // force overwrite (not implemented)
@@ -65,6 +69,7 @@ typedef enum {
     TOK_REDIRECT_OUT, //OVERLAP
     TOK_REDIRECT_APPEND, //OVERLAP
     TOK_HEREDOC, //OVERLAP
+    TOK_OP_REF, // "&" for stdio
     TOK_PIPE, //OVERLAP
 	TOK_ANDIF,
 	TOK_ORIF, //OVERLAP
@@ -98,6 +103,8 @@ typedef struct s_tok {
 } t_tok;
 
 t_tok	*create_token(const char *s, int type, size_t pos);
+t_tok   *create_ht_token();
+void    *copy_token_data(void *data);
 void	destroy_token(void *token);
 int		tok_set_globbing(t_tok *token);
 int		tok_set_expansion(t_tok *token);
