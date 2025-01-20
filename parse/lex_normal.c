@@ -1,16 +1,17 @@
 #include "lex_int.h"
 
-static t_tok *_match_normal_token(t_lex *lexer, int *buf_idx)
+static t_tok	*_match_normal_token(t_lex *lexer, int *buf_idx)
 {
-	t_tok *res = NULL;
+	t_tok	*res;
 
+	res = NULL;
 	while (*lexer->ptr && false == is_normal_delim(*lexer->ptr))
-	{	
+	{
 		process_escape_sequence(lexer);
 		if (1 == process_special_operators(lexer))
-			continue;
+			continue ;
 		lexer->buf[(*buf_idx)++] = *lexer->ptr++;
-		debug_print("------Buffer content: '%s'\n", lexer->buf);  // Expecting a string with a single character
+		debug_print("------Buffer content: '%s'\n", lexer->buf);
 		res = lex_ht_lookup(lexer);
 		if (res)
 			return (res);
@@ -18,18 +19,19 @@ static t_tok *_match_normal_token(t_lex *lexer, int *buf_idx)
 	return (NULL);
 }
 
-static t_tok *_match_word_or_name(t_lex *lexer)
+static t_tok	*_match_word_or_name(t_lex *lexer)
 {
 	if (true == is_normal_delim(*lexer->ptr) && ft_strlen(lexer->buf) > 0)
 		return (lex_create_token(lexer, word_or_name(lexer->buf)));
 	return (NULL);
 }
 
- // check if operator
-static t_tok *_match_normal_op(t_lex *lexer)
+// check if operator
+static t_tok	*_match_normal_op(t_lex *lexer)
 {
-	t_tok *res = NULL;
+	t_tok	*res;
 
+	res = NULL;
 	if (true == is_normal_delim(*lexer->ptr))
 	{
 		lexer->buf[0] = *lexer->ptr++;
@@ -47,10 +49,12 @@ static t_tok *_match_normal_op(t_lex *lexer)
 /* Returns a new token of chars when points to a delimiter */
 static t_tok	*_match_normal(t_lex *lexer)
 {
-	debug_print("----_match_normal\n");
-	t_tok *res = NULL;
-	int buf_idx = 0;
+	t_tok	*res;
+	int		buf_idx;
 
+	debug_print("----_match_normal\n");
+	res = NULL;
+	buf_idx = 0;
 	while (' ' == *lexer->ptr)
 		lexer->ptr++;
 	if (true == is_transition_char(*lexer->ptr))
@@ -72,24 +76,26 @@ static t_tok	*_match_normal(t_lex *lexer)
 	return (NULL);
 }
 
-/* Expected to add multiple tokens to the llist 
- * Adds token to llist when ptr advances to a 
+/* Expected to add multiple tokens to the llist
+ * Adds token to llist when ptr advances to a
  * delimiter char, which includes transition chars.
- * 
-*/
+ *
+ */
 int	tokenize_normal(t_lex *lexer)
 {
+	t_tok	*token;
+
 	debug_print("tokenize_normal\n");
 	while (lexer->ptr && !is_transition_char(*lexer->ptr))
 	{
-		t_tok *token = _match_normal(lexer);
+		token = _match_normal(lexer);
 		debug_print("ptr at:_%c_\n", *lexer->ptr);
 		if (token)
 			if (0 != add_token(lexer, token))
 				return (1);
 		if (OP_NULL == *lexer->ptr)
 		{
-			debug_print( "##### TOK EOF FOUND\n");
+			debug_print("##### TOK EOF FOUND\n");
 			return (0);
 		}
 	}

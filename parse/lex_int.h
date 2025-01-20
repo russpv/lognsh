@@ -4,7 +4,8 @@
 
 /* chars that need to be quoted if meant literally */
 #define NORMALDELIMS "^*()=|{}[]`<>?~;&\n\t \'\"" //$ should not break tokens,
-	//backslash also, # is escape only
+													// backslash also,
+													//	# is escape only
 #define NORMALTRANSITIONS "\'\"\0"
 #define LEX_BUFSZ 1024
 #define RESET 0
@@ -57,10 +58,10 @@
 // continuation expected for heredocs
 // continuation is equivalent of ';'
 //
-// Be careful of spaces var="name with space" will expand to a list, 
-	//not a string
-// bash doesn't allow this to expand to two arguments: var='a "b c"', 
-	//just 1 or 3
+// Be careful of spaces var="name with space" will expand to a list,
+// not a string
+// bash doesn't allow this to expand to two arguments: var='a "b c"',
+// just 1 or 3
 //
 // Colon
 // Could be in a dir or filename, but for simplicity will treat as a char, or
@@ -103,14 +104,14 @@
  * DGREAT
  */
 
-typedef enum 
+enum e_lex_state
 {
 	NORMAL,
 	IN_SINGLE_QUOTES,
 	IN_DOUBLE_QUOTES,
 	ON_EOF,
 	DONE
-}							e_lex_state;
+};
 
 typedef int					(*t_tokenizer)(t_lex *l);
 
@@ -118,7 +119,7 @@ typedef struct s_lex
 {
 	const char				*raw_string;
 	char					*ptr;
-	e_lex_state				state;
+	enum e_lex_state		state;
 	bool					escape_mode;
 	t_tokenizer				tokenizer;
 	t_list					*token_list;
@@ -132,7 +133,7 @@ typedef struct s_lex
 struct						s_ht_data
 {
 	bool					is_substring;
-	e_tok_type				type;
+	enum e_tok_type			type;
 };
 
 typedef struct s_ht_data	*t_ht_data;
@@ -156,5 +157,7 @@ bool						is_transition_char(unsigned char s);
 int							word_or_name(const char *s);
 void						process_escape_sequence(t_lex *l);
 int							process_special_operators(t_lex *lexer);
-struct s_ht_entry	*do_one_char_lookahead(t_lex *lexer, struct s_ht_entry	*res);
-t_tok *lex_ht_lookup(t_lex *lexer);
+struct s_ht_entry			*do_one_char_lookahead(t_lex *lexer,
+								struct s_ht_entry *res);
+t_tok						*lex_ht_lookup(t_lex *lexer);
+int							do_state_transition(t_lex *lexer);

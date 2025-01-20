@@ -13,7 +13,7 @@ bool	is_normal_delim(unsigned char s)
 	return (false);
 }
 
-/* A subset of normal delimiters to trigger state 
+/* A subset of normal delimiters to trigger state
  * transition
  */
 bool	is_transition_char(unsigned char s)
@@ -50,18 +50,18 @@ int	word_or_name(const char *s)
 }
 
 // Process escape sequences in the lexer
-void process_escape_sequence(t_lex *l) 
+void	process_escape_sequence(t_lex *l)
 {
-    if ((unsigned char)TK_ESC == *l->ptr) 
+	if ((unsigned char)TK_ESC == *l->ptr)
 	{
-        l->escape_mode = true;
-        l->ptr++;
-    }
+		l->escape_mode = true;
+		l->ptr++;
+	}
 }
 
 // Handle special operators like environment variables and globbing
 // Advance the lexer pointer past comments
-int process_special_operators(t_lex *lexer) 
+int	process_special_operators(t_lex *lexer)
 {
 	if ((unsigned char)OP_ENV == *lexer->ptr && false == lexer->escape_mode)
 		lexer->do_expansion = DO_EXPANSION;
@@ -71,7 +71,7 @@ int process_special_operators(t_lex *lexer)
 	{
 		lexer->escape_mode = false;
 		while (*lexer->ptr && *lexer->ptr != TK_NEWL && *lexer->ptr != TK_EOF)
-        	lexer->ptr++;
+			lexer->ptr++;
 		return (1);
 	}
 	lexer->escape_mode = false;

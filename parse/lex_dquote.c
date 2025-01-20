@@ -1,13 +1,13 @@
 #include "lex_int.h"
 
-static inline t_tok *_process_dquote_logic(t_lex *lexer)
+static inline t_tok	*_process_dquote_logic(t_lex *lexer)
 {
 	if ((unsigned char)TK_ESC == *lexer->ptr)
 	{
-		if ((unsigned char)TK_ESC == *(lexer->ptr + 1) || \
-			(unsigned char)OP_ENV == *(lexer->ptr + 1) || \
-			(unsigned char)OP_DQUOTE == *(lexer->ptr + 1) || \
-			(unsigned char)OP_BACKTICK == *(lexer->ptr + 1))
+		if ((unsigned char)TK_ESC == *(lexer->ptr + 1)
+			|| (unsigned char)OP_ENV == *(lexer->ptr + 1)
+			|| (unsigned char)OP_DQUOTE == *(lexer->ptr + 1)
+			|| (unsigned char)OP_BACKTICK == *(lexer->ptr + 1))
 		{
 			lexer->escape_mode = true;
 			++lexer->ptr;
@@ -16,18 +16,22 @@ static inline t_tok *_process_dquote_logic(t_lex *lexer)
 	if ((unsigned char)OP_ENV == *lexer->ptr && false == lexer->escape_mode)
 		lexer->do_expansion = DO_EXPANSION;
 	if ((unsigned char)OP_DQUOTE == *lexer->ptr && false == lexer->escape_mode)
-		return(lex_create_token(lexer, TOK_WORD));
+		return (lex_create_token(lexer, TOK_WORD));
+	return (NULL);
 }
+
 /* Returns next token, loads buf, doesn't flush buf
  * if $, record it in the token record for later expansion
  * if bs, skip it if next char is bs, dollar, double quote or backtick
  */
-static t_tok	*_match_double(t_lex *lexer)
+static inline t_tok	*_match_double(t_lex *lexer)
 {
-	debug_print("_match_double\n");
-	t_tok	*token = NULL;
-	int buf_idx = 0;
+	t_tok	*token;
+	int		buf_idx;
 
+	debug_print("_match_double\n");
+	token = NULL;
+	buf_idx = 0;
 	if (lexer->ptr)
 	{
 		while (*(++lexer->ptr))
@@ -43,24 +47,26 @@ static t_tok	*_match_double(t_lex *lexer)
 	return (token);
 }
 
-/* Expected to add only one token to the llist 
+/* Expected to add only one token to the llist
  * Ptr starts on first double quote
+ */
+/* search rest of string until " found else err
+ * if $, record it in the token record for later expansion
+ * if bs, skip it if next char is bs, dollar, double quote or backtick
+ * everything else is not a delimiter
  */
 int	tokenize_double_quotes(t_lex *lexer)
 {
+	t_tok	*token;
+
 	debug_print("tokenize_double_quotes\n");
-	/* search rest of string until " found else err
-	 * if $, record it in the token record for later expansion
-	 * if bs, skip it if next char is bs, dollar, double quote or backtick
-	 * everything else is not a delimiter
-	 */
 	if (lexer)
 	{
-		t_tok *token = _match_double(lexer); // Did not find closing quote
+		token = _match_double(lexer);
 		if (!token)
 			return (1);
 		debug_print("created token\n");
-		lexer->ptr++; //move past the closing quote
+		lexer->ptr++;
 		debug_print("ptr at _%c_\n", *lexer->ptr);
 		if (0 != add_token(lexer, token))
 			return (1);

@@ -1,28 +1,29 @@
 #include "lex_int.h"
 
 /* Check for the closing single quote or EOF. Returns 1 if found. */
-static inline int _load_buf(t_lex *lexer, int *buf_idx) 
+static inline int	_load_buf(t_lex *lexer, int *buf_idx)
 {
 	debug_print("ptr:_%c_\n", *lexer->ptr);
-    if ((unsigned char)OP_SQUOTE == *lexer->ptr) 
+	if ((unsigned char)OP_SQUOTE == *lexer->ptr)
 	{
-        debug_print("FOUND CLOSING QUOTE\n");
-        return (1);
+		debug_print("FOUND CLOSING QUOTE\n");
+		return (1);
 	}
-	else 
+	else
 		lexer->buf[(*buf_idx)++] = *lexer->ptr;
-    return (0);
+	return (0);
 }
 
-/* Expected to add only one token to the llist 
+/* Expected to add only one token to the llist
  * Assumes ptr is on the first single quote
  */
 int	tokenize_single_quotes(t_lex *lexer)
 {
-	debug_print("tokenize_single_quotes, ptr:_%c_\n", *lexer->ptr);
-	int buf_idx = 0;
-	t_tok *token;
+	int		buf_idx;
+	t_tok	*token;
 
+	debug_print("tokenize_single_quotes, ptr:_%c_\n", *lexer->ptr);
+	buf_idx = 0;
 	while (++lexer->ptr)
 		if (1 == _load_buf(lexer, &buf_idx))
 			break ;
@@ -39,7 +40,7 @@ int	tokenize_single_quotes(t_lex *lexer)
 			return (1);
 		if (0 != add_token(lexer, token))
 			return (1);
-		lexer->ptr++; 
+		lexer->ptr++;
 	}
 	return (0);
 }
@@ -47,10 +48,12 @@ int	tokenize_single_quotes(t_lex *lexer)
 /* terminates a lexer run */
 int	tokenize_null(t_lex *lexer)
 {
+	t_tok	*token;
+
 	debug_print("tokenize_null\n");
 	if (lexer)
 	{
-		t_tok *token = create_token("\0", TOK_EOF, lexer->ptr - lexer->raw_string);
+		token = create_token("\0", TOK_EOF, lexer->ptr - lexer->raw_string);
 		if (token)
 			add_token(lexer, token);
 		else
