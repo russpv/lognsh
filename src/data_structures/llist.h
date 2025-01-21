@@ -3,7 +3,6 @@
 
 /* LINKED LIST */
 
-//typedef	struct s_llnode	*t_ll;
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>

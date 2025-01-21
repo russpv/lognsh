@@ -9,14 +9,10 @@
 # include "../token/token.h"
 # include <stdbool.h>
 
-/* delimiter handling */
-// single vs double quotes
-// preserve literal strings
-
 /* Error handling */
-// Undefined variables cannot be expanded
-// Invalid globbing pattern
-// Unmatched quotation marks?
+// Unmatched quotation marks
+// Heredoc Ctrl+D signal
+
 
 struct					s_lex;
 typedef struct s_lex	t_lex;

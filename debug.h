@@ -5,7 +5,7 @@
 #include <stdarg.h>
 #include <assert.h>
 
-#include "data_structures/llist.h"
+#include "src/data_structures/llist.h"
 
 #ifdef DEBUGMODE
 	#define DEBUG 1
