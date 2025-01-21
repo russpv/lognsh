@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../include/libft.h"
 
 /* ISALPHA
 ** Tests if char is alphabetic

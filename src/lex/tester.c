@@ -29,6 +29,9 @@ const char *inputs[] = {
 
     // Heredoc cases
     "Test << EOF stuff \n stuff EOF",
+
+    // Buildint cases
+    "echo \"haha\"",
 };
 
     // Number of inputs to process

@@ -1,5 +1,25 @@
 #include "lex_int.h"
 
+static inline int	_insert_builtins(t_ht ht)
+{
+	const char *cmd[] = {
+		BI_ECHO,
+		BI_CD,
+		BI_PWD,
+		BI_EXPORT,
+		BI_UNSET,
+		BI_ENV, 
+		BI_EXIT,
+	};
+	int i;
+
+	i = -1;
+	while (++i < BI_COUNT)
+		if (!ht_install(ht, (char *)cmd[i], lex_create_ht_node(false, TOK_BI), lex_copy_ht_data))
+			return (1);
+	return (0);
+}
+
 static inline void	_insert_reserved_words(t_ht ht)
 {
 	ht_install(ht, WD_IF, lex_create_ht_node(false, TOK_IF), lex_copy_ht_data);
@@ -61,4 +81,5 @@ void	build_hasht(t_lex *lexer)
 		lex_copy_ht_data);
 	_insert_operators(ht);
 	_insert_reserved_words(ht);
+	_insert_builtins(ht);
 }

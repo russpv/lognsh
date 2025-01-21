@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../include/libft.h"
 
 /* CALLOC
 ** Returns ptr to heap memory for an array of num obj

@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../include/libft.h"
 
 /* ISALNUM
 ** Tests if char is alphanumeric 

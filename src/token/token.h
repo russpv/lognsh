@@ -1,7 +1,7 @@
 #ifndef TOKEN_H
 # define TOKEN_H
 
-# include "../debug.h"
+# include "../../debug.h"
 # include "../state/state.h"
 # include <stddef.h>
 # include <stdlib.h>
@@ -79,6 +79,7 @@ enum				e_tok_type
 	TOK_DOUBLE_QUOTE,
 	TOK_ENV_VAR,		//$
 	TOK_EXIT_STATUS,	//$?
+	TOK_BI,				// Builtin command
 	TOK_IF,				// Reserved word "if"
 	TOK_THEN,		// Reserved word "then"
 	TOK_ELSE,		// Reserved word "else"

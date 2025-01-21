@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../include/libft.h"
 
 /* ISSPACE
 ** Returns 1 if ch is a space char

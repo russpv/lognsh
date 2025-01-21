@@ -4,14 +4,15 @@
 # include "../data_structures/ast.h"
 # include "../data_structures/hashtable.h"
 # include "../data_structures/llist.h"
-# include "../debug.h"
+# include "../../debug.h"
 # include "../state/state.h"
 # include "../token/token.h"
+# include "../builtins/builtins.h"
 # include <stdbool.h>
 
 /* Error handling */
 // Unmatched quotation marks
-// Heredoc Ctrl+D signal
+// Heredoc Ctrl+D signal: silent abort
 
 
 struct					s_lex;
