@@ -9,7 +9,7 @@ SRC = ../data_structures/llist.c  ../data_structures/llist_utils.c \
       ../debug.c \
 	  lex_utils.c lex_normal_utils.c lex_normal_ht.c lex_squote.c lex_dquote.c lex_utils_ht.c \
 	  lex_state.c lex_build_ht.c lex_.c lex_normal.c lex_heredoc.c \
-	  token.c token_utils.c \
+	  ../token/token.c ../token/token_utils.c \
 	  tester.c
 
 OBJ = $(SRC:.c=.o)

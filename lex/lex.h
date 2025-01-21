@@ -6,7 +6,7 @@
 # include "../data_structures/llist.h"
 # include "../debug.h"
 # include "../state/state.h"
-# include "token.h"
+# include "../token/token.h"
 # include <stdbool.h>
 
 /* delimiter handling */
