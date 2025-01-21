@@ -3,10 +3,11 @@
 #define FAIL_TOKEN 10 // TODO group somewhere else
 
 /* chars that need to be quoted if meant literally */
-#define NORMALDELIMS "^*()=|{}[]`<>?~;&\n\t \'\"" //$ should not break tokens,
-													// backslash also,
-													//	# is escape only
-#define NORMALTRANSITIONS "\'\"\0"
+#define NORMALDELIMS \
+	"^*()=|{}[]`<>?~;&\n\t \'\"" //$ should not break tokens,
+									// backslash also,
+									//	# is escape only
+#define NORMALTRANSITIONS "\'\"<\0" // the '\0' isn't tested, keep at end
 #define LEX_BUFSZ 1024
 #define RESET 0
 
@@ -27,8 +28,6 @@
  */
 
 // TODO add redirection types enum
-// TODO add reserved words
-// TODO add quote types
 
 // Note: (&&, ||) are sublists
 // Note: (<, >) are redirs, followed by fd1
@@ -41,10 +40,8 @@
  * inside escape sequence
  * operator parsing
  */
+
 // TODO use a stack to track open/close delimiters
-// track state with flags in_single_quotes, in_double_quotes, escaping
-// treat space as delimiter only if all these are false
-// toggle quotes if escaping is false
 
 /* On separators
  *
@@ -52,6 +49,7 @@
  * universal interface.” Hence, it is not strongly typed; it’s stringly typed."
  * - a grumpy programmer
  */
+
 // Notes: These bash separators must be lexed properly
 // line-separator \n (treated as separate commands) vs continuation '\'
 // but continuation char not needed for pipes
@@ -67,6 +65,7 @@
 // Could be in a dir or filename, but for simplicity will treat as a char, or
 // the PATH delimiter
 //
+
 /* The State Machine
  * General states:
  * START: Beginning of input or start of a new token.
@@ -104,11 +103,12 @@
  * DGREAT
  */
 
-enum e_lex_state
+enum						e_lex_state
 {
 	NORMAL,
 	IN_SINGLE_QUOTES,
 	IN_DOUBLE_QUOTES,
+	IN_HEREDOC,
 	ON_EOF,
 	DONE
 };
@@ -127,6 +127,8 @@ typedef struct s_lex
 	char					*buf;
 	int						do_expansion;
 	int						do_globbing;
+	int						do_heredoc;
+	char					*eof_word;
 }							t_lex;
 
 /* This gets inserted as s_ht_entry->data */
@@ -147,6 +149,7 @@ int							tokenize_normal(t_lex *lexer);
 int							tokenize_single_quotes(t_lex *lexer);
 int							tokenize_double_quotes(t_lex *lexer);
 int							tokenize_null(t_lex *lexer);
+int							tokenize_heredoc(t_lex *lexer);
 t_tok						*lex_create_token(t_lex *lexer, int type);
 int							add_token(t_lex *lexer, t_tok *token);
 
@@ -161,3 +164,4 @@ struct s_ht_entry			*do_one_char_lookahead(t_lex *lexer,
 								struct s_ht_entry *res);
 t_tok						*lex_ht_lookup(t_lex *lexer);
 int							do_state_transition(t_lex *lexer);
+bool						is_too_long(const char *input);

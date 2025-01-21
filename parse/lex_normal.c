@@ -1,5 +1,6 @@
 #include "lex_int.h"
 
+// TODO: trigger heredoc
 static t_tok	*_match_normal_token(t_lex *lexer, int *buf_idx)
 {
 	t_tok	*res;
@@ -46,7 +47,8 @@ static t_tok	*_match_normal_op(t_lex *lexer)
 // if overlap flag, 1-char lookahead and recheck hashtable
 // else return word or name using a helper func
 // modifies input string location
-/* Returns a new token of chars when points to a delimiter */
+/* Returns a new token of chars when points to a delimiter 
+ */
 static t_tok	*_match_normal(t_lex *lexer)
 {
 	t_tok	*res;
@@ -79,7 +81,7 @@ static t_tok	*_match_normal(t_lex *lexer)
 /* Expected to add multiple tokens to the llist
  * Adds token to llist when ptr advances to a
  * delimiter char, which includes transition chars.
- *
+ * TODO: trigger heredoc state, set flags
  */
 int	tokenize_normal(t_lex *lexer)
 {

@@ -14,12 +14,17 @@ bool	is_normal_delim(unsigned char s)
 }
 
 /* A subset of normal delimiters to trigger state
- * transition
+ * transition. If '<', go back to do_transitions
  */
 bool	is_transition_char(unsigned char s)
 {
 	debug_print("--------_is_transition_char:_%c_", s);
-	if (s != 0 && ft_strchr(NORMALTRANSITIONS, s))
+	if (s == 0)
+	{
+		debug_print("YES-NULL\n");
+		return (true);
+	}
+	if (ft_strchr(NORMALTRANSITIONS, s))
 	{
 		debug_print("YES\n");
 		return (true);

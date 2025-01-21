@@ -4,6 +4,8 @@
 # include "env.h"
 # include "../signal/signal.h"
 # include "../command/command.h"
+# include <readline/readline.h>
+# include <readline/history.h>
 
 
 /* STATE ADT

@@ -25,30 +25,28 @@ const char *inputs[] = {
     "echo $HOME",
     "echo \"The path is \\\"C:\\\\Program Files\\\\\\\"\"",
     "cat << EOF\nHello\nWorld\nEOF",
-    "while [ \"$1\" -gt 0 ]; do echo \"Processing\"; done"
+    "while [ \"$1\" -gt 0 ]; do echo \"Processing\"; done",
+
+    // Heredoc cases
+    "Test << EOF stuff \n stuff EOF",
 };
 
     // Number of inputs to process
     int num_inputs = sizeof(inputs) / sizeof(inputs[0]);
 
-    // Loop through each input string
     for (int i = 0; i < num_inputs; i++) {
-        const char *input = inputs[i];  // Get the current input string
+        const char *input = inputs[i];
 
-        // Print the input to be processed
         printf("Processing input %d: %s\n", i + 1, input);
-        fflush(stdout);  // Ensure output is printed immediately
-
-        // Tokenize and process the input
-        t_lex *lexer = tokenize(input);  // Assuming tokenize function returns a lexer
-
+        fflush(stdout); 
+        t_lex *lexer = tokenize(input); 
         if (lexer)
         {
-            lex_print(lexer);                 // Print tokens (assuming lex_print prints the tokens)
+            lex_print(lexer);
             fflush(stdout);
-           destroy_lexer(lexer);             // Clean up after processing the lexer
+           destroy_lexer(lexer); 
         }
-        printf("\n");  // Print a newline between test cases for readability
+        printf("\n");
     }
 
     return 0;

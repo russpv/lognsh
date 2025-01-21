@@ -34,3 +34,14 @@ t_tok	*lex_create_token(t_lex *lexer, int type)
 	}
 	return (token);
 }
+inline bool	is_too_long(const char *input)
+{
+	if (NULL == input)
+		return (true);
+	if (ft_strlen(input) >= LEX_BUFSZ)
+	{
+		debug_print("ERROR: Input exceeds buf size.\n");
+		return (true);
+	}
+	return (false);
+}

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# THIS DOESN'T WORK NICELY WHEN CALLED FROM MAKE
 # Determine how long to sleep in each iteration
 # and when to timeout (integral seconds).
 sleepInterval=1 timeout=10 elapsed=0 timedOut=0

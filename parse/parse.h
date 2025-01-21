@@ -4,6 +4,7 @@
 #include "../data_structures/ast.h"
 #include "../data_structures/llist.h"
 #include "../state/state.h"
+#include "lex.h"
 
 /* PARSE
  * Converts user input into an AST

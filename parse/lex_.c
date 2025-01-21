@@ -38,6 +38,7 @@ t_lex	*create_lexer(int start_state, const char *s)
 		lexer->do_expansion = RESET;
 		lexer->do_globbing = RESET;
 		lexer->token_list = NULL;
+		lexer->eof_word = NULL;
 		if (false == _allocate_buf_and_hasht(lexer))
 		{
 			free(lexer);
@@ -54,6 +55,8 @@ void	destroy_lexer(t_lex *lexer)
 		return ;
 	if (lexer->buf)
 		free(lexer->buf);
+	if (lexer->eof_word)
+		free(lexer->eof_word);
 	if (lexer->hasht)
 		ht_destroy(lexer->hasht, lex_destroy_ht_node);
 	if (lexer->token_list)
