@@ -39,6 +39,7 @@ t_lex	*create_lexer(int start_state, const char *s)
 		lexer->do_globbing = RESET;
 		lexer->token_list = NULL;
 		lexer->eof_word = NULL;
+		lexer->is_incomplete = false;
 		if (false == _allocate_buf_and_hasht(lexer))
 		{
 			free(lexer);

@@ -45,3 +45,13 @@ inline bool	is_too_long(const char *input)
 	}
 	return (false);
 }
+
+bool	lex_get_incomplete(t_lex *lexer)
+{
+	return (lexer->is_incomplete);
+}
+
+t_list	*lex_get_tokens(t_lex *lexer)
+{
+	return (lexer->token_list);
+}

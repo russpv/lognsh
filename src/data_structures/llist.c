@@ -18,6 +18,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	}
 	tmp = ft_lstlast(*lst);
 	tmp->next = new;
+	new->prev = tmp;
 }
 
 /* LSTADD_FRONT
@@ -33,6 +34,7 @@ void	ft_lstadd_front(t_list **lst, t_list *new)
 	if (!lst || !new)
 		return ;
 	new->next = *lst;
+	(*lst)->prev = new;
 	*lst = new;
 }
 

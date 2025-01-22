@@ -23,6 +23,7 @@ static inline t_tok	*_process_dquote_logic(t_lex *lexer)
 /* Returns next token, loads buf, doesn't flush buf
  * if $, record it in the token record for later expansion
  * if bs, skip it if next char is bs, dollar, double quote or backtick
+ * if normal loop doesn't find closing ", flags incomplete
  */
 static inline t_tok	*_match_double(t_lex *lexer)
 {
@@ -43,14 +44,17 @@ static inline t_tok	*_match_double(t_lex *lexer)
 			debug_print("    Got:_%c_\n", *lexer->ptr);
 			lexer->buf[buf_idx++] = *lexer->ptr;
 		}
+		lexer->is_incomplete = true;
+		token = lex_create_token(lexer, TOK_WORD);
 	}
 	return (token);
 }
 
 /* Expected to add only one token to the llist
  * Ptr starts on first double quote
- */
-/* search rest of string until " found else err
+ *
+ * Searches rest of string until " found
+ * else, flag incomplete
  * if $, record it in the token record for later expansion
  * if bs, skip it if next char is bs, dollar, double quote or backtick
  * everything else is not a delimiter

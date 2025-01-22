@@ -30,7 +30,10 @@ const char *inputs[] = {
     // Heredoc cases
     "Test << EOF stuff \n stuff EOF",
 
-    // Buildint cases
+    // Absolute path 
+    "/bin/ls",
+
+    // Builtin cases
     "echo \"haha\"",
 };
 

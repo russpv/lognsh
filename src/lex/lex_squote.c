@@ -1,6 +1,8 @@
 #include "lex_int.h"
 
-/* Check for the closing single quote or EOF. Returns 1 if found. */
+/* Loads a char into buf. 
+ * Checks for the closing single quote. Returns 1 if found.
+ */
 static inline int	_load_buf(t_lex *lexer, int *buf_idx)
 {
 	debug_print("ptr:_%c_\n", *lexer->ptr);
@@ -16,6 +18,7 @@ static inline int	_load_buf(t_lex *lexer, int *buf_idx)
 
 /* Expected to add only one token to the llist
  * Assumes ptr is on the first single quote
+ * If '\'' not found, flags incomplete only
  */
 int	tokenize_single_quotes(t_lex *lexer)
 {
@@ -27,10 +30,10 @@ int	tokenize_single_quotes(t_lex *lexer)
 	while (++lexer->ptr)
 		if (1 == _load_buf(lexer, &buf_idx))
 			break ;
-	if ((unsigned char)TOK_EOF == *lexer->ptr)
+	if ((unsigned char)OP_NULL == *lexer->ptr)
 	{
-		debug_print("ERR FOUND EOF\n");
-		return (1);
+		debug_print("WARNING: FOUND NULL\n");
+		lexer->is_incomplete = true;
 	}
 	else
 	{

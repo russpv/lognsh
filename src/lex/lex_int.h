@@ -129,6 +129,7 @@ typedef struct s_lex
 	int						do_globbing;
 	int						do_heredoc;
 	char					*eof_word;
+	bool					is_incomplete;
 }							t_lex;
 
 /* This gets inserted as s_ht_entry->data */

@@ -42,11 +42,12 @@ t_ast	parse(t_state s, char *input);
 
 /* delimiter handling */
 // single vs double quotes
+// Parentheses
 // preserve literal strings
 
 /* Error handling */
 // Undefined variables cannot be expanded
 // Invalid globbing pattern
-// Unmatched quotation marks?
+// Unmatched quotation marks? >> Says throw ERR.
 
 #endif

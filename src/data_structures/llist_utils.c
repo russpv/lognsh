@@ -62,6 +62,7 @@ t_list	*ft_lstnew(void *content)
 	if (!ll)
 		return (NULL);
 	ll->next = NULL;
+	ll->prev = NULL;
 	ll->content = content;
 	return (ll);
 }
