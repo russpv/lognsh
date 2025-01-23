@@ -66,16 +66,16 @@ enum					e_tok_type
 							// from the portable character set. The first character
 							// of a name is not a digit.
 	TOK_NEWLINE,         // (non-functional)
-	TOK_IO_NUMBER,       // REDOUT/REDIN plus digits OVERLAP
+	TOK_IO_NUMBER,       // REDOUT/REDIN plus digits 
 	TOK_OP_REF,          // "&" for stdio
-	TOK_REDIRECT_IN,     // OVERLAP
-	TOK_REDIRECT_OUT,    // OVERLAP
-	TOK_REDIRECT_APPEND, // OVERLAP
-	TOK_HEREDOC,         // OVERLAP (non-functional,
-		//gets processed straightaway)
-	TOK_PIPE,            // OVERLAP
+	TOK_REDIRECT_IN,     // 
+	TOK_REDIRECT_OUT,    // 
+	TOK_REDIRECT_APPEND, // 
+	TOK_HEREDOC,         // TODO - tokenize this for parser
+	TOK_HEREDOC_WORD,		//TODO 
+	TOK_PIPE,            // 
 	TOK_ANDIF,
-	TOK_ORIF,         // OVERLAP
+	TOK_ORIF,         // 
 	TOK_OPEN_PAREN,
 	TOK_CLOSE_PAREN,
 	TOK_SINGLE_QUOTE, // (non-functional)

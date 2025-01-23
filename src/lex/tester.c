@@ -28,7 +28,7 @@ const char *inputs[] = {
     "while [ \"$1\" -gt 0 ]; do echo \"Processing\"; done",
 
     // Heredoc cases
-    "Test << EOF stuff \n stuff EOF",
+    "<< EOF Test stuff \n stuff EOF",
 
     // Absolute path 
     "/bin/ls",

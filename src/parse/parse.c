@@ -5,6 +5,8 @@
 #define OP_OPTION '-'
 // Use Strategy pattern for validation functions per built-in command
 // Use Visitor pattern for validating all AST nodes
+// validate_filename - ensure no '~' '?', length 255 chars, if '*', then no '/'
+// 
 
 //RULES
 //- The very first token shall be interpreted as a command
@@ -32,7 +34,8 @@ bool	is_option(t_tok *tok)
 bool	is_cmd_token(t_tok *tok)
 {
 	const enum e_tok_type type = get_tok_type(tok);
-	return (type == TOK_WORD || type == TOK_NAME || type == TOK_BI || type == TOK_EXIT_STATUS);
+	return (type == TOK_WORD || type == TOK_NAME || type == TOK_BI || type == TOK_EXIT_STATUS || type == TOK_REDIRECT_APPEND \
+	|| type == TOK_REDIRECT_IN || type == TOK_REDIRECT_OUT || type == TOK_HEREDOC_WORD);
 }
 
 bool	is_op_token(t_tok *tok)
@@ -118,7 +121,7 @@ t_ast_node *_test_parens(t_parser *p, t_ast_node *cmd_node)
 			return (NULL);
 		}
 		t_tok *next_cmd_token = advance(p);
-		return (parse_cmd(p)); // nested
+		return (parse_cmd(p)); // TODO, if NULL, then ...
 	}
 	if (get_tok_type(peek(p)) == TOK_CLOSE_PAREN)
 	{
@@ -133,7 +136,8 @@ t_ast_node *_test_parens(t_parser *p, t_ast_node *cmd_node)
 
 /* Returns cmd node.
  * Validates token type, parses args into list
- * checks for redirect operator.
+ * checks for redirect operator(s) before or after
+ * REDIR WORD REDIR WORD
  */
 t_ast_node *parse_cmd(t_parser *p)
 {
