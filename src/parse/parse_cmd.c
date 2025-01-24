@@ -1,6 +1,6 @@
 #include "parse_int.h"
 
-void	_init_cmd_data(t_arg_data *arg, t_tok *tok)
+static void	_init_arg_data(t_arg_data *arg, t_tok *tok)
 {
 	arg->raw = tok_get_raw(tok);
 	arg->option = is_option(tok);
@@ -14,7 +14,6 @@ void	_init_cmd_data(t_arg_data *arg, t_tok *tok)
 static t_list	*_parse_args(t_parser *p, t_ast_node *cmd_node)
 {
 	t_arg_data	*arg;
-	t_tok		*tok;
 	t_list		*new;
 
 	while (!is_at_end(p) && is_arg_token(peek(p)))
@@ -39,11 +38,13 @@ static t_list	*_parse_args(t_parser *p, t_ast_node *cmd_node)
 	return (cmd_node->data.cmd.args);
 }
 
-t_ast_node	*_process_cmd(t_parser *p, t_ast_node *cmd_node, t_tok *tok)
-{
+static t_ast_node	*_process_cmd(t_parser *p, t_ast_node *cmd_node)
+{	
+	fprintf(stderr, "proc'g cmd %s\n", tok_get_raw(peek(p)));
 	if (is_redir_token(peek(p)))
 	{
-		if (!_parse_redir(p, cmd_node))
+		fprintf(stderr, "proc'g redir %s\n", tok_get_raw(peek(p)));
+		if (!parse_redir(p, cmd_node))
 		{
 			free(cmd_node);
 			err("Failed to parse redirection\n");
@@ -54,13 +55,14 @@ t_ast_node	*_process_cmd(t_parser *p, t_ast_node *cmd_node, t_tok *tok)
 	{
 		free(cmd_node);
 		err("Expected a command token, but none found\n");
+		fprintf(stderr, "tok: %s", tok_get_raw(peek(p)));
 		return (NULL);
 	}
-	cmd_node->data.cmd.name = tok_get_raw((t_tok *)tok);
+	cmd_node->data.cmd.name = tok_get_raw(advance(p));
 	_parse_args(p, cmd_node);
 	if (is_redir_token(peek(p)))
 	{
-		if (!_parse_redir(p, cmd_node))
+		if (!parse_redir(p, cmd_node))
 		{
 			free(cmd_node);
 			err("Failed to parse redirection\n");
@@ -70,7 +72,7 @@ t_ast_node	*_process_cmd(t_parser *p, t_ast_node *cmd_node, t_tok *tok)
 	return (cmd_node);
 }
 
-void	_init_cmd_data(t_ast_node *cmd_node)
+static void	_init_cmd_data(t_ast_node *cmd_node)
 {
 	cmd_node->type = AST_NODE_CMD;
 	cmd_node->data.cmd.args = NULL;
@@ -82,14 +84,14 @@ void	_init_cmd_data(t_ast_node *cmd_node)
 t_ast_node	*parse_cmd(t_parser *p)
 {
 	t_ast_node	*cmd_node;
-	const t_tok	*tok = advance(p);
 
 	st_push(p->st, AST_NODE_CMD);
 	cmd_node = malloc(sizeof(t_ast_node));
 	if (cmd_node)
 	{
+		fprintf(stderr, "tok: %s", tok_get_raw(peek(p)));
 		_init_cmd_data(cmd_node);
-		if (!_process_cmd(p, cmd_node, tok))
+		if (!_process_cmd(p, cmd_node))
 			return (NULL);
 	}
 	else

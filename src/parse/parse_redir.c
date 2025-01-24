@@ -6,11 +6,9 @@
  * TODO: handle TOK_HEREDOC_WORDs
  */
 
-static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
+t_list	*parse_redir(t_parser *p, t_ast_node *cmd)
 {
 	t_redir_data	*red;
-	const t_tok		*tok = advance(p);
-	const t_tok		*name = advance(p);
 	t_list			*new;
 
 	if (!cmd)
@@ -27,6 +25,7 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
 			return (NULL);
 		}
 		red->cmd = &cmd->data.cmd;
+		const t_tok		*tok = advance(p);
 		red->type = tok_get_type((t_tok *)tok);
 		if (!is_heredoc_token((t_tok *)tok))
 		{
@@ -34,7 +33,14 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
 			red->symbol = tok_get_raw((t_tok *)tok);
 			debug_print("Redirection: type=%d symbol=%s\n", red->type,
 				red->symbol);
-			if (is_at_end(p) || !is_filename_token(peek(p)))
+			if (is_at_end(p))
+			{
+				err("Expected a filename after redirection operator\n");
+				free(red);
+				return (NULL);
+			}
+			const t_tok		*name = advance(p);
+			if (!is_filename_token((t_tok*)name))
 			{
 				err("Expected a filename after redirection operator\n");
 				free(red);
@@ -62,7 +68,7 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
 			free(red);
 			return (NULL);
 		}
-		debug_print("Adding redirection: %s %s %s\n", red->symbol,
+		debug_print("Adding redirection: (%s %s | %s)\n", red->symbol, \
 			red->filename, red->doc);
 		ft_lstadd_back(&cmd->data.cmd.redirs, new);
 		cmd->data.cmd.redc++;

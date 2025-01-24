@@ -13,7 +13,7 @@
 From Bash Manual:
 These (expansion) operations are performed in this order:
 
-Parameter expansion: $var is replaced with its ENV value. No fancy stuff. Also,
+Parameter expansion: is replaced with its ENV value. No fancy stuff. Also,
 	$0 and $? do their thing.
 Command substition: $(command) replaces command with its output. If this appears in double quotes,
 	word splitting and filename expansion
@@ -75,9 +75,9 @@ expansion of word to be opened for writing on file descriptor n,
 
  Expansions
  Precedence:
- $(command) Command substitions
- ${parameter:=word}
- filename matching
+ $(command) Command substitions Note: not implemented.
+ ${parameter:=word} Note: not implemented.
+ filename matching Note: not implemented.
 
 
 */
@@ -189,7 +189,6 @@ t_tok						*lookahead(t_parser *p);
 t_tok						*previous(t_parser *p);
 bool						is_at_end(t_parser *p);
 t_tok						*advance(t_parser *p);
-bool						match(t_parser *p, enum e_tok_type type);
 
 t_ast_node					*parse_full_cmd(t_parser *p);
 t_ast_node					*parse_pipeline(t_parser *p);
@@ -199,7 +198,7 @@ t_ast_node *parse_logical(t_parser *p);;
 bool 	last_parsed_was_cmd(t_parser *p);
 
 t_list						*parse_args(t_parser *p, t_ast_node *cmd_node);
-t_list						*parse_redir(t_parser *p, t_ast_node *cmd);
+t_list	*parse_redir(t_parser *p, t_ast_node *cmd);
 
 bool						is_arg_token(t_tok *tok);
 bool						is_op_token(t_tok *tok);
