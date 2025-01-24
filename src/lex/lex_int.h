@@ -7,7 +7,7 @@
 	"^*()=|{}[]`<>?~;&\n\t \'\"" //$ should not break tokens,
 									// backslash also,
 									//	# is escape only
-#define NORMALTRANSITIONS "\'\"<\0" // the '\0' isn't tested, keep at end
+#define NORMALTRANSITIONS "\'\"<\0" // the '\0' isn't tested, keep at end, < for heredoc
 #define LEX_BUFSZ 1024
 #define RESET 0
 
@@ -157,7 +157,7 @@ int							add_token(t_lex *lexer, t_tok *token);
 void						debug_detect_cycle(t_list *head);
 
 bool						is_normal_delim(unsigned char s);
-bool						is_transition_char(unsigned char s);
+bool						is_transition_char(t_lex *l, unsigned char s);
 int							word_or_name(const char *s);
 void						process_escape_sequence(t_lex *l);
 int							process_special_operators(t_lex *lexer);

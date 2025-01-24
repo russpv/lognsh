@@ -25,9 +25,9 @@ t_tok	*lex_create_token(t_lex *lexer, int type)
 				- lexer->raw_string));
 	if (token)
 	{
-		if (DO_GLOBBING == lexer->do_globbing)
+		if (true == lexer->do_globbing)
 			tok_set_globbing(token);
-		if (DO_EXPANSION == lexer->do_expansion)
+		if (true == lexer->do_expansion)
 			tok_set_expansion(token);
 		lexer->do_globbing = RESET;
 		lexer->do_expansion = RESET;

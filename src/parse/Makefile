@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -DDEBUGMODE -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 LDFLAGS = -lreadline -lncurses -fsanitize=address  # Add ASAN for linking
 
 SRC = ../data_structures/llist.c  ../data_structures/llist_utils.c \
@@ -8,13 +8,16 @@ SRC = ../data_structures/llist.c  ../data_structures/llist_utils.c \
       ../../lib/ft_memcpy.c ../../lib/ft_strlen.c ../../lib/ft_strncmp.c ../../lib/ft_memset.c ../../lib/ft_isspace.c \
 	  ../../lib/ft_isalnum.c \
       ../../debug.c \
-	  lex_utils.c lex_normal_utils.c lex_normal_ht.c lex_squote.c lex_dquote.c lex_utils_ht.c \
-	  lex_state.c lex_build_ht.c lex_.c lex_normal.c lex_heredoc.c \
+	  ../lex/lex_utils.c ../lex/lex_normal_utils.c ../lex/lex_normal_ht.c ../lex/lex_squote.c ../lex/lex_dquote.c ../lex/lex_utils_ht.c \
+	  ../lex/lex_state.c ../lex/lex_build_ht.c ../lex/lex_.c ../lex/lex_normal.c ../lex/lex_heredoc.c \
 	  ../token/token.c ../token/token_utils.c \
-	  tester.c
+	  test_parser.c \
+	  parse.c parse_stack.c parse_utils.c parse_class.c \
+	  ../state/error.c ../state/state.c \
+	  ../data_structures/stack.c 
 
 OBJ = $(SRC:.c=.o)
-NAME = test_lexer
+NAME = test_parser
 
 # The main build target
 $(NAME): $(OBJ)

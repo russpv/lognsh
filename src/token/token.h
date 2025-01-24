@@ -28,6 +28,9 @@
 # define OP_STAR '*'
 # define OP_SQUOTE '\''
 # define OP_NULL '\0'
+# define OP_OPTION '-'
+# define OP_OPENP '('
+# define OP_CLOSEDP ')'
 # define OP_DQUOTE \
 	'\"'                   // backslash retained if followed by [$`"\\n],
 							//" requires \ inside ""

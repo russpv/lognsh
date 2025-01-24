@@ -3,11 +3,14 @@
 int	set_exit_status(t_state *state)
 {
 	//TODO
+	(void)state;
+	return (0);
 }
 
 /* BUILD COMMAND
  * Use command.h methods
  */
+/*
 t_cmd	build_command(char *input)
 {
 	//TODO, use command.h methods
@@ -34,5 +37,9 @@ char	**expand_glob(const char *pattern)
 	//TODO
 	//wrapper required for COMMAND for parsing
 }
-
+*/
+void	set_error(t_state *state, int code)
+{
+	state->error_code = code;
+}
 

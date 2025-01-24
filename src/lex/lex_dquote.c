@@ -14,7 +14,7 @@ static inline t_tok	*_process_dquote_logic(t_lex *lexer)
 		}
 	}
 	if ((unsigned char)OP_ENV == *lexer->ptr && false == lexer->escape_mode)
-		lexer->do_expansion = DO_EXPANSION;
+		lexer->do_expansion = true;
 	if ((unsigned char)OP_DQUOTE == *lexer->ptr && false == lexer->escape_mode)
 		return (lex_create_token(lexer, TOK_WORD));
 	return (NULL);

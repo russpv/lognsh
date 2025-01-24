@@ -1,5 +1,17 @@
 #include "lex_int.h"
 
+#define NOTDELIMITED "()"
+
+static inline bool	_is_not_delimd(const char *s)
+{
+	if (ft_strlen(s) > 1)
+		return (false);
+	if (ft_strchr(NOTDELIMITED, *s))
+		return (true);
+	return (false);
+}
+
+/* Returns hashtable matches using current buf */
 t_tok	*lex_ht_lookup(t_lex *lexer)
 {
 	struct s_ht_entry	*res;
@@ -8,11 +20,15 @@ t_tok	*lex_ht_lookup(t_lex *lexer)
 	res = ht_lookup(lexer->hasht, lexer->buf);
 	if (res)
 	{
+		debug_print("Found hasht match. Ptr: %c\n", *lexer->ptr);
 		if (true == ((t_ht_data)(ht_get_payload(res)))->is_substring)
 			res = do_one_char_lookahead(lexer, res);
-		if (true == is_normal_delim(*lexer->ptr))
+		if (true == is_normal_delim(*lexer->ptr) || true == _is_not_delimd(lexer->buf))
+		{
+			debug_print("Creating token...\n");
 			return (lex_create_token(lexer,
 					((t_ht_data)ht_get_payload(res))->type));
+		}
 	}
 	return (NULL);
 }

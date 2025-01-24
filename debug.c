@@ -47,3 +47,8 @@ void	debug_detect_cycle(t_list *head)
 		printf("No cycle detected in the linked list\n");
 	}
 }
+
+void	err(const char *s)
+{
+	printf("%s", s);
+}

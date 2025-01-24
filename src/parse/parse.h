@@ -1,7 +1,7 @@
 #ifndef PARSE_H
 # define PARSE_H
 
-#include "../data_structures/ast.h"
+#include "../data_structures/stack.h"
 #include "../data_structures/llist.h"
 #include "../state/state.h"
 #include "../lex/lex.h"
@@ -10,11 +10,11 @@
  * Converts user input into an AST
  * Tokenizes input, Expands variables, Does globbing(?)
  *
- * cmd: echo $HOME/*.c | grep foo && echo "done"
+ * cmd: echo $HOME/ *.c | grep foo && echo "done"
  *
- * input: 'echo $HOME/*.c'
- * tokens: "echo", "$HOME", "/*.c"
- * expanded: "echo", "/home/user", "/*.c"
+ * input: 'echo $HOME/ *.c'
+ * tokens: "echo", "$HOME", "/ *.c"
+ * expanded: "echo", "/home/user", "/ *.c"
  * globbed: ["echo", "/home/user/main.c", "/home/user/utils.c"]
  *
  * AND
@@ -29,7 +29,8 @@
 // Builds the AST (Composite Pattern) where commands are leaf
 // nodes; pipes, conditionals and args are elsewhere
 // Command module interprets (processes) AST
-t_ast	parse(t_state s, char *input);
+typedef struct s_node t_ast_node;
+t_ast_node	*parse(t_state *s, char *input);
 
 /*  Expansions */
 // tilde ~ ?

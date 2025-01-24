@@ -14,9 +14,9 @@ bool	is_normal_delim(unsigned char s)
 }
 
 /* A subset of normal delimiters to trigger state
- * transition. If '<', go back to do_transitions
+ * transition. If "<<" , must change state
  */
-bool	is_transition_char(unsigned char s)
+bool	is_transition_char(t_lex *l, unsigned char s)
 {
 	debug_print("--------_is_transition_char:_%c_", s);
 	if (s == 0)
@@ -26,8 +26,19 @@ bool	is_transition_char(unsigned char s)
 	}
 	if (ft_strchr(NORMALTRANSITIONS, s))
 	{
-		debug_print("YES\n");
-		return (true);
+		if (s == '<')
+		{
+			if ('<' == *(l->ptr + 1))
+			{
+				debug_print("YES\n");
+				return (true);
+			}
+		}
+		else
+		{
+			debug_print("YES\n");
+			return (true);
+		}
 	}
 	debug_print("NO\n");
 	return (false);
@@ -69,9 +80,9 @@ void	process_escape_sequence(t_lex *l)
 int	process_special_operators(t_lex *lexer)
 {
 	if ((unsigned char)OP_ENV == *lexer->ptr && false == lexer->escape_mode)
-		lexer->do_expansion = DO_EXPANSION;
+		lexer->do_expansion = true;
 	if ((unsigned char)OP_STAR == *lexer->ptr && false == lexer->escape_mode)
-		lexer->do_globbing = DO_GLOBBING;
+		lexer->do_globbing = true;
 	if ((unsigned char)OP_HASH == *lexer->ptr && false == lexer->escape_mode)
 	{
 		lexer->escape_mode = false;

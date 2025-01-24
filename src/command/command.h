@@ -25,7 +25,7 @@ If the command was not begun asynchronously, the shell waits for the command to 
 
 typedef struct s_cmd	*t_cmd;
 // we need to access global state for expansion and globbing
-typedef struct s_state	*t_state; // forward declare instead of include state.h
+typedef struct s_global_state	t_state; // forward declare instead of include state.h
 								  // use wrapper functions in state.h
 
 t_cmd	init_command(char *input);

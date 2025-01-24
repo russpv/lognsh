@@ -5,7 +5,7 @@ int main(void)
 {
 const char *inputs[] = {
     // Existing Test Cases
-    "echo \"Hello, world\" > file.txt && cat file.txt",
+    "(echo \"Hello, world\" > file.txt) && cat file.txt",
     "grep Hello | wc -l",
     "grep Hello && wc -l",
     "grep Hello | ls -la src/",
@@ -16,7 +16,7 @@ const char *inputs[] = {
     "grep Hello | awk \"'{count++} END {print count}'\"",
 
     // Additional Test Cases
-    "echo \"Hello\"",
+    "(echo \"Hello\")",
     "echo \"Hello, World!\" # This is a comment",
     "echo \"Hello\" && ls -la || cat file.txt",
     "grep \"Hello\" | awk '{count++} END {print count}' > output.txt",

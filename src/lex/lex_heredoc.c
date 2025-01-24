@@ -27,6 +27,7 @@ static inline int	_get_eof_word(t_lex *l)
 	return (0);
 }
 
+/* Puts readline output onto buf */
 static inline int	_load_line(t_lex *l, const char *line)
 {
 	size_t	buf_idx;
@@ -50,7 +51,7 @@ static inline bool	_line_is_eof(t_lex *l, const char *line)
 
 /* Creates token up until EOF or exits if NULL (Ctrl+D)
  * Runs readline, loads buf until line return equals EOF
- * Note: Bash/Zsh do not trim the line when testing EOF
+ * Note: Bash/Zsh do not trim the line when testing EOF (" EOF" != EOF)
  * only when capturing the EOF value
  */
 static inline t_tok	*_match_heredoc(t_lex *l)
@@ -72,7 +73,7 @@ static inline t_tok	*_match_heredoc(t_lex *l)
 		if (true == _line_is_eof(l, line))
 		{
 			debug_print("Heredoc delimiter found, exiting heredoc mode.\n");
-			token = lex_create_token(l, TOK_HEREDOC);
+			token = lex_create_token(l, TOK_HEREDOC_WORD);
 			free(l->eof_word);
 			l->eof_word = NULL;
 			return (token);
@@ -102,7 +103,7 @@ int	tokenize_heredoc(t_lex *lexer)
 	{
 		if (0 != add_token(lexer, token))
 			return (1);
-		lexer->state = ON_EOF;
+		//lexer->state = ON_EOF; //heredoc can be anywhere
 	}
 	else
 	{

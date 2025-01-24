@@ -1,6 +1,6 @@
 #include "lex_int.h"
 
-// TODO: trigger heredoc
+/* Handles current char and advances */
 static t_tok	*_match_normal_token(t_lex *lexer, int *buf_idx)
 {
 	t_tok	*res;
@@ -23,7 +23,10 @@ static t_tok	*_match_normal_token(t_lex *lexer, int *buf_idx)
 static t_tok	*_match_word_or_name(t_lex *lexer)
 {
 	if (true == is_normal_delim(*lexer->ptr) && ft_strlen(lexer->buf) > 0)
+	{
+		debug_print("----_match_word_or_name: got %s\n", lexer->buf);
 		return (lex_create_token(lexer, word_or_name(lexer->buf)));
+	}
 	return (NULL);
 }
 
@@ -36,9 +39,13 @@ static t_tok	*_match_normal_op(t_lex *lexer)
 	if (true == is_normal_delim(*lexer->ptr))
 	{
 		lexer->buf[0] = *lexer->ptr++;
+		debug_print("----_match_normal_op: got _%s_\n", lexer->buf);
 		res = lex_ht_lookup(lexer);
 		if (res)
+		{
+			debug_print("----_match_normal_op: match %s\n", lexer->buf);
 			return (res);
+		}
 	}
 	return (NULL);
 }
@@ -59,7 +66,7 @@ static t_tok	*_match_normal(t_lex *lexer)
 	buf_idx = 0;
 	while (' ' == *lexer->ptr)
 		lexer->ptr++;
-	if (true == is_transition_char(*lexer->ptr))
+	if (true == is_transition_char(lexer, *lexer->ptr))
 		return (NULL);
 	res = _match_normal_token(lexer, &buf_idx);
 	if (res)
@@ -75,20 +82,20 @@ static t_tok	*_match_normal(t_lex *lexer)
 	res = _match_normal_op(lexer);
 	if (res)
 		return (res);
+	debug_print("----_match_normal DONE\n");
 	return (NULL);
 }
 
 /* Expected to add multiple tokens to the llist
  * Adds token to llist when ptr advances to a
  * delimiter char, which includes transition chars.
- * TODO: trigger heredoc state, set flags
  */
 int	tokenize_normal(t_lex *lexer)
 {
 	t_tok	*token;
 
 	debug_print("tokenize_normal\n");
-	while (lexer->ptr && !is_transition_char(*lexer->ptr))
+	while (lexer->ptr && !is_transition_char(lexer, *lexer->ptr))
 	{
 		token = _match_normal(lexer);
 		debug_print("ptr at:_%c_\n", *lexer->ptr);

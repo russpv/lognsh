@@ -31,28 +31,15 @@
 ** including environment, command history, execution state.
 **
 */
-
-typedef struct s_state	*t_state;
-
-// TODO move this into sub header for ADT
-struct					s_global_state
-{
-	char **path;           // PATH is char **
-	char *pwd;             // cwd modifies this, pwd prints this,
-		execution starts with searching here
-	int current_exit_code; // last command's exit code
-	// TODO track stdin, stdout, stderr fds to undo redirection
-	// TODO add command history pointer
-	// TODO
-	// no signals, too mcuh indirection
-	// t_ht *env_cache; TODO LATER, add hash table to env.h for faster lookups
-};
+struct s_global_state;
+typedef struct s_global_state	t_state;
 
 // Methods
 t_state					*init_state(void);
 void					destroy_state(t_state *state);
 
 int						set_exit_status(t_state *state);
+void					set_error(t_state *state, int code);
 
 t_cmd	build_command(char *input); // interface to COMMAND
 

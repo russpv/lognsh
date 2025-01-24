@@ -46,6 +46,10 @@ static inline void	_insert_reserved_words(t_ht ht)
 
 static inline void	_insert_operators(t_ht ht)
 {
+	ht_install(ht, "(", lex_create_ht_node(false, TOK_OPEN_PAREN),
+		lex_copy_ht_data);
+	ht_install(ht, ")", lex_create_ht_node(false, TOK_CLOSE_PAREN),
+		lex_copy_ht_data);
 	ht_install(ht, OP_ANDIF, lex_create_ht_node(false, TOK_ANDIF),
 		lex_copy_ht_data);
 	ht_install(ht, "&", lex_create_ht_node(true, TOK_OP_REF), lex_copy_ht_data);

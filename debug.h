@@ -17,5 +17,5 @@
 
 void debug_print(const char *format, ...);
 void log_printf(const char *s, ...);
-
+void	err(const char *s);
 #endif
