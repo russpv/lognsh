@@ -35,7 +35,7 @@ void	destroy_token(void *token)
 	token = NULL;
 }
 
-void	*copy_token_data(void *data)
+void	*copy_token_data(const void *data)
 {
 	t_tok	*token;
 	t_tok	*new_token;

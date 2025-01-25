@@ -108,7 +108,7 @@ typedef struct s_tok	t_tok;
 
 t_tok					*create_token(const char *s, int type, size_t pos);
 t_tok					*create_ht_token(void);
-void					*copy_token_data(void *data);
+void	*copy_token_data(const void *data);
 void					destroy_token(void *token);
 
 int						tok_set_globbing(t_tok *token);

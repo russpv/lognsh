@@ -12,7 +12,8 @@ SRC = ../data_structures/llist.c  ../data_structures/llist_utils.c \
 	  ../lex/lex_state.c ../lex/lex_build_ht.c ../lex/lex_.c ../lex/lex_normal.c ../lex/lex_heredoc.c \
 	  ../token/token.c ../token/token_utils.c \
 	  test_parser.c \
-	  parse.c parse_stack.c parse_utils.c parse_class.c parse_cmd.c parse_oth.c parse_redir.c \
+	  parse.c parse_stack.c parse_utils.c parse_class.c parse_cmd.c parse_oth.c parse_redir.c parse_log.c parse_proc.c parse_pipe.c\
+	  parse_bools.c parse_bools2.c parse_utils2.c \
 	  ../state/error.c ../state/state.c \
 	  ../data_structures/stack.c 
 

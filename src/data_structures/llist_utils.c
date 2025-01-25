@@ -3,7 +3,6 @@
 /* LSTLAST
 ** Returns last node of a list
 */
-
 t_list	*ft_lstlast(t_list *lst)
 {
 	if (!lst)

@@ -3,7 +3,11 @@
 
 # include "parse.h"
 
-#define MAX_CMD_ARGS 10
+# define MAX_CMD_ARGS 10
+
+//TODO: $ and * expansions. Send to lexer. Create tokens_insert method. 
+// unsure when redirect expansion occurs; might as well do it asap.
+// if multiple words result, throw 'bash: $VAR: ambiguous redirect' 
 
 // Operator precedence for operators like &&, ||, |, etc.
 // Note: bash equates && and || unusually, so left to right order
@@ -13,7 +17,7 @@
 From Bash Manual:
 These (expansion) operations are performed in this order:
 
-Parameter expansion: is replaced with its ENV value. No fancy stuff. Also,
+Parameter expansion: $VAR is replaced with its ENV value. No fancy stuff. Also,
 	$0 and $? do their thing.
 Command substition: $(command) replaces command with its output. If this appears in double quotes,
 	word splitting and filename expansion
@@ -59,7 +63,6 @@ command_substitution → '$(' full_command ')'
 
 Attempting a hand-written LL(1) recursive descent parser.
 
-
 "redirection operators may precede or appear anywhere within a simple
 command or may follow a command. Redirections are processed in the
  order they appear, from left to right."
@@ -79,18 +82,14 @@ expansion of word to be opened for writing on file descriptor n,
  ${parameter:=word} Note: not implemented.
  filename matching Note: not implemented.
 
-
+Note: any split words on an expansion of a redirection fd results in an error
 */
 
-/* Parser */
 
 typedef struct
 {
 	int						depth;
 }							t_pstack;
-
-/* AST */
-/* Note: not sure if we need these for separate validation pass */
 
 enum						e_ast_node_type
 {
@@ -129,23 +128,26 @@ typedef struct s_arg
 	bool					do_expansion;
 }							t_arg_data;
 
+/* Next refactor, remove the t_list since 
+ * this can only be a wrapper for one cmd
+ */
 typedef struct s_proc
 {
-	t_list *cmds; // think this can only be 1 root node
+	t_list *cmds;
 	int						cmdc;
 }							t_ast_node_proc;
 
 typedef struct s_op
 {
 	char					**operators;
-	t_list 					*cmds; // can be anything
+	t_list *cmds;
 	int						cmdc;
 }							t_ast_node_log;
 
 typedef struct s_pipeline
 {
 	char					symbol;
-	t_list *cmds; // can be procs or cmds only
+	t_list *cmds;
 	int						cmdc;
 }							t_ast_node_pipeline;
 
@@ -166,74 +168,50 @@ typedef struct s_node
 typedef struct s_parser
 {
 	t_list					*tokens;
+	int						token_count;
 	t_list					*curr_tok;
 	t_stack					*st;
 	t_ast_node				*last_node;
 	t_ast_node				*ref_node;
 	int						curr_idx;
-	int token_count; // ?
 	t_tok					*curr_cmd;
-	t_pstack				*stack; //retire this
 	t_ast_node				*ast;
 	bool					parse_error;
 
 }							t_parser;
 
 t_parser					*create_parser(t_list *tokens);
-void	destroy_parser(t_parser *p);
-
-t_ast_node					*parse_cmd(t_parser *p);
+void						destroy_parser(t_parser *p);
+t_tok						*peek(t_parser *p);
+t_tok						*lookahead(t_parser *p);
+t_tok						*previous(t_parser *p);
+t_tok						*advance(t_parser *p);
 
 t_tok						*peek(t_parser *p);
 t_tok						*lookahead(t_parser *p);
 t_tok						*previous(t_parser *p);
 bool						is_at_end(t_parser *p);
-t_tok						*advance(t_parser *p);
 
+t_ast_node					*parse_cmd(t_parser *p);
 t_ast_node					*parse_full_cmd(t_parser *p);
 t_ast_node					*parse_pipeline(t_parser *p);
 t_ast_node					*parse_proc(t_parser *p);
-t_ast_node *parse_logical(t_parser *p);;
+t_ast_node					*parse_logical(t_parser *p);
 
-bool 	last_parsed_was_cmd(t_parser *p);
+int							process_redir(t_parser *p, t_ast_node *cmd_node);
 
-t_list						*parse_args(t_parser *p, t_ast_node *cmd_node);
-t_list	*parse_redir(t_parser *p, t_ast_node *cmd);
-
-bool						is_arg_token(t_tok *tok);
+bool						is_option(t_tok *tok);
+bool						is_redir_token(t_tok *tok);
+bool						is_filename_token(t_tok *tok);
+bool						is_open_paren(t_tok *tok);
+bool						is_cmd_token(t_tok *tok);
+bool						is_log_token(t_tok *tok);
+bool						is_pipe_token(t_tok *tok);
 bool						is_op_token(t_tok *tok);
+bool						is_heredoc_token(t_tok *tok);
+bool						is_arg_token(t_tok *tok);
 
-t_pstack						*create_stack(void);
-void						destroy_stack(t_pstack *s);
-int							push(t_pstack *stack);
-int							pop(t_pstack *stack);
-
-
-
-t_tok	*peek(t_parser *p);
-t_tok	*lookahead(t_parser *p);
-t_tok	*previous(t_parser *p);
-bool	is_at_end(t_parser *p);
-bool last_parsed_was_pipe_or_cmd(t_parser *p);
-bool	last_parsed_was_cmd_or_proc(t_parser *p);
-bool 	last_parsed_was_cmd(t_parser *p);
-bool	last_parsed_was_group_or_null(t_parser *p);
-
-
-bool	is_option(t_tok *tok);
-bool	is_redir_token(t_tok *tok);
-bool	is_filename_token(t_tok *tok);
-bool	is_open_paren(t_tok *tok);
-bool	is_cmd_token(t_tok *tok);
-bool	is_log_token(t_tok *tok);
-bool	is_pipe_token(t_tok *tok);
-bool	is_op_token(t_tok *tok);
-bool	is_heredoc_token(t_tok *tok);
-
-bool	is_arg_token(t_tok *tok);
-void	parse_print(t_ast_node *ast);
-
-t_ast_node	*test_parse(t_parser *parser);
-
+void						parse_print(t_ast_node *ast);
+t_ast_node					*test_parse(t_parser *parser);
 
 #endif

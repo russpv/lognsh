@@ -1,10 +1,9 @@
 #include "llist.h"
 
 /* LSTADD_BACK
-** Returns single node for empty list, or adds new to back of
+** Returns single node for empty list, or adds new to end of
 ** linked list, keeps ptr to head ptr intact
 */
-
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	t_list	*tmp;
@@ -28,7 +27,6 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 ** PROTECTED: if lst is NULL, pushes onto empty list
 ** if new is NULL, does nothing
 */
-
 void	ft_lstadd_front(t_list **lst, t_list *new)
 {
 	if (!lst || !new)
@@ -43,7 +41,6 @@ void	ft_lstadd_front(t_list **lst, t_list *new)
 ** lst: ptr to ptr to node
 ** del: ptr to free(content) function
 */
-
 void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
 	t_list	*tmp;
@@ -67,7 +64,6 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 ** del: ptr to func that deletes node.content
 ** UNPROTECTED Does not check del
 */
-
 void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
 	if (lst == NULL)

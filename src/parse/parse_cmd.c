@@ -40,35 +40,18 @@ static t_list	*_parse_args(t_parser *p, t_ast_node *cmd_node)
 
 static t_ast_node	*_process_cmd(t_parser *p, t_ast_node *cmd_node)
 {	
-	fprintf(stderr, "proc'g cmd %s\n", tok_get_raw(peek(p)));
-	if (is_redir_token(peek(p)))
-	{
-		fprintf(stderr, "proc'g redir %s\n", tok_get_raw(peek(p)));
-		if (!parse_redir(p, cmd_node))
-		{
-			free(cmd_node);
-			err("Failed to parse redirection\n");
-			return (NULL);
-		}
-	}
+	if (0 != process_redir(p, cmd_node))
+		return (NULL);
 	if (!is_cmd_token(peek(p)))
 	{
 		free(cmd_node);
 		err("Expected a command token, but none found\n");
-		fprintf(stderr, "tok: %s", tok_get_raw(peek(p)));
 		return (NULL);
 	}
 	cmd_node->data.cmd.name = tok_get_raw(advance(p));
 	_parse_args(p, cmd_node);
-	if (is_redir_token(peek(p)))
-	{
-		if (!parse_redir(p, cmd_node))
-		{
-			free(cmd_node);
-			err("Failed to parse redirection\n");
-			return (NULL);
-		}
-	}
+	if (0 != process_redir(p, cmd_node))
+		return (NULL);
 	return (cmd_node);
 }
 
