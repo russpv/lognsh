@@ -6,80 +6,90 @@
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:00:49 by dayeo             #+#    #+#             */
-/*   Updated: 2025/01/25 02:30:02 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/01/27 13:43:05 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse/parse_int.h"
 #include "execute.h"
+#include "../parse/parse_int.h"
 
 // Convert linked list of arguments to char **array
-char	**list_to_array(t_list *args, int argc)
+char    **list_to_array(t_list *args, int argc)
 {
-	char	**array;
-	t_list	*current;
-	int		i;
+    char    **array;
+    t_list  *current;
+    int     i;
 
-	array = malloc(sizeof(char *) * (argc + 1));
-	if (!array)
-		return (NULL);
-	current = args;
-	i = 0;
-	while (i < argc && current)
-	{
-		array[i] = ((t_arg_data *)current->content)->raw;
-		current = current->next;
-		i++;
-	}
-	array[argc] = NULL;
-	return (array);
+    array = malloc(sizeof(char *) * (argc + 1));
+    if (!array)
+    {
+        perror("minishell: malloc failed in list_to_array");
+        return (NULL);  
+    }
+    current = args;
+    i = 0;
+    // iterates through linked list; extract raw strings into arrays for processing 
+    while (i < argc && current)
+    {
+        array[i] = ((t_arg_data *)current->content)->raw;
+        current = current->next;
+        i++;
+    }
+    array[argc] = NULL;
+    return (array);
 }
 
 // Fn to map command names to corresponding built-ins
-t_builtin_fn	get_builtin(char *command)
+t_builtin_fn    get_builtin(char *command)
 {
-	if (ft_strcmp(command, BI_ECHO) == 0)
-		return (&builtin_echo);
-	if (ft_strcmp(command, BI_PWD) == 0)
-		return (&builtin_pwd);
-	/* WIP
-	if (ft_strcmp(command, BI_CD) == 0)
-		return (&builtin_cd);
-	if (ft_strcmp(command, BI_UNSET) == 0)
-		return (&builtin_unset);
-	if (ft_strcmp(command, BI_ENV) == 0)
-		return (&builtin_env);
-	if (ft_strcmp(command, BI_EXPORT) == 0)
-		return (&builtin_export);
-	if (ft_strcmp(command, BI_EXIT) == 0)
-		return (&builtin_exit); */
-	return (NULL);
+    if (ft_strcmp(command, BI_ECHO) == 0)
+        return (&builtin_echo);
+    if (ft_strcmp(command, BI_PWD) == 0)
+        return (&builtin_pwd);
+    if (ft_strcmp(command, BI_ENV) == 0)
+        return (&builtin_env);
+    if (ft_strcmp(command, BI_EXIT) == 0)
+        return (&builtin_exit);
+    /* WIP
+    if (ft_strcmp(command, BI_CD) == 0)
+        return (&builtin_cd);
+    if (ft_strcmp(command, BI_UNSET) == 0)
+        return (&builtin_unset);
+    
+    if (ft_strcmp(command, BI_EXPORT) == 0)
+        return (&builtin_export);
+    if (ft_strcmp(command, BI_EXIT) == 0)
+        return (&builtin_exit); */
+    return (NULL); 
 }
+
 
 // Fn to execute commands
-void	execute_command(t_ast_node *node)
+void    execute_command(t_ast_node *node)
 {
-	char			**args;
-	t_builtin_fn	builtin;
-
-	if (!node || node->type != AST_NODE_CMD || !node->data.cmd.name)
-	{
-		write(STDERR_FILENO, "minishell: Invalid command\n", 28);
-		return ;
-	}
-	args = list_to_array(node->data.cmd.args, node->data.cmd.argc);
-	if (!args)
-	{
-		perror("minishell: malloc");
-		return ;
-	}
-	builtin = get_builtin(node->data.cmd.name);
-	if (builtin)
-		builtin(args);
-	else
-	{
-		/*if (execute_system_command(args) < 0)*/ /*TODO*/
-		perror("minishell");
-	}
-	free(args);
+    char    **args;
+    t_builtin_fn    builtin;
+    
+    if (!node || node->type != AST_NODE_CMD || !node->data.cmd.name)
+    {        
+        write(STDERR_FILENO, "minishell: Invalid command\n", 28);
+        return ;
+    }
+    args = list_to_array(node->data.cmd.args, node->data.cmd.argc);
+    if (!args)
+    {
+        perror("minishell: malloc");
+        return ;
+    }
+    builtin = get_builtin(node->data.cmd.name);
+    if (builtin)
+        builtin(args);
+    else
+    {
+        /*if (execute_system_command(args) < 0)*/ /*TODO*/
+            perror("minishell: system command not yet done.");
+    }
+    free(args);     
 }
+
+
