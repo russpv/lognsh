@@ -1,3 +1,4 @@
+// These commands are executed by the shell not child procs
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
@@ -10,9 +11,10 @@
 # define BI_EXIT "exit"
 # define BI_COUNT 7
 
-void	builtin_echo(char **args); //RKP: I believe these need to update '$?'
+void	builtin_echo(char **args);
 void	builtin_pwd(char **args);
-
+void	builtin_env(char **args);
+void	builtin_exit(char **args);
 /* Bash Manual
  *
  * All of the Bash builtins return an exit status of zero if
