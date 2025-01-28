@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bi.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/28 08:56:51 by dayeo             #+#    #+#             */
+/*   Updated: 2025/01/28 09:28:37 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // These commands are executed by the shell not child procs
-#ifndef BUILTINS_H
-# define BUILTINS_H
+#ifndef BI_H
+# define BI_H
 
 # define BI_ECHO "echo"
 # define BI_CD "cd"
@@ -11,10 +23,7 @@
 # define BI_EXIT "exit"
 # define BI_COUNT 7
 
-void	builtin_echo(char **args);
-void	builtin_pwd(char **args);
-void	builtin_env(char **args);
-void	builtin_exit(char **args);
+
 /* Bash Manual
  *
  * All of the Bash builtins return an exit status of zero if

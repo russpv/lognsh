@@ -1,88 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   bi_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/24 15:43:36 by dayeo             #+#    #+#             */
-/*   Updated: 2025/01/27 13:25:35 by dayeo            ###   ########.fr       */
+/*   Created: 2025/01/28 09:05:10 by dayeo             #+#    #+#             */
+/*   Updated: 2025/01/28 09:05:10 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "bi_int.h"
 
-void    builtin_echo(char **args)
-{
-    int     i;
-    int     no_newline;
-
-    i = 1;
-    no_newline = 0;
-
-    while (args[i] && ft_strcmp(args[i], "-n") == 0)
-    {
-        no_newline = 1;
-        i++;
-    }
-    while (args[i])
-    {
-        printf("%s", args[i]);
-        if (args[i + 1])
-            printf(" ");
-        i++;
-    }
-    if (!no_newline)
-        printf("\n");
-
-    g_exit_code = 0;
-}
-
-void    builtin_pwd(char **args)
-{
-    char    *cwd;
-    
-    if (args[1])
-    {
-        write(STDERR_FILENO, "minishell: pwd: too many arguments\n", 37);
-        g_exit_code = 1;
-        return ;
-    }
-    cwd = getcwd(NULL, 0);
-    if (cwd)
-    {
-        printf("%s\n", cwd);
-        free (cwd);
-        g_exit_code = 0;
-    }
-    else
-    {
-        perror("minishell: pwd");
-        g_exit_code = 1;
-    }
-}
-
-void    builtin_env(char **args)
-{
-    extern char **environ;
-    int i;
-
-    if (args[1])
-    {
-        write(STRERR_FILENO, "minishell: env: too many arguments\n", 35);
-        g_exit_code = 1;
-        return ;
-    }
-    i = 0;
-    while (environ[i])
-    {
-        printf("%s\n", environ[i]);
-        i++;
-    }
-    g_exit_code = 0;
-}
-
-// helper function for 
 static int  is_numeric(const char *str)
 {
     int     i;
