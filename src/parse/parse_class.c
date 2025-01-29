@@ -64,7 +64,7 @@ void	destroy_parser(t_parser *p)
 	if (p->ast)
 		destroy_ast(p->ast);
 	if (p->tokens)
-		ft_lstclear(p->tokens, destroy_token);
+		ft_lstclear(&p->tokens, destroy_token);
 	if (p->st)
 		st_destroy(p->st);
 	free(p);

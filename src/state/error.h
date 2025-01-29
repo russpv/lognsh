@@ -1,7 +1,8 @@
 #ifndef ERROR_H
 # define ERROR_H
 
-# include "state.h"
+// no includes, but redefs, due to circular dependency
+typedef struct s_global_state t_state; 
 
 # define ERR_TOKEN 0
 

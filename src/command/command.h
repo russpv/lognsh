@@ -3,6 +3,10 @@
 # define COMMAND_H
 
 # include "../data_structures/b_tree.h"
+# include "../parse/parse.h"
+# include "../state/state.h"
+# include "../execute/execute.h"
+
 // Note: do not need to include state.h or parse.h
 
 /* COMMAND ADT 
@@ -31,5 +35,7 @@ typedef struct s_global_state	t_state; // forward declare instead of include sta
 t_cmd	init_command(char *input);
 void	destroy_command(t_cmd c);
 void	cmd_execute(t_cmd c); //delegate to Execute. Must search builtins first.
+
+int	cmd_execute_simple(t_ast_node *a);
 
 #endif

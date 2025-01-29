@@ -13,34 +13,13 @@
 #include "../parse/parse_int.h"
 #include "execute.h"
 
-// Convert linked list of arguments to char **array
-char	**list_to_array(t_list *args, int argc)
-{
-	char	**array;
-	t_list	*current;
-	int		i;
-
-	array = malloc(sizeof(char *) * (argc + 1));
-	if (!array)
-		return (NULL);
-	current = args;
-	i = 0;
-	while (i < argc && current)
-	{
-		array[i] = ((t_arg_data *)current->content)->raw;
-		current = current->next;
-		i++;
-	}
-	array[argc] = NULL;
-	return (array);
-}
 
 // Fn to map command names to corresponding built-ins
 t_builtin_fn	get_builtin(char *command)
 {
-	if (ft_strcmp(command, BI_ECHO) == 0)
+	if (ft_strncmp(command, BI_ECHO, -1) == 0)
 		return (&builtin_echo);
-	if (ft_strcmp(command, BI_PWD) == 0)
+	if (ft_strncmp(command, BI_PWD, -1) == 0)
 		return (&builtin_pwd);
 	/* WIP
 	if (ft_strcmp(command, BI_CD) == 0)
@@ -55,7 +34,7 @@ t_builtin_fn	get_builtin(char *command)
 		return (&builtin_exit); */
 	return (NULL);
 }
-
+/*
 // Fn to execute commands
 void	execute_command(t_ast_node *node)
 {
@@ -78,8 +57,9 @@ void	execute_command(t_ast_node *node)
 		builtin(args);
 	else
 	{
-		/*if (execute_system_command(args) < 0)*/ /*TODO*/
+		//if (execute_system_command(args) < 0) TODO
 		perror("minishell");
 	}
 	free(args);
 }
+*/

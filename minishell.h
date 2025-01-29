@@ -1,9 +1,9 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "signal.h"
-#include "state.h" 
-#include "command.h" 
+#include "src/signal/signal.h"
+#include "src/state/state.h" 
+#include "src/command/command.h" 
 
 #include <stdio.h>
 #include <stdlib.h>

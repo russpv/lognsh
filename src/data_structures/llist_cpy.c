@@ -20,7 +20,7 @@ t_list	*ft_lstcopy_node(const t_list *orig, void *(*f)(const void *))
 
 // f - content copy func; d - content delete func
 t_list	*ft_lstcopy(t_list *orig, void *(*f)(const void *),
-		void *(*d)(const void *))
+		void (*d)(void *))
 {
 	t_list	*new_list;
 	t_list	*curr;
@@ -35,7 +35,7 @@ t_list	*ft_lstcopy(t_list *orig, void *(*f)(const void *),
 		new_node = ft_lstcopy_node(curr, f);
 		if (!new_node)
 		{
-			ft_lstclear(new_list, d);
+			ft_lstclear(&new_list, d);
 			return (NULL);
 		}	
 		if (prev_node != NULL)

@@ -15,15 +15,15 @@
 #include <stdio.h>
 #include <unistd.h>
 
-void    builtin_echo(char **args)
+int    builtin_echo(char **args)
 {
     int     i;
     int     no_newline;
 
-    i = 1;
+    i = 0;
     no_newline = 0;
 
-    while (args[i] && ft_strcmp(args[i], "-n") == 0)
+    while (args[i] && ft_strncmp(args[i], "-n", -1) == 0)
     {
         no_newline = 1;
         i++;
@@ -37,16 +37,17 @@ void    builtin_echo(char **args)
     }
     if (!no_newline)
         printf("\n");
+    return (0);
 }
 
-void    builtin_pwd(char **args)
+int    builtin_pwd(char **args)
 {
     char    *cwd;
     
     if (args[1])
     {
         write(STDERR_FILENO, "minishell: pwd: too many arguments\n", 36);
-        return ;
+        return (1);
     }
     cwd = getcwd(NULL, 0);
     if (cwd)
@@ -56,4 +57,5 @@ void    builtin_pwd(char **args)
     }
     else
         perror("minishell: pwd");
+    return (0);
 }

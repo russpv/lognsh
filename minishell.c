@@ -2,18 +2,6 @@
 
 int g_exit_code;
 
-char **parse(const char *input)
-{
-	int n = 0;
-	char **res = malloc(n * sizeof(char*));
-	return (res);
-}
-
-int	execute(char **args)
-{
-	printf("%s", *args);
-	return (1);
-}
 
 # define PROMPT "minish> "
 
@@ -22,7 +10,10 @@ int main() {
     // signal(SIGINT, sigint_handler); // Ctrl-C
 	// signal(SIG..., ..._handler); // Ctrl-...
     char *input = NULL;
+    t_ast_node *ast;
+    t_state *s;
 
+    s = init_state();
     while (1) {
         input = readline(PROMPT);
         
@@ -36,8 +27,8 @@ int main() {
             add_history(input);
         }
 		
-		char **args = parse(input); //TODO: t_ast ast = parse(s, input);
-		int exit_code = execute(args); //TODO: s.status = cmd_execute(s, ast);
+	    ast = parse(s, input); //TODO: t_ast ast = parse(s, input);
+		cmd_execute_simple(ast); //TODO: s.status = cmd_execute(s, ast);
 
 		//parse_free_ast(ast);
         free(input);

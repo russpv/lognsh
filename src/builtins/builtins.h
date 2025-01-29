@@ -10,8 +10,8 @@
 # define BI_EXIT "exit"
 # define BI_COUNT 7
 
-void	builtin_echo(char **args); //RKP: I believe these need to update '$?'
-void	builtin_pwd(char **args);
+int	builtin_echo(char **args); //RKP: I believe these need to update '$?'
+int	builtin_pwd(char **args);
 
 /* Bash Manual
  *

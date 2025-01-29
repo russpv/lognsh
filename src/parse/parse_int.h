@@ -91,14 +91,7 @@ typedef struct
 	int						depth;
 }							t_pstack;
 
-enum						e_ast_node_type
-{
-	NONE,
-	AST_NODE_LOG,
-	AST_NODE_PIPELINE,
-	AST_NODE_CMD,
-	AST_NODE_PROC
-};
+
 
 typedef struct s_cmd
 {

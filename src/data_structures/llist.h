@@ -28,7 +28,7 @@ t_list					*ft_lstmap(t_list *lst, void *(*f)(void *), \
 t_list					*ft_lstnew(void *content);
 int						ft_lstsize(t_list *lst);
 t_list					*ft_lstcopy(t_list *orig, void *(*f)(const void *), \
-							void *(*d)(const void *));
+							void (*d)(void *));
 t_list					*ft_lstcopy_node(const t_list *orig, \
 							void *(*f)(const void *));
 
