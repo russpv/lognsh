@@ -1,5 +1,18 @@
-#ifndef BUILTINS_H
-# define BUILTINS_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bi.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/28 08:56:51 by dayeo             #+#    #+#             */
+/*   Updated: 2025/01/28 09:28:37 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// These commands are executed by the shell not child procs
+#ifndef BI_H
+# define BI_H
 
 # define BI_ECHO "echo"
 # define BI_CD "cd"
