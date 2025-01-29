@@ -14,31 +14,7 @@
 #include "../parse/parse_int.h"
 
 
-// Fn to map command names to corresponding built-ins
-t_builtin_fn    get_builtin(char *command)
-{
-    if (ft_strcmp(command, BI_ECHO) == 0)
-        return (&builtin_echo);
-    if (ft_strcmp(command, BI_PWD) == 0)
-        return (&builtin_pwd);
-    if (ft_strcmp(command, BI_ENV) == 0)
-        return (&builtin_env);
-    if (ft_strcmp(command, BI_EXIT) == 0)
-        return (&builtin_exit);
-    /* WIP
-    if (ft_strcmp(command, BI_CD) == 0)
-        return (&builtin_cd);
-    if (ft_strcmp(command, BI_UNSET) == 0)
-        return (&builtin_unset);
-    
-    if (ft_strcmp(command, BI_EXPORT) == 0)
-        return (&builtin_export);
-    if (ft_strcmp(command, BI_EXIT) == 0)
-        return (&builtin_exit); */
-    return (NULL); 
-}
-
-
+/*
 // Fn to execute commands
 void    execute_command(t_ast_node *node)
 {
@@ -61,10 +37,10 @@ void    execute_command(t_ast_node *node)
         builtin(args);
     else
     {
-        /*if (execute_system_command(args) < 0)*/ /*TODO*/
+        //TODO if (execute_system_command(args) < 0)
             perror("minishell: system command not yet done.");
     }
     free(args);     
-}
+}*/
 
 

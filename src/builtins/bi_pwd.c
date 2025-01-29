@@ -12,26 +12,25 @@
 
 #include "bi_int.h"
 
-void    builtin_pwd(char **args)
+int    bi_pwd(char **args)
 {
     char    *cwd;
     
     if (args[1])
     {
         write(STDERR_FILENO, "minishell: pwd: too many arguments\n", 37);
-        g_exit_code = 1;
-        return ;
+        return (1);
     }
     cwd = getcwd(NULL, 0);
     if (cwd)
     {
         printf("%s\n", cwd);
         free (cwd);
-        g_exit_code = 0;
+        return (0);
     }
     else
     {
         perror("minishell: pwd");
-        g_exit_code = 1;
+        return (1);
     }
 }

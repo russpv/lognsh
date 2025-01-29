@@ -11,15 +11,20 @@
 /* ************************************************************************** */
 
 #ifndef BI_INT_H
-# define BI__INT_H
-#include "bi_int.h"
+# define BI_INT_H
 
-void	bi_echo(char **args);
-void	bi_pwd(char **args);
-void	bi_env(char **args);
-void	bi_exit(char **args);
-void    bi_cd(char **args);
+#include "bi.h"
 
+#include "../../lib/libft.h"
+#include <unistd.h>
+#include <stdio.h>
+
+
+int	bi_echo(char **args);
+int	bi_pwd(char **args);
+//void	bi_env(char **args); //Note: compile errors
+//void	bi_exit(char **args);
+//void    bi_cd(char **args);
 
 
 #endif

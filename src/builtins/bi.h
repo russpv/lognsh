@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// These commands are executed by the shell not child procs
 #ifndef BI_H
 # define BI_H
 
@@ -23,8 +22,10 @@
 # define BI_EXIT "exit"
 # define BI_COUNT 7
 
-int	builtin_echo(char **args); //RKP: I believe these need to update '$?'
-int	builtin_pwd(char **args);
+
+typedef int (*t_builtin_fn)(char **args); //RKP: last exit code should be set by caller
+
+t_builtin_fn	get_builtin(char *command);
 
 /* Bash Manual
  *

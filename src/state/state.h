@@ -3,6 +3,7 @@
 
 # include "../signal/signal.h"
 # include "env.h"
+# include "error.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 
@@ -39,16 +40,18 @@ typedef struct s_global_state	t_state;
 // Methods
 t_state							*init_state(void);
 void							destroy_state(t_state *state);
-
 int								set_exit_status(t_state *state);
 void							set_error(t_state *state, int code);
 
-//t_cmd							*build_command(char *input); // interface to COMMAND
+// t_cmd							*build_command(char *input);
+								// interface to COMMAND
+
+t_state							*state_get_instance(void);
 
 char							*get_env_var(t_state *s, const char *key);
-void							set_env_var(t_state *s, const char *key, \
+void							set_env_var(t_state *s, const char *key,
 									const char *value);
-char							*search_path(const char *command);  // wrapper required for COMMAND
-char							**expand_glob(const char *pattern); // wrapper required for COMMAND
+char	*search_path(const char *command);  // wrapper required for COMMAND
+char	**expand_glob(const char *pattern); // wrapper required for COMMAND
 
 #endif

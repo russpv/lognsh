@@ -42,7 +42,7 @@ void    builtin_cd(char **args)
     {
         write(STDERR_FILENO, "minishell: cd: ", 15);
         write(STDERR_FILENO, target_dir, ft_strlen(target_dir));
-        write(STRERR_FILENO, ": ", 2);
+        write(STDERR_FILENO, ": ", 2);
         write(STDERR_FILENO, strerror(errno), ft_strlen(strerror(errno)));
         write(STDERR_FILENO, "\n", 1);
         g_exit_code = 1;

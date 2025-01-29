@@ -2,7 +2,7 @@
 # define LEX_H
 
 # include "../../debug.h"
-# include "../builtins/builtins.h"
+# include "../builtins/bi.h"
 # include "../data_structures/hashtable.h"
 # include "../data_structures/llist.h"
 # include "../state/state.h"

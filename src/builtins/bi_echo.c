@@ -12,7 +12,7 @@
 
 #include "bi_int.h"
 
-int    builtin_echo(char **args)
+int    bi_echo(char **args)
 {
     int     i;
     int     no_newline;
@@ -35,5 +35,5 @@ int    builtin_echo(char **args)
     if (!no_newline)
         printf("\n");
 
-    g_exit_code = 0;
+    return (0);
 }

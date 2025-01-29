@@ -36,6 +36,6 @@ t_cmd	init_command(char *input);
 void	destroy_command(t_cmd c);
 void	cmd_execute(t_cmd c); //delegate to Execute. Must search builtins first.
 
-int	cmd_execute_simple(t_ast_node *a);
+int		cmd_execute_simple(t_ast_node *a);
 
 #endif

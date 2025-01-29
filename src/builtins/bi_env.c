@@ -19,7 +19,7 @@ void    builtin_env(char **args)
 
     if (args[1])
     {
-        write(STRERR_FILENO, "minishell: env: too many arguments\n", 35);
+        write(STDERR_FILENO, "minishell: env: too many arguments\n", 35);
         g_exit_code = 1;
         return ;
     }
