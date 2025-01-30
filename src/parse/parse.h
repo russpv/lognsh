@@ -49,6 +49,7 @@ char *p_get_cmd(t_ast_node *a);
 char **p_get_argv(t_ast_node *a);
 t_list *p_get_args(t_ast_node *a);
 
+char **p_do_arg_expansions(t_ast_node *a);
 
 /*  Expansions */
 // tilde ~ ?

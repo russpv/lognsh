@@ -36,6 +36,5 @@ int    bi_echo(char **args)
     }
     if (!no_newline)
         printf("\n");
-
     return (0);
 }

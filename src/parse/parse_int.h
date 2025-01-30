@@ -124,6 +124,7 @@ typedef struct s_redir
 typedef struct s_arg
 {
 	char					*raw;
+	char					**tmp;
 	bool					option;
 	bool					do_globbing;
 	bool					do_expansion;
@@ -181,7 +182,7 @@ typedef struct s_parser
 	bool					parse_error;
 }							t_parser;
 
-t_parser	*create_parser(t_state *s, t_list *tokens);
+t_parser					*create_parser(t_state *s, t_list *tokens);
 void						destroy_parser(void *instance);
 t_tok						*peek(t_parser *p);
 t_tok						*lookahead(t_parser *p);
@@ -214,5 +215,8 @@ bool						is_arg_token(t_tok *tok);
 
 void						parse_print(t_ast_node *ast);
 t_ast_node					*test_parse(t_parser *parser);
+
+void	p_do_expansion(void *content);
+
 
 #endif

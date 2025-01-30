@@ -7,7 +7,7 @@ SRC = src/data_structures/llist.c src/data_structures/llist_utils.c src/data_str
       src/data_structures/stack.c \
       lib/ft_strchr.c lib/ft_strdup.c lib/ft_isalpha.c lib/ft_isdigit.c lib/ft_strncmp.c \
       lib/ft_memcpy.c lib/ft_strlen.c lib/ft_memset.c lib/ft_isspace.c lib/ft_strcmp.c \
-      lib/ft_isalnum.c \
+      lib/ft_isalnum.c lib/ft_strnlen.c \
       debug.c \
       src/lex/lex_utils.c src/lex/lex_normal_utils.c src/lex/lex_normal_ht.c src/lex/lex_squote.c src/lex/lex_dquote.c src/lex/lex_utils_ht.c \
       src/lex/lex_state.c src/lex/lex_build_ht.c src/lex/lex_.c src/lex/lex_normal.c src/lex/lex_heredoc.c \

@@ -1,6 +1,6 @@
 #include "parse_int.h"
 
-
+/* Returns the cmd name of an AST_NODE_CMD node */
 char *p_get_cmd(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)
@@ -14,6 +14,7 @@ int p_get_type(t_ast_node *a)
 	return (a->type);
 }
 
+/* Returns the llist of t_arg_data node content */
 t_list *p_get_args(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)
@@ -75,3 +76,16 @@ char **p_get_argv(t_ast_node *a)
 	return (args);
 }
 
+/* Needs to work with the arg llist 
+ * and mind the flags
+ */
+char **p_do_arg_expansions(t_ast_node *a)
+{
+	if (a->type != AST_NODE_CMD)
+		return (NULL);
+	t_list *args = p_get_args(a);
+	ft_lstiter(args, p_do_expansion);
+	//char **tmp = p_get_argv(a);
+	char **tmp = list_to_array(args, a->data.cmd.argc);
+	return (tmp);
+}

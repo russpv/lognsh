@@ -51,7 +51,11 @@ void							set_error(t_state *state, int code);
 void							set_parser(t_state *state, t_parser *p);
 void							set_lexer(t_state *state, t_lex *l);
 void							set_input(t_state *s, char *input);
+
 char							*get_input(t_state *s);
+
+void							register_parser_destroy(t_state *s, t_destroy_fn fn);
+void							register_lexer_destroy(t_state *s, t_destroy_fn fn);
 void							s_free_cmd(t_state *s);
 
 // t_cmd							*build_command(char *input);
@@ -64,8 +68,5 @@ void							set_env_var(t_state *s, const char *key,
 									const char *value);
 char	*search_path(const char *command);  // wrapper required for COMMAND
 char	**expand_glob(const char *pattern); // wrapper required for COMMAND
-
-void	register_parser_destroy(t_state *s, t_destroy_fn fn);
-void							register_lexer_destroy(t_state *s, t_destroy_fn fn);
 
 #endif
