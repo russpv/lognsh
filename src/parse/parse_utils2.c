@@ -14,3 +14,29 @@ void	parse_print(t_ast_node *ast)
 	// ast_traverse
 }
 
+// Deep copies linked list of arguments to char **array
+char	**list_to_array(t_list *args, int argc)
+{
+	char	**array;
+	t_list	*current;
+	int		i;
+
+	array = malloc(sizeof(char *) * (argc + 1));
+	if (!array)
+		return (NULL);
+	current = args;
+	i = 0;
+	while (i < argc && current)
+	{
+		array[i] = ft_strdup(((t_arg_data *)current->content)->raw);
+		if (!array[i])
+		{
+			destroy_arr(array);
+			return (NULL);
+		}
+		current = current->next;
+		i++;
+	}
+	array[argc] = NULL;
+	return (array);
+}

@@ -212,6 +212,10 @@ bool						is_pipe_token(t_tok *tok);
 bool						is_op_token(t_tok *tok);
 bool						is_heredoc_token(t_tok *tok);
 bool						is_arg_token(t_tok *tok);
+bool						is_expansion(t_tok *tok);
+
+char	**list_to_array(t_list *args, int argc);
+
 
 void						parse_print(t_ast_node *ast);
 t_ast_node					*test_parse(t_parser *parser);

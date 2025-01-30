@@ -43,39 +43,6 @@ static t_list	*_parse_args(t_parser *p, t_ast_node *cmd_node)
 	return (cmd_node->data.cmd.args);
 }
 
-/* If flag set, looks for expansion values in ENV and replaces 
- * t_arg_data.raw string 
- * Applied to t_ast_node.cmd's t_list*
- */
-void	p_do_expansion(void *c)
-{
-	char buf[1024];
-
-	ft_memset(buf, 0, 1024);
-	t_arg_data *content = (t_arg_data *)c;
-	debug_print("p_do_expansion got: %s\n", content->raw);
-	if (content->do_expansion)
-	{
-		ft_memcpy(buf, content->raw + 1, ft_strnlen(content->raw, 1024) - 1);
-		const char *value = getenv(buf);
-		debug_print("p_do_expansion found: %s\n", value);
-		if (value)
-		{
-			free(content->raw);
-			content->raw = ft_strdup(value);
-			if (!content->raw)
-				err("p_do_expansion Malloc\n");
-		}
-	}
-}
-
-bool	is_expansion(t_tok *tok)
-{
-	const enum e_tok_type	type = tok_get_type(tok);
-
-	return (type == TOK_EXIT_STATUS || type == TOK_ENV_VAR);
-}
-
 static t_ast_node	*_process_cmd(t_parser *p, t_ast_node *cmd_node)
 {	
 	if (0 != process_redir(p, cmd_node))
