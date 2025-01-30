@@ -10,6 +10,7 @@ struct s_tok
 	size_t			pos;
 	bool			do_globbing;
 	bool			do_expansion;
+	bool			in_dquotes;
 };
 
 #endif

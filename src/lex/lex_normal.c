@@ -20,7 +20,7 @@ static t_tok	*_match_normal_token(t_lex *lexer, int *buf_idx)
 	return (NULL);
 }
 
-/* Handles '$?' here */
+/* Tokenizes '$?' here, which does not need to be delimited */
 static t_tok	*_match_word_or_name_or_exception(t_lex *lexer, int *buf_idx)
 {
     if (true == is_dollar_question(lexer))
@@ -32,6 +32,8 @@ static t_tok	*_match_word_or_name_or_exception(t_lex *lexer, int *buf_idx)
 	if (true == is_normal_delim(*lexer->ptr) && ft_strlen(lexer->buf) > 0)
 	{
 		debug_print("----_match_word_or_name: got %s\n", lexer->buf);
+		if ('$' == lexer->buf[0])
+			return (lex_create_token(lexer, TOK_ENV_VAR));
 		return (lex_create_token(lexer, word_or_name(lexer->buf)));
 	}
 	return (NULL);

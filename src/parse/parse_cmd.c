@@ -6,6 +6,7 @@ static void	_init_arg_data(t_arg_data *arg, t_tok *tok)
 	arg->option = is_option(tok);
 	arg->do_globbing = tok_get_globbing(tok);
 	arg->do_expansion = tok_get_expansion(tok);
+	arg->in_dquotes = tok_get_dquotes(tok);
 }
 
 /* Consumes arg tokens and adds them to command node linked list
@@ -38,6 +39,13 @@ static t_list	*_parse_args(t_parser *p, t_ast_node *cmd_node)
 	return (cmd_node->data.cmd.args);
 }
 
+bool	is_expansion(t_tok *tok)
+{
+	const enum e_tok_type	type = tok_get_type(tok);
+
+	return (type == TOK_EXIT_STATUS || type == TOK_ENV_VAR);
+}
+
 static t_ast_node	*_process_cmd(t_parser *p, t_ast_node *cmd_node)
 {	
 	if (0 != process_redir(p, cmd_node))
@@ -48,7 +56,10 @@ static t_ast_node	*_process_cmd(t_parser *p, t_ast_node *cmd_node)
 		err("Expected a command token, but none found\n");
 		return (NULL);
 	}
-	cmd_node->data.cmd.name = tok_get_raw(advance(p));
+	if (!is_expansion(peek(p)))
+		cmd_node->data.cmd.name = tok_get_raw(advance(p));
+	else
+		cmd_node->data.cmd.name = NULL;
 	_parse_args(p, cmd_node);
 	if (0 != process_redir(p, cmd_node))
 		return (NULL);

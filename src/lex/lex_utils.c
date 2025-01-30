@@ -25,6 +25,8 @@ t_tok	*lex_create_token(t_lex *lexer, int type)
 				- lexer->raw_string));
 	if (token)
 	{
+		if (IN_DOUBLE_QUOTES == lexer->state)
+			tok_set_dquotes(token);
 		if (true == lexer->do_globbing)
 			tok_set_globbing(token);
 		if (true == lexer->do_expansion)

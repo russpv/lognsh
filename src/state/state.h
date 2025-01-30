@@ -32,19 +32,30 @@
 /* STATE ADT
 ** A centralized singleton-like pattern for tracking global state
 ** including environment, command history, execution state.
-**
 */
 struct s_global_state;
 typedef struct s_global_state	t_state;
 
+typedef void					(*t_destroy_fn)(void *instance);
+
+/* Duplicate declarations instead of includes */
+typedef struct s_parser			t_parser;
+typedef struct s_lex			t_lex;
+
 // Methods
 t_state							*init_state(void);
 void							destroy_state(t_state *state);
+
 int								set_exit_status(t_state *state, int value);
 void							set_error(t_state *state, int code);
+void							set_parser(t_state *state, t_parser *p);
+void							set_lexer(t_state *state, t_lex *l);
+void							set_input(t_state *s, char *input);
+char							*get_input(t_state *s);
+void							s_free_cmd(t_state *s);
 
 // t_cmd							*build_command(char *input);
-								// interface to COMMAND
+// interface to COMMAND
 
 t_state							*state_get_instance(void);
 
@@ -53,5 +64,8 @@ void							set_env_var(t_state *s, const char *key,
 									const char *value);
 char	*search_path(const char *command);  // wrapper required for COMMAND
 char	**expand_glob(const char *pattern); // wrapper required for COMMAND
+
+void	register_parser_destroy(t_state *s, t_destroy_fn fn);
+void							register_lexer_destroy(t_state *s, t_destroy_fn fn);
 
 #endif

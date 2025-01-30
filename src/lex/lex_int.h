@@ -4,10 +4,11 @@
 
 /* chars that need to be quoted if meant literally */
 #define NORMALDELIMS \
-	"^*()=|{}[]`<>?~;&\n\t \'\"" //$ should not break tokens,
+	"^*()=|{}[]`<>?~;&\n\t \'\""    //$ should not break tokens,
 									// backslash also,
 									//	# is escape only
-#define NORMALTRANSITIONS "\'\"<\0" // the '\0' isn't tested, keep at end, < for heredoc
+#define NORMALTRANSITIONS "\'\"<\0" // the '\0' isn't tested, keep at end,
+//	< for heredoc
 #define LEX_BUFSZ 1024
 #define RESET 0
 
@@ -141,6 +142,10 @@ struct						s_ht_data
 
 typedef struct s_ht_data	*t_ht_data;
 
+t_lex						*create_lexer(t_state *st, int start_state, \
+							const char *s);
+void						destroy_lexer(void *instance);
+
 void						build_hasht(t_lex *lexer);
 t_ht_data					lex_create_ht_node(int is_substring, int type);
 void						lex_destroy_ht_node(void *node);
@@ -158,11 +163,11 @@ void						debug_detect_cycle(t_list *head);
 
 bool						is_normal_delim(unsigned char s);
 bool						is_transition_char(t_lex *l, unsigned char s);
-bool is_dollar_question(t_lex *lexer);
+bool						is_dollar_question(t_lex *lexer);
 int							word_or_name(const char *s);
 void						process_escape_sequence(t_lex *l);
 int							process_special_operators(t_lex *lexer);
-struct s_ht_entry			*do_one_char_lookahead(t_lex *lexer,
+struct s_ht_entry			*do_one_char_lookahead(t_lex *lexer, \
 								struct s_ht_entry *res);
 t_tok						*lex_ht_lookup(t_lex *lexer);
 int							do_state_transition(t_lex *lexer);

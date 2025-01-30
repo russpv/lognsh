@@ -23,7 +23,7 @@ static inline bool	_allocate_buf_and_hasht(t_lex *lexer)
 	return (lexer->hasht != NULL);
 }
 
-t_lex	*create_lexer(int start_state, const char *s)
+t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 {
 	t_lex	*lexer;
 
@@ -40,6 +40,7 @@ t_lex	*create_lexer(int start_state, const char *s)
 		lexer->token_list = NULL;
 		lexer->eof_word = NULL;
 		lexer->is_incomplete = false;
+    	register_lexer_destroy(st, destroy_lexer);
 		if (false == _allocate_buf_and_hasht(lexer))
 		{
 			free(lexer);
@@ -50,8 +51,9 @@ t_lex	*create_lexer(int start_state, const char *s)
 	return (lexer);
 }
 
-void	destroy_lexer(t_lex *lexer)
+void	destroy_lexer(void *instance)
 {
+	t_lex *lexer = (t_lex *)instance;
 	if (!lexer)
 		return ;
 	if (lexer->buf)
@@ -66,7 +68,7 @@ void	destroy_lexer(t_lex *lexer)
 }
 
 // assumes non-empty string
-t_lex	*tokenize(const char *input)
+t_lex	*tokenize(t_state *s, const char *input)
 {
 	enum e_lex_state	state;
 	t_lex				*lexer;
@@ -77,7 +79,7 @@ t_lex	*tokenize(const char *input)
 		state = IN_DOUBLE_QUOTES;
 	else
 		state = NORMAL;
-	lexer = create_lexer(state, input);
+	lexer = create_lexer(s, state, input);
 	if (lexer)
 	{
 		while (DONE != lexer->state)

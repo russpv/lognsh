@@ -14,6 +14,14 @@ int p_get_type(t_ast_node *a)
 	return (a->type);
 }
 
+t_list *p_get_args(t_ast_node *a)
+{
+	if (a->type != AST_NODE_CMD)
+		return (NULL);
+	debug_print("p_get_args got: _%s_\n", a->data.cmd.name);
+	return (a->data.cmd.args);
+}
+
 void	destroy_arr(char **arr)
 {
 	int i = 0;

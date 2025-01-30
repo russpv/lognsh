@@ -39,7 +39,6 @@ enum						e_ast_node_type
 	AST_NODE_PROC
 };
 
-
 typedef struct s_global_state	t_state;
 typedef struct s_node t_ast_node;
 
@@ -48,6 +47,8 @@ t_ast_node	*parse(t_state *s, char *input);
 int	p_get_type(t_ast_node *a);
 char *p_get_cmd(t_ast_node *a);
 char **p_get_argv(t_ast_node *a);
+t_list *p_get_args(t_ast_node *a);
+
 
 /*  Expansions */
 // tilde ~ ?

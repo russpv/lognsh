@@ -8,11 +8,9 @@
 
 t_bool	ft_isalpha(int c)
 {
-	if (c >= 0 && c < 256)
-	{
-		c |= 32;
-		if (c >= 'a' && c <= 'z')
-			return (TRUE);
-	}
+	unsigned char uc = (unsigned char)c;
+
+	if ((uc >= 'A' && uc <= 'Z') || (uc >= 'a' && uc <= 'z'))
+		return (TRUE);
 	return (FALSE);
 }

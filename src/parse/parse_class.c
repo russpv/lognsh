@@ -21,7 +21,7 @@ void	destroy_ast(t_ast_node *ast)
 	(void)ast;
 }
 
-void static inline _init_parser(t_parser *p)
+void static inline _init_parser(t_state *s, t_parser *p)
 {
 	p->ast = NULL;
 	p->curr_idx = -1;
@@ -29,9 +29,10 @@ void static inline _init_parser(t_parser *p)
 	p->last_node = NULL;
 	p->ref_node = NULL;
 	p->parse_error = false;
+    register_parser_destroy(s, destroy_parser);
 }
 
-t_parser	*create_parser(t_list *tokens)
+t_parser	*create_parser(t_state *s, t_list *tokens)
 {
 	t_parser	*p;
 
@@ -48,7 +49,7 @@ t_parser	*create_parser(t_list *tokens)
 		}
 		p->curr_tok = tokens;
 		p->token_count = ft_lstsize(tokens);
-		_init_parser(p);
+		_init_parser(s, p);
 		p->st = st_create();
 		if (!p->st)
 		{
@@ -59,8 +60,9 @@ t_parser	*create_parser(t_list *tokens)
 	return (p);
 }
 
-void	destroy_parser(t_parser *p)
+void	destroy_parser(void *instance)
 {
+	t_parser *p = (t_parser *)instance;
 	if (p->ast)
 		destroy_ast(p->ast);
 	if (p->tokens)

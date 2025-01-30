@@ -15,6 +15,7 @@ SRC = src/data_structures/llist.c src/data_structures/llist_utils.c src/data_str
       src/parse/parse.c src/parse/parse_stack.c src/parse/parse_utils.c src/parse/parse_class.c src/parse/parse_cmd.c \
       src/parse/parse_redir.c src/parse/parse_log.c src/parse/parse_proc.c src/parse/parse_pipe.c \
       src/parse/parse_bools.c src/parse/parse_bools2.c src/parse/parse_utils2.c src/parse/parse_getters.c \
+      src/parse/parse_expand.c \
       src/state/error.c src/state/state.c \
       src/command/command.c \
       src/execute/execute.c \

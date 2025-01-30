@@ -5,41 +5,51 @@
 
 # define MAX_CMD_ARGS 10
 
-//TODO: $ and * expansions. Send to lexer. Create tokens_insert method. 
+// TODO: $ and * expansions. Send to lexer. Create tokens_insert method.
 // unsure when redirect expansion occurs; might as well do it asap.
-// if multiple words result, throw 'bash: $VAR: ambiguous redirect' 
+// if multiple words result, throw 'bash: $VAR: ambiguous redirect'
 
-// Operator precedence for operators like &&, ||, |, etc.
-// Note: bash equates && and || unusually, so left to right order
-// Grouping in commands (e.g., command1 && (command2 || command3)).
+// TODO expand_env_var(): if expansion flag is set, searches ENV for value.
+// TODO expand_exit_status(): if TOK_EXIT_STATUS, gets last value.
+// TODO split_words(): split on IFS, default space, tab, newline.
 
+// Note: multi-word expansions trigger an error for redirects. they cannot introduce functionality,
+//	so lexing is different.
+// Note: redirections can supersede piping
+// Note: expansion does not alter the parse tree structure. All words are treated as arguments,
+// unless no command was parsed,
+//	then the first word is treated as the command name.
 /*
 From Bash Manual:
 These (expansion) operations are performed in this order:
 
-Parameter expansion: $VAR is replaced with its ENV value. No fancy stuff. Also,
+1) Parameter expansion: $VAR is replaced with its ENV value. No fancy stuff. Also,
 	$0 and $? do their thing.
-Command substition: $(command) replaces command with its output. If this appears in double quotes,
-	word splitting and filename expansion
-are not performed on output.
-Word splitting: checks results of expansions to split words
-Filename expansion: if word has unquoted ‘*’,
-	it is replaced with alphabetically sorted list of matching (case sensitive) filenames in pwd.
-If no matches, the word is left unchanged, or removed,
-	or error thrown. Starting dots must be matched explicitly.
-Pattern matching: * Matches any string, including the null string
-Quote removal: any [\ ' "], not resulting from an expansion,
+(excluded) Command substition: $(command) replaces command with its output. If this appears in double quotes,
+	word splitting and filename expansion are not performed on output.
+2) Word splitting: checks results of expansions to split words
+3) Filename expansion: if word has unquoted ‘*’,
+	it is replaced with alphabetically sorted
+	list of matching (case sensitive) filenames in pwd. If no matches,
+		the word is left
+	unchanged, or removed,
+		or error thrown. Starting dots must be matched explicitly.
+(excluded) Pattern matching: * Matches any string, including the null string
+4) Quote removal: any [\ ' "], not resulting from an expansion,
 	and outside of quotes, is removed
 
 Execution:
-- Expansions on words other than redirections. If any,
-	first word is taken as the command name, remaining are args.
+- Expansions (see above) on words other than redirections. If any,
+	first word is taken as the command
+		name, remaining are args.
 - Redirections are performed.
 - If no command name results, redirections are performed,
-	but do not affect the current shell environment. A redirection error causes the command to exit with a non-zero status.
+	but do not affect the current
+	shell environment. A redirection error causes the command to exit with a non-zero status.
 - If one of the expansions contained a command substitution,
-	the exit status of the command is the exit status of the last command substitution performed. If there were no command substitutions,
-	the command exits with a status of zero.
+	the exit status of the command
+	is the exit status of the last command substitution performed. If there were no command
+		substitutions, the command exits with a status of zero.
 
 See Noyce, Robert. Crafting Interpreters.
 
@@ -69,6 +79,7 @@ command or may follow a command. Redirections are processed in the
 if you redirect multiple times, all the redirections are performed,
  but only the last redirection will take effect (assuming none of
  the earlier redirections cause error)
+
  3.6.2 Redirecting Output
 
 Redirection of output causes the file whose name results from the
@@ -85,13 +96,10 @@ expansion of word to be opened for writing on file descriptor n,
 Note: any split words on an expansion of a redirection fd results in an error
 */
 
-
 typedef struct
 {
 	int						depth;
 }							t_pstack;
-
-
 
 typedef struct s_cmd
 {
@@ -119,28 +127,29 @@ typedef struct s_arg
 	bool					option;
 	bool					do_globbing;
 	bool					do_expansion;
+	bool					in_dquotes;
 }							t_arg_data;
 
-/* Next refactor, remove the t_list since 
+/* Next refactor, remove the t_list since
  * this can only be a wrapper for one cmd
  */
 typedef struct s_proc
 {
-	t_list *cmds;
+	t_list					*cmds;
 	int						cmdc;
 }							t_ast_node_proc;
 
 typedef struct s_op
 {
 	char					**operators;
-	t_list *cmds;
+	t_list					*cmds;
 	int						cmdc;
 }							t_ast_node_log;
 
 typedef struct s_pipeline
 {
 	char					symbol;
-	t_list *cmds;
+	t_list					*cmds;
 	int						cmdc;
 }							t_ast_node_pipeline;
 
@@ -170,11 +179,10 @@ typedef struct s_parser
 	t_tok					*curr_cmd;
 	t_ast_node				*ast;
 	bool					parse_error;
-
 }							t_parser;
 
-t_parser					*create_parser(t_list *tokens);
-void						destroy_parser(t_parser *p);
+t_parser	*create_parser(t_state *s, t_list *tokens);
+void						destroy_parser(void *instance);
 t_tok						*peek(t_parser *p);
 t_tok						*lookahead(t_parser *p);
 t_tok						*previous(t_parser *p);

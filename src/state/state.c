@@ -42,3 +42,41 @@ void	set_error(t_state *state, int code)
 	state->error_code = code;
 }
 
+void	s_free_cmd(t_state *state)
+{
+	free(state->input);
+	state->input = NULL;
+	state->destroy_parser(state->current_parser);
+	state->destroy_lexer(state->current_lexer);
+}
+
+void	set_parser(t_state *state, t_parser *p)
+{
+	state->current_parser = p;
+}
+
+void	set_lexer(t_state *state, t_lex *l)
+{
+	state->current_lexer = l;
+}
+
+void	set_input(t_state *s, char *input)
+{
+	s->input = input;
+}
+
+char *get_input(t_state *s)
+{
+	return (s->input);
+}
+
+void	register_parser_destroy(t_state *s, t_destroy_fn fn)
+{
+	s->destroy_parser = fn;
+}
+
+void	register_lexer_destroy(t_state *s, t_destroy_fn fn)
+{
+	s->destroy_lexer = fn;
+}
+

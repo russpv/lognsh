@@ -80,7 +80,7 @@ void	process_escape_sequence(t_lex *l)
 	}
 }
 
-// Handle special operators like environment variables and globbing
+// Sets flags only for special operators like environment variables and globbing
 // Advance the lexer pointer past comments
 int	process_special_operators(t_lex *lexer)
 {

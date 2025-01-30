@@ -118,7 +118,9 @@ enum e_tok_type			tok_get_type(t_tok *token);
 bool					tok_get_option(t_tok *token);
 int						tok_get_globbing(t_tok *token);
 int						tok_get_expansion(t_tok *token);
+int						tok_get_dquotes(t_tok *token);
 
+int						tok_set_dquotes(t_tok *token);
 void					tok_print(void *token);
 
 #endif

@@ -58,6 +58,12 @@ int	tok_set_globbing(t_tok *token)
 	return (0);
 }
 
+int tok_set_dqoute(t_tok *token)
+{
+	token->in_dquotes = true;
+	return (0);
+}
+
 int	tok_set_expansion(t_tok *token)
 {
 	token->do_expansion = true;
@@ -72,4 +78,15 @@ int	tok_get_globbing(t_tok *token)
 int	tok_get_expansion(t_tok *token)
 {
 	return (token->do_expansion);
+}
+
+int	tok_get_dquotes(t_tok *token)
+{
+	return (token->in_dquotes);
+}
+
+int	tok_set_dquotes(t_tok *token)
+{
+	token->in_dquotes = true;
+	return (0);
 }

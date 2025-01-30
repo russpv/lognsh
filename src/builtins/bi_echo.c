@@ -20,6 +20,8 @@ int    bi_echo(char **args)
     i = 0;
     no_newline = 0;
 
+    if (!args)
+        return (0);
     while (args[i] && ft_strncmp(args[i], "-n", -1) == 0)
     {
         no_newline = 1;
