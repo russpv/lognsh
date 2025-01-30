@@ -16,8 +16,10 @@
 #include "bi.h"
 
 #include "../../lib/libft.h"
+#include "../../debug.h"
 #include <unistd.h>
 #include <stdio.h>
+
 
 
 int	bi_echo(char **args);

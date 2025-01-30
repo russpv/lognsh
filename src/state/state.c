@@ -1,9 +1,8 @@
 #include "state_int.h"
 
-int	set_exit_status(t_state *state)
+int	set_exit_status(t_state *state, int value)
 {
-	//TODO
-	(void)state;
+	state->current_exit_code = value;
 	return (0);
 }
 

@@ -40,7 +40,7 @@ typedef struct s_global_state	t_state;
 // Methods
 t_state							*init_state(void);
 void							destroy_state(t_state *state);
-int								set_exit_status(t_state *state);
+int								set_exit_status(t_state *state, int value);
 void							set_error(t_state *state, int code);
 
 // t_cmd							*build_command(char *input);

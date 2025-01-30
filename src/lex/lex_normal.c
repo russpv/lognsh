@@ -1,6 +1,6 @@
 #include "lex_int.h"
 
-/* Handles current char and advances */
+/* Handles current char, loads buf and advances */
 static t_tok	*_match_normal_token(t_lex *lexer, int *buf_idx)
 {
 	t_tok	*res;
@@ -20,8 +20,15 @@ static t_tok	*_match_normal_token(t_lex *lexer, int *buf_idx)
 	return (NULL);
 }
 
-static t_tok	*_match_word_or_name(t_lex *lexer)
+/* Handles '$?' here */
+static t_tok	*_match_word_or_name_or_exception(t_lex *lexer, int *buf_idx)
 {
+    if (true == is_dollar_question(lexer))
+    {
+        debug_print("----_match_word_or_name: got $? \n");
+		lexer->buf[(*buf_idx)++] = *lexer->ptr++;
+        return lex_create_token(lexer, TOK_EXIT_STATUS);
+    }
 	if (true == is_normal_delim(*lexer->ptr) && ft_strlen(lexer->buf) > 0)
 	{
 		debug_print("----_match_word_or_name: got %s\n", lexer->buf);
@@ -71,7 +78,7 @@ static t_tok	*_match_normal(t_lex *lexer)
 	res = _match_normal_token(lexer, &buf_idx);
 	if (res)
 		return (res);
-	res = _match_word_or_name(lexer);
+	res = _match_word_or_name_or_exception(lexer, &buf_idx);
 	if (res)
 		return (res);
 	if ((unsigned char)OP_NULL == *lexer->ptr)

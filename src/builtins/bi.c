@@ -21,5 +21,6 @@ t_builtin_fn    get_builtin(char *command)
         return (&builtin_export);
     if (ft_strcmp(command, BI_EXIT) == 0)
         return (&builtin_exit); */
+    debug_print("get_builtin found nothing\n");
     return (NULL); 
 }

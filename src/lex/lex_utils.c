@@ -21,7 +21,7 @@ t_tok	*lex_create_token(t_lex *lexer, int type)
 	debug_print("lex_create_token\n");
 	if (!lexer)
 		return (NULL);
-	token = create_token(lexer->buf, type, (size_t)(lexer->ptr
+	token = create_token(lexer->buf, type, (size_t)(lexer->ptr \
 				- lexer->raw_string));
 	if (token)
 	{

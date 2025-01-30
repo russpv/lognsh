@@ -27,8 +27,10 @@ int main() {
             add_history(input);
         }
 		
-	    ast = parse(s, input); //TODO: t_ast ast = parse(s, input);
-		cmd_execute_simple(ast); //TODO: s.status = cmd_execute(s, ast);
+	    ast = parse(s, input);
+        if (!ast)
+            fprintf(stderr, "SHIT!\n");
+        set_exit_status(s, cmd_execute_simple(ast));
 
 		//parse_free_ast(ast);
         free(input);

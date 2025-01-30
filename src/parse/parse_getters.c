@@ -5,6 +5,7 @@ char *p_get_cmd(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)
 		return (NULL);
+	debug_print("p_get_cmd got: _%s_\n", a->data.cmd.name);
 	return (a->data.cmd.name);
 }
 
@@ -54,11 +55,15 @@ char **p_get_argv(t_ast_node *a)
 {
 	char **args;
 
+	args = NULL;
 	if (!a)
 		return (NULL);
 	if (p_get_type(a) != AST_NODE_CMD)
 		return (NULL);
-	args = list_to_array(a->data.cmd.args, a->data.cmd.argc);
+	if (a->data.cmd.argc > 0)
+	{
+		args = list_to_array(a->data.cmd.args, a->data.cmd.argc);
+	}
 	return (args);
 }
 

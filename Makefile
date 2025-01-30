@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -DDEBUGMODE
 LDFLAGS = -lreadline -lncurses -fsanitize=address  # Add ASAN for linking
 
 SRC = src/data_structures/llist.c src/data_structures/llist_utils.c src/data_structures/llist_cpy.c \

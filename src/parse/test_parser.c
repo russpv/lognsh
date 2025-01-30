@@ -122,7 +122,10 @@ int main(void) {
         "< input1.txt > output1.txt command < input2.txt > output2.txt",
 
         // Heredoc cases
-        "<< EOF Test stuff"
+        "<< EOF Test stuff",
+
+        // Erorrs
+        "asdf"
     };
 
     // Number of inputs to process

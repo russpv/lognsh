@@ -60,6 +60,5 @@ t_ast_node	*parse(t_state *s, char *input)
 	while (!is_at_end(parser) && !parser->parse_error)
 		ast = parse_full_cmd(parser);
 	parser->ast = ast;
-	
 	return (ast);
 }

@@ -31,17 +31,20 @@ void	exec_command(t_cmd c)
  */
 int	cmd_execute_simple(t_ast_node *a)
 {
-	t_builtin_fn bi;
 	char **args;
 	int exit_code;
 
+	exit_code = -1;
 	if (!a)
 		return (-1);
 	if (p_get_type(a) != AST_NODE_CMD)
 		return (-1);
-	bi = get_builtin(p_get_cmd(a));
+	const t_builtin_fn bi = get_builtin(p_get_cmd(a));
 	args = p_get_argv(a);
-	exit_code = bi(args);
+	//if (sf)
+	//	exit_code = sf(args);
+	if (bi)
+		exit_code = bi(args);
 	return (exit_code);
 }
 

@@ -72,7 +72,7 @@ t_ast_node	*parse_cmd(t_parser *p)
 	cmd_node = malloc(sizeof(t_ast_node));
 	if (cmd_node)
 	{
-		fprintf(stderr, "tok: %s", tok_get_raw(peek(p)));
+		debug_print("cmd tok: %s\n", tok_get_raw(peek(p)));
 		_init_cmd_data(cmd_node);
 		if (!_process_cmd(p, cmd_node))
 			return (NULL);

@@ -20,12 +20,8 @@ typedef struct s_32
 {
 	t_uint8_t		data[32];
 }	t_block_32;		/* 32 bytes */
-typedef struct s_list
-{
-	void			*content;
-	size_t			content_size;
-	struct s_list	*next;
-}					t_list;
+
+
 
 typedef unsigned long long	(t_uint64_t);		/* Must be at least 8-bytes */
 typedef unsigned long long	(t_uintptr_t);	/* 64-bit ptr */
@@ -42,8 +38,7 @@ typedef unsigned long long	(t_uintptr_t);	/* 64-bit ptr */
  * Extras / TODO
  */
 
-void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
-void				ft_lstadd(t_list **alist, t_list *new);
+
 size_t				ft_strnlen(const char *s, size_t maxlen);
 char				*ft_strcpy(char *dest, const char *src);
 char				*ft_strncpy(char *dest, const char *src, size_t n);

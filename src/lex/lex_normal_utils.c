@@ -1,6 +1,11 @@
 #include "lex_int.h"
 
-/* */
+/* When '$' in the buf and '?' is ptr */
+bool is_dollar_question(t_lex *lexer)
+{
+    return (lexer->buf[0] == '$' && *(lexer->ptr) == '?');
+}
+
 bool	is_normal_delim(unsigned char s)
 {
 	debug_print("--------_is_normal_delim:_%c_", s);

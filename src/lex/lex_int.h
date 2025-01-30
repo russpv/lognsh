@@ -158,6 +158,7 @@ void						debug_detect_cycle(t_list *head);
 
 bool						is_normal_delim(unsigned char s);
 bool						is_transition_char(t_lex *l, unsigned char s);
+bool is_dollar_question(t_lex *lexer);
 int							word_or_name(const char *s);
 void						process_escape_sequence(t_lex *l);
 int							process_special_operators(t_lex *lexer);
