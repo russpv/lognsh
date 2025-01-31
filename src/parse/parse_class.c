@@ -1,19 +1,31 @@
 #include "parse_int.h"
 
+
+static void	_destroy_redirs(void *in)
+{
+	t_redir_data *redirs = (t_redir_data *)in;
+	(void)redirs;
+}
+static void	_destroy_args(void *in)
+{
+	t_arg_data *args = (t_arg_data *)in;
+	// TODO
+	(void)args;
+}
+
 void	*destroy_cmd_node(t_ast_node *n)
 {
-	// TODO
-	(void)n;
+	if (n->type != AST_NODE_CMD)
+		return (NULL);
+	if (n->data.cmd.name)
+		free(n->data.cmd.name);
+	if (n->data.cmd.args)
+		ft_lstclear(&n->data.cmd.args, _destroy_args);
+	if (n->data.cmd.redirs)
+		ft_lstclear(&n->data.cmd.redirs, _destroy_redirs);
 	return (NULL);
 }
 
-void	*destroy_args(t_arg_data *args, t_ast_node_cmd *cmd)
-{
-	(void)args;
-	(void)cmd;
-	// TODO
-	return (NULL);
-}
 
 void	destroy_ast(t_ast_node *ast)
 {
@@ -29,6 +41,7 @@ void static inline _init_parser(t_state *s, t_parser *p)
 	p->last_node = NULL;
 	p->ref_node = NULL;
 	p->parse_error = false;
+	p->global_state = s;
     register_parser_destroy(s, destroy_parser);
 }
 
@@ -64,10 +77,19 @@ void	destroy_parser(void *instance)
 {
 	t_parser *p = (t_parser *)instance;
 	if (p->ast)
+	{
 		destroy_ast(p->ast);
+		p->ast = NULL;
+	}
 	if (p->tokens)
+	{
 		ft_lstclear(&p->tokens, destroy_token);
+		p->tokens = NULL;
+	}
 	if (p->st)
+	{
 		st_destroy(p->st);
+		p->st = NULL;
+	}
 	free(p);
 }

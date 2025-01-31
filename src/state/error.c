@@ -19,7 +19,7 @@ const char *get_error_message(int error_code)
 {
     switch (error_code)
     {
-    case ERR_MEMORY:
+    case ERR_MEM:
         return "Memory allocation failed";
     case ERR_SYNTAX:
         return "Syntax error";
@@ -28,4 +28,14 @@ const char *get_error_message(int error_code)
     default:
         return "Unknown error";
     }
+}
+
+void print_command_not_found(const char *cmd)
+{
+    fprintf(stderr, "%s: %s: command not found\n", SHELL_NAME, cmd);
+}
+
+void    print_permission_denied(const char *path)
+{
+    fprintf(stderr, "%s: %s: Permission denied", SHELL_NAME, path);
 }

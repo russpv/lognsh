@@ -1,11 +1,5 @@
 #include "state_int.h"
 
-int	set_exit_status(t_state *state, int value)
-{
-	state->current_exit_code = value;
-	return (0);
-}
-
 /* BUILD COMMAND
  * Use command.h methods
  */
@@ -37,46 +31,42 @@ char	**expand_glob(const char *pattern)
 	//wrapper required for COMMAND for parsing
 }
 */
-void	set_error(t_state *state, int code)
+
+t_state	*init_state(char **envp)
 {
-	state->error_code = code;
+ 	t_state *s = malloc(sizeof(struct s_global_state));
+	if (s)
+	{
+		s->pwd = NULL; // TODO remove?
+		s->current_exit_code = 0;
+		s->error_code = 0;
+		s->current_parser = NULL;
+		s->current_lexer = NULL;
+		s->current_cmd = NULL;
+		s->input = NULL;
+		s->envp = envp;
+	}
+	return (s);
+}
+
+void	destroy_state(t_state *s)
+{
+	if (s->current_parser)
+		s->destroy_parser(s->current_parser);
+	if (s->current_lexer)
+		s->destroy_lexer(s->current_lexer);
+	if (s->input)
+		free(s->input);
 }
 
 void	s_free_cmd(t_state *state)
 {
 	free(state->input);
 	state->input = NULL;
-	state->destroy_parser(state->current_parser);
-	state->destroy_lexer(state->current_lexer);
+	if (state->current_parser)
+		state->destroy_parser(state->current_parser);
+	if (state->current_lexer)
+		state->destroy_lexer(state->current_lexer);
+	if (state->current_cmd)
+		state->destroy_command(state->current_cmd);
 }
-
-void	set_parser(t_state *state, t_parser *p)
-{
-	state->current_parser = p;
-}
-
-void	set_lexer(t_state *state, t_lex *l)
-{
-	state->current_lexer = l;
-}
-
-void	set_input(t_state *s, char *input)
-{
-	s->input = input;
-}
-
-char *get_input(t_state *s)
-{
-	return (s->input);
-}
-
-void	register_parser_destroy(t_state *s, t_destroy_fn fn)
-{
-	s->destroy_parser = fn;
-}
-
-void	register_lexer_destroy(t_state *s, t_destroy_fn fn)
-{
-	s->destroy_lexer = fn;
-}
-

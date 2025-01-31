@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* LSTADD_FRONT
 ** Adds new node at the beginning of linked list

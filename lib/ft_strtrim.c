@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* STRTRIM
 ** Returns a new c-string copy of s1 without chars in set

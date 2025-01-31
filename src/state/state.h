@@ -4,8 +4,12 @@
 # include "../signal/signal.h"
 # include "env.h"
 # include "error.h"
+# include <errno.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+
+
+# define SHELL_NAME "minish"
 
 /* Bash Manual
  *
@@ -37,13 +41,15 @@ struct s_global_state;
 typedef struct s_global_state	t_state;
 
 typedef void					(*t_destroy_fn)(void *instance);
+typedef void					(*t_attach_fn)(void *instance);
 
 /* Duplicate declarations instead of includes */
 typedef struct s_parser			t_parser;
 typedef struct s_lex			t_lex;
+typedef struct s_cmd			t_cmd;
 
 // Methods
-t_state							*init_state(void);
+t_state							*init_state(char **envp);
 void							destroy_state(t_state *state);
 
 int								set_exit_status(t_state *state, int value);
@@ -51,9 +57,14 @@ void							set_error(t_state *state, int code);
 void							set_parser(t_state *state, t_parser *p);
 void							set_lexer(t_state *state, t_lex *l);
 void							set_input(t_state *s, char *input);
+void							set_command(t_state *s, t_cmd *c);
 
+int								*get_status(t_state *s);
 char							*get_input(t_state *s);
+t_cmd							*get_cmd(t_state *s);
+char							**get_envp(t_state *s);
 
+void							register_command_destroy(t_state *s, t_destroy_fn fn);
 void							register_parser_destroy(t_state *s, t_destroy_fn fn);
 void							register_lexer_destroy(t_state *s, t_destroy_fn fn);
 void							s_free_cmd(t_state *s);

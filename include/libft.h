@@ -45,6 +45,8 @@ void				*ft_memccpy(void *dest, const void *src, int c, size_t n);
 char				*ft_strstr(const char *str, const char *substr);
 char				*ft_strmap(char const *s, char (*f)(unsigned int, char));
 int					ft_strcmp(const char *s1, const char *s2);
+void	ft_freearr(void **arr, int size);
+
 
 /*
 ** Print functions

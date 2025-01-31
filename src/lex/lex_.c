@@ -35,8 +35,8 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 		lexer->raw_string = s;
 		lexer->ptr = (char *)s;
 		lexer->escape_mode = false;
-		lexer->do_expansion = RESET;
-		lexer->do_globbing = RESET;
+		lexer->do_expansion = INIT;
+		lexer->do_globbing = INIT;
 		lexer->token_list = NULL;
 		lexer->eof_word = NULL;
 		lexer->is_incomplete = false;

@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* MEMMOVE
 ** buffers can overlap

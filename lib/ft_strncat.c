@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* STRNCAT
 ** Uses at most n bytes from src

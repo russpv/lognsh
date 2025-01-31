@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../include/libft.h"
 
 /* MEMCMP
 ** Compares n bytes between mem regions

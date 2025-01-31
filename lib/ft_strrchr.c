@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* STRRCHR
 ** Returns last occurrence of char (incl '\0')

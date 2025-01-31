@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* LSTITER
 ** Iterates singly linked list and applies func f to node.content

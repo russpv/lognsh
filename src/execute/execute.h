@@ -12,19 +12,16 @@
 
 // Low-level implementation of forking, piping, redirects
 #ifndef EXECUTE_H
-#define EXECUTE_H
+# define EXECUTE_H
 
-#include "../builtins/bi.h"
-#include "../parse/parse.h"
+# include "../builtins/bi.h"
+# include "../state/state.h"
+# include "../command/command.h"
+//# include "../parse/parse.h"
 
-typedef struct s_node t_ast_node;
+// typedef struct s_node	t_ast_node;
 
-
-// exec a cmd
-void			execute_command(t_ast_node *node);
-
-
-
-
+int	redirect(int *to, char *topath, int from, t_bool ifappend);
+int	fork_and_run(t_state *s);
 
 #endif

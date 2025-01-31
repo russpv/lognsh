@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* This prints integers.
 ** GCC has a problem with writeing more than 1 byte

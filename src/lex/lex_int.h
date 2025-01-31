@@ -10,7 +10,7 @@
 #define NORMALTRANSITIONS "\'\"<\0" // the '\0' isn't tested, keep at end,
 //	< for heredoc
 #define LEX_BUFSZ 1024
-#define RESET 0
+#define INIT 0
 
 /* LEX
  * Does these rules:

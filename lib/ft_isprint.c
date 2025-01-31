@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../include/libft.h"
 
 /* ISPRINT
 ** returns non-zero if printable char 

@@ -18,4 +18,7 @@ char	**expand_glob(const char *pattern);
 // TODO implement hash table index
 // build_ht();
 */
+
+char **s_getenv(void);
+
 #endif

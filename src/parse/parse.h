@@ -1,10 +1,12 @@
 #ifndef PARSE_H
 # define PARSE_H
 
-#include "../data_structures/stack.h"
-#include "../data_structures/llist.h"
-#include "../state/state.h"
-#include "../lex/lex.h"
+# include "../../include/libft.h"
+# include "../data_structures/llist.h"
+# include "../data_structures/stack.h"
+# include "../execute/execute.h"
+# include "../lex/lex.h"
+# include "../state/state.h"
 
 /* PARSE
  * Converts user input into an AST
@@ -30,7 +32,7 @@
 // nodes; pipes, conditionals and args are elsewhere
 // Command module interprets (processes) AST
 
-enum						e_ast_node_type
+enum							e_ast_node_type
 {
 	NONE,
 	AST_NODE_LOG,
@@ -40,16 +42,22 @@ enum						e_ast_node_type
 };
 
 typedef struct s_global_state	t_state;
-typedef struct s_node t_ast_node;
+typedef struct s_node			t_ast_node;
 
-t_ast_node	*parse(t_state *s, char *input);
+t_ast_node						*parse(t_state *s, char *input);
 
-int	p_get_type(t_ast_node *a);
-char *p_get_cmd(t_ast_node *a);
-char **p_get_argv(t_ast_node *a);
-t_list *p_get_args(t_ast_node *a);
+int								p_get_type(t_ast_node *a);
+char							*p_get_cmd(t_ast_node *a);
+t_list							*p_get_args(t_ast_node *a);
+int								p_get_argc(t_ast_node *a);
+bool							p_get_expansion(t_ast_node *a);
 
-char **p_do_arg_expansions(t_ast_node *a);
+/* These methods are called by Command */
+char							**p_do_arg_expansions(t_ast_node *a);
+int								p_do_redirections(t_ast_node *a);
+int								p_set_cmd(t_ast_node *a, const char *cmd);
+
+void print_ast(t_ast_node *ast, int depth);
 
 /*  Expansions */
 // tilde ~ ?

@@ -1,17 +1,22 @@
+#ifndef STATE_INT_H
+# define STATE_INT_H
+
 #include "state.h"
 
-
 struct s_global_state {
-	char **path;
+	char **envp;
 	char *pwd; 
 	int current_exit_code; 
 	int error_code;
 	char *input;
+	
 	t_parser *current_parser;
 	t_lex *current_lexer;
+	t_cmd *current_cmd;
+
 	t_destroy_fn destroy_parser;
 	t_destroy_fn destroy_lexer;
-
+	t_destroy_fn destroy_command;
 };
 
 typedef struct s_global_state	t_state;
@@ -22,31 +27,4 @@ typedef struct s_global_state	t_state;
 	// no signals, too mcuh indirection	
 	// t_ht *env_cache; TODO LATER, add hash table to env.h for faster lookups
 
-t_state	*init_state(void)
-{
- 	t_state *s = malloc(sizeof(struct s_global_state));
-	if (s)
-	{
-		s->path = NULL; // TODO remove?
-		s->pwd = NULL; // TODO remove?
-		s->current_exit_code = 0;
-		s->error_code = 0;
-		s->current_parser = NULL;
-		s->current_lexer = NULL;
-		s->input = NULL;
-	}
-	return (s);
-}
-
-void	destroy_state(t_state *s)
-{
-	if (s->current_parser)
-		s->destroy_parser(s->current_parser);
-	if (s->current_lexer)
-		s->destroy_lexer(s->current_lexer);
-	if (s->input)
-		free(s->input);
-}
-
-
-
+#endif

@@ -14,6 +14,9 @@
 #endif
 
 #define LOG 1
+#define RESET "\033[0m"
+#define GREEN "\033[32m"
+#define BLUE "\033[34m"
 
 void debug_print(const char *format, ...);
 void log_printf(const char *s, ...);

@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* STRNLEN
 ** Returns # of bytes in s excl NULL, but at most maxlen 

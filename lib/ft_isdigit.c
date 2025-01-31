@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../include/libft.h"
 
 /* ISDIGIT
 ** Tests if char is a numeric

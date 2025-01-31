@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 #include <errno.h>
 
 /* STRSCPY

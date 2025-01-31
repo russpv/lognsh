@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* STRLCPY
 ** Copies at most size-1 chars

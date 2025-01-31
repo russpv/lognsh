@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../include/libft.h"
 
 /* ITOA
 ** Returns new C-string representing n value

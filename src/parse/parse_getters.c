@@ -23,14 +23,12 @@ t_list *p_get_args(t_ast_node *a)
 	return (a->data.cmd.args);
 }
 
-void	destroy_arr(char **arr)
+int		p_get_argc(t_ast_node *a)
 {
-	int i = 0;
-	if (!arr[i])
-		return ;
-	while (arr[i])
-		free(arr[i++]);
-	free(arr);
+	if (a->type != AST_NODE_CMD)
+		return (-1);
+	debug_print("p_get_argc got: _%s_\n", a->data.cmd.name);
+	return (a->data.cmd.argc);
 }
 
 // TODO change to actual argv
@@ -48,4 +46,11 @@ char **p_get_argv(t_ast_node *a)
 		args = list_to_array(a->data.cmd.args, a->data.cmd.argc);
 	}
 	return (args);
+}
+
+bool	p_get_expansion(t_ast_node *a)
+{
+	if (p_get_type(a) != AST_NODE_CMD)
+		return (NULL);
+	return (a->data.cmd.do_expansion);
 }

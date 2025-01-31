@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* STRMAPI
 ** Returns new string by applying func f to each char in s

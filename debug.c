@@ -1,13 +1,15 @@
 #include "debug.h"
 
-void debug_print(const char *s, ...) 
+void debug_print(const char *format, ...) 
 {
 	if (DEBUG)
 	{
     	va_list args;
-    	va_start(args, s);
+    	va_start(args, format);
 
-    	vfprintf(stderr, s, args);
+        fprintf(stderr, BLUE);
+        vfprintf(stderr, format, args);
+        fprintf(stderr, RESET);
 
     	va_end(args);
 	}
@@ -44,7 +46,7 @@ void	debug_detect_cycle(t_list *head)
 				return ;
 			}
 		}
-		printf("No cycle detected in the linked list\n");
+		debug_print("No cycle detected in the linked list\n");
 	}
 }
 

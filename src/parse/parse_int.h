@@ -103,13 +103,14 @@ typedef struct
 
 typedef struct s_cmd
 {
-	char					*name;
+	char					*name; // heap string
 	t_list					*args;
 	int						argc;
 	t_list					*redirs;
 	int						redc;
 
 	bool					do_globbing;
+	bool					do_expansion;
 }							t_ast_node_cmd;
 
 typedef struct s_redir
@@ -129,6 +130,7 @@ typedef struct s_arg
 	bool					do_globbing;
 	bool					do_expansion;
 	bool					in_dquotes;
+	t_state					*global_state; //for llist expansions
 }							t_arg_data;
 
 /* Next refactor, remove the t_list since
@@ -180,6 +182,7 @@ typedef struct s_parser
 	t_tok					*curr_cmd;
 	t_ast_node				*ast;
 	bool					parse_error;
+	t_state					*global_state;
 }							t_parser;
 
 t_parser					*create_parser(t_state *s, t_list *tokens);
@@ -214,13 +217,23 @@ bool						is_heredoc_token(t_tok *tok);
 bool						is_arg_token(t_tok *tok);
 bool						is_expansion(t_tok *tok);
 
-char	**list_to_array(t_list *args, int argc);
+/* For traversing the AST */
+bool	node_has_redirects(t_ast_node *n);
+
+typedef void (*redir_fn)(const t_redir_data *node);
+
+void handle_redirect_in(const t_redir_data *node);
+void handle_redirect_out(const t_redir_data *node);
+void handle_redirect_append(const t_redir_data *node);
+void handle_heredoc(const t_redir_data *node);
+
+char						**list_to_array(t_list *args, int argc);
 
 
 void						parse_print(t_ast_node *ast);
 t_ast_node					*test_parse(t_parser *parser);
 
-void	p_do_expansion(void *content);
+
 
 
 #endif

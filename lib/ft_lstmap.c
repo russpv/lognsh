@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /*LSTMAP
 ** Returns modified singly linked list head ptr using func f

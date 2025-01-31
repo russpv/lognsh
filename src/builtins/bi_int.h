@@ -15,7 +15,7 @@
 
 #include "bi.h"
 
-#include "../../lib/libft.h"
+#include "../../include/libft.h"
 #include "../../debug.h"
 #include <unistd.h>
 #include <stdio.h>

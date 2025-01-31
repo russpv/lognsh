@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* STRLEN
 ** This returns length of the string pointed to by 'c'

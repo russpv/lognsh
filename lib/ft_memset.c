@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* MEMSET
 ** Fills first n bytes of memory pointed to by s with c

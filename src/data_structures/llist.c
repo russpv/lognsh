@@ -31,6 +31,12 @@ void	ft_lstadd_front(t_list **lst, t_list *new)
 {
 	if (!lst || !new)
 		return ;
+	if (*lst == NULL)
+	{
+		*lst = new;
+		new->prev = NULL;
+		return ;
+	}
 	new->next = *lst;
 	(*lst)->prev = new;
 	*lst = new;
@@ -44,16 +50,16 @@ void	ft_lstadd_front(t_list **lst, t_list *new)
 void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
 	t_list	*tmp;
-	t_list	*prev;
+	t_list	*next;
 
 	if (!*lst || !del || !lst)
 		return ;
 	tmp = *lst;
 	while (tmp)
 	{
-		prev = tmp;
-		tmp = tmp->next;
-		ft_lstdelone(prev, del);
+		next = tmp->next;
+		ft_lstdelone(lst, tmp, del);
+		tmp = next;
 	}
 	*lst = NULL;
 }
@@ -62,19 +68,25 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 ** Removes passed node
 ** 1st: node to free
 ** del: ptr to func that deletes node.content
-** UNPROTECTED Does not check del
 */
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+#include <assert.h>
+
+void	ft_lstdelone(t_list **lst, t_list *node, void (*del)(void *))
 {
-	if (lst == NULL)
+	if (!lst || !node || !del)
 		return ;
-	del(lst->content);
-	free(lst);
-	lst = NULL;
+    if (node->prev)
+        node->prev->next = node->next;
+    if (node->next)
+        node->next->prev = node->prev;
+    if (node == *lst)
+        *lst = node->next;
+    del(node->content);
+    free(node);
 }
 
 /* LSTITER
-** Iterates singly linked list and applies func f to node.content
+** Iterates linked list and applies func f to node.content
 ** lst: ptr to node
 ** f: ptr to function
 ** UNPROTECTED

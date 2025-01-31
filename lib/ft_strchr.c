@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 #include <stdio.h>
 
 /* STRCHR

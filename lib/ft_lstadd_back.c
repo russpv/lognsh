@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* LSTADD_BACK
 ** Returns single node for empty list, or adds new to back of

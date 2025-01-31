@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* SPLIT
 ** Returns new C-strings split by c or NULL (malloc)

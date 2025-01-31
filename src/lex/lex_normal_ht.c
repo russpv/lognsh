@@ -1,7 +1,8 @@
 #include "lex_int.h"
 
-#define NOTDELIMITED "()"
+#define NOTDELIMITED "()<"
 
+/* Checks if s is in the set of tokens that do not need to be delimited */
 static inline bool	_is_not_delimd(const char *s)
 {
 	if (ft_strlen(s) > 1)

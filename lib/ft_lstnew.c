@@ -1,4 +1,5 @@
-#include "libft.h"
+#include "../include/libft.h"
+
 
 /* LSTNEW
 ** Returns new linked list head ptr with one node

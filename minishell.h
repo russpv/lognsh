@@ -21,5 +21,6 @@
 #include <errno.h>
 #include <ctype.h>
 
+#define PROMPT GREEN "minish> " RESET
 
 #endif

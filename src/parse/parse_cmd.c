@@ -1,7 +1,7 @@
 #include "parse_int.h"
 
 /* Must deep copy token strings to decouple token-list/ast */
-static void	_init_arg_data(t_arg_data *arg, t_tok *tok)
+static void	_init_arg_data(t_parser *p, t_ast_node *cmd_node, t_arg_data *arg, t_tok *tok)
 {
 	arg->raw = ft_strdup(tok_get_raw(tok));
 	if (!arg->raw)
@@ -11,6 +11,11 @@ static void	_init_arg_data(t_arg_data *arg, t_tok *tok)
 	arg->do_expansion = tok_get_expansion(tok);
 	arg->in_dquotes = tok_get_dquotes(tok);
 	arg->tmp = NULL;
+	arg->global_state = p->global_state;
+	if (true == arg->do_expansion)
+		cmd_node->data.cmd.do_expansion = true;
+	if (true == arg->do_globbing)
+		cmd_node->data.cmd.do_globbing = true;
 }
 
 /* Consumes arg tokens and adds them to command node linked list
@@ -29,7 +34,7 @@ static t_list	*_parse_args(t_parser *p, t_ast_node *cmd_node)
 			err("Memory allocation error for args\n");
 			return (NULL);
 		}
-		_init_arg_data(arg, advance(p));
+		_init_arg_data(p, cmd_node, arg, advance(p));
 		new = ft_lstnew(arg);
 		if (!new)
 		{
