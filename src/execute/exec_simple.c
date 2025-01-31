@@ -1,6 +1,5 @@
 #include "execute_int.h"
 
-
 /* This executes a simple cmd and
  * manages the various I/O redirections
  */
@@ -22,8 +21,26 @@ static int	_do_child_ops(t_state *s)
 	return (0);
 }
 
+/* Handles redirects and calls built-in */
+int	exec_bi_run(t_state *s, t_builtin_fn bi)
+{
+	const t_cmd *c = (const t_cmd *)get_cmd(s);
+	const char **argv = (const char **)c_getargv((t_cmd*)c);
+
+	if (!argv || !bi || !c)
+		return (err("ERR null command parameters\n"), -1);
+	save_redirs((t_cmd *)c);
+	if (-1 == p_do_redirections(c_getnode((t_cmd*)c)))
+		return (-1);
+	debug_print("Shell exec'g \n");
+	if (-1 == bi(s, (char **)argv))
+		err("ERR bi()\n");
+	restore_redirs((t_cmd *)c);
+	return (0);
+}
+
 // TODO cleanup
-int	fork_and_run(t_state *s)
+int	exec_fork_run(t_state *s)
 {
 	pid_t p = fork();
 

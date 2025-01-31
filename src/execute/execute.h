@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 13:32:35 by dayeo             #+#    #+#             */
-/*   Updated: 2025/01/31 22:13:40 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/02/01 01:49:10 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 // typedef struct s_node	t_ast_node;
 
 int	redirect(int *to, char *topath, int from, t_bool ifappend);
-int	fork_and_run(t_state *s);
+int	exec_fork_run(t_state *s);
+int	exec_bi_run(t_state *s, t_builtin_fn bi);
+
 
 #endif

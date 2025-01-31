@@ -14,6 +14,9 @@ t_cmd *init_cmd(t_state *s, t_ast_node *a)
 	c->argv = NULL;
 	c->fullpath = NULL;
 	c->curr_node = a;
+	c->saved_stderr = -1;
+	c->saved_stdin = -1;
+	c->saved_stdout = -1;
 	set_command(s, c);
 	register_command_destroy(s, destroy_cmd);
 	return (c);

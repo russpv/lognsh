@@ -59,6 +59,7 @@ static int	_find_and_validate_cmd(const char *cmd, char **fullpath)
 
 /* Forks depending on execution context
  * a null cmd name is valid, nothing runs
+ * Execute module handles redirects and forking
  */
 static int	_run_cmd(t_state *s, t_ast_node *a)
 {
@@ -77,12 +78,13 @@ static int	_run_cmd(t_state *s, t_ast_node *a)
 			err("ERR execve()\n");
 	}
 	else
-		if (0 != fork_and_run(s))
+		if (0 != exec_fork_run(s))
 			err("ERR fork and run\n");
 	return (0);
 }
 
-/* Checks for no command, builtin (1), then PATH (2)
+/* For an AST command node only
+ * Checks for no command, builtin (1), then PATH (2)
  */
 int	cmd_execute_simple(t_state *s, t_ast_node *a)
 {
@@ -90,26 +92,23 @@ int	cmd_execute_simple(t_state *s, t_ast_node *a)
 	int exit_code;
 	t_cmd *c = get_cmd(s);
 
-	exit_code = -1;
-	if (!a)
+	if (!c || !a)
 		return (-1);
 	if (p_get_type(a) != AST_NODE_CMD)
 		return (-1);
+	c->curr_node = a;
+	exit_code = -1;
 	args = p_do_arg_expansions(a);
 	if (true == p_get_expansion(a) && !p_get_cmd(a)) // handle no command
 		p_set_cmd(a, args[0]); // deep copies 
 	if (false == p_get_expansion(a) && !p_get_cmd(a))
 		return (0); // is this the right code?
 	const t_builtin_fn bi = get_builtin(p_get_cmd(a));
+	c->argv = c_argstoargv(args, p_get_cmd(a), p_get_argc(a));
 	if (bi)
-	// TODO handle redirects for builtins
-		exit_code = bi(s, args);
-	else 
+		exit_code = exec_bi_run(s, bi);
+	else
 	{
-		if (!c)
-			return (-1);
-		c->argv = c_argstoargv(args, p_get_cmd(a), p_get_argc(a));
-
 		// Print debug statement before calling _run_cmd
 		printf("Executing command: %s\n", p_get_cmd(a));
 		printf("Arguments:\n");
@@ -118,7 +117,7 @@ int	cmd_execute_simple(t_state *s, t_ast_node *a)
 			for (int i = 0; c->argv[i] != NULL; i++)
 				printf("  argv[%d]: %s\n", i, c->argv[i]);
 		}
-		printf("  argv[%d]: (NULL)\n", p_get_argc(a) + 1);  // Ensure NULL terminator
+		printf("  argv[%d]: (NULL)\n", p_get_argc(a) + 1);
 
 		exit_code = _run_cmd(s, a);
 	}

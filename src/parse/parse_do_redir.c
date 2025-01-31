@@ -11,8 +11,8 @@ void handle_redirect_in(const t_redir_data *node)
 		err("No filename for input redirection.\n");
 	//handle expansions
 	const int append = false;
-	if (0 != redirect(NULL, node->filename, STDIN_FILENO, append))
-		err("Redirection issue\n");
+	if (-1 == redirect(NULL, node->filename, STDIN_FILENO, append))
+		err("Input redirection issue\n");
 }
 
 void handle_heredoc(const t_redir_data *node)
@@ -26,8 +26,8 @@ void handle_heredoc(const t_redir_data *node)
 		err("heredoc pipe()");
 	write(fildes[1], node->doc, ft_strlen(node->doc));
 	close(fildes[1]);
-	if (0 != redirect(&fildes[0], NULL, STDIN_FILENO, append))
-		err("Redirection issue\n");
+	if (-1 == redirect(&fildes[0], NULL, STDIN_FILENO, append))
+		err("Heredoc redirection issue\n");
 }
 
 void handle_redirect_out(const t_redir_data *node)
@@ -36,8 +36,8 @@ void handle_redirect_out(const t_redir_data *node)
 		err("No filename for output redirection.\n");
 	//handle expansions
 	const int append = false;
-	if (0 != redirect(NULL, node->filename, STDOUT_FILENO, append))
-		err("Redirection issue\n");
+	if (-1 == redirect(NULL, node->filename, STDOUT_FILENO, append))
+		err("Output redirection issue\n");
 }
 
 void handle_redirect_append(const t_redir_data *node)
@@ -46,8 +46,8 @@ void handle_redirect_append(const t_redir_data *node)
 		err("No filename for output redirection.\n");
 	//handle expansions
 	const int append = true;
-	if (0 != redirect(NULL, node->filename, STDOUT_FILENO, append))
-		err("Redirection issue\n");
+	if (-1 == redirect(NULL, node->filename, STDOUT_FILENO, append))
+		err("Append redirection issue\n");
 }
 
 /* Executes redirection of t_redir_data llist */

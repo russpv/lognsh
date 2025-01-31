@@ -1,12 +1,12 @@
 #include "execute_int.h"
 
 
-/* Does the correct open() 
+/* Does the correct open() and returns new fd
  * If input file can't be opened, opens /dev/null/ to allow cmd 
  * to run otherwise and prints
  * warning as fish does
 */
-static inline int	_redirect_logic(char *topath, int from, t_bool append)
+static inline int	_redirect_logic(char *topath, int from, bool append)
 {
 	int	fd;
 
@@ -25,6 +25,7 @@ static inline int	_redirect_logic(char *topath, int from, t_bool append)
 		fd = open(topath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
 		fd = -1;
+	debug_print("_redirect_logic fd:%d\n", fd);
 	return (fd);
 }
 

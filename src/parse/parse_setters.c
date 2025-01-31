@@ -1,6 +1,6 @@
 #include "parse_int.h"
 
-// Assumes new c-string cmd
+// Sets cmd name. Assumes new c-string cmd
 int	p_set_cmd(t_ast_node *a, const char *cmd)
 {
 	if (a->type != AST_NODE_CMD || !cmd)

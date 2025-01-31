@@ -60,4 +60,7 @@ t_ast_node						*c_getnode(t_cmd *c);
 int								cmd_execute_simple(t_state *s, t_ast_node *a);
 int								cmd_execute_full(t_state *s, t_ast_node *a);
 
+int	save_redirs(t_cmd *c);
+int	restore_redirs(t_cmd *c);
+
 #endif

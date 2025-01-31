@@ -52,5 +52,5 @@ void	debug_detect_cycle(t_list *head)
 
 void	err(const char *s)
 {
-	printf("%s", s);
+	fprintf(stderr, "%s", s);
 }
