@@ -9,10 +9,10 @@ t_builtin_fn    get_builtin(char *command)
             return (&bi_echo);
         if (ft_strcmp(command, BI_PWD) == 0)
             return (&bi_pwd);
+        if (ft_strcmp(command, BI_EXIT) == 0)
+            return (&bi_exit);
         //if (ft_strcmp(command, BI_ENV) == 0)
         //    return (&bi_env);
-        //if (ft_strcmp(command, BI_EXIT) == 0)
-        //    return (&bi_exit);
         /* WIP
         if (ft_strcmp(command, BI_CD) == 0)
             return (&builtin_cd);

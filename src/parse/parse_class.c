@@ -1,36 +1,85 @@
 #include "parse_int.h"
 
-
-static void	_destroy_redirs(void *in)
+/* Deletes llist content */
+void	destroy_redir(void *in)
 {
-	t_redir_data *redirs = (t_redir_data *)in;
-	(void)redirs;
-}
-static void	_destroy_args(void *in)
-{
-	t_arg_data *args = (t_arg_data *)in;
-	// TODO
-	(void)args;
-}
-
-void	*destroy_cmd_node(t_ast_node *n)
-{
-	if (n->type != AST_NODE_CMD)
-		return (NULL);
-	if (n->data.cmd.name)
-		free(n->data.cmd.name);
-	if (n->data.cmd.args)
-		ft_lstclear(&n->data.cmd.args, _destroy_args);
-	if (n->data.cmd.redirs)
-		ft_lstclear(&n->data.cmd.redirs, _destroy_redirs);
-	return (NULL);
+	t_redir_data *redir = (t_redir_data *)in;
+	if (redir->symbol)
+		free(redir->symbol);
+//	if (redir->filename)
+//		free(redir->filename); //note: free lexer to clean
+	if (redir->doc)
+		free(redir->doc);
 }
 
-
-void	destroy_ast(t_ast_node *ast)
+/* Deletes llist content */
+void	destroy_arg(void *in)
 {
-	//TODO
-	(void)ast;
+	t_arg_data *arg = (t_arg_data *)in;
+	if (arg->raw)
+		free(arg->raw);
+	if (arg->tmp)
+		ft_freearr((void **)arg->tmp, -1);
+}
+
+void	destroy_cmd_node(void *n)
+{
+	t_ast_node *node = (t_ast_node *)n;
+
+	if (node->type != AST_NODE_CMD)
+		return ;
+	if (node->data.cmd.name)
+		free(node->data.cmd.name);
+	if (node->data.cmd.args)
+		ft_lstclear(&node->data.cmd.args, destroy_arg);
+	if (node->data.cmd.redirs)
+		ft_lstclear(&node->data.cmd.redirs, destroy_redir);
+	free(node);
+}
+
+void	destroy_proc_node(void *n)
+{
+	t_ast_node *node = (t_ast_node *)n;
+
+	if (AST_NODE_PROC != node->type)
+		return ;
+	ft_lstclear(&node->data.proc.cmds, destroy_ast);
+}
+
+// destroy t_list cmds, char **operators
+void	destroy_log_node(void *n)
+{
+	t_ast_node *node = (t_ast_node *)n;
+
+	if (AST_NODE_LOG != node->type)
+		return ;
+	if (node->data.log.operators)
+		ft_freearr((void **)node->data.log.operators, -1);
+	ft_lstclear(&node->data.log.cmds, destroy_ast);
+}
+
+void	destroy_pipe_node(void *n)
+{
+	t_ast_node *node = (t_ast_node *)n;
+
+	if (AST_NODE_PIPELINE != node->type)
+		return ;
+	ft_lstclear(&node->data.pipe.cmds, destroy_ast);
+}
+
+void	destroy_ast(void *node)
+{
+	t_ast_node *ast = (t_ast_node *)node;
+
+	if (AST_NODE_PROC == ast->type)
+		destroy_proc_node(ast);
+	else if (AST_NODE_CMD == ast->type)
+		destroy_cmd_node(ast);
+	else if (AST_NODE_PIPELINE == ast->type)
+		destroy_pipe_node(ast);
+	else
+		destroy_log_node(ast);
+	
 }
 
 static inline void	_init_parser(t_state *s, t_parser *p)
@@ -76,6 +125,8 @@ t_parser	*create_parser(t_state *s, t_list *tokens)
 void	destroy_parser(void *instance)
 {
 	t_parser *p = (t_parser *)instance;
+	if (!p)
+		return ;
 	if (p->ast)
 	{
 		destroy_ast(p->ast);

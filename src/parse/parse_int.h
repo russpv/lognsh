@@ -230,6 +230,14 @@ void handle_heredoc(const t_redir_data *node);
 char						**list_to_array(t_list *args, int argc);
 
 
+void	destroy_ast(void *node);
+void	destroy_pipe_node(void *n);
+void	destroy_cmd_node(void *n);
+void	destroy_proc_node(void *n);
+void	destroy_log_node(void *n);
+void	destroy_redir(void *in);
+void	destroy_arg(void *in);
+
 void						parse_print(t_ast_node *ast);
 t_ast_node					*test_parse(t_parser *parser);
 

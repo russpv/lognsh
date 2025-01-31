@@ -51,6 +51,7 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 	return (lexer);
 }
 
+/* Doesn't free raw_string */
 void	destroy_lexer(void *instance)
 {
 	t_lex *lexer = (t_lex *)instance;

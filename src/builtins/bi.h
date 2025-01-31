@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   bi.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:56:51 by dayeo             #+#    #+#             */
-/*   Updated: 2025/01/28 09:28:37 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/02/01 00:59:03 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BI_H
 # define BI_H
+
+#include "../../include/libft.h"
+#include "../../debug.h"
+#include "../state/state.h"
+#include <unistd.h>
+#include <stdio.h>
 
 # define BI_ECHO "echo"
 # define BI_CD "cd"
@@ -22,8 +28,7 @@
 # define BI_EXIT "exit"
 # define BI_COUNT 7
 
-
-typedef int (*t_builtin_fn)(char **args); //RKP: last exit code should be set by caller
+typedef int (*t_builtin_fn)(t_state *s, char **args);
 
 t_builtin_fn	get_builtin(char *command);
 

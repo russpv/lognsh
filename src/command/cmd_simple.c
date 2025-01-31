@@ -103,7 +103,7 @@ int	cmd_execute_simple(t_state *s, t_ast_node *a)
 	const t_builtin_fn bi = get_builtin(p_get_cmd(a));
 	if (bi)
 	// TODO handle redirects for builtins
-		exit_code = bi(args);
+		exit_code = bi(s, args);
 	else 
 	{
 		if (!c)

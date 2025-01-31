@@ -94,7 +94,9 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
 		if (!is_heredoc_token((t_tok *)tok))
 		{
 			red->doc = NULL;
-			red->symbol = tok_get_raw((t_tok *)tok);
+			red->symbol = ft_strdup(tok_get_raw((t_tok *)tok));
+			if (!red->symbol)
+				return (destroy_redir(red), err("ERR malloc\n"), NULL);
 			debug_print("Redirection: type=%d symbol=%s\n", red->type,
 				red->symbol);
 			if (is_at_end(p))

@@ -49,6 +49,9 @@ t_state	*init_state(char **envp)
 	return (s);
 }
 
+/* Destroys parser before lexer 
+ * as parser wraps some lexer token content
+ */
 void	destroy_state(t_state *s)
 {
 	if (s->current_parser)
@@ -57,16 +60,29 @@ void	destroy_state(t_state *s)
 		s->destroy_lexer(s->current_lexer);
 	if (s->input)
 		free(s->input);
+	free(s);
 }
 
+/* Destroys parser before lexer 
+ * as parser wraps some lexer token content
+ */
 void	s_free_cmd(t_state *state)
 {
 	free(state->input);
 	state->input = NULL;
 	if (state->current_parser)
+	{
 		state->destroy_parser(state->current_parser);
+		state->current_parser = NULL;
+	}
 	if (state->current_lexer)
+	{
 		state->destroy_lexer(state->current_lexer);
+		state->current_lexer = NULL;
+	}
 	if (state->current_cmd)
+	{
 		state->destroy_command(state->current_cmd);
+		state->current_cmd = NULL;
+	}
 }

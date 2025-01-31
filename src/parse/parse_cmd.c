@@ -59,7 +59,11 @@ static t_ast_node	*_process_cmd(t_parser *p, t_ast_node *cmd_node)
 		return (NULL);
 	}
 	if (!is_expansion(peek(p)))
-		cmd_node->data.cmd.name = tok_get_raw(advance(p));
+	{
+		cmd_node->data.cmd.name = ft_strdup(tok_get_raw(advance(p)));
+		if (NULL == cmd_node->data.cmd.name)
+			return (destroy_cmd_node(cmd_node), err("Malloc\n"), NULL);
+	}
 	else
 		cmd_node->data.cmd.name = NULL;
 	_parse_args(p, cmd_node);
@@ -75,6 +79,8 @@ static void	_init_cmd_data(t_ast_node *cmd_node)
 	cmd_node->data.cmd.redirs = NULL;
 	cmd_node->data.cmd.redc = 0;
 	cmd_node->data.cmd.argc = 0;
+	cmd_node->data.cmd.do_expansion = false;
+	cmd_node->data.cmd.do_globbing = false;
 }
 
 t_ast_node	*parse_cmd(t_parser *p)

@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   bi_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:56:22 by dayeo             #+#    #+#             */
-/*   Updated: 2025/01/28 09:03:58 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/02/01 01:00:28 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bi_int.h"
 
-int    bi_echo(char **args)
+int    bi_echo(t_state *s, char **args)
 {
     int     i;
     int     no_newline;
 
+    (void)s;
     i = 0;
     no_newline = 0;
 
