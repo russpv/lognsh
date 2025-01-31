@@ -33,7 +33,7 @@ void	destroy_ast(t_ast_node *ast)
 	(void)ast;
 }
 
-void static inline _init_parser(t_state *s, t_parser *p)
+static inline void	_init_parser(t_state *s, t_parser *p)
 {
 	p->ast = NULL;
 	p->curr_idx = -1;

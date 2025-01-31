@@ -20,7 +20,7 @@ int	_search_path(const char *cmd, char **fullpath)
 
 	i = -1;
     if (!(paths = s_getenv()))
-        return (1);
+		return (1);
 	while (paths[++i])
 	{
 		tmp = ft_strjoin(paths[i], "/");

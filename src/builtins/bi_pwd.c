@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:02:05 by dayeo             #+#    #+#             */
-/*   Updated: 2025/01/28 09:03:23 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/01/31 22:14:28 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int    bi_pwd(char **args)
     
     if (args[1])
     {
-        write(STDERR_FILENO, "minishell: pwd: too many arguments\n", 37);
+        write(STDERR_FILENO, "minishell: pwd: too many arguments\n", sizeof("minishell: pwd: too many arguments\n"));
         return (1);
     }
     cwd = getcwd(NULL, 0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 13:32:35 by dayeo             #+#    #+#             */
-/*   Updated: 2025/01/27 17:17:26 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/01/31 22:13:40 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include "../builtins/bi.h"
 # include "../state/state.h"
 # include "../command/command.h"
+# include <sys/wait.h>
+# include <sys/types.h>
+
 //# include "../parse/parse.h"
 
 // typedef struct s_node	t_ast_node;
