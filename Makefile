@@ -19,7 +19,7 @@ SRC = src/data_structures/llist.c src/data_structures/llist_utils.c src/data_str
       src/parse/parse_do_expand.c src/parse/parse_do_redir.c src/parse/parse_setters.c \
       src/state/error.c src/state/state.c src/state/env.c src/state/state_setters.c src/state/state_getters.c src/state/state_callbacks.c\
       src/command/command.c src/command/cmd_getters.c src/command/cmd_simple.c src/command/cmd_redirs.c \
-      src/execute/execute.c src/execute/exec_redirect.c src/execute/exec_simple.c \
+      src/execute/execute.c src/execute/exec_redirect.c src/execute/exec_simple.c src/execute/exec_complex.c \
 	src/builtins/bi_echo.c src/builtins/bi_pwd.c src/builtins/bi.c src/builtins/bi_exit.c \
       minishell.c
 

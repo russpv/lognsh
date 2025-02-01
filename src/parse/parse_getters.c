@@ -54,3 +54,17 @@ bool	p_get_expansion(t_ast_node *a)
 		return (NULL);
 	return (a->data.cmd.do_expansion);
 }
+
+int	p_get_proc_cmdc(t_ast_node *a)
+{
+	if (p_get_type(a) != AST_NODE_PROC)
+		return (-1);
+	return (a->data.proc.cmdc);
+}
+
+t_list	*p_get_proc_cmds(t_ast_node *a)
+{
+	if (p_get_type(a) != AST_NODE_PROC)
+		return (NULL);
+	return (a->data.proc.cmds);
+}

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <assert.h>
+#include <unistd.h>
 
 #include "src/data_structures/llist.h"
 
@@ -21,4 +22,5 @@
 void debug_print(const char *format, ...);
 void log_printf(const char *s, ...);
 void	err(const char *s);
+
 #endif

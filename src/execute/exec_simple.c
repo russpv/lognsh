@@ -1,6 +1,6 @@
 #include "execute_int.h"
 
-/* This executes a simple cmd and
+/* This execve's a simple cmd and
  * manages the various I/O redirections
  */
 static int	_do_child_ops(t_state *s)
@@ -10,7 +10,7 @@ static int	_do_child_ops(t_state *s)
 	const char **argv = (const char **)c_getargv((t_cmd*)c);
 
 	if (!argv || !fullpath || !c)
-		return (err("ERR null command parameters\n"), -1);
+		return (err("_do_child_ops: ERR null command parameters\n"), -1);
 	if (-1 == p_do_redirections(c_getnode((t_cmd*)c)))
 		return (-1);
 	debug_print("Child exec'g %s\n", fullpath);
@@ -22,13 +22,13 @@ static int	_do_child_ops(t_state *s)
 }
 
 /* Handles redirects and calls built-in */
-int	exec_bi_run(t_state *s, t_builtin_fn bi)
+int	exec_bi_call(t_state *s, t_builtin_fn bi)
 {
 	const t_cmd *c = (const t_cmd *)get_cmd(s);
 	const char **argv = (const char **)c_getargv((t_cmd*)c);
 
 	if (!argv || !bi || !c)
-		return (err("ERR null command parameters\n"), -1);
+		return (err("exec_bi_run: ERR null command parameters\n"), -1);
 	save_redirs((t_cmd *)c);
 	if (-1 == p_do_redirections(c_getnode((t_cmd*)c)))
 		return (-1);
@@ -40,7 +40,7 @@ int	exec_bi_run(t_state *s, t_builtin_fn bi)
 }
 
 // TODO cleanup
-int	exec_fork_run(t_state *s)
+int	exec_fork_execve(t_state *s)
 {
 	pid_t p = fork();
 
@@ -53,7 +53,7 @@ int	exec_fork_run(t_state *s)
 		}
 	}
 	else if (p < 0)
-		err("ERR Fork");
+		err("ERR exec_fork_execve");
 	waitchild(get_status(s), 1);
 	//cleanup(&st);
 	return (get_exit_status(*get_status(s)));

@@ -22,11 +22,18 @@
 
 //# include "../parse/parse.h"
 
-// typedef struct s_node	t_ast_node;
+/* Duplicate declares */
+typedef struct s_node			t_ast_node;
+
+typedef int (*execute_fn)(t_state *s, t_ast_node *node);
 
 int	redirect(int *to, char *topath, int from, t_bool ifappend);
-int	exec_fork_run(t_state *s);
-int	exec_bi_run(t_state *s, t_builtin_fn bi);
 
+/* Atomic commands */
+int	exec_fork_execve(t_state *s);
+int	exec_bi_call(t_state *s, t_builtin_fn bi);
+
+/* Higher level commands */
+int exec_fork_func(t_state *s, t_ast_node *node, execute_fn executor);
 
 #endif

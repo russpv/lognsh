@@ -135,6 +135,7 @@ typedef struct s_arg
 
 /* Next refactor, remove the t_list since
  * this can only be a wrapper for one cmd
+ * cmds is a llist vehicle for ast nodes
  */
 typedef struct s_proc
 {

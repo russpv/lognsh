@@ -30,6 +30,7 @@ const char *get_error_message(int error_code);
 /* specific error messages */
 void	print_command_not_found(const char *cmd);
 void    print_permission_denied(const char *path);
+void	print_lex_buffer_overflow(void);
 
 
 #endif

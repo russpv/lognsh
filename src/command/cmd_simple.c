@@ -12,25 +12,26 @@ static int	_check_access(const char *path)
 }
 
 /* Returns 0 if absolute path is found */
-int	_search_path(const char *cmd, char **fullpath)
+static int	_search_path(const char *cmd, char **fullpath)
 {
-    char **paths;
-	char *tmp;
-	int i;
+	char	**paths;
+	char	*tmp;
+	int		i;
 
 	i = -1;
-    if (!(paths = s_getenv()))
+	if (!(paths = s_getenv()))
 		return (1);
 	while (paths[++i])
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		*fullpath = ft_strjoin(tmp, cmd);
 		free(tmp);
-        if (!*fullpath)
-            return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"), 1);
-        if (0 == _check_access(*fullpath))
-            return (ft_freearr((void **)paths, -1), 0);
-        free(*fullpath);
+		if (!*fullpath)
+			return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"),
+				1);
+		if (0 == _check_access(*fullpath))
+			return (ft_freearr((void **)paths, -1), 0);
+		free(*fullpath);
 		*fullpath = NULL;
 	}
 	return (ft_freearr((void **)paths, -1), 1);
@@ -44,7 +45,7 @@ static int	_find_and_validate_cmd(const char *cmd, char **fullpath)
 		if (ft_strchr(cmd, '/'))
 		{
 			if (0 == _check_access(cmd))
-				return (0); 
+				return (0);
 		}
 		else
 		{
@@ -58,16 +59,20 @@ static int	_find_and_validate_cmd(const char *cmd, char **fullpath)
 }
 
 /* Forks depending on execution context
+ * In the context of a proc or pipeline, 
+ * forking would already be done and be in 
+ * a child process. 
  * a null cmd name is valid, nothing runs
  * Execute module handles redirects and forking
  */
 static int	_run_cmd(t_state *s, t_ast_node *a)
 {
-	t_cmd *c = get_cmd(s);
+	t_cmd	*c;
 
+	c = get_cmd(s);
 	if (p_get_type(a) != AST_NODE_CMD || NULL == p_get_cmd(a))
 		return (EINVAL);
-	if ( 0 != _find_and_validate_cmd(p_get_cmd(a), &c->fullpath))
+	if (0 != _find_and_validate_cmd(p_get_cmd(a), &c->fullpath))
 		return (ERR_CMD_NOT_FOUND);
 	if (c->fullpath)
 		debug_print("Found command! at %s\n", c->fullpath);
@@ -77,21 +82,23 @@ static int	_run_cmd(t_state *s, t_ast_node *a)
 		if (execve(c->fullpath, c->argv, get_envp(s)) == -1)
 			err("ERR execve()\n");
 	}
-	else
-		if (0 != exec_fork_run(s))
-			err("ERR fork and run\n");
+	else if (0 != exec_fork_execve(s))
+		err("ERR fork and run\n");
 	return (0);
 }
 
 /* For an AST command node only
  * Checks for no command, builtin (1), then PATH (2)
  */
-int	cmd_execute_simple(t_state *s, t_ast_node *a)
+int	cmd_exec_simple(t_state *s, t_ast_node *a)
 {
-	char **args;
-	int exit_code;
-	t_cmd *c = get_cmd(s);
+	char				**args;
+	int					exit_code;
+	t_cmd				*c;
+	const t_builtin_fn	bi = get_builtin(p_get_cmd(a));
 
+	debug_print("\t### cmd_exec_simple ###\n");
+	c = get_cmd(s);
 	if (!c || !a)
 		return (-1);
 	if (p_get_type(a) != AST_NODE_CMD)
@@ -100,13 +107,12 @@ int	cmd_execute_simple(t_state *s, t_ast_node *a)
 	exit_code = -1;
 	args = p_do_arg_expansions(a);
 	if (true == p_get_expansion(a) && !p_get_cmd(a)) // handle no command
-		p_set_cmd(a, args[0]); // deep copies 
+		p_set_cmd(a, args[0]);                       // deep copies
 	if (false == p_get_expansion(a) && !p_get_cmd(a))
 		return (0); // is this the right code?
-	const t_builtin_fn bi = get_builtin(p_get_cmd(a));
 	c->argv = c_argstoargv(args, p_get_cmd(a), p_get_argc(a));
 	if (bi)
-		exit_code = exec_bi_run(s, bi);
+		exit_code = exec_bi_call(s, bi);
 	else
 	{
 		// Print debug statement before calling _run_cmd

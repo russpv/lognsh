@@ -37,5 +37,10 @@ void print_command_not_found(const char *cmd)
 
 void    print_permission_denied(const char *path)
 {
-    fprintf(stderr, "%s: %s: Permission denied", SHELL_NAME, path);
+    fprintf(stderr, "%s: %s: Permission denied\n", SHELL_NAME, path);
+}
+
+void print_lex_buffer_overflow(void)
+{
+    fprintf(stderr, "%s: Buffer overflow\n", SHELL_NAME);
 }

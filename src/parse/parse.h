@@ -47,10 +47,16 @@ typedef struct s_node			t_ast_node;
 t_ast_node						*parse(t_state *s, char *input);
 
 int								p_get_type(t_ast_node *a);
+
 char							*p_get_cmd(t_ast_node *a);
 t_list							*p_get_args(t_ast_node *a);
 int								p_get_argc(t_ast_node *a);
 bool							p_get_expansion(t_ast_node *a);
+
+/* */
+t_list	*p_get_proc_cmds(t_ast_node *a);
+int	p_get_proc_cmdc(t_ast_node *a);
+
 
 /* These methods are called by Command */
 char							**p_do_arg_expansions(t_ast_node *a);

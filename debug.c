@@ -1,18 +1,16 @@
 #include "debug.h"
 
-void debug_print(const char *format, ...) 
+void debug_print(const char *format, ...)
 {
-	if (DEBUG)
-	{
-    	va_list args;
-    	va_start(args, format);
-
-        fprintf(stderr, BLUE);
+    if (DEBUG)
+    {
+        va_list args;
+        va_start(args, format);
+        fprintf(stderr, BLUE "[PID %d] ", getpid());
         vfprintf(stderr, format, args);
         fprintf(stderr, RESET);
-
-    	va_end(args);
-	}
+        va_end(args);
+    }
 }
 
 void log_printf(const char *s, ...)

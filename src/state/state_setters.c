@@ -29,3 +29,4 @@ int	set_exit_status(t_state *state, int value)
 	state->current_exit_code = value;
 	return (0);
 }
+

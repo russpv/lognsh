@@ -18,5 +18,7 @@ typedef struct s_cmd	t_cmd;
 
 char **c_argstoargv(char **args, char *cmd, int argc);
 
+int	cmd_exec_simple(t_state *s, t_ast_node *a);
+int	cmd_execute_full(t_state *s, t_ast_node *a);
 
 #endif

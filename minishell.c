@@ -21,8 +21,8 @@ int	main(int argc, char **argv, char **envp)
 			add_history(get_input(s));
 		ast = parse(s, get_input(s));
 		if (!ast)
-			fprintf(stderr, "PooPoo!\n");
-		set_exit_status(s, cmd_execute_full(s, ast));
+			err("ERR parse()\n");
+		set_exit_status(s, cmd_execute(s, ast));
 		s_free_cmd(s);
 	}
 	destroy_state(s);
