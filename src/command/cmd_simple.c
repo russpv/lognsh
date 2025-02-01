@@ -1,131 +1,57 @@
 #include "command_int.h"
 
-static int	_check_access(const char *path)
+static int	_handle_no_command(t_ast_node *a, char **args)
 {
-	if (0 == access((const char *)path, F_OK))
-	{
-		if (0 != access((const char *)path, X_OK))
-			return (print_permission_denied(path), ERR_CMD_NOT_EXEC);
+	if (true == p_get_expansion(a) && !p_get_cmd(a))
+		p_set_cmd(a, args[0]);
+	if (false == p_get_expansion(a) && !p_get_cmd(a))
 		return (0);
-	}
 	return (-1);
 }
 
-/* Returns 0 if absolute path is found */
-static int	_search_path(const char *cmd, char **fullpath)
+static void	_print_command_info(t_cmd *c, t_ast_node *a)
 {
-	char	**paths;
-	char	*tmp;
-	int		i;
-
-	i = -1;
-	if (!(paths = s_getenv()))
-		return (1);
-	while (paths[++i])
+	colored_printf(YELLOW, "\tExecuting command: %s\n", p_get_cmd(a));
+	colored_printf(YELLOW, "\tArguments:\n");
+	if (c->argv)
 	{
-		tmp = ft_strjoin(paths[i], "/");
-		*fullpath = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (!*fullpath)
-			return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"),
-				1);
-		if (0 == _check_access(*fullpath))
-			return (ft_freearr((void **)paths, -1), 0);
-		free(*fullpath);
-		*fullpath = NULL;
+		for (int i = 0; c->argv[i] != NULL; i++)
+			colored_printf(YELLOW, "\t  argv[%d]: %s\n", i, c->argv[i]);
 	}
-	return (ft_freearr((void **)paths, -1), 1);
+	colored_printf(YELLOW, "\t  argv[%d]: (NULL)\n", p_get_argc(a) + 1);
 }
 
-/* Checks PATH, or absolute path if slash is in the name */
-static int	_find_and_validate_cmd(const char *cmd, char **fullpath)
-{
-	if (!(NULL == cmd || '\0' == cmd[0]))
-	{
-		if (ft_strchr(cmd, '/'))
-		{
-			if (0 == _check_access(cmd))
-				return (0);
-		}
-		else
-		{
-			if (0 == _search_path(cmd, fullpath))
-				if (0 == _check_access(*fullpath))
-					return (0);
-		}
-	}
-	print_command_not_found(cmd);
-	return (ERR_CMD_NOT_FOUND);
-}
-
-/* Forks depending on execution context
- * In the context of a proc or pipeline, 
- * forking would already be done and be in 
- * a child process. 
- * a null cmd name is valid, nothing runs
- * Execute module handles redirects and forking
- */
-static int	_run_cmd(t_state *s, t_ast_node *a)
-{
-	t_cmd	*c;
-
-	c = get_cmd(s);
-	if (p_get_type(a) != AST_NODE_CMD || NULL == p_get_cmd(a))
-		return (EINVAL);
-	if (0 != _find_and_validate_cmd(p_get_cmd(a), &c->fullpath))
-		return (ERR_CMD_NOT_FOUND);
-	if (c->fullpath)
-		debug_print("Found command! at %s\n", c->fullpath);
-	if (CTXT_PIPELINE == st_peek(get_cmd(s)->st) \
-		|| CTXT_PROC == st_peek(get_cmd(s)->st))
-	{
-		if (execve(c->fullpath, c->argv, get_envp(s)) == -1)
-			err("ERR execve()\n");
-	}
-	else if (0 != exec_fork_execve(s))
-		err("ERR fork and run\n");
-	return (0);
-}
-
-/* For an AST command node only
- * Checks for no command, builtin (1), then PATH (2)
+/* For an AST COMMAND node only
+ * Checks for no command, builtin, then PATH
+ * Prints diagnostic info.
+ * Stores argv and argc into s->curr_cmd.
  */
 int	cmd_exec_simple(t_state *s, t_ast_node *a)
 {
 	char				**args;
 	int					exit_code;
-	t_cmd				*c;
+	const t_cmd			*c = (const t_cmd *)get_cmd(s);
 	const t_builtin_fn	bi = get_builtin(p_get_cmd(a));
 
 	debug_print("\t### cmd_exec_simple ###\n");
-	c = get_cmd(s);
 	if (!c || !a)
 		return (-1);
 	if (p_get_type(a) != AST_NODE_CMD)
 		return (-1);
-	c->curr_node = a;
+	((t_cmd *)c)->curr_node = a;
 	exit_code = -1;
 	args = p_do_arg_expansions(a);
-	if (true == p_get_expansion(a) && !p_get_cmd(a)) // handle no command
-		p_set_cmd(a, args[0]);                       // deep copies
-	if (false == p_get_expansion(a) && !p_get_cmd(a))
-		return (0); // is this the right code?
-	c->argv = c_argstoargv(args, p_get_cmd(a), p_get_argc(a));
+	exit_code = _handle_no_command(a, args);
+	if (0 == exit_code)
+		return (exit_code);
+	((t_cmd *)c)->argv = c_argstoargv(args, p_get_cmd(a), p_get_argc(a));
+	((t_cmd *)c)->argc = p_get_argc(a) + 1;
 	if (bi)
 		exit_code = exec_bi_call(s, bi);
 	else
 	{
-		// Print debug statement before calling _run_cmd
-		colored_printf(YELLOW, "\tExecuting command: %s\n", p_get_cmd(a));
-		colored_printf(YELLOW, "\tArguments:\n");
-		if (c->argv)
-		{
-			for (int i = 0; c->argv[i] != NULL; i++)
-				colored_printf(YELLOW,"\t  argv[%d]: %s\n", i, c->argv[i]);
-		}
-		colored_printf(YELLOW, "\t  argv[%d]: (NULL)\n", p_get_argc(a) + 1);
-
-		exit_code = _run_cmd(s, a);
+		_print_command_info((t_cmd *)c, a);
+		exit_code = run_cmd(s, a);
 	}
 	return (exit_code);
 }

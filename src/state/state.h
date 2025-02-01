@@ -70,15 +70,5 @@ void							register_parser_destroy(t_state *s, t_destroy_fn fn);
 void							register_lexer_destroy(t_state *s, t_destroy_fn fn);
 void							s_free_cmd(t_state *s);
 
-// t_cmd							*build_command(char *input);
-// interface to COMMAND
-
-t_state							*state_get_instance(void);
-
-char							*get_env_var(t_state *s, const char *key);
-void							set_env_var(t_state *s, const char *key,
-									const char *value);
-char	*search_path(const char *command);  // wrapper required for COMMAND
-char	**expand_glob(const char *pattern); // wrapper required for COMMAND
 
 #endif

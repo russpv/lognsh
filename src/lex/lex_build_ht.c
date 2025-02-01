@@ -10,6 +10,7 @@ static inline int	_insert_builtins(t_ht ht)
 		BI_UNSET,
 		BI_ENV, 
 		BI_EXIT,
+		BI_EXEC,
 	};
 	int i;
 

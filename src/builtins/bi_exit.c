@@ -32,10 +32,11 @@ static int  _is_numeric(const char *str)
 }
 // RKP: needs to trigger state cleanup before exiting
 // RKP: is this args or argv?
-int	bi_exit(t_state *s, char **args)
+int	bi_exit(t_state *s, char **args, int argc)
 {
     int     exit_code;
     
+    (void)argc;
     write(STDOUT_FILENO, "exit\n", 5);
 
     // if no args: exit with last exit code

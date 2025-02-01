@@ -2,7 +2,7 @@
 
 void	debug_print(const char *format, ...)
 {
-		va_list args;
+	va_list	args;
 
 	if (DEBUG)
 	{
@@ -19,15 +19,15 @@ void	colored_printf(const char *color, const char *format, ...)
 	va_list	args;
 
 	va_start(args, format);
-	printf("%s", color);
-	vprintf(format, args);
-	printf(RESET);
+	fprintf(stderr, "%s", color);
+	vfprintf(stderr, format, args);
+	fprintf(stderr, "%s", RESET);
 	va_end(args);
 }
 
 void	log_printf(const char *s, ...)
 {
-		va_list args;
+	va_list	args;
 
 	if (LOG)
 	{
@@ -54,7 +54,7 @@ void	debug_detect_cycle(t_list *head)
 			fast = fast->next->next;
 			if (slow == fast)
 			{
-				printf(RED"Cycle detected in the linked list\n"RESET);
+				err("Cycle detected in the linked list\n");
 				return ;
 			}
 		}
@@ -64,5 +64,5 @@ void	debug_detect_cycle(t_list *head)
 
 void	err(const char *s)
 {
-	fprintf(stderr, "%s", s);
+	fprintf(stderr, RED"%s"RESET, s);
 }

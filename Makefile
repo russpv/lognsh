@@ -19,10 +19,10 @@ SRCDIR = src
 RESDIR = res
 
 # Compiler and flags
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
-EXT_CFLAGS = -DEXTENDEDFUNC
-LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses
+CC = cc 
+CFLAGS = -Wall -Wextra -Werror -g -DDEBUGMODE -fsanitize=address
+EXT_CFLAGS = -DEXTENDEDFUNC 
+LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses -fsanitize=address
 LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
 
 INC	= -I$(INCDIR) -I/usr/include/readline

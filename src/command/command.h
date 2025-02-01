@@ -56,13 +56,16 @@ char							*c_getfullpath(t_cmd *c);
 char							**c_getargv(t_cmd *c);
 t_stack							*c_getctxt(t_cmd *c);
 t_ast_node						*c_getnode(t_cmd *c);
-int	c_get_cmdc(const t_cmd *c);
+int								c_get_cmdc(const t_cmd *c);
+int								c_get_argc(const t_cmd *c);
 
-const int	**c_get_fildes(const t_cmd *c);
+const int						**c_get_fildes(const t_cmd *c);
 
-int	cmd_execute(t_state *s, t_ast_node *a);
+int								cmd_execute(t_state *s, t_ast_node *a);
 
-int	save_redirs(t_cmd *c);
-int	restore_redirs(t_cmd *c);
+int								save_redirs(t_cmd *c);
+int								restore_redirs(t_cmd *c);
+
+//int	find_and_validate_cmd(const char *name, char **fullpath);
 
 #endif

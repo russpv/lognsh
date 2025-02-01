@@ -21,6 +21,7 @@ t_cmd	*init_cmd(t_state *s, t_ast_node *a)
 		c->fildes = NULL;
 		c->st = st_create();
 		c->argv = NULL;
+		c->argc = 0;
 		c->fullpath = NULL;
 		c->curr_node = a;
 		c->saved_stderr = -1;

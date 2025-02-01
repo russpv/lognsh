@@ -12,11 +12,12 @@
 
 #include "bi_int.h"
 
-int    bi_echo(t_state *s, char **args)
+int    bi_echo(t_state *s, char **args, int argc)
 {
     int     i;
     int     no_newline;
-
+    
+    (void)argc;
     (void)s;
     i = 0;
     no_newline = 0;

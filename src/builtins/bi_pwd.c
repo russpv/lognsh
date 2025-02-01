@@ -12,11 +12,12 @@
 
 #include "bi_int.h"
 
-int    bi_pwd(t_state *s, char **args)
+int    bi_pwd(t_state *s, char **args, int argc)
 {
     char    *cwd;
 
     (void)s;
+    (void)argc;
     if (args[1])
     {
         write(STDERR_FILENO, "minishell: pwd: too many arguments\n", sizeof("minishell: pwd: too many arguments\n"));
