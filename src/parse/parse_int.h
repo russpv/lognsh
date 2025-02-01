@@ -145,7 +145,7 @@ typedef struct s_proc
 
 typedef struct s_op
 {
-	char					**operators;
+	t_list					*operators;
 	t_list					*cmds;
 	int						cmdc;
 }							t_ast_node_log;

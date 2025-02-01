@@ -6,6 +6,7 @@ t_ast_node	*parse_logical(t_parser *p)
 	t_list		*first;
 	t_ast_node	*next_cmd;
 	t_list		*next;
+	t_list		*op;
 
 	if (!p->last_node) // need to have something parsed already
 		return (NULL);
@@ -20,6 +21,17 @@ t_ast_node	*parse_logical(t_parser *p)
 		log_node->data.log.operators = NULL;
 		while (!is_at_end(p) && is_log_token(peek(p)))
 		{
+			op = ft_lstnew(tok_get_raw(peek(p))); // store the op token
+			if (op)
+			{
+				ft_lstadd_back(&log_node->data.log.operators, op);
+			}
+			else
+			{
+				err("Memory allocation error while creating operator node\n");
+				free(log_node);
+				return (NULL);
+			}			
 			advance(p);
 			first = ft_lstnew(p->last_node);
 			if (first)
@@ -31,7 +43,7 @@ t_ast_node	*parse_logical(t_parser *p)
 			{
 				err("Memory allocation error while creating the first command node\n");
 				free(log_node);
-				return (NULL); // Return NULL on error
+				return (NULL);
 			}
 			debug_print("parsing logical: getting next cmd...\n");
 			next_cmd = parse_full_cmd(p);

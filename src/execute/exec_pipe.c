@@ -124,10 +124,11 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
 int	exec_fork_redirect_run(t_state *s, t_ast_node *node, int i, execute_fn executor)
 {
 	pid_t pid;
-	
+	int exit_status;
+
 	debug_print("exec_fork_func_child: got %dth\n", i);
 	pid = fork();
-	if (0 > pid)
+	if (pid < 0)
 	{
 		err("ERR exec_fork_func\n");
 		return (-1);
@@ -136,7 +137,7 @@ int	exec_fork_redirect_run(t_state *s, t_ast_node *node, int i, execute_fn execu
 	{
 		_close_other_pipe_ends(get_cmd(s), i);
 		_redirect_pipes(get_cmd(s), i);
-		int exit_status = executor(s, node);
+		exit_status = executor(s, node);
 		exit(exit_status); // No cleanup?
 	}
 	return (0);

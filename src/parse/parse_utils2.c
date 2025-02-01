@@ -65,6 +65,16 @@ void print_ast(t_ast_node *ast, int depth)
             for (t_list *cmd_node = ast->data.log.cmds; cmd_node != NULL; cmd_node = cmd_node->next) {
                 print_ast(cmd_node->content, depth + 1);
             }
+            char **operators = (char **)ast->data.log.operators;
+            if (operators)
+            {
+                colored_printf(CYAN, "  Ops: ");
+                for (t_list *op_node = ast->data.log.operators; op_node != NULL; op_node = op_node->next) {
+                    char *symbol = (char *)op_node->content;
+                    colored_printf(CYAN, "%s", symbol);
+                }
+                printf("\n");
+            }
             break;
         case AST_NODE_PROC:
            colored_printf(CYAN, "Proc () with %d commands:\n", ast->data.proc.cmdc);

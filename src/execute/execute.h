@@ -38,6 +38,7 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi);
 /* Higher level commands */
 int exec_fork_func(t_state *s, t_ast_node *node, execute_fn executor);
 int	exec_fork_redirect_run(t_state *s, t_ast_node *node, int i, execute_fn executor);
+int	exec_fork_run(t_state *s, t_ast_node *node, int i, execute_fn executor);
 
 int	exec_close_pipes(int **fildes, int cmd_count);
 

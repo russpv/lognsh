@@ -53,20 +53,21 @@ t_list							*p_get_args(t_ast_node *a);
 int								p_get_argc(t_ast_node *a);
 bool							p_get_expansion(t_ast_node *a);
 
-/* */
-t_list	*p_get_proc_cmds(t_ast_node *a);
-int	p_get_proc_cmdc(t_ast_node *a);
-t_list	*p_get_pipe_cmds(t_ast_node *a);
-int	p_get_pipe_cmdc(t_ast_node *a);
-
-
+/* Command getters */
+t_list							*p_get_proc_cmds(t_ast_node *a);
+int								p_get_proc_cmdc(t_ast_node *a);
+t_list							*p_get_pipe_cmds(t_ast_node *a);
+int								p_get_pipe_cmdc(t_ast_node *a);
+t_list							*p_get_log_cmds(t_ast_node *a);
+int								p_get_log_cmdc(t_ast_node *a);
+t_list	*p_get_log_ops(t_ast_node *a);
 
 /* These methods are called by Command */
 char							**p_do_arg_expansions(t_ast_node *a);
 int								p_do_redirections(t_ast_node *a);
 int								p_set_cmd(t_ast_node *a, const char *cmd);
 
-void print_ast(t_ast_node *ast, int depth);
+void							print_ast(t_ast_node *ast, int depth);
 
 /*  Expansions */
 // tilde ~ ?
