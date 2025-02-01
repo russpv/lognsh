@@ -3,7 +3,7 @@
 
 /* TOKEN ADT */
 
-# include "../../debug.h"
+# include "../debug.h"
 # include "../state/state.h"
 # include <stdbool.h>
 # include <stddef.h>

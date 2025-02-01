@@ -6,7 +6,7 @@
 ** It assumes the correct lengths have been passed 
 */
 
-char	*ft_strcpy(char *dest, char *src)
+char	*ft_strcpy(char *dest, const char *src)
 {
 	unsigned int	i;
 

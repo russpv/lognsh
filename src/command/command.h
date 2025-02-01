@@ -56,6 +56,9 @@ char							*c_getfullpath(t_cmd *c);
 char							**c_getargv(t_cmd *c);
 t_stack							*c_getctxt(t_cmd *c);
 t_ast_node						*c_getnode(t_cmd *c);
+int	c_get_cmdc(const t_cmd *c);
+
+const int	**c_get_fildes(const t_cmd *c);
 
 int	cmd_execute(t_state *s, t_ast_node *a);
 

@@ -56,6 +56,9 @@ bool							p_get_expansion(t_ast_node *a);
 /* */
 t_list	*p_get_proc_cmds(t_ast_node *a);
 int	p_get_proc_cmdc(t_ast_node *a);
+t_list	*p_get_pipe_cmds(t_ast_node *a);
+int	p_get_pipe_cmdc(t_ast_node *a);
+
 
 
 /* These methods are called by Command */

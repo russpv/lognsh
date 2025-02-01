@@ -1,7 +1,7 @@
 #ifndef STACK_H
 # define STACK_H
 
-# include "../../debug.h"
+# include "../debug.h"
 # include "../../include/libft.h"
 # include <stdlib.h>
 

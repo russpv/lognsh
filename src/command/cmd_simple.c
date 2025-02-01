@@ -116,14 +116,14 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	else
 	{
 		// Print debug statement before calling _run_cmd
-		printf("Executing command: %s\n", p_get_cmd(a));
-		printf("Arguments:\n");
+		colored_printf(YELLOW, "\tExecuting command: %s\n", p_get_cmd(a));
+		colored_printf(YELLOW, "\tArguments:\n");
 		if (c->argv)
 		{
 			for (int i = 0; c->argv[i] != NULL; i++)
-				printf("  argv[%d]: %s\n", i, c->argv[i]);
+				colored_printf(YELLOW,"\t  argv[%d]: %s\n", i, c->argv[i]);
 		}
-		printf("  argv[%d]: (NULL)\n", p_get_argc(a) + 1);
+		colored_printf(YELLOW, "\t  argv[%d]: (NULL)\n", p_get_argc(a) + 1);
 
 		exit_code = _run_cmd(s, a);
 	}

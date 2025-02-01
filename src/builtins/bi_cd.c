@@ -12,6 +12,7 @@
 
 #include "bi_int.h"
 
+/*
 void    builtin_cd(char **args)
 {
     char    *target_dir;
@@ -50,4 +51,4 @@ void    builtin_cd(char **args)
     }
     // successful change dir > update prompt
     g_exit_code = 0;
-}
+}*/

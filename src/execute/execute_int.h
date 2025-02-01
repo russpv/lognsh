@@ -3,8 +3,7 @@
 
 #include "execute.h"
 
-int		get_exit_status(int status);
-void	waitchild(int *status, int childc);
+
 
 
 #endif

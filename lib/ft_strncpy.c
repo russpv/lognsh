@@ -7,7 +7,7 @@
 ** see memcpy
 */
 
-char	*ft_strncpy(char *dest, char *src, unsigned int n)
+char	*ft_strncpy(char *dest, const char *src, size_t n)
 {
 	unsigned int	i;
 

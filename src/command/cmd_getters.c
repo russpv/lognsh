@@ -19,3 +19,17 @@ t_ast_node *c_getnode(t_cmd *c)
 {
 	return (c->curr_node);
 }
+
+const int	**c_get_fildes(const t_cmd *c)
+{
+
+	return ((const int **)c->fildes);
+}
+
+int	c_get_cmdc(const t_cmd *c)
+{
+	if (!c)
+		return (-1);
+	return(c->curr_cmdc);
+}
+

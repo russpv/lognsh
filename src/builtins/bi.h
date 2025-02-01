@@ -14,7 +14,7 @@
 # define BI_H
 
 #include "../../include/libft.h"
-#include "../../debug.h"
+#include "../debug.h"
 #include "../state/state.h"
 #include <unistd.h>
 #include <stdio.h>

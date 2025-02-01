@@ -24,6 +24,7 @@ t_stack	*st_create(void)
 }
 void	st_destroy(t_stack *s)
 {
+	
 	free(s);
 }
 

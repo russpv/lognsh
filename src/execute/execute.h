@@ -19,6 +19,7 @@
 # include "../command/command.h"
 # include <sys/wait.h>
 # include <sys/types.h>
+# include <stdbool.h>
 
 //# include "../parse/parse.h"
 
@@ -27,7 +28,8 @@ typedef struct s_node			t_ast_node;
 
 typedef int (*execute_fn)(t_state *s, t_ast_node *node);
 
-int	redirect(int *to, char *topath, int from, t_bool ifappend);
+int	redirect(int *to, char *topath, int from, bool ifappend);
+int	exec_create_pipes(int ***fildes, int cmd_count);
 
 /* Atomic commands */
 int	exec_fork_execve(t_state *s);
@@ -35,5 +37,14 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi);
 
 /* Higher level commands */
 int exec_fork_func(t_state *s, t_ast_node *node, execute_fn executor);
+int	exec_fork_redirect_run(t_state *s, t_ast_node *node, int i, execute_fn executor);
+
+int	exec_close_pipes(int **fildes, int cmd_count);
+
+int		get_exit_status(int status);
+void	waitchild(int *status, int childc);
+
+void free_pipes(int **fildes, int count);
+
 
 #endif

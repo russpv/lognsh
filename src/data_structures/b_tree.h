@@ -1,6 +1,7 @@
 #ifndef BIN_TREE_H
 # define BIN_TREE_H
 
+# include <stdlib.h>
 /* BINARY TREE ADT
  */
 

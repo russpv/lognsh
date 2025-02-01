@@ -45,7 +45,7 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
  * append: for opt <</>> here_doc 
  * from file is only ever stdin or stdout
  */
-int	redirect(int *to, char *topath, int from, t_bool ifappend)
+int	redirect(int *to, char *topath, int from, bool ifappend)
 {
 	int	fd;
 
@@ -57,6 +57,7 @@ int	redirect(int *to, char *topath, int from, t_bool ifappend)
 	}
 	else
 		fd = *to;
+	fprintf(stderr, GREEN"\tRedirect: dup2 from %d to %d\n"RESET, from, fd);
 	if (dup2(fd, from) == -1)
 		return (-1);
 	close(fd);

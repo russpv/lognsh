@@ -1,7 +1,7 @@
 #ifndef LEX_H
 # define LEX_H
 
-# include "../../debug.h"
+# include "../debug.h"
 # include "../builtins/bi.h"
 # include "../data_structures/hashtable.h"
 # include "../data_structures/llist.h"

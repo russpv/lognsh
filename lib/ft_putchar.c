@@ -1,3 +1,5 @@
+#include "../include/libft.h"
+
 /* PUTCHAR 
 ** Displays c on stdout
 */

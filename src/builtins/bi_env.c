@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "bi_int.h"
-
+/*
 void    builtin_env(char **args)
 {
     extern char **environ;
@@ -30,4 +30,4 @@ void    builtin_env(char **args)
         i++;
     }
     g_exit_code = 0;
-}
+}*/

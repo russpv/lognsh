@@ -22,3 +22,4 @@ int exec_fork_func(t_state *s, t_ast_node *node, execute_fn executor)
 	waitchild(&status, 1);
 	return (get_exit_status(status));
 }
+

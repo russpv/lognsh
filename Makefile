@@ -1,42 +1,138 @@
+SHELL := /bin/bash
+TARGET = minish
+OUTPUT = executable
+
+# Colors
+YELLOW = \033[33m
+GREEN = \033[32m
+RESET = \033[0m
+BOLD = \033[1m
+
+# Dirs
+OBJDIR = obj
+OBJEXT = o
+SRCEXT = c
+DEPEXT = d
+INCDIR = include
+TARGETDIR = bin
+SRCDIR = src
+RESDIR = res
+
+# Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -DDEBUGMODE
-LDFLAGS = -lreadline -lncurses  # Add ASAN for linking -fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror -g
+EXT_CFLAGS = -DEXTENDEDFUNC
+LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses
+LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
 
-SRC = src/data_structures/llist.c src/data_structures/llist_utils.c src/data_structures/llist_cpy.c \
-      src/data_structures/hashtable.c src/data_structures/hashtable_utils.c \
-      src/data_structures/stack.c \
-      lib/ft_strchr.c lib/ft_strdup.c lib/ft_isalpha.c lib/ft_isdigit.c lib/ft_strncmp.c \
-      lib/ft_memcpy.c lib/ft_strlen.c lib/ft_memset.c lib/ft_isspace.c lib/ft_strcmp.c \
-      lib/ft_isalnum.c lib/ft_strnlen.c lib/ft_freearr.c lib/ft_split.c lib/ft_strjoin.c \
-      lib/ft_memmove.c lib/ft_isprint.c lib/ft_itoa.c lib/ft_atoi.c \
-      debug.c \
-      src/lex/lex_utils.c src/lex/lex_normal_utils.c src/lex/lex_normal_ht.c src/lex/lex_squote.c src/lex/lex_dquote.c src/lex/lex_utils_ht.c \
-      src/lex/lex_state.c src/lex/lex_build_ht.c src/lex/lex_.c src/lex/lex_normal.c src/lex/lex_heredoc.c \
-      src/token/token.c src/token/token_utils.c \
-      src/parse/parse.c src/parse/parse_stack.c src/parse/parse_utils.c src/parse/parse_class.c src/parse/parse_cmd.c \
-      src/parse/parse_redir.c src/parse/parse_log.c src/parse/parse_proc.c src/parse/parse_pipe.c \
-      src/parse/parse_bools.c src/parse/parse_bools2.c src/parse/parse_utils2.c src/parse/parse_getters.c \
-      src/parse/parse_do_expand.c src/parse/parse_do_redir.c src/parse/parse_setters.c \
-      src/state/error.c src/state/state.c src/state/env.c src/state/state_setters.c src/state/state_getters.c src/state/state_callbacks.c\
-      src/command/command.c src/command/cmd_getters.c src/command/cmd_simple.c src/command/cmd_redirs.c \
-      src/execute/execute.c src/execute/exec_redirect.c src/execute/exec_simple.c src/execute/exec_complex.c \
-	src/builtins/bi_echo.c src/builtins/bi_pwd.c src/builtins/bi.c src/builtins/bi_exit.c \
-      minishell.c
+INC	= -I$(INCDIR) -I/usr/include/readline
+INCDEP = -I$(INCDIR)
 
-OBJ = $(SRC:.c=.o)
-NAME = main
+LIB_CPDIR = .
+LIB_DIR = lib
+LIB_NAME = libft.a
+LIB_NAME_SO = libft.so
+LIB_PATH = $(LIB_DIR)/$(LIB_NAME)
+LIB_PATH_SO = $(LIB_DIR)/$(LIB_NAME_SO)
 
-# The main build target
-$(NAME): $(OBJ)
-	$(CC) $(OBJ) $(LDFLAGS) -o $@
+# ----------------------------------------------------------------
+#  DO NOT EDIT BELOW
+# ----------------------------------------------------------------
 
-# Clean up object files
+# BONUS_SOURCES = $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+# BONUS_OBJECTS = $(addprefix $(OBJDIR), $(BONUS_SOURCES:.c=.o))
+SOURCES = $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)" ! -name "test_*.$(SRCEXT)")
+OBJECTS = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEXT)))
+
+# Default Make
+all: directories $(TARGET)
+
+# Copy resources from dir to target dir
+resources: directories
+	@if [ -d "$(RESDIR)" ] && [ "$(shell ls -A $(RESDIR))" ]; then \
+        cp $(RESDIR)/* $(TARGETDIR)/; \
+	else \
+        echo "Warning: $(RESDIR) directory is empty or doesn't exist."; \
+	fi
+
+#Make the dirs
+directories:
+	@mkdir -p $(TARGETDIR)
+	@mkdir -p $(OBJDIR)
+
+# Pull in dependencies for *existing* .o files
+-include $(OBJECTS:.$(OBJEXT)=.$(DEPEXT))
+
+# Link the executable
+$(TARGET): $(OBJECTS) $(LIB_PATH)
+	@echo "Linking with object files: $(OBJECTS)"
+	$(CC) -o $(TARGETDIR)/$(TARGET) $^ $(LDFLAGS)
+	chmod +x $(TARGETDIR)/$(TARGET)
+	@cp $(TARGETDIR)/$(TARGET) .
+
+#Compile
+$(OBJDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(INCDEP) -MM $(SRCDIR)/$*.$(SRCEXT) > $(OBJDIR)/$*.$(DEPEXT)
+	@cp -f $(OBJDIR)/$*.$(DEPEXT) $(OBJDIR)/$*.$(DEPEXT).tmp
+	@sed -e 's|.*:|$(OBJDIR)/$*.$(OBJEXT):|' < $(OBJDIR)/$*.$(DEPEXT).tmp > $(OBJDIR)/$*.$(DEPEXT)
+	@sed -e 's/.*://' -e 's/\\$$//' < $(OBJDIR)/$*.$(DEPEXT).tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $(OBJDIR)/$*.$(DEPEXT)
+	@rm -f $(OBJDIR)/$*.$(DEPEXT).tmp
+	
+#@echo "$(GREEN)$(BOLD)SUCCESS$(RESET)"
+#@echo "$(YELLOW)Created: $(words $(OBJECTS) ) object file(s)$(RESET)"
+#@echo "$(YELLOW)Created: $(NAME)$(RESET)"
+
+bonus: .bonus_made
+
+.bonus_made: 
+	@echo "Creating $(NAME) $(OUTPUT) with extended functionality..."
+	$(MAKE) CFLAGS="$(CFLAGS) $(EXT_CFLAGS)"
+	-@touch .bonus_made
+#	@echo "$(GREEN)$(BOLD)SUCCESS$(RESET)"
+#	@echo "$(YELLOW)Created: $(words $(OBJECTS) $(BONUS_OBJECTS)) object file(s)$(RESET)"
+#	@echo "$(YELLOW)Created: $(NAME)$(RESET)"
+#
+#%(OBJDIR)/%.o: %.c | $(OBJDIR) # -DDEBUGMODE
+#	$(CC) -c $(CFLAGS) $< -o $@ #Initial compilation of .c files
+
+
+# make lib
+$(LIB_PATH):
+	@$(MAKE) -C $(LIB_DIR)
+	@echo "Copying $(LIB_NAME) to ../"
+	@cp $(LIB_PATH) .
+
+# clean only objects
 clean:
-	rm -f $(OBJ)
+	@$(RM) -rf $(OBJDIR)
+	@$(MAKE) -C $(LIB_DIR) clean
 
-# Clean everything, including the binary
-fclean: clean
-	rm -f $(NAME)
+# Clean+, objects and binaries
+cleaner: clean
+	@$(RM) -rf $(TARGETDIR)
+	@$(RM) -f $(TARGET) # copied to root for lame evaluators
+	rm -f $(LIB_NAME) # don't delete so!
+	-@rm -f .bonus_made
+# @echo "$(GREEN)$(BOLD)SUCCESS$(RESET)"
+# @echo "$(YELLOW) Deleted: $(words $(OBJECTS) $(BONUS_OBJECTS)) object file(s)$(RESET)"
 
-# Rebuild everything
-re: fclean $(NAME)
+# Full clean
+fclean: cleaner
+	rm -f $(LIB_PATH)
+	rm -f $(LIB_NAME)
+	rm -f $(LIB_NAME_SO)
+	@$(MAKE) -C $(LIB_DIR) fclean
+	@rm -f $(LIB_DIR)/error.txt
+# @echo "$(GREEN)SUCCESS$(RESET)"
+# @echo "$(YELLOW) Deleted $(words $(NAME)) object files(s)$(RESET)"
+# @echo "$(YELLOW) Deleted: $(NAME)"
+
+re: fclean all
+
+so:
+	$(CC) -fPIC $(CFLAGS) -c $(SOURCES) $(BONUS_SOURCES)
+	$(CC) -nostartfiles -shared -o pipex.so $(OBJECTS) $(BONUS_OBJECTS)
+
+.PHONY: all bonus clean cleaner fclean re resources so
