@@ -12,31 +12,30 @@
 
 #include "bi_int.h"
 
-int    bi_echo(t_state *s, char **args, int argc)
+int	bi_echo(t_state *s, char **argv, int argc)
 {
-    int     i;
-    int     no_newline;
-    
-    (void)argc;
-    (void)s;
-    i = 0;
-    no_newline = 0;
+	int	i;
+	int	no_newline;
 
-    if (!args)
-        return (0);
-    while (args[i] && ft_strncmp(args[i], "-n", -1) == 0)
-    {
-        no_newline = 1;
-        i++;
-    }
-    while (args[i])
-    {
-        printf("%s", args[i]);
-        if (args[i + 1])
-            printf(" ");
-        i++;
-    }
-    if (!no_newline)
-        printf("\n");
-    return (0);
+	(void)argc;
+	(void)s;
+	i = 1;
+	no_newline = 0;
+	if (!argv)
+		return (0);
+	while (argv[i] && ft_strncmp(argv[i], "-n", -1) == 0)
+	{
+		no_newline = 1;
+		i++;
+	}
+	while (argv[i])
+	{
+		printf("%s", argv[i]);
+		if (argv[i + 1])
+			printf(" ");
+		i++;
+	}
+	if (!no_newline)
+		printf("\n");
+	return (0);
 }

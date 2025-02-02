@@ -16,7 +16,9 @@ int cmd_exec_proc(t_state *s, t_ast_node *a)
 	while (++i < cmdc)
 	{
 		//push onto stack?
+		//TODO redirect pipe to parent
 		node = cmd->content;
+		debug_print("\t### cmd_exec_proc got cmd type:%d\n", p_get_type(node));
 		exec_fork_func(s, node, cmd_execute_full);
 		cmd = cmd->next;
 	}

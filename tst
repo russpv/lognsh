@@ -1,1 +1,1 @@
-echo bobo
+echo my test

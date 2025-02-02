@@ -5,7 +5,7 @@ static int	_setup_pipes(t_cmd *c)
 	if (0 != exec_create_pipes(&c->fildes, c->curr_cmdc))
 		return (err("ERR pipe creation\n"), -1);
  	for (int i = 0; i < c->curr_cmdc - 1; i++)
-        debug_print("Pipe %d: read fd=%d, write fd=%d\n", i, c->fildes[i][0], c->fildes[i][1]);
+        debug_print("\tPipe %d: read fd=%d, write fd=%d\n", i, c->fildes[i][0], c->fildes[i][1]);
     return (0);
 }
 

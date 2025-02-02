@@ -14,12 +14,14 @@ static int	_do_log_commands(t_state *s, t_list *cmds, t_cmd *c)
 	while (cmds && ++i < c->curr_cmdc)
 	{
 		a = (t_ast_node *)cmds->content;
+		debug_print("\t### _do_log_commands got cmd:%s\n", p_get_cmd(a));
 		if (0 != exec_fork_run(s, a, i, cmd_execute_full))	
 			return (-1);
 		waitchild(&exit_status, 1);
+		debug_print("\t### _do_log_commands got exit:%d\n", exit_status);
 		if (!ops)
 			break ;
-		debug_print("_do_log_commands got op:%s\n", ops->content);
+		debug_print("\t### _do_log_commands got op:%s\n", ops->content);
 		if ((0 != exit_status && 0 == ft_strcmp(OP_ANDIF, ops->content)) \
 			|| (0 == exit_status && 0 == ft_strcmp(OP_ORIF, ops->content)))
 		{
@@ -33,8 +35,6 @@ static int	_do_log_commands(t_state *s, t_list *cmds, t_cmd *c)
 	return (exit_status);
 }
 
-// do the first cmd
-// get logic, get exit, decide to loop or return
 int cmd_exec_log(t_state *s, t_ast_node *node)
 {
 	t_cmd *cmd; 
@@ -45,11 +45,16 @@ int cmd_exec_log(t_state *s, t_ast_node *node)
 	if (!cmd)
 		return (-1);
 	cmd->curr_cmdc = p_get_log_cmdc(node);
+	cmd->curr_node = node; // This might be problematic and we need a stack
 	debug_print("\t got %d cmds\n", cmd->curr_cmdc);
 	if (cmd->curr_cmdc < 2)
 		return (-1);
 	exit_status = _do_log_commands(s, p_get_log_cmds(node), cmd);
 	if (exit_status < 0)
+	{
+		debug_print("\t### cmd_exec_log: got negative exit, returning\n");
 		return (-1);
+	}
+		debug_print("\t### cmd_exec_log: got exit, returning\n");
 	return (exit_status);
 }

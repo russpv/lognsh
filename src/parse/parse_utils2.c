@@ -61,10 +61,7 @@ void print_ast(t_ast_node *ast, int depth)
             }
             break;
         case AST_NODE_LOG:
-           colored_printf(CYAN, "Logical with %d commands:\n", ast->data.log.cmdc);
-            for (t_list *cmd_node = ast->data.log.cmds; cmd_node != NULL; cmd_node = cmd_node->next) {
-                print_ast(cmd_node->content, depth + 1);
-            }
+           colored_printf(CYAN, "Logical with %d commands, ", ast->data.log.cmdc);
             char **operators = (char **)ast->data.log.operators;
             if (operators)
             {
@@ -74,6 +71,9 @@ void print_ast(t_ast_node *ast, int depth)
                     colored_printf(CYAN, "%s", symbol);
                 }
                 printf("\n");
+            }
+            for (t_list *cmd_node = ast->data.log.cmds; cmd_node != NULL; cmd_node = cmd_node->next) {
+                print_ast(cmd_node->content, depth + 1);
             }
             break;
         case AST_NODE_PROC:
