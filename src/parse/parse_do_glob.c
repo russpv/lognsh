@@ -91,11 +91,13 @@ int	p_do_globbing_redirs(void *c)
 }
 /*
  * To be called by Command executor, not Parser.
- * Passed to t_list *redirs iterator. 
+ * Passed to t_list *redirs BACKWARDS iterator,
+ * 	to handle insertions while iterating.
  * Modifies argument t_list.
  * Returns early in case of ambiguous redirect:
  * 
  * Arg c: t_redir_data *
+ * Arg parent_lst: 
  * 
  * For filenames in redirs, does not modify * string unless results found
  * Error is "[filename]: no such file or directory\n"
@@ -103,23 +105,28 @@ int	p_do_globbing_redirs(void *c)
  * "[original string]: ambiguous redirect\n"
  * So, if multiple results found after expansion then globbing, display
  * original argument, ie throw error.
+ * 
+ * Anything returned from globbing matches will NOT be processed further.
 */
-void	p_do_globbing(void *c)
+void	p_do_globbing(t_list **lst_node, void *lst_c)
 {
 	t_list *lst = NULL;
-
-	t_arg_data *content = (t_arg_data *)c;
-	debug_print("p_do_globbing got arg: %s\n", content->raw);
+	t_arg_data *content = (t_arg_data *)lst_c;
+	debug_print("p_do_globbing got arg: %s, lst:%p\n", content->raw, (void*)lst_node);
 	if (true == content->do_globbing)
 	{
 		lst = match_glob(content->raw);
 		if (lst)
 		{
-			debug_print("p_do_globbing found: %s\n", lst->content);
-			if (ft_lstsize(lst) > 1) 
-				;//TODO split them and insert new nodes
-			else
+			debug_print("p_do_globbing found %d matches, 1st: %s\n", ft_lstsize(lst), lst->content);
+			if (ft_lstsize(lst) > 1) //need to insert
 			{
+				ft_lstdelone_rwd(lst_node, lst_node, destroy_arg);
+				t_list *new_arg_data_lst = ft_lstmap(lst, create_arg_data_node, destroy_arg);
+				ft_lstadd_insert(lst_node, new_arg_data_lst); 
+			}
+			else
+			{ 
 				char *new_arg = ft_strdup(lst->content);
 				if (!new_arg)
 					return ; //TODO malloc processing

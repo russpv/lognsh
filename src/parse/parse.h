@@ -51,7 +51,7 @@ t_ast_node						*parse(t_state *s, char *input);
 int								p_get_type(t_ast_node *a);
 
 char							*p_get_cmd(t_ast_node *a);
-t_list							*p_get_args(t_ast_node *a);
+t_list **p_get_args(t_ast_node *a);
 t_list *p_get_redirs(t_ast_node *a);
 
 int								p_get_argc(t_ast_node *a);

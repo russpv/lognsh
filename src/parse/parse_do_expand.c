@@ -72,15 +72,19 @@ void	p_do_expansion(void *c)
  */
 char	**p_do_arg_processing(t_ast_node *a)
 {
-	t_list	*args;
+	t_list	**args;
 	char	**tmp;
 
 	if (a->type != AST_NODE_CMD)
 		return (NULL);
 	args = p_get_args(a);
-	ft_lstiter(args, p_do_expansion);
-	ft_lstiter(args, p_do_globbing); // TODO
-	tmp = list_to_array(args, a->data.cmd.argc);
+	ft_lstiter(*args, p_do_expansion); //TODO test that this does not corrupt the args list
+	debug_print("Before globbing: head: %p, first node: %p\n", args, *args ? (*args)->content : NULL);
+	ft_lstiter_ins_rwd(args, p_do_globbing);
+	debug_print("After globbing: head: %p, first node: %p\n", args, *args ? (*args)->content : NULL);
+
+	a->data.cmd.argc = ft_lstsize(*args);
+	tmp = list_to_array(*args, a->data.cmd.argc);
 	return (tmp);
 }
 

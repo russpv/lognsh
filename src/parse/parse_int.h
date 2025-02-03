@@ -246,9 +246,10 @@ void	destroy_arg(void *in);
 void						parse_print(t_ast_node *ast);
 t_ast_node					*test_parse(t_parser *parser);
 
-void	p_do_globbing(void *c); //TODO malloc protection
+void	p_do_globbing(t_list **parent_lst, void *c);
 int	p_do_globbing_redirs(void *c);
 
+void *create_arg_data_node(void *content);
 
 
 
