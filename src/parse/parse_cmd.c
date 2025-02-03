@@ -42,6 +42,7 @@ static t_list	*_parse_args(t_parser *p, t_ast_node *cmd_node)
 			free(arg);
 			return (NULL);
 		}
+		debug_print("\t_parse_args adding arg:%s\n", arg->raw);
 		ft_lstadd_back(&cmd_node->data.cmd.args, new);
 		cmd_node->data.cmd.argc++;
 	}
@@ -83,6 +84,7 @@ static void	_init_cmd_data(t_ast_node *cmd_node)
 	cmd_node->data.cmd.do_globbing = false;
 }
 
+/* Parsing of atomic command. */
 t_ast_node	*parse_cmd(t_parser *p)
 {
 	t_ast_node	*cmd_node;

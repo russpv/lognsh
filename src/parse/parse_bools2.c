@@ -37,3 +37,14 @@ bool	is_op_token(t_tok *tok)
 		|| type == TOK_REDIRECT_APPEND || type == TOK_PIPE || type == TOK_ANDIF
 		|| type == TOK_ORIF);
 }
+
+/* Added builtins so that they can be considered 
+ * args. Ex: exec echo haha, or cat echo 
+ */
+bool	is_arg_token(t_tok *tok)
+{
+	const enum e_tok_type	type = tok_get_type(tok);
+
+	return (type == TOK_WORD || type == TOK_NAME || type == TOK_ENV_VAR || type == TOK_EXIT_STATUS \
+            || type == TOK_BI);
+}

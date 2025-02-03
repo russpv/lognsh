@@ -21,7 +21,7 @@ static int	_do_child_ops(t_state *s)
 	if (NULL == fullpath)
 		return (-1);
 	else if (-1 == execve(fullpath, (char **)argv, get_envp(s)))
-		err("ERR execve()\n");
+		err("exec_simple ERR execve()\n");
 	return (0);
 }
 
@@ -39,7 +39,7 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 		return (-1);
 	debug_print("Shell exec'g builtin\n");
 	if (-1 == bi(s, (char **)argv, argc))
-		err("ERR bi()\n");
+		debug_print("ERR bi()\n");
 	restore_redirs((t_cmd *)c);
 	return (0);
 }

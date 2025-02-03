@@ -30,9 +30,12 @@ const char *get_error_message(int error_code)
     }
 }
 
-void print_command_not_found(const char *cmd)
+void print_command_not_found(const char *cmd, const char *caller)
 {
-    fprintf(stderr, "%s: %s: command not found\n", SHELL_NAME, cmd);
+    if (caller)
+        fprintf(stderr, "%s: %s: %s: not found\n", SHELL_NAME, caller, cmd);
+    else
+        fprintf(stderr, "%s: %s: command not found\n", SHELL_NAME, cmd);
 }
 
 void    print_permission_denied(const char *path)

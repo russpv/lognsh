@@ -28,7 +28,7 @@ void* null_and_stat(t_state* s, int error_code);
 const char *get_error_message(int error_code);
 
 /* specific error messages */
-void	print_command_not_found(const char *cmd);
+void	print_command_not_found(const char *cmd, const char *caller);
 void    print_permission_denied(const char *path);
 void	print_lex_buffer_overflow(void);
 

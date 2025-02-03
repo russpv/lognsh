@@ -1,12 +1,5 @@
 #include "parse_int.h"
 
-bool	is_arg_token(t_tok *tok)
-{
-	const enum e_tok_type	type = tok_get_type(tok);
-
-	return (type == TOK_WORD || type == TOK_NAME || type == TOK_ENV_VAR || type == TOK_EXIT_STATUS);
-}
-
 void print_ast(t_ast_node *ast, int depth) 
 {
     // You can implement an AST printer here to print the nodes for debugging.

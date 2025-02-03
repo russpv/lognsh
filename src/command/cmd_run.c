@@ -37,9 +37,10 @@ static int	_search_path(const char *cmd, char **fullpath)
 	return (ft_freearr((void **)paths, -1), 1);
 }
 
-/* Stores path if valid. 
+/* Stores path if valid.
  * Checks PATH, or absolute path if slash is in the name */
-extern int	find_and_validate_cmd(const char *name, char **fullpath)
+extern int	find_and_validate_cmd(const char *name, char **fullpath, \
+		const char *caller)
 {
 	if (NULL != name && '\0' != name[0])
 	{
@@ -58,7 +59,7 @@ extern int	find_and_validate_cmd(const char *name, char **fullpath)
 					return (0);
 		}
 	}
-	print_command_not_found(name);
+	print_command_not_found(name, ft_strdup(caller));
 	return (ERR_CMD_NOT_FOUND);
 }
 
@@ -76,7 +77,7 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	c = get_cmd(s);
 	if (p_get_type(a) != AST_NODE_CMD || NULL == p_get_cmd(a))
 		return (EINVAL);
-	if (0 != find_and_validate_cmd(p_get_cmd(a), &c->fullpath))
+	if (0 != find_and_validate_cmd(p_get_cmd(a), &c->fullpath, NULL))
 		return (ERR_CMD_NOT_FOUND);
 	if (c->fullpath)
 		debug_print("Found command! at %s\n", c->fullpath);
@@ -84,7 +85,7 @@ int	run_cmd(t_state *s, t_ast_node *a)
 		|| CTXT_PROC == st_peek(get_cmd(s)->st))
 	{
 		if (execve(c->fullpath, c->argv, get_envp(s)) == -1)
-			err("ERR execve()\n");
+			err("run_cmd ERR execve() \n");
 	}
 	else if (0 != exec_fork_execve(s))
 		err("ERR fork and run\n");
