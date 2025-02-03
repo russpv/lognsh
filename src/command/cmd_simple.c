@@ -24,6 +24,9 @@ static void	_print_command_info(t_cmd *c, t_ast_node *a)
 /* For an AST COMMAND node only
  * Checks for no command, builtin, then PATH
  * Prints diagnostic info.
+ * Runs expansion then globbing and stores 
+ * 	results into t_cmd not t_ast_node.
+ * Throws ambiguous redirect error (1) prior to exec'g. 
  * Stores argv and argc into s->curr_cmd.
  */
 int	cmd_exec_simple(t_state *s, t_ast_node *a)
@@ -40,12 +43,16 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 		return (-1);
 	((t_cmd *)c)->curr_node = a;
 	exit_code = -1;
-	args = p_do_arg_expansions(a);
+	//TODO expansion on redirs, then
+	//TODO globbing on args and redirs (throw err ambiguous redir)
+	args = p_do_arg_processing(a);
 	exit_code = _handle_no_command(a, args);
 	if (0 == exit_code)
 		return (exit_code);
 	((t_cmd *)c)->argv = c_argstoargv(args, p_get_cmd(a), p_get_argc(a));
 	((t_cmd *)c)->argc = p_get_argc(a) + 1;
+	if (0 != p_do_redir_processing(a))
+		return (ERR_AMBIGUOUS_REDIR);
 	if (bi)
 		exit_code = exec_bi_call(s, bi);
 	else

@@ -101,3 +101,23 @@ void	ft_lstiter(t_list *lst, void (*f)(void *))
 		lst = lst->next;
 	}
 }
+
+/* LSTITERSTR
+** Iterates linked list and applies func f to node.content
+** Returns the node content if the func f returns error code
+** lst: ptr to node
+** f: ptr to function
+** UNPROTECTED
+*/
+char	*ft_lstiterstr(t_list *lst, int (*f)(void *))
+{
+	if (lst == NULL)
+		return (NULL);
+	while (lst)
+	{
+		if (0 != f(lst->content))
+			return (lst->content);
+		lst = lst->next;
+	}
+	return (NULL);
+}

@@ -1,4 +1,5 @@
 #include "parse_int.h"
+
 /*
 // Parses a single redirection token and returns the parsed redirection data.
 static t_redir_data	*parse_redir_token(t_parser *p, t_ast_node *cmd)
@@ -91,6 +92,8 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
 		red->cmd = &cmd->data.cmd;
 		tok = advance(p);
 		red->type = tok_get_type((t_tok *)tok);
+		red->do_globbing = false;
+		red->do_expansion = false;
 		if (!is_heredoc_token((t_tok *)tok))
 		{
 			red->doc = NULL;
@@ -106,12 +109,14 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
 				return (NULL);
 			}
 			name = advance(p);
-			if (!is_filename_token((t_tok *)name))
+			if (!is_filename_token((t_tok *)name) && !is_expansion((t_tok *)name))
 			{
 				err("Expected a filename after redirection operator\n");
 				free(red);
 				return (NULL);
 			}
+			red->do_globbing = tok_get_globbing((t_tok *)name);
+			red->do_expansion = tok_get_expansion((t_tok *)name);
 			red->filename = tok_get_raw((t_tok *)name);
 			if (!red->filename)
 			{
@@ -134,8 +139,8 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
 			free(red);
 			return (NULL);
 		}
-		debug_print("Adding redirection: (%s %s | %s)\n", red->symbol,
-			red->filename, red->doc);
+		debug_print("Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n", red->symbol,
+			red->filename, red->doc, red->do_globbing, red->do_expansion);
 		ft_lstadd_back(&cmd->data.cmd.redirs, new);
 		cmd->data.cmd.redc++;
 	}

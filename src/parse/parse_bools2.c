@@ -48,3 +48,17 @@ bool	is_arg_token(t_tok *tok)
 	return (type == TOK_WORD || type == TOK_NAME || type == TOK_ENV_VAR || type == TOK_EXIT_STATUS \
             || type == TOK_BI);
 }
+
+/* True if token type needs to be expanded.
+ */
+bool	is_expansion(t_tok *tok)
+{
+	const enum e_tok_type	type = tok_get_type(tok);
+
+	return (type == TOK_EXIT_STATUS || type == TOK_ENV_VAR || true == tok_get_expansion(tok));
+}
+
+bool	is_globbing(t_tok *tok)
+{
+	return (true == tok_get_globbing(tok));
+}

@@ -69,16 +69,16 @@ enum					e_tok_type
 							// from the portable character set. The first character
 							// of a name is not a digit.
 	TOK_NEWLINE,         // (non-functional)
-	TOK_IO_NUMBER,       // REDOUT/REDIN plus digits 
+	TOK_IO_NUMBER,       // REDOUT/REDIN plus digits
 	TOK_OP_REF,          // "&" for stdio
-	TOK_REDIRECT_IN,     // 
-	TOK_REDIRECT_OUT,    // 
-	TOK_REDIRECT_APPEND, // 
+	TOK_REDIRECT_IN,     //
+	TOK_REDIRECT_OUT,    //
+	TOK_REDIRECT_APPEND, //
 	TOK_HEREDOC,         // TODO - tokenize this for parser
-	TOK_HEREDOC_WORD,		//TODO 
-	TOK_PIPE,            // 
+	TOK_HEREDOC_WORD,    // TODO
+	TOK_PIPE,            //
 	TOK_ANDIF,
-	TOK_ORIF,         // 
+	TOK_ORIF, //
 	TOK_OPEN_PAREN,
 	TOK_CLOSE_PAREN,
 	TOK_SINGLE_QUOTE, // (non-functional)
@@ -108,7 +108,7 @@ typedef struct s_tok	t_tok;
 
 t_tok					*create_token(const char *s, int type, size_t pos);
 t_tok					*create_ht_token(void);
-void	*copy_token_data(const void *data);
+void					*copy_token_data(const void *data);
 void					destroy_token(void *token);
 
 int						tok_set_globbing(t_tok *token);
@@ -116,9 +116,9 @@ int						tok_set_expansion(t_tok *token);
 char					*tok_get_raw(t_tok *token);
 enum e_tok_type			tok_get_type(t_tok *token);
 bool					tok_get_option(t_tok *token);
-int						tok_get_globbing(t_tok *token);
-int						tok_get_expansion(t_tok *token);
-int						tok_get_dquotes(t_tok *token);
+bool					tok_get_globbing(t_tok *token);
+bool					tok_get_expansion(t_tok *token);
+bool					tok_get_dquotes(t_tok *token);
 
 int						tok_set_dquotes(t_tok *token);
 void					tok_print(void *token);

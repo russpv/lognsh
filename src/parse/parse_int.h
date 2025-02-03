@@ -111,6 +111,7 @@ typedef struct s_cmd
 
 	bool					do_globbing;
 	bool					do_expansion;
+	bool					do_redir_globbing; // check if I use this
 }							t_ast_node_cmd;
 
 typedef struct s_redir
@@ -120,6 +121,9 @@ typedef struct s_redir
 	char					*filename;
 	char					*doc;
 	t_ast_node_cmd			*cmd;
+	bool					do_globbing; //pulls from token
+	bool					do_expansion; //pulls from token
+	t_state					*global_state; //for llist globbing expansions
 }							t_redir_data;
 
 typedef struct s_arg
@@ -241,6 +245,9 @@ void	destroy_arg(void *in);
 
 void						parse_print(t_ast_node *ast);
 t_ast_node					*test_parse(t_parser *parser);
+
+void	p_do_globbing(void *c); //TODO malloc protection
+int	p_do_globbing_redirs(void *c);
 
 
 

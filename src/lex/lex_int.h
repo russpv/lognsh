@@ -4,9 +4,10 @@
 
 /* chars that need to be quoted if meant literally */
 #define NORMALDELIMS \
-	"^*()=|{}[]`<>?~;&\n\t \'\""    //$ should not break tokens,
+	"^()=|{}[]`<>?~;&\n\t \'\""    //$ should not break tokens,
 									// backslash also,
 									//	# is escape only
+									// Removed '*' so that it is included in token raws
 #define NORMALTRANSITIONS "\'\"<\0" // the '\0' isn't tested, keep at end,
 //	< for heredoc
 #define LEX_BUFSZ 1024

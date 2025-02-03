@@ -4,6 +4,7 @@
 #include "state.h"
 
 #define ERR_NONE 0
+#define ERR_AMBIGUOUS_REDIR 1
 #define ERR_GENERAL 1
 #define ERR_SYNTAX 2
 #define ERR_FILE_NOT_FOUND 3
@@ -31,6 +32,7 @@ const char *get_error_message(int error_code);
 void	print_command_not_found(const char *cmd, const char *caller);
 void    print_permission_denied(const char *path);
 void	print_lex_buffer_overflow(void);
+void    print_ambiguous_redirect(const char *orig_fn);
 
 
 #endif

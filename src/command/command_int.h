@@ -9,6 +9,7 @@ struct					s_cmd
 	t_stack *st; // parse depth
 	char				*fullpath;
 	char				**argv;
+	t_list				*redirs;
 	int					argc;
 	t_ast_node			*curr_node;
 	int					**fildes;

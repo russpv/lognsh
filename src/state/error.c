@@ -29,6 +29,10 @@ const char *get_error_message(int error_code)
         return "Unknown error";
     }
 }
+void    print_ambiguous_redirect(const char *orig_fn)
+{
+    fprintf(stderr, "%s: %s: ambiguous redirect\n", SHELL_NAME, orig_fn);
+}
 
 void print_command_not_found(const char *cmd, const char *caller)
 {

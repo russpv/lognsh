@@ -82,6 +82,8 @@ static void	_init_cmd_data(t_ast_node *cmd_node)
 	cmd_node->data.cmd.argc = 0;
 	cmd_node->data.cmd.do_expansion = false;
 	cmd_node->data.cmd.do_globbing = false;
+	cmd_node->data.cmd.do_redir_globbing = false;
+
 }
 
 /* Parsing of atomic command. */

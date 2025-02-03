@@ -23,6 +23,14 @@ t_list *p_get_args(t_ast_node *a)
 	return (a->data.cmd.args);
 }
 
+t_list *p_get_redirs(t_ast_node *a)
+{
+	if (a->type != AST_NODE_CMD)
+		return (NULL);
+	debug_print("p_get_redirs got: _%s_\n", a->data.cmd.name);
+	return (a->data.cmd.redirs);
+}
+
 int		p_get_argc(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)

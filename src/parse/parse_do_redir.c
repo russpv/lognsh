@@ -67,8 +67,9 @@ void	p_do_redirection(void *content)
 		err("redirection handler issue\n");
 }
 
-/* Processes redirections of a cmd node in order.
+/* Executes redirections of a cmd node in order.
  * If no redirections to do, returns ...
+ * Expansions and globbing are to have been done earlier.
  */
 int	p_do_redirections(t_ast_node *a)
 {
