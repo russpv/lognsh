@@ -1,38 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.h                                           :+:      :+:    :+:   */
+/*   signal_int.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/03 17:02:00 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/04 00:18:15 by dayeo            ###   ########.fr       */
+/*   Created: 2025/02/03 16:58:36 by dayeo             #+#    #+#             */
+/*   Updated: 2025/02/04 00:01:29 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIGNAL_H
-# define SIGNAL_H
+#ifndef SIGNAL_INT_H
+# define SIGNAL_INT_H
 
-//# include "../../include/minishell.h"
-# include "../state/error.h"
-# include "../state/state.h"
-# include <signal.h>
-
-// register signal handlers
-
-
-void    set_signal_handlers(void);
-
-// turn this into an ADT 
-/*
-struct s_signal_manager;
+# include "signal.h"
+typedef struct  s_signal_manager
 {
+    struct  sigaction   sa_int; // SIGINT (Ctrl-C)
+    struct  sigaction   sa_quit; // SIGQUIT (Ctrl-\)  
+}   t_signal_mgr;
 
-}
-
-typedef struct s_signal_manager *t_signal_mgr;
-
-// register the handlers
-set_sighandlers();
-*/
+void    sigint_handler(int signo);
+void    sigquit_handler(int signo);
 #endif
