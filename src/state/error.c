@@ -2,6 +2,7 @@
 
 #include "error.h"
 #include <unistd.h>
+#include <signal.h>
 
 volatile sig_atomic_t g_signal = 0; 
 
