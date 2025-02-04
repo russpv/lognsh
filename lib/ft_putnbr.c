@@ -7,7 +7,7 @@
 void	ft_putnbr(int num)
 {
 	if (num == (int)1 << (sizeof(int) * 8 - 1))
-		write(1, &(char){num + '0'}, 11);
+		write(1, &(char){num + '0'}, 1);
 	if (num < 0)
 	{
 		write(1, "-", 1);
