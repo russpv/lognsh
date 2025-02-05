@@ -18,9 +18,9 @@
 int	bi_echo(t_state *s, char **args, int argc);
 int	bi_pwd(t_state *s, char **args, int argc);
 int	bi_exit(t_state *s, char **args, int argc);
+int    bi_env(t_state *s, char **argv, int argc);
 int	bi_exec(t_state *s, char **args, int argc); //RKP so shell can be relaunched without exit
-//void	bi_env(char **args); //Note: compile errors
-//void    bi_cd(char **args);
+
 
 
 #endif

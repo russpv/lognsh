@@ -13,8 +13,8 @@ t_builtin_fn    get_builtin(char *command)
             return (&bi_exit);
         if (ft_strcmp(command, BI_EXEC) == 0)
             return (&bi_exec);
-        //if (ft_strcmp(command, BI_ENV) == 0)
-        //    return (&bi_env);
+        if (ft_strcmp(command, BI_ENV) == 0)
+            return (&bi_env);
         /* WIP
         if (ft_strcmp(command, BI_CD) == 0)
             return (&builtin_cd);

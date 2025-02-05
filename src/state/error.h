@@ -2,6 +2,7 @@
 # define ERROR_H
 
 #include "state.h"
+#include <signal.h>
 
 #define ERR_NONE 0
 #define ERR_AMBIGUOUS_REDIR 1
@@ -17,7 +18,7 @@
 #define ERR_EXIT_RANGE 255
 
 
-extern sig_atomic_t _g_signal;
+extern volatile sig_atomic_t g_signal;
 
 
 // no includes, but redefs, due to circular dependency
