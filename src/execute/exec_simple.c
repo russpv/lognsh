@@ -52,6 +52,7 @@ int	exec_fork_execve(t_state *s)
 	p = fork();
 	if (0 == p)
 	{
+		reset_signal_handlers();
 		if (-1 == _do_child_ops(s))
 		{
 			write(STDERR_FILENO, "ERR child ops\n", sizeof("ERR child ops\n"));

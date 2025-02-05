@@ -9,6 +9,7 @@
 # include "../token/token.h"
 # include <stdbool.h>
 
+
 /* Error handling */
 // TODO Unmatched symbol pairs should be prompted for more input
 // Heredoc Ctrl+D signal: silent abort

@@ -18,13 +18,8 @@
 #define ERR_EXIT_RANGE 255
 
 
-extern volatile sig_atomic_t g_signal;
-
-
 // no includes, but redefs, due to circular dependency
 typedef struct s_global_state t_state; 
-
-
 
 void* null_and_stat(t_state* s, int error_code);
 const char *get_error_message(int error_code);
@@ -34,6 +29,7 @@ void	print_command_not_found(const char *cmd, const char *caller);
 void    print_permission_denied(const char *path);
 void	print_lex_buffer_overflow(void);
 void    print_ambiguous_redirect(const char *orig_fn);
+void    print_too_many_args(const char *caller);
 
 
 #endif

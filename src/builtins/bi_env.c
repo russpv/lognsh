@@ -12,24 +12,32 @@
 
 #include "bi_int.h"
 
-int    bi_env(t_state *s, char **argv, int argc)
+# define CMD_NAME "env"
+
+/* ENV
+ * Run a program in a modified environment...
+ * Except in this pared down version, 
+ * only prints current environ content line by line
+ */
+int	bi_env(t_state *s, char **argv, int argc)
 {
-	extern char **environ;
-	int i;
+	extern char	**environ;
+	int			i;
 
 	(void)s;
 	(void)argc;
 	if (!argv || !argv[0])
 		return (1);
-	if (argv[1]) // too many arguments
+	if (argv[1])
 	{
-		write(STDERR_FILENO, "minishell: env: too many arguments\n", 35);
+		print_too_many_args(CMD_NAME);
 		return (1);
 	}
 	i = 0;
 	while (environ[i])
 	{
 		printf("%s\n", environ[i]);
+		flushbuf();
 		i++;
 	}
 	return (0);

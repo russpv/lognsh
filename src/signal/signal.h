@@ -13,15 +13,16 @@
 #ifndef SIGNAL_H
 # define SIGNAL_H
 
-//# include "../../include/minishell.h"
+# include "../globals/globals.h"
 # include "../state/error.h"
 # include "../state/state.h"
 # include <signal.h>
 
 // register signal handlers
-
-
 void    set_signal_handlers(void);
+
+// un-register signal handlers back to defaults
+void	reset_signal_handlers(void);
 
 // turn this into an ADT 
 /*
@@ -31,8 +32,5 @@ struct s_signal_manager;
 }
 
 typedef struct s_signal_manager *t_signal_mgr;
-
-// register the handlers
-set_sighandlers();
 */
 #endif

@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_ast_node	*ast;
@@ -19,26 +20,6 @@ int	main(int argc, char **argv, char **envp)
 			err("ERR parse()\n"); //TODO refactor errors
 		set_exit_status(s, cmd_execute(s, ast));
 		s_free_cmd(s);
-	}
-	else
-	{
-		while (1)
-		{
-			set_input(s, readline(PROMPT));
-			if (NULL == get_input(s))
-			{
-				write(STDOUT_FILENO, "exit\n", sizeof("exit\n"));
-				break ;
-			if (get_input(s)[0] != '\0')
-				add_history(get_input(s));
-			else
-				continue;
-			ast = parse(s, get_input(s));
-			if (!ast)
-				err("ERR parse()\n"); //TODO refactor errors
-			set_exit_status(s, cmd_execute(s, ast));
-			s_free_cmd(s);
-		}
 	}
 	else
 	{

@@ -14,12 +14,13 @@
 # define SIGNAL_INT_H
 
 # include "signal.h"
-typedef struct  s_signal_manager
-{
-    struct  sigaction   sa_int; // SIGINT (Ctrl-C)
-    struct  sigaction   sa_quit; // SIGQUIT (Ctrl-\)  
-}   t_signal_mgr;
 
-void    sigint_handler(int signo);
-void    sigquit_handler(int signo);
+typedef struct s_signal_manager
+{
+	struct sigaction sa_int;  // SIGINT (Ctrl-C)
+	struct sigaction sa_quit; // SIGQUIT (Ctrl-\)
+}		t_signal_mgr;
+
+void	sigint_handler(int signo);
+void	sigquit_handler(int signo);
 #endif

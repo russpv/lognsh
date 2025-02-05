@@ -4,8 +4,6 @@
 #include <unistd.h>
 #include <signal.h>
 
-volatile sig_atomic_t g_signal = 0; 
-
 // Function to return NULL and set the error code in the state
 void	*null_and_stat(t_state *s, int error_code)
 {
@@ -66,7 +64,16 @@ void print_lex_buffer_overflow(void)
     write(STDERR_FILENO, ": Buffer overflow\n", 18);
 }
 
-
+void    print_too_many_args(const char *caller)
+{
+    write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+    if (caller)
+    {
+        write(STDERR_FILENO, caller, ft_strlen(caller));
+        write(STDERR_FILENO, ": ", 2);
+    }
+    write(STDERR_FILENO, "too many arguments\n", sizeof("too many arguments\n"));
+}
 /*
 void    print_ambiguous_redirect(const char *orig_fn)
 {

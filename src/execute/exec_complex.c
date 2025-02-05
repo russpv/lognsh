@@ -16,6 +16,7 @@ int exec_fork_func(t_state *s, t_ast_node *node, execute_fn executor)
 	}
 	else if (0 == pid)
 	{
+		reset_signal_handlers();
 		int exit_status = executor(s, node);
 		exit(exit_status); // No cleanup?
 	}

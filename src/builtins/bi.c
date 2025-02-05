@@ -29,3 +29,10 @@ t_builtin_fn    get_builtin(char *command)
     debug_print("get_builtin found nothing\n");
     return (NULL); 
 }
+
+void	flushbuf(void)
+{
+	if (0 != TESTFLAG)
+		if (0 == isatty(STDOUT_FILENO))
+			fflush(stdout);
+}

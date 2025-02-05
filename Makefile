@@ -26,10 +26,17 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 EXT_CFLAGS = -DEXTENDEDFUNC 
 LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses -fsanitize=address
-LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
+LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses 
 
-INC	= -I$(INCDIR) -I/usr/include/readline
+ifeq ($(shell uname), Darwin)  # macOS
+    INC += -I$(INCDIR) -I/usr/local/opt/readline/include
+else  # Linux
+    INC += -I$(INCDIR) -I/usr/include/readline # $(shell pkg-config --cflags readline)
+endif
+
 INCDEP = -I$(INCDIR)
+
+RL_DIR = /usr/local/opt/readline/lib
 
 LIB_CPDIR = .
 LIB_DIR = lib
@@ -57,9 +64,9 @@ all: directories $(TARGET)
 # Copy resources from dir to target dir
 resources: directories
 	@if [ -d "$(RESDIR)" ] && [ "$(shell ls -A $(RESDIR))" ]; then \
-        cp $(RESDIR)/* $(TARGETDIR)/; \
+    	cp $(RESDIR)/* $(TARGETDIR)/; \
 	else \
-        echo "Warning: $(RESDIR) directory is empty or doesn't exist."; \
+    	echo "Warning: $(RESDIR) directory is empty or doesn't exist."; \
 	fi
 
 #Make the dirs
@@ -131,6 +138,7 @@ $(LIB_PATH):
 # clean only objects
 clean:
 	@$(RM) -rf $(OBJDIR)
+	@$(RM) -f $(OBJDIR)/*.d # Remove .d dependency files as well
 	@$(MAKE) -C $(LIB_DIR) clean
 
 # Clean+, objects and binaries
