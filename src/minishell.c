@@ -10,13 +10,16 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	(void)argc;
 	s = init_state(envp);
-	// signal(SIGINT, sigint_handler); // Ctrl-C
-	// signal(SIG..., ..._handler); // Ctrl-...
+	set_signal_handlers(); // **working on signal handling in child process
 	while (1)
 	{
 		set_input(s, readline(PROMPT));
-		if (NULL == get_input(s))
-			break ;
+		if (!get_input(s)) // handles Ctrl-D in parent process
+		{
+			write(STDOUT_FILENO, "exit\n", 5);
+			destroy_state(s);
+			exit(0);
+		}
 		if (get_input(s)[0] != '\0')
 			add_history(get_input(s));
 		ast = parse(s, get_input(s));
