@@ -68,7 +68,8 @@ void	destroy_state(t_state *s)
  */
 void	s_free_cmd(t_state *state)
 {
-	free(state->input);
+	if (TESTFLAG == 0)
+		free(state->input);
 	state->input = NULL;
 	if (state->current_parser)
 	{

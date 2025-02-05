@@ -6,6 +6,7 @@
 # include <stdarg.h>
 # include <stdio.h>
 # include <unistd.h>
+# include "log.h"
 
 # ifdef DEBUGMODE
 #  define DEBUG 1
@@ -13,7 +14,6 @@
 #  define DEBUG 0
 # endif
 
-# define LOG 1
 # define RESET "\033[0m"
 # define GREEN "\033[32m"
 # define BLUE "\033[34m"

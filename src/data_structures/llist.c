@@ -48,11 +48,11 @@ void	ft_lstadd_insert(t_list **lst, t_list *new)
 	t_list *save_next = NULL;
 	t_list *last_new_node = NULL;
 	
-	printf("[DEBUG] ft_lstadd_insert got lst = %p, head = %p\n", (void*)lst, (void*)*lst);
+	debug_print("[DEBUG] ft_lstadd_insert got lst = %p, head = %p\n", (void*)lst, (void*)*lst);
 	// Check if the list or new node is NULL
 	if (!lst || !new)
 	{
-		printf("[DEBUG] NULL input detected: lst = %p, new = %p\n", (void*)lst, (void*)new);
+		debug_print("[DEBUG] NULL input detected: lst = %p, new = %p\n", (void*)lst, (void*)new);
 		return ;
 	}
 
@@ -61,36 +61,36 @@ void	ft_lstadd_insert(t_list **lst, t_list *new)
 	{
 		*lst = new;
 		new->prev = NULL;
-		printf("[DEBUG] List is empty. Added new node as the first element: %p\n", (void*)new);
-		printf("[DEBUG] Insert completed successfully.\n");
+		debug_print("[DEBUG] List is empty. Added new node as the first element: %p\n", (void*)new);
+		debug_print("[DEBUG] Insert completed successfully.\n");
 		return ;
 	}
 
 	// Find the last node of the new list
 	last_new_node = ft_lstlast(new);
-	printf("[DEBUG] Last node in new list: %p\n", (void*)last_new_node);
+	debug_print("[DEBUG] Last node in new list: %p\n", (void*)last_new_node);
 
 	// Check if the current list has a next node
 	if ((*lst)->next)
 	{
 		save_next = (*lst)->next;
-		printf("[DEBUG] Current list has a next node. Save next node: %p\n", (void*)save_next);
+		debug_print("[DEBUG] Current list has a next node. Save next node: %p\n", (void*)save_next);
 	}
 
 	// Insert the new node after the first node
 	(*lst)->next = new;
 	new->prev = *lst;
-	printf("[DEBUG] Inserted new node after the first node. new->prev = %p, (*lst)->next = %p\n", (void*)new->prev, (void*)(*lst)->next);
+	debug_print("[DEBUG] Inserted new node after the first node. new->prev = %p, (*lst)->next = %p\n", (void*)new->prev, (void*)(*lst)->next);
 
 	// Link the last node of the new node to the saved next node, if there was one
 	last_new_node->next = save_next;
 	if (save_next)
 	{
 		save_next->prev = last_new_node;
-		printf("[DEBUG] Linked last node of new list to the saved next node: save_next->prev = %p\n", (void*)save_next->prev);
+		debug_print("[DEBUG] Linked last node of new list to the saved next node: save_next->prev = %p\n", (void*)save_next->prev);
 	}
 
-	printf("[DEBUG] Insert completed successfully.\n");
+	debug_print("[DEBUG] Insert completed successfully.\n");
 }
 
 /* LSTCLEAR
@@ -149,34 +149,34 @@ void	ft_lstdelone(t_list **lst, t_list *node, void (*del)(void *))
 void	ft_lstdelone_rwd(t_list **lst, t_list **node, void (*del)(void *))
 {
 	t_list *tmp;
-	printf("[DEBUG] ft_lstdelone_rwd got (head: %p)\n", (void*)lst);
+	debug_print("[DEBUG] ft_lstdelone_rwd got (head: %p)\n", (void*)lst);
 
 	if (!lst || !node || !(*node) || !del)
 		return ;
-	printf("[DEBUG] Deleting node: %p (content: %p) (head: %p)\n", (void*)(*node), (void*)((*node)->content), (void*)lst);
+	debug_print("[DEBUG] Deleting node: %p (content: %p) (head: %p)\n", (void*)(*node), (void*)((*node)->content), (void*)lst);
 	tmp = (*node)->prev;
     if ((*node)->prev) {
-		printf("[DEBUG] Setting prev->next (%p -> %p)\n", (void*)(*node)->prev, (void*)(*node)->next);
+		debug_print("[DEBUG] Setting prev->next (%p -> %p)\n", (void*)(*node)->prev, (void*)(*node)->next);
         (*node)->prev->next = (*node)->next;
 	}
     if ((*node)->next) {
-		printf("[DEBUG] Setting next->prev (%p -> %p)\n", 
+		debug_print("[DEBUG] Setting next->prev (%p -> %p)\n", 
 			(void*)(*node)->next, (void*)(*node)->prev);
         (*node)->next->prev = (*node)->prev;
 	}
     if ((*node)->content) {
-		printf("[DEBUG] Freeing content at %p\n", (void*)(*node)->content);
+		debug_print("[DEBUG] Freeing content at %p\n", (void*)(*node)->content);
 		del((*node)->content);
 	}
-	printf("[DEBUG] Freeing node at %p\n", (void*)(*node));
+	debug_print("[DEBUG] Freeing node at %p\n", (void*)(*node));
     free(*node);
 	*node = NULL;
 	if (*lst == *node) {
-		printf("[DEBUG] Adjusting head: old head=%p, new head=%p\n", 
+		debug_print("[DEBUG] Adjusting head: old head=%p, new head=%p\n", 
 		(void*)(*lst), (void*)(tmp));		
 		*lst = tmp;
 	}
-	printf("[DEBUG] Node deleted successfully\n");
+	debug_print("[DEBUG] Node deleted successfully\n");
 
 }
 
@@ -203,18 +203,18 @@ void	ft_lstiter_ins_rwd(t_list **lst, void (*f)(t_list **, void *))
 	t_list *lst_rear;
 	t_list *tmp;
 
-	printf("[DEBUG] ft_lstiter_ins_rwd got lst: %p, head:%p.\n", (void*)lst, (void*)*lst);
+	debug_print("[DEBUG] ft_lstiter_ins_rwd got lst: %p, head:%p.\n", (void*)lst, (void*)*lst);
 
 	// Check if the input list is NULL
 	if (lst == NULL)
 	{
-		printf("[DEBUG] Input list is NULL. Returning.\n");
+		debug_print("[DEBUG] Input list is NULL. Returning.\n");
 		return ;
 	}
 
 	// Initialize lst_rear to the last node
 	lst_rear = ft_lstlast(*lst);
-	printf("[DEBUG] Starting iteration from last node: %p\n", (void*)lst_rear);
+	debug_print("[DEBUG] Starting iteration from last node: %p\n", (void*)lst_rear);
 
 	// Iterate backwards through the list
 	while (lst_rear)
@@ -223,11 +223,11 @@ void	ft_lstiter_ins_rwd(t_list **lst, void (*f)(t_list **, void *))
 		tmp = lst_rear->prev;
 
 		// Print the current node's address and content
-		printf("[DEBUG] Iterating node: %p, content: %p\n", (void*)lst_rear, (void*)lst_rear->content);
+		debug_print("[DEBUG] Iterating node: %p, content: %p\n", (void*)lst_rear, (void*)lst_rear->content);
 
 		// Apply the function f to the node
 		f(&(lst_rear), lst_rear->content);
-		printf("[DEBUG] Function f applied to node: %p\n", (void*)lst_rear);
+		debug_print("[DEBUG] Function f applied to node: %p\n", (void*)lst_rear);
 
 		// Move to the previous node in the list
 		if (NULL == tmp)
@@ -235,7 +235,7 @@ void	ft_lstiter_ins_rwd(t_list **lst, void (*f)(t_list **, void *))
 		lst_rear = tmp;
 	}
 	// Finished iterating through the list
-	printf("[DEBUG] ft_lstiter_ins_rwd Iteration complete.\n");
+	debug_print("[DEBUG] ft_lstiter_ins_rwd Iteration complete.\n");
 }
 
 

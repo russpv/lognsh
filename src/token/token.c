@@ -44,7 +44,7 @@ void	*copy_token_data(const void *data)
 	new_token = malloc(sizeof(t_tok));
 	if (new_token == NULL)
 		return (NULL);
-	new_token->raw = strdup(token->raw);
+	new_token->raw = ft_strdup(token->raw);
 	new_token->type = token->type;
 	new_token->pos = token->pos;
 	new_token->do_globbing = token->do_globbing;

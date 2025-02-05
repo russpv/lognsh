@@ -29,6 +29,44 @@ const char *get_error_message(int error_code)
         return "Unknown error";
     }
 }
+
+void print_ambiguous_redirect(const char *orig_fn)
+{
+    write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+    write(STDERR_FILENO, ": ", 2);
+    write(STDERR_FILENO, orig_fn, ft_strlen(orig_fn));
+    write(STDERR_FILENO, ": ambiguous redirect\n", 21);
+}
+
+void print_command_not_found(const char *cmd, const char *caller)
+{
+    write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+    write(STDERR_FILENO, ": ", 2);
+    if (caller)
+    {
+        write(STDERR_FILENO, caller, ft_strlen(caller));
+        write(STDERR_FILENO, ": ", 2);
+    }
+    write(STDERR_FILENO, cmd, ft_strlen(cmd));
+    write(STDERR_FILENO, ": command not found\n", 20);
+}
+
+void print_permission_denied(const char *path)
+{
+    write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+    write(STDERR_FILENO, ": ", 2);
+    write(STDERR_FILENO, path, ft_strlen(path));
+    write(STDERR_FILENO, ": Permission denied\n", 20);
+}
+
+void print_lex_buffer_overflow(void)
+{
+    write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+    write(STDERR_FILENO, ": Buffer overflow\n", 18);
+}
+
+
+/*
 void    print_ambiguous_redirect(const char *orig_fn)
 {
     fprintf(stderr, "%s: %s: ambiguous redirect\n", SHELL_NAME, orig_fn);
@@ -51,3 +89,4 @@ void print_lex_buffer_overflow(void)
 {
     fprintf(stderr, "%s: Buffer overflow\n", SHELL_NAME);
 }
+*/

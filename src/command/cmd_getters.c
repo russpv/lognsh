@@ -5,7 +5,7 @@ char	*c_getfullpath(t_cmd *c)
 	return (c->fullpath);
 }
 
-char	**c_getargv(t_cmd *c)
+char	**c_get_argv(t_cmd *c)
 {
 	return (c->argv);
 }

@@ -20,3 +20,4 @@ int	*get_status(t_state *s)
 {
 	return(&s->current_exit_code);
 }
+

@@ -9,17 +9,6 @@ static int	_handle_no_command(t_ast_node *a, char **args)
 	return (-1);
 }
 
-static void	_print_command_info(t_cmd *c, t_ast_node *a)
-{
-	colored_printf(YELLOW, "\tExecuting command: %s\n", p_get_cmd(a));
-	colored_printf(YELLOW, "\tArguments:\n");
-	if (c->argv)
-	{
-		for (int i = 0; c->argv[i] != NULL; i++)
-			colored_printf(YELLOW, "\t  argv[%d]: %s\n", i, c->argv[i]);
-	}
-	colored_printf(YELLOW, "\t  argv[%d]: (NULL)\n", p_get_argc(a) + 1);
-}
 
 /* For an AST COMMAND node only
  * Checks for no command, builtin, then PATH
@@ -57,7 +46,7 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 		exit_code = exec_bi_call(s, bi);
 	else
 	{
-		_print_command_info((t_cmd *)c, a);
+		log_command_info((t_cmd *)c, a);
 		exit_code = run_cmd(s, a);
 	}
 	return (exit_code);

@@ -31,8 +31,7 @@ int						cmd_exec_pipe(t_state *s, t_ast_node *pipe);
 int						cmd_exec_log(t_state *s, t_ast_node *a);
 int						cmd_exec_proc(t_state *s, t_ast_node *a);
 
-int	do_commands(t_state *s, t_list *cmds, t_cmd *c);
-int wait_and_clean(t_cmd *c);
-
+//int						do_commands(t_state *s, t_list *cmds, t_cmd *c);
+//int						wait_and_clean(t_cmd *c);
 
 #endif

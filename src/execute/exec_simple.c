@@ -7,7 +7,7 @@ static int	_do_child_ops(t_state *s)
 {
 	const t_cmd	*c = (const t_cmd *)get_cmd(s);
 	const char	*fullpath = (const char *)c_getfullpath((t_cmd *)c);
-	const char	**argv = (const char **)c_getargv((t_cmd *)c);
+	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
 
 	if (!argv)
 		return (err("_do_child_ops: ERR null argv parameters\n"), -1);
@@ -29,7 +29,7 @@ static int	_do_child_ops(t_state *s)
 int	exec_bi_call(t_state *s, t_builtin_fn bi)
 {
 	const t_cmd	*c = (const t_cmd *)get_cmd(s);
-	const char	**argv = (const char **)c_getargv((t_cmd *)c);
+	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
 	const int	argc = (const int)c_get_argc((t_cmd *)c);
 
 	if (!argv || !bi || !c)
@@ -54,7 +54,7 @@ int	exec_fork_execve(t_state *s)
 	{
 		if (-1 == _do_child_ops(s))
 		{
-			fprintf(stderr, "ERR child ops\n");
+			write(STDERR_FILENO, "ERR child ops\n", sizeof("ERR child ops\n"));
 			exit(127); // cleanup
 		}
 	}

@@ -18,18 +18,21 @@ void	colored_printf(const char *color, const char *format, ...)
 {
 	va_list	args;
 
-	va_start(args, format);
-	fprintf(stderr, "%s", color);
-	vfprintf(stderr, format, args);
-	fprintf(stderr, "%s", RESET);
-	va_end(args);
+	if (LOGGING)
+	{
+		va_start(args, format);
+		fprintf(stderr, "%s", color);
+		vfprintf(stderr, format, args);
+		fprintf(stderr, "%s", RESET);
+		va_end(args);
+	}
 }
 
 void	log_printf(const char *s, ...)
 {
 	va_list	args;
 
-	if (LOG)
+	if (LOGGING)
 	{
 		va_start(args, s);
 		vfprintf(stdout, s, args);
@@ -64,5 +67,8 @@ void	debug_detect_cycle(t_list *head)
 
 void	err(const char *s)
 {
-	fprintf(stderr, RED"%s"RESET, s);
+	if (LOGGING)
+		fprintf(stderr, RED"%s"RESET, s);
+	else
+		(void)s;
 }

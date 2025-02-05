@@ -12,6 +12,12 @@
 
 # define SHELL_NAME "minish"
 
+#ifdef TESTMODE
+	# define TESTFLAG 1
+#else
+	# define TESTFLAG 0
+#endif
+
 /* Bash Manual
  *
  * For the shell’s purposes,

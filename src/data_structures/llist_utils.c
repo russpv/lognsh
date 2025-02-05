@@ -25,11 +25,11 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	t_list	*newlst;
 	t_list	*new;
 	void	*new_content;
-	printf("[DEBUG] ft_lstmap.\n");
+	debug_print("[DEBUG] ft_lstmap.\n");
 	// Check if the input list is NULL
 	if (!lst)
 	{
-		printf("[DEBUG] Input list is NULL. Returning NULL.\n");
+		debug_print("[DEBUG] Input list is NULL. Returning NULL.\n");
 		return (NULL);
 	}
 
@@ -39,20 +39,20 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	// Loop through the original list
 	while (lst)
 	{
-		printf("[DEBUG] Mapping node: %p, content: %p\n", (void*)lst, (void*)lst->content);
+		debug_print("[DEBUG] Mapping node: %p, content: %p\n", (void*)lst, (void*)lst->content);
 
 		// Apply the function to the content
 		new_content = f(lst->content);
 		if (!new_content)
 		{
-			printf("[DEBUG] Function f returned NULL for content: %p\n", (void*)lst->content);
+			debug_print("[DEBUG] Function f returned NULL for content: %p\n", (void*)lst->content);
 		}
 
 		// Create a new node with the mapped content
 		new = ft_lstnew(new_content);
 		if (!new)
 		{
-			printf("[DEBUG] Memory allocation failed for new node. Cleaning up.\n");
+			debug_print("[DEBUG] Memory allocation failed for new node. Cleaning up.\n");
 			// If new node creation fails, delete the content and clear the list
 			(*del)(new_content);
 			if (newlst)
@@ -65,14 +65,14 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 
 		// Add the new node to the new list
 		ft_lstadd_back(&newlst, new);
-		printf("[DEBUG] Added new node to new list: %p\n", (void*)new);
+		debug_print("[DEBUG] Added new node to new list: %p\n", (void*)new);
 
 		// Move to the next node in the original list
 		lst = lst->next;
 	}
 
 	// Return the new list
-	printf("[DEBUG] Mapping complete. Returning new list: %p\n", (void*)newlst);
+	debug_print("[DEBUG] Mapping complete. Returning new list: %p\n", (void*)newlst);
 	return (newlst);
 }
 
@@ -104,16 +104,16 @@ int	ft_lstsize(t_list *lst)
 
 	count = 0;
 	if (lst == NULL) {
-		printf("[DEBUG] List is NULL, returning 0\n");
+		debug_print("[DEBUG] List is NULL, returning 0\n");
 		return (0);
 	}
-	printf("[DEBUG] Starting ft_lstsize traversal. Initial lst: %p\n", (void*)lst);
+	debug_print("[DEBUG] Starting ft_lstsize traversal. Initial lst: %p\n", (void*)lst);
 	while (lst)
 	{
-		printf("[DEBUG] Visiting node %p (next: %p)\n", (void*)lst, (void*)lst->next);
+		debug_print("[DEBUG] Visiting node %p (next: %p)\n", (void*)lst, (void*)lst->next);
 		count++;
 		lst = lst->next;
 	}
-	printf("[DEBUG] Finished traversal. Node count: %d\n", count);
+	debug_print("[DEBUG] Finished traversal. Node count: %d\n", count);
 	return (count);
 }

@@ -57,7 +57,7 @@ int	redirect(int *to, char *topath, int from, bool ifappend)
 	}
 	else
 		fd = *to;
-	fprintf(stderr, GREEN"\tRedirect: dup2 from %d to %d\n"RESET, from, fd);
+	colored_printf(GREEN, "\tRedirect: dup2 from %d to %d\n", from, fd);
 	if (dup2(fd, from) == -1)
 		return (-1);
 	close(fd);

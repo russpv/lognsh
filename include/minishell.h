@@ -3,7 +3,8 @@
 
 #include "../src/signal/signal.h"
 #include "../src/state/state.h" 
-#include "../src/command/command.h" 
+#include "../src/command/command.h"
+#include "test.h"
 
 #include <stdio.h>
 #include <stdlib.h>

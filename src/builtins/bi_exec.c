@@ -12,7 +12,7 @@ int	bi_exec(t_state *s, char **argv, int argc)
 
 	if (!argv || !argv[1])
 	{
-		fprintf(stderr, "Usage: exec <command>\n");
+		write(STDERR_FILENO, "Usage: exec <command>\n", sizeof("Usage: exec <command>\n"));
 		return (-1);
 	}
 	fullpath = NULL;

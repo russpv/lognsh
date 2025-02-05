@@ -12,6 +12,14 @@
 
 #include "bi_int.h"
 
+static inline void _flushbuf(void)
+{
+	if (0 != TESTFLAG)
+		if (0 == isatty(STDOUT_FILENO))
+			fflush(stdout);
+}
+
+
 int	bi_echo(t_state *s, char **argv, int argc)
 {
 	int	i;
@@ -37,5 +45,6 @@ int	bi_echo(t_state *s, char **argv, int argc)
 	}
 	if (!no_newline)
 		printf("\n");
+	_flushbuf();
 	return (0);
 }

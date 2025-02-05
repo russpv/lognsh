@@ -59,11 +59,13 @@ t_ast_node	*parse(t_state *s, char *input)
 	t_list		*tokens;
 	t_parser	*parser;
 
+	ast = NULL;
 	lexer = tokenize(s, input);
 	if (NULL == lexer)
 		return (null_and_stat(s, ERR_TOKEN)); // Ctrl+D abort
 	tokens = lex_get_tokens(lexer);
 	parser = create_parser(s, tokens);
+	debug_print("\t###### parse ####### \n");
 	while (!is_at_end(parser) && !parser->parse_error)
 		ast = parse_full_cmd(parser);
 	parser->ast = ast;

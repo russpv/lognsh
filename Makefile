@@ -1,5 +1,6 @@
 SHELL := /bin/bash
 TARGET = minish
+TEST_TARGET = testsh
 OUTPUT = executable
 
 # Colors
@@ -17,10 +18,12 @@ INCDIR = include
 TARGETDIR = bin
 SRCDIR = src
 RESDIR = res
+EXTDIR = external
+TESTDIR = test
 
 # Compiler and flags
 CC = cc 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -DDEBUGMODE
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 EXT_CFLAGS = -DEXTENDEDFUNC 
 LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses -fsanitize=address
 LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
@@ -41,8 +44,12 @@ LIB_PATH_SO = $(LIB_DIR)/$(LIB_NAME_SO)
 
 # BONUS_SOURCES = $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 # BONUS_OBJECTS = $(addprefix $(OBJDIR), $(BONUS_SOURCES:.c=.o))
+TEST_SOURCES = $(shell find $(TESTDIR) -type f -name '*.$(SRCEXT)')
+TEST_OBJECTS = $(patsubst $(TESTDIR)/%,$(OBJDIR)/test/%,$(TEST_SOURCES:.c=.o))
 SOURCES = $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)" ! -name "test_*.$(SRCEXT)")
 OBJECTS = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEXT)))
+UNITY_SRC = $(shell find $(EXTDIR)/unity/ -type f -name '*.$(SRCEXT)')
+UNITY_OBJ = $(patsubst $(EXTDIR)/unity/%,$(OBJDIR)/test/%,$(UNITY_SRC:.c=.o))
 
 # Default Make
 all: directories $(TARGET)
@@ -71,7 +78,7 @@ $(TARGET): $(OBJECTS) $(LIB_PATH)
 	@cp $(TARGETDIR)/$(TARGET) .
 
 #Compile
-$(OBJDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
+$(OBJDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)  # % ensures obj file associates with src file
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 	@$(CC) $(CFLAGS) $(INCDEP) -MM $(SRCDIR)/$*.$(SRCEXT) > $(OBJDIR)/$*.$(DEPEXT)
@@ -83,6 +90,23 @@ $(OBJDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
 #@echo "$(GREEN)$(BOLD)SUCCESS$(RESET)"
 #@echo "$(YELLOW)Created: $(words $(OBJECTS) ) object file(s)$(RESET)"
 #@echo "$(YELLOW)Created: $(NAME)$(RESET)"
+
+tst: directories $(TEST_TARGET)
+
+$(TEST_TARGET) : $(UNITY_OBJ) $(LIB_PATH) $(TEST_OBJECTS)
+	$(CC) -o $(TARGETDIR)/$(TEST_TARGET) $^ $(LDFLAGS)
+	chmod +x $(TARGETDIR)/$(TEST_TARGET)
+	@cp $(TARGETDIR)/$(TEST_TARGET) .
+
+# Compile Unity
+$(OBJDIR)/$(TESTDIR)/%.$(OBJEXT): $(EXTDIR)/unity/%.$(SRCEXT)
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -I$(EXTDIR)/unity -c $< -o $@
+
+$(OBJDIR)/$(TESTDIR)/%.$(OBJEXT): $(TESTDIR)/%.$(SRCEXT)
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -I$(EXTDIR)/unity -c $< -o $@
+
 
 bonus: .bonus_made
 
