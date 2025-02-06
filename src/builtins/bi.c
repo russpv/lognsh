@@ -15,16 +15,14 @@ t_builtin_fn    get_builtin(char *command)
             return (&bi_exec);
         if (ft_strcmp(command, BI_ENV) == 0)
             return (&bi_env);
-        /* WIP
         if (ft_strcmp(command, BI_CD) == 0)
-            return (&builtin_cd);
+            return (&bi_cd);
         if (ft_strcmp(command, BI_UNSET) == 0)
-            return (&builtin_unset);
-        
+            return (&bi_unset);
+        /*
         if (ft_strcmp(command, BI_EXPORT) == 0)
             return (&builtin_export);
-        if (ft_strcmp(command, BI_EXIT) == 0)
-            return (&builtin_exit); */
+        */
     }
     debug_print("get_builtin found nothing\n");
     return (NULL); 
