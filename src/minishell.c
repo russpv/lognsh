@@ -13,7 +13,7 @@ int	main(int argc, char **argv, char **envp)
 	set_signal_handlers();
 	if (MYTEST)
 	{
-		if (!fgets(input, sizeof(input), stdin)) 
+		if (NULL == fgets(input, sizeof(input), stdin)) 
         	return 1;
 		set_input(s, input);
 		ast = parse(s, get_input(s));
@@ -27,8 +27,7 @@ int	main(int argc, char **argv, char **envp)
 		while (1)
 		{
 			set_input(s, readline(PROMPT));
-			//if (NULL == get_input(s))
-			if (!get_input(s)) // handles Ctrl-D in parent process
+			if (NULL == get_input(s)) // handles Ctrl-D in parent process
 			{
 				write(STDOUT_FILENO, "exit\n", sizeof("exit\n"));
 				break ;
