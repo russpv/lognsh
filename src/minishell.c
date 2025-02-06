@@ -10,6 +10,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	(void)argc;
 	s = init_state(envp); // TODO register signal handlers
+	set_signal_handlers();
 	if (MYTEST)
 	{
 		if (!fgets(input, sizeof(input), stdin)) 
@@ -26,7 +27,8 @@ int	main(int argc, char **argv, char **envp)
 		while (1)
 		{
 			set_input(s, readline(PROMPT));
-			if (NULL == get_input(s))
+			//if (NULL == get_input(s))
+			if (!get_input(s)) // handles Ctrl-D in parent process
 			{
 				write(STDOUT_FILENO, "exit\n", sizeof("exit\n"));
 				break ;
