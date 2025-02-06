@@ -33,7 +33,7 @@ void	sigquit_handler(int signo)
 		if (isatty(STDIN_FILENO)) // ignore Ctrl-\ at prompt
 			return ;
 		g_last_signal = SIGQUIT; // store signal in g_signal
-		write(STDOUT_FILENO, "Quit (core dumped) (to bash purist: but not really)\n", 19); // RKP: the default this overrides dumps core, but the subject says do nothing
+		//write(STDOUT_FILENO, "Quit (core dumped) (to bash purist: but not really)\n", 19); // RKP: the default this overrides dumps core, but the subject says do nothing
 	}
 }
 
@@ -54,5 +54,6 @@ void	set_signal_handlers(void)
 
 void	reset_signal_handlers(void)
 {
-	//TODO
+	signal(SIGINT, SIG_DFL);  
+	signal(SIGQUIT, SIG_DFL); 
 }
