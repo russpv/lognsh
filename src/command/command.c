@@ -10,6 +10,8 @@ void	destroy_cmd(void *c)
 		ft_lstclear(&cmd->redirs, destroy_redir);
 	if (cmd->fildes)
 		ft_freearr((void **)cmd->fildes, -1);
+	if (cmd->argv)
+		ft_freearr((void **)cmd->argv, -1);
 	free(cmd);
 }
 

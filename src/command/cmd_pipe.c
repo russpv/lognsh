@@ -37,7 +37,8 @@ static int	_do_pipe_commands(t_state *s, t_list *cmds, t_cmd *c)
 	return (0);
 }
 
-/* Executes commands within pipeline node 
+/* Executes commands within pipeline node
+ * Not guaranteed to have forked, so no cleanup done.
  */
 int cmd_exec_pipe(t_state *s, t_ast_node *pipe)
 {

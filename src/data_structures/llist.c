@@ -105,9 +105,12 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 
 	if (!*lst || !del || !lst)
 		return ;
+	debug_print("[DEBUG] ft_lstclear got lst = %p, head = %p\n", (void*)lst, (void*)*lst);
+
 	tmp = *lst;
 	while (tmp)
 	{
+		debug_print("[DEBUG] ft_lstclear deleting node = %p\n", (void*)tmp);
 		next = tmp->next;
 		ft_lstdelone(lst, tmp, del);
 		tmp = next;

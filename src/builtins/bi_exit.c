@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:05:10 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/01 01:12:22 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/02/07 19:25:09 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,15 @@ int	bi_exit(t_state *s, char **args, int argc)
 
     // if no args: exit with last exit code
     if (!args[1])
-        exit(*get_status(s));
+    {
+        exit_code = *(get_status(s));
+        destroy_state(s);
+        exit(exit_code);
+    }
     // if first arg is not numeric: exit with 255; shell still exits  
     if (!_is_numeric(args[1]))
     {   
+        destroy_state(s);
         write(STDERR_FILENO, "minishell:exit: numeric argument required\n", 43);
         exit (255);
     }
@@ -52,6 +57,7 @@ int	bi_exit(t_state *s, char **args, int argc)
     // only when shell is not exited.  
     if (args[2])
     {
+        destroy_state(s);
         write(STDERR_FILENO, "minishell:exit: too many arguments\n", 36);
         return (1); // RKP: returns exit code to caller
     }
@@ -59,5 +65,6 @@ int	bi_exit(t_state *s, char **args, int argc)
     exit_code = ft_atoi(args[1]) % 256;
     if (exit_code < 0)
         exit_code = exit_code + 256;
+    destroy_state(s);
     exit(exit_code);
 }

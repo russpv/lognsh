@@ -8,7 +8,7 @@ void free_pipes(int **fildes, int count)
     int i = 0;
     while (i < count)
         free(fildes[i++]);
-    free(fildes);
+    free(*fildes);
     *fildes = NULL;
 }
 
@@ -18,7 +18,7 @@ int	exec_create_pipes(int ***fildes, int cmd_count)
 	int	i;
 
 	i = 0;
-	*fildes = (int **)malloc((sizeof(int *)) * (cmd_count));
+	*fildes = (int **)malloc((sizeof(int *)) * (size_t)(cmd_count));
 	if (!(*fildes))
 		return(err("ERR malloc"), -1);
 	(*fildes)[cmd_count - 1] = NULL;
@@ -138,7 +138,8 @@ int	exec_fork_redirect_run(t_state *s, t_ast_node *node, int i, execute_fn execu
 		_close_other_pipe_ends(get_cmd(s), i);
 		_redirect_pipes(get_cmd(s), i);
 		exit_status = executor(s, node);
-		exit(exit_status); // No cleanup?
+		destroy_state(s);
+		exit(exit_status);
 	}
 	return (0);
 }

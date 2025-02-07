@@ -94,6 +94,26 @@ t_list	*ft_lstnew(void *content)
 	return (ll);
 }
 
+
+/*
+t_list	*ft_lstnew_copy(void *content, void *(*f)(void *))
+{
+	t_list	*new_node;
+
+	new_node = malloc(sizeof(t_list));
+	if (!new_node)
+		return (NULL);
+	new_node->content = f(content);
+	if (!new_node->content)
+	{
+		free(new_node);
+		return (NULL);
+	}
+	new_node->next = NULL;
+	new_node->prev = NULL;
+	return (new_node);
+}*/
+
 /* LSTSIZE
 ** Returns the node count of the linked list
 */
@@ -103,8 +123,9 @@ int	ft_lstsize(t_list *lst)
 	int	count;
 
 	count = 0;
+
 	if (lst == NULL) {
-		debug_print("[DEBUG] List is NULL, returning 0\n");
+		debug_print("[DEBUG] ft_lstsize: List is NULL, returning 0\n");
 		return (0);
 	}
 	debug_print("[DEBUG] Starting ft_lstsize traversal. Initial lst: %p\n", (void*)lst);

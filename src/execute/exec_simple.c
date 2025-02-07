@@ -2,12 +2,14 @@
 
 /* This execve's a simple cmd and
  * manages the various I/O redirections
+ * And cleans up state (useless to child)
  */
 static int	_do_child_ops(t_state *s)
 {
 	const t_cmd	*c = (const t_cmd *)get_cmd(s);
 	const char	*fullpath = (const char *)c_getfullpath((t_cmd *)c);
 	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
+	const char	**envp = (const char **)get_envp(s);
 
 	if (!argv)
 		return (err("_do_child_ops: ERR null argv parameters\n"), -1);
@@ -17,11 +19,13 @@ static int	_do_child_ops(t_state *s)
 		return (err("_do_child_ops: ERR null t_cmd parameters\n"), -1);
 	if (-1 == p_do_redirections(c_getnode((t_cmd *)c)))
 		return (-1);
+	//destroy_state(s);
 	debug_print("Child exec'g %s\n", fullpath);
 	if (NULL == fullpath)
 		return (-1);
-	else if (-1 == execve(fullpath, (char **)argv, get_envp(s)))
+	else if (-1 == execve(fullpath, (char **)argv, (char **)envp))
 		err("exec_simple ERR execve()\n");
+	destroy_state(s);
 	return (0);
 }
 
@@ -32,9 +36,12 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
 	const int	argc = (const int)c_get_argc((t_cmd *)c);
 
+	debug_print("exec_bi_call...\n");
 	if (!argv || !bi || !c)
 		return (err("exec_bi_run: ERR null command parameters\n"), -1);
+	debug_print("exec_bi_call saving redir fns...\n");
 	save_redirs((t_cmd *)c);
+	debug_print("exec_bi_call doing redirs ...\n");
 	if (-1 == p_do_redirections(c_getnode((t_cmd *)c)))
 		return (-1);
 	debug_print("Shell exec'g builtin\n");

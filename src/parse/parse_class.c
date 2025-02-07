@@ -4,6 +4,8 @@
 void	destroy_redir(void *in)
 {
 	t_redir_data *redir = (t_redir_data *)in;
+	debug_print("destroy_redir...\n");
+
 	if (redir->symbol)
 		free(redir->symbol);
 //	if (redir->filename)
@@ -16,6 +18,8 @@ void	destroy_redir(void *in)
 void	destroy_arg(void *in)
 {
 	t_arg_data *arg = (t_arg_data *)in;
+	debug_print("destroy_arg...\n");
+
 	if (arg->raw)
 		free(arg->raw);
 	if (arg->tmp)
@@ -25,6 +29,8 @@ void	destroy_arg(void *in)
 void	destroy_cmd_node(void *n)
 {
 	t_ast_node *node = (t_ast_node *)n;
+
+	debug_print("destroy_cmd_node...\n");
 
 	if (node->type != AST_NODE_CMD)
 		return ;
@@ -41,6 +47,8 @@ void	destroy_proc_node(void *n)
 {
 	t_ast_node *node = (t_ast_node *)n;
 
+	debug_print("destroy_proc_node...\n");
+
 	if (AST_NODE_PROC != node->type)
 		return ;
 	ft_lstclear(&node->data.proc.cmds, destroy_ast);
@@ -50,6 +58,8 @@ void	destroy_proc_node(void *n)
 void	destroy_log_node(void *n)
 {
 	t_ast_node *node = (t_ast_node *)n;
+
+	debug_print("destroy_log_node...\n");
 
 	if (AST_NODE_LOG != node->type)
 		return ;
@@ -62,6 +72,8 @@ void	destroy_pipe_node(void *n)
 {
 	t_ast_node *node = (t_ast_node *)n;
 
+	debug_print("destroy_pipe_node...\n");
+
 	if (AST_NODE_PIPELINE != node->type)
 		return ;
 	ft_lstclear(&node->data.pipe.cmds, destroy_ast);
@@ -70,6 +82,8 @@ void	destroy_pipe_node(void *n)
 void	destroy_ast(void *node)
 {
 	t_ast_node *ast = (t_ast_node *)node;
+
+	debug_print("destroy_ast...\n");
 
 	if (AST_NODE_PROC == ast->type)
 		destroy_proc_node(ast);
@@ -103,7 +117,7 @@ t_parser	*create_parser(t_state *s, t_list *tokens)
 	p = (t_parser *)malloc(sizeof(t_parser));
 	if (p)
 	{
-		p->tokens = ft_lstcopy(tokens, copy_token_data, destroy_token);
+		p->tokens = ft_lstcopy(tokens, copy_token, destroy_token);
 		if (!p->tokens)
 		{
 			free(p);
@@ -127,6 +141,7 @@ void	destroy_parser(void *instance)
 	t_parser *p = (t_parser *)instance;
 	if (!p)
 		return ;
+	debug_print("destroy_parser...\n");
 	if (p->ast)
 	{
 		destroy_ast(p->ast);
@@ -134,6 +149,7 @@ void	destroy_parser(void *instance)
 	}
 	if (p->tokens)
 	{
+		debug_print("destroy_parser destroying p->tokens...\n");
 		ft_lstclear(&p->tokens, destroy_token);
 		p->tokens = NULL;
 	}

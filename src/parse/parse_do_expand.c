@@ -1,7 +1,7 @@
 #include "parse_int.h"
 
 /* Add special $? codes here */
-int	_check_special_expansions(t_arg_data *data, const char *buf, char **value)
+static int	_check_special_expansions(t_arg_data *data, const char *buf, char **value)
 {
 		const int *stat = get_status(data->global_state);
 
@@ -25,7 +25,7 @@ int	_check_special_expansions(t_arg_data *data, const char *buf, char **value)
  * If flag set, looks for expansion values in ENV and replaces
  * t_arg_data.raw string, omitting '$'.
  */
-void	p_do_expansion(void *c)
+static void	p_do_expansion(void *c)
 {
 	char		buf[1024];
 	char		*value;
@@ -95,16 +95,17 @@ char	**p_do_arg_processing(t_ast_node *a)
 int	p_do_redir_processing(t_ast_node *a)
 {
 	t_list	*redirs;
-	char *orig_fn;
+	char *orig_filen;
 
 	if (a->type != AST_NODE_CMD)
 		return (-1);
 	redirs = p_get_redirs(a);
 	ft_lstiter(redirs, p_do_expansion);
-	orig_fn = ft_lstiterstr(redirs, p_do_globbing_redirs);
-	if (NULL != orig_fn)
+	debug_print("p_do_redir_processing...\n");
+	orig_filen = ft_lstiterstr(redirs, p_do_globbing_redirs);
+	if (NULL != orig_filen)
 	{
-		print_ambiguous_redirect(((t_redir_data *)orig_fn)->filename);
+		print_ambiguous_redirect(((t_redir_data *)orig_filen)->filename);
 		return (-1);
 	}
 	return (0);

@@ -10,7 +10,7 @@ char	**c_argstoargv(char **args, char *cmd, int argc)
 	int		i;
 
 	i = -1;
-	argv = malloc(sizeof(char *) * (argc + 2));
+	argv = malloc(sizeof(char *) * ((size_t)argc + 2));
 	if (argv)
 	{
 		while (++i <= argc)

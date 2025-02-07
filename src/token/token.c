@@ -35,12 +35,12 @@ void	destroy_token(void *token)
 	token = NULL;
 }
 
-void	*copy_token_data(const void *data)
+void	*copy_token(const void *tok)
 {
 	t_tok	*token;
 	t_tok	*new_token;
 
-	token = (t_tok *)data;
+	token = (t_tok *)tok;
 	new_token = malloc(sizeof(t_tok));
 	if (new_token == NULL)
 		return (NULL);

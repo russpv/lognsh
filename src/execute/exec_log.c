@@ -20,6 +20,7 @@ int	exec_fork_run(t_state *s, t_ast_node *node, int i, execute_fn executor)
 	else if (0 == pid)
 	{
 		reset_signal_handlers();
+		//destroy_state(s);
 		exit_status = executor(s, node);
 		exit(exit_status);
 	}

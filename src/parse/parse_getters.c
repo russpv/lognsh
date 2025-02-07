@@ -32,6 +32,7 @@ t_list *p_get_args(t_ast_node *a)
 	return (a->data.cmd.args);
 }*/
 
+/* Returns a t_ast_node's t_list *redirs of t_redir_data if type is AST_NODE_CMD*/
 t_list *p_get_redirs(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)
@@ -46,23 +47,6 @@ int		p_get_argc(t_ast_node *a)
 		return (-1);
 	debug_print("p_get_argc got: _%s_\n", a->data.cmd.name);
 	return (a->data.cmd.argc);
-}
-
-// TODO change to actual argv
-char **p_get_argv(t_ast_node *a)
-{
-	char **args;
-
-	args = NULL;
-	if (!a)
-		return (NULL);
-	if (p_get_type(a) != AST_NODE_CMD)
-		return (NULL);
-	if (a->data.cmd.argc > 0)
-	{
-		args = list_to_array(a->data.cmd.args, a->data.cmd.argc);
-	}
-	return (args);
 }
 
 bool	p_get_expansion(t_ast_node *a)

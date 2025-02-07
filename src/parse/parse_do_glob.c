@@ -4,7 +4,7 @@
  * Assumes pattern will contain '*'
  * An empty string will return false.
  */
-bool	matches_pattern(const char *s, const char *pattern)
+static bool	_matches_pattern(const char *s, const char *pattern)
 {
 	while (*s && *pattern)
 	{
@@ -15,7 +15,7 @@ bool	matches_pattern(const char *s, const char *pattern)
 			{
 				while (*s)
 				{
-					if (true == matches_pattern(s, pattern))
+					if (true == _matches_pattern(s, pattern))
 						return (true);
 					s++;
 				}
@@ -35,7 +35,7 @@ bool	matches_pattern(const char *s, const char *pattern)
 // Returns array of globbing matches in cwd
 // Uses opendir() on "." since this will always
 // run from interactive mode and not in background
-t_list	*match_glob(const char *pattern)
+static t_list	*_match_glob(const char *pattern)
 {
 	t_list *lst = NULL;
 	struct dirent *res;
@@ -51,7 +51,7 @@ t_list	*match_glob(const char *pattern)
 	while (res)
 	{
 		debug_print("match_glob readdir: %s\n", res->d_name);
-		if (true == matches_pattern(res->d_name, pattern))
+		if (true == _matches_pattern(res->d_name, pattern))
 		{
 			debug_print("match_glob matched: %s\n", res->d_name);
 			ft_lstadd_back(&lst, ft_lstnew(ft_strdup(res->d_name))); // TODO malloc guard
@@ -62,16 +62,16 @@ t_list	*match_glob(const char *pattern)
 	return (lst);
 }
 
-/* Returns redir raw string in case of error */
+/* Operates on single t_redir_data. Returns redir raw string in case of error */
 int	p_do_globbing_redirs(void *c)
 {
 	t_list *lst = NULL;
 
 	t_redir_data *content = (t_redir_data *)c;
-	debug_print("p_do_globbing_redirs got redir: %s do_glob:%d\n", content->filename, content->do_globbing);
+	debug_print("p_do_globbing_redirs got redir type: %d fn:%s doc: %s do_glob:%d\n", content->type, content->filename, content->doc, content->do_globbing);
 	if (true == content->do_globbing)
 	{
-		lst = match_glob((const char *)content->filename);
+		lst = _match_glob((const char *)content->filename);
 		if (lst)
 		{
 			debug_print("p_do_globbing_redirs found (1st): %s\n", (char *)lst->content);
@@ -115,7 +115,7 @@ void	p_do_globbing(t_list **lst_node, void *lst_c)
 	debug_print("p_do_globbing got arg: %s, lst:%p\n", content->raw, (void*)lst_node);
 	if (true == content->do_globbing)
 	{
-		lst = match_glob(content->raw);
+		lst = _match_glob(content->raw);
 		if (lst)
 		{
 			debug_print("p_do_globbing found %d matches, 1st: %s\n", ft_lstsize(lst), lst->content);

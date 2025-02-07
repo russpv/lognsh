@@ -55,16 +55,29 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 void	destroy_lexer(void *instance)
 {
 	t_lex *lexer = (t_lex *)instance;
+	debug_print("destroy_lexer...\n");
 	if (!lexer)
 		return ;
 	if (lexer->buf)
+	{
+		debug_print("destroy_lexer buf...\n");
 		free(lexer->buf);
+	}
 	if (lexer->eof_word)
+	{
+		debug_print("destroy_lexer eof_word...\n");
 		free(lexer->eof_word);
+	}
 	if (lexer->hasht)
+	{
+		debug_print("destroy_lexer hasht...\n");
 		ht_destroy(lexer->hasht, lex_destroy_ht_node);
+	}
 	if (lexer->token_list)
+	{
+		debug_print("destroy_lexer token_list...\n");
 		ft_lstclear(&lexer->token_list, destroy_token);
+	}
 	free(lexer);
 }
 
@@ -95,5 +108,6 @@ t_lex	*tokenize(t_state *s, const char *input)
 		}
 	}
 	debug_detect_cycle(lexer->token_list);
+	lex_print(lexer);
 	return (lexer);
 }

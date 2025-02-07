@@ -2,7 +2,8 @@
 
 int	find_and_validate_cmd(const char *name, char **fullpath, const char *caller);
 
-/* Takes first argument and
+/* Takes first argument
+ * Note: retains state, does not do cleanup.
  */
 int	bi_exec(t_state *s, char **argv, int argc)
 {

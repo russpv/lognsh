@@ -196,10 +196,6 @@ t_tok						*peek(t_parser *p);
 t_tok						*lookahead(t_parser *p);
 t_tok						*previous(t_parser *p);
 t_tok						*advance(t_parser *p);
-
-t_tok						*peek(t_parser *p);
-t_tok						*lookahead(t_parser *p);
-t_tok						*previous(t_parser *p);
 bool						is_at_end(t_parser *p);
 
 t_ast_node					*parse_cmd(t_parser *p);
@@ -240,17 +236,21 @@ void	destroy_pipe_node(void *n);
 void	destroy_cmd_node(void *n);
 void	destroy_proc_node(void *n);
 void	destroy_log_node(void *n);
-void	destroy_redir(void *in);
 void	destroy_arg(void *in);
 
 void						parse_print(t_ast_node *ast);
 t_ast_node					*test_parse(t_parser *parser);
 
 void	p_do_globbing(t_list **parent_lst, void *c);
-int	p_do_globbing_redirs(void *c);
+int		p_do_globbing_redirs(void *c);
 
 void *create_arg_data_node(void *content);
 
+
+t_pstack *create_stack(void);
+void	destroy_stack(t_pstack *s);
+int	push(t_pstack *stack);
+int	pop(t_pstack *stack);
 
 
 #endif

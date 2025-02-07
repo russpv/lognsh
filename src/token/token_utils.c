@@ -7,7 +7,7 @@ void	tok_print(void *content)
 	token = (t_tok *)content;
 	if (token)
 	{
-		log_printf("Token: %d Exp: %d Value: %s \n", token->type,
+		log_printf("Lexer: Token: %d Exp: %d Value: %s \n", token->type,
 			token->do_expansion, token->raw);
 	}
 }

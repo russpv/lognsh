@@ -124,7 +124,7 @@ typedef struct s_lex
 	enum e_lex_state		state;
 	bool					escape_mode;
 	t_tokenizer				tokenizer;
-	t_list					*token_list;
+	t_list					*token_list; /* t_tok */
 	t_ht					hasht;
 	char					*buf;
 	int						do_expansion;
@@ -159,9 +159,6 @@ int							tokenize_null(t_lex *lexer);
 int							tokenize_heredoc(t_lex *lexer);
 t_tok						*lex_create_token(t_lex *lexer, int type);
 int							add_token(t_lex *lexer, t_tok *token);
-
-void						debug_detect_cycle(t_list *head);
-
 bool						is_normal_delim(unsigned char s);
 bool						is_transition_char(t_lex *l, unsigned char s);
 bool						is_dollar_question(t_lex *lexer);

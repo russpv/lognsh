@@ -35,7 +35,9 @@ void	log_printf(const char *s, ...)
 	if (LOGGING)
 	{
 		va_start(args, s);
-		vfprintf(stdout, s, args);
+		fprintf(stderr, BLUE"[LOG] ");
+		vfprintf(stderr, s, args);
+		fprintf(stderr, "%s", BLUE);
 		va_end(args);
 	}
 }

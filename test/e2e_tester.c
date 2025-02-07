@@ -6,14 +6,17 @@
 
 // Tests for basic parser functionality
 
-RUN_E2E_TEST(test_echo, "echo hello world");
-RUN_E2E_TEST(test_pipe, "ls -l | grep file");
-RUN_E2E_TEST(test_redirection, "echo test > output.txt");
+DEFINE_E2E_TEST(test_echo, "echo hello world");
+DEFINE_E2E_TEST(test_pipe, "ls -l | grep file");
+DEFINE_E2E_TEST(test_redirection, "echo test > output.txt");
+DEFINE_E2E_TEST(test_echo_flag, "echo -nnnnnn haha");
+
 
 TEST_GROUP_RUNNER(basic) {
 	RUN_TEST(test_echo);
 	RUN_TEST(test_pipe);
 	RUN_TEST(test_redirection);
+    RUN_TEST(test_echo_flag);
 }
 
 /*

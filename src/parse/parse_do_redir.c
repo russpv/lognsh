@@ -50,17 +50,29 @@ void handle_redirect_append(const t_redir_data *node)
 		err("Append redirection issue\n");
 }
 
-/* Executes redirection of t_redir_data llist */
-void	p_do_redirection(void *content)
+/* Executes redirection of t_redir_data llist
+ * Accepts a t_redir_data.
+ * Note: parser does not node-rize TOK_HEREDOC
+ */
+static void	_p_do_redirection(void *content)
 {
+	if (NULL == content)
+		return ;
+	debug_print("_p_do_redirection...\n");
 	const t_redir_data *node = (t_redir_data *)content;
     redir_fn handlers[] = {
         [TOK_REDIRECT_IN] = handle_redirect_in,
         [TOK_REDIRECT_OUT] = handle_redirect_out,
         [TOK_REDIRECT_APPEND] = handle_redirect_append,
-        [TOK_HEREDOC] = handle_heredoc
+        [TOK_HEREDOC_WORD] = handle_heredoc
     };
 
+	if (!node->type)
+	{
+		debug_print("_p_do_redirection got NULL\n");
+		return ;
+	}
+	debug_print("_p_do_redirection got smthg and executing...\n");
     if (handlers[node->type]) 
         handlers[node->type](node);
 	else 
@@ -79,6 +91,7 @@ int	p_do_redirections(t_ast_node *a)
 		return (EINVAL);
 	if (!node_has_redirects(a))
 		return (0);
-	ft_lstiter(a->data.cmd.redirs, p_do_redirection);
+	debug_print("p_do_redirections, doing redirs...\n");
+	ft_lstiter(a->data.cmd.redirs, _p_do_redirection);
 	return (0);
 }

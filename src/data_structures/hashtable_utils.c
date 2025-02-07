@@ -4,14 +4,18 @@
 void	*ht_get_payload(struct s_ht_entry *e)
 {
 	return (e->data);
-};
+}
 
-static int	_install_data(struct s_ht_entry *np, void *data,
+/* Optionally copies the data before assigning it. */
+static int	_install_data(struct s_ht_entry *np, void *data, \
 		void *(*cpy)(void *))
 {
 	if (NULL != data)
 	{
-		np->data = cpy(data);
+		if (cpy)
+			np->data = cpy(data);
+		else
+			np->data = data;
 		if (NULL == np->data)
 			return (-1);
 	}
@@ -39,12 +43,19 @@ struct s_ht_entry	*ht_install(t_ht ht, char *name, void *data,
 			return (NULL);
 		np->name = ft_strdup(name);
 		if (NULL == np->name)
+		{
+			free(np);
 			return (NULL);
+		}
 		hashval = hash(name);
 		np->next = ht->buckets[hashval];
 		ht->buckets[hashval] = np;
 		if (-1 == _install_data(np, data, cpy_data))
+		{
+			free(np->name);
+			free(np);
 			return (NULL);
+		}
 	}
 	else
 		return (NULL);

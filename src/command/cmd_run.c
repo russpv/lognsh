@@ -69,6 +69,7 @@ extern int	find_and_validate_cmd(const char *name, char **fullpath, \
  * a child process.
  * a null cmd name is valid, nothing runs
  * Execute module handles redirects and forking in exec_fork_execve()
+ * 
  */
 int	run_cmd(t_state *s, t_ast_node *a)
 {
@@ -88,6 +89,6 @@ int	run_cmd(t_state *s, t_ast_node *a)
 			err("run_cmd ERR execve() \n");
 	}
 	else if (0 != exec_fork_execve(s))
-		err("ERR fork and run\n");
+		err("ERR fork and run nonzero exit status\n");
 	return (0);
 }

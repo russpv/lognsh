@@ -22,9 +22,12 @@
 # define MAGENTA "\033[1;35m"
 # define CYAN "\033[1;36m"
 
+typedef struct s_list	t_list;
+
 void	debug_print(const char *format, ...);
 void	log_printf(const char *s, ...);
 void	err(const char *s);
 void	colored_printf(const char *color, const char *format, ...);
+void	debug_detect_cycle(t_list *head);
 
 #endif

@@ -42,12 +42,17 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	((t_cmd *)c)->argc = p_get_argc(a) + 1;
 	if (0 != p_do_redir_processing(a))
 		return (ERR_AMBIGUOUS_REDIR);
+	printf("Finished redirs.\n");
 	if (bi)
 		exit_code = exec_bi_call(s, bi);
 	else
 	{
+		printf("Doing log_command_info.\n");
 		log_command_info((t_cmd *)c, a);
+		printf("Doing run_cmd.\n");
+
 		exit_code = run_cmd(s, a);
 	}
+	printf("Finished command.\n");
 	return (exit_code);
 }

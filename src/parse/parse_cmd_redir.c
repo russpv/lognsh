@@ -69,6 +69,29 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
  * TODO: handle TOK_HEREDOC_WORDs
  */
 
+static t_redir_data *_init_redir()
+{
+	t_redir_data	*red;
+
+	red = malloc(sizeof(t_redir_data));
+	if (!red)
+	{
+		err("Memory allocation failed for redirection data\n");
+		return (NULL);
+	}
+	red->cmd = NULL;
+	red->type = 0;
+	red->do_globbing = false;
+	red->do_expansion = false;
+	red->doc = NULL;
+	red->symbol = NULL;
+	red->filename = NULL;
+	red->global_state = NULL;
+	return (red);
+}
+
+
+
 static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
 {
 	t_redir_data	*red;
@@ -83,12 +106,7 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
 	}
 	while (!is_at_end(p) && is_redir_token(peek(p)))
 	{
-		red = malloc(sizeof(t_redir_data));
-		if (!red)
-		{
-			err("Memory allocation failed for redirection data\n");
-			return (NULL);
-		}
+		red = _init_redir();
 		red->cmd = &cmd->data.cmd;
 		tok = advance(p);
 		red->type = tok_get_type((t_tok *)tok);
@@ -117,10 +135,11 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
 			}
 			red->do_globbing = tok_get_globbing((t_tok *)name);
 			red->do_expansion = tok_get_expansion((t_tok *)name);
-			red->filename = tok_get_raw((t_tok *)name);
+			red->filename = ft_strdup(tok_get_raw((t_tok *)name));
 			if (!red->filename)
 			{
 				err("Redirection filename is invalid\n");
+				free(red->symbol);
 				free(red);
 				return (NULL);
 			}
@@ -130,7 +149,13 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *cmd)
 			debug_print("Got heredoc document\n");
 			red->symbol = NULL;
 			red->filename = NULL;
-			red->doc = tok_get_raw((t_tok *)tok);
+			red->doc = ft_strdup(tok_get_raw((t_tok *)tok));
+			if (!red->doc)
+			{
+				err("Memory allocation failed for redirection heredoc\n");
+				free(red);
+				return (NULL);
+			}
 		}
 		new = ft_lstnew(red);
 		if (!new)

@@ -56,6 +56,7 @@ t_list							**p_get_args(t_ast_node *a);
 t_list							*p_get_redirs(t_ast_node *a);
 
 int								p_get_argc(t_ast_node *a);
+
 bool							p_get_expansion(t_ast_node *a);
 
 /* Command getters */
@@ -77,6 +78,9 @@ int								p_set_cmd(t_ast_node *a, const char *cmd);
 void							print_ast(t_ast_node *ast, int depth);
 
 void							destroy_redir(void *in);
+
+bool	is_globbing(t_tok *tok);
+
 
 /*  Expansions */
 // tilde ~ ?

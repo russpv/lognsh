@@ -72,7 +72,7 @@ int	tokenize_null(t_lex *lexer)
 	debug_print("tokenize_null...\n");
 	if (lexer)
 	{
-		token = create_token("\0", TOK_EOF, lexer->ptr - lexer->raw_string);
+		token = create_token("\0", TOK_EOF, (size_t)(lexer->ptr - lexer->raw_string));
 		if (token)
 			add_token(lexer, token);
 		else

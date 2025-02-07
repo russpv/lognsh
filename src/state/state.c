@@ -58,6 +58,8 @@ void	destroy_state(t_state *s)
 		s->destroy_parser(s->current_parser);
 	if (s->current_lexer)
 		s->destroy_lexer(s->current_lexer);
+	if (s->current_cmd)
+		s->destroy_command(s->current_cmd);
 	if (s->input)
 		free(s->input);
 	free(s);

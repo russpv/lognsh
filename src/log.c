@@ -5,6 +5,7 @@
 
 void	log_command_info(t_cmd *c, t_ast_node *a)
 {
+	debug_print("log_command_info: \n");
 	if (LOGGING)
 	{
 		colored_printf(YELLOW, "\tExecuting command: %s\n", p_get_cmd(a));

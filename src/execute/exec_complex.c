@@ -18,6 +18,7 @@ int exec_fork_func(t_state *s, t_ast_node *node, execute_fn executor)
 	{
 		reset_signal_handlers();
 		int exit_status = executor(s, node);
+		destroy_state(s);
 		exit(exit_status); // No cleanup?
 	}
 	waitchild(&status, 1);
