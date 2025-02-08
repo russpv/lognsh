@@ -103,7 +103,7 @@ char	**list_to_array(t_list *args, int argc)
 	t_list	*current;
 	int		i;
 
-	array = malloc(sizeof(char *) * (argc + 1));
+	array = malloc(sizeof(char *) * (size_t)(argc + 1));
 	if (!array)
 		return (NULL);
 	current = args;

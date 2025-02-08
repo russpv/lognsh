@@ -1,6 +1,6 @@
 #include "llist.h"
 
-// Helper function: Copy a single node's content
+// Helper function: Deep copy a single node's content
 t_list	*ft_lstcopy_node(const t_list *orig, void *(*f)(const void *))
 {
 	t_list	*new_node;
@@ -19,7 +19,9 @@ t_list	*ft_lstcopy_node(const t_list *orig, void *(*f)(const void *))
 	return (new_node);
 }
 
-// f - content copy func; d - content delete func
+/* Deep copies linked lists 
+ * f - content deep copy func; d - content delete func
+ */
 t_list	*ft_lstcopy(t_list *orig, void *(*f)(const void *), void (*d)(void *))
 {
 	t_list	*new_list;

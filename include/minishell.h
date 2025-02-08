@@ -21,5 +21,5 @@
 #include <ctype.h>
 
 #define PROMPT GREEN "minish> " RESET
-
+#define INPUT_BUF_SZ 1024
 #endif

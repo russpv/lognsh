@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:56:22 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/01 01:00:28 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/02/07 17:01:19 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 /* ECHO
  * derived from code echo.c in Bash.
+ * Option -n.* defeats newline print
  */
-char	*expand_variable(const char *arg)
+static char	*_expand_variable(const char *arg)
 {
 	char	*env_value;
 	
@@ -40,7 +41,7 @@ int	bi_echo(t_state *s, char **argv, int argc)
 	i = 1;
 	while (i <argc)
 	{
-		expanded = expand_variable(argv[i]);
+		expanded = _expand_variable(argv[i]);
 		printf("%s", expanded);
 		free(expanded);
 		

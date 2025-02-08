@@ -6,10 +6,14 @@ void	destroy_cmd(void *c)
 
 	cmd = (t_cmd *)c;
 	st_destroy(cmd->st);
+	if (cmd->fullpath)
+		free(cmd->fullpath);
 	if (cmd->redirs)
 		ft_lstclear(&cmd->redirs, destroy_redir);
 	if (cmd->fildes)
 		ft_freearr((void **)cmd->fildes, -1);
+	if (cmd->argv)
+		ft_freearr((void **)cmd->argv, -1);
 	free(cmd);
 }
 
@@ -39,19 +43,19 @@ t_cmd	*init_cmd(t_state *s, t_ast_node *a)
 
 int	cmd_execute_full(t_state *s, t_ast_node *a)
 {
-	debug_print("######## cmd_execute_full ########\n");
+	debug_print("Cmd: ######## cmd_execute_full ########\n");
 	if (AST_NODE_PROC == p_get_type(a))
 		return (cmd_exec_proc(s, a));
-	debug_print("node not a proc...\n");
+	debug_print("Cmd: node not a proc...\n");
 	if (AST_NODE_CMD == p_get_type(a))
 		return (cmd_exec_simple(s, a)); // this one does not recurse
-	debug_print("node not a cmd...\n");
+	debug_print("Cmd: node not a cmd...\n");
 	if (AST_NODE_PIPELINE == p_get_type(a))
 		return (cmd_exec_pipe(s, a));
-	debug_print("node not a pipe...\n");
+	debug_print("Cmd: node not a pipe...\n");
 	if (AST_NODE_LOG == p_get_type(a))
 		return (cmd_exec_log(s, a));
-	debug_print("ERR unknown node...\n");
+	debug_print("Cmd: ERR unknown node...\n");
 	return (1);
 }
 

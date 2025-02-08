@@ -10,7 +10,7 @@ char	**c_argstoargv(char **args, char *cmd, int argc)
 	int		i;
 
 	i = -1;
-	argv = malloc(sizeof(char *) * (argc + 2));
+	argv = malloc(sizeof(char *) * ((size_t)argc + 2));
 	if (argv)
 	{
 		while (++i <= argc)
@@ -25,11 +25,14 @@ char	**c_argstoargv(char **args, char *cmd, int argc)
 				argv[i] = ft_strdup(args[i]);
 			if (!argv[i])
 			{
+				ft_freearr((void **)args, -1);
 				ft_freearr((void **)argv, -1);
 				return (NULL);
 			}
 		}
 		argv[i] = NULL;
+		ft_freearr((void **)args, -1);
+
 	}
 	return (argv);
 }

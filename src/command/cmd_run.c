@@ -11,7 +11,7 @@ static int	_check_access(const char *path)
 	return (-1);
 }
 
-/* Returns 0 if absolute path is found */
+/* Returns 0 if absolute fullpath is found */
 static int	_search_path(const char *cmd, char **fullpath)
 {
 	char	**paths;
@@ -24,10 +24,13 @@ static int	_search_path(const char *cmd, char **fullpath)
 	while (paths[++i])
 	{
 		tmp = ft_strjoin(paths[i], "/");
+		if (NULL == tmp)
+			return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"), \
+			1);
 		*fullpath = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!*fullpath)
-			return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"),
+			return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"), \
 				1);
 		if (0 == _check_access(*fullpath))
 			return (ft_freearr((void **)paths, -1), 0);
@@ -37,7 +40,7 @@ static int	_search_path(const char *cmd, char **fullpath)
 	return (ft_freearr((void **)paths, -1), 1);
 }
 
-/* Stores path if valid.
+/* Stores command path in fullpath, if valid.
  * Checks PATH, or absolute path if slash is in the name */
 extern int	find_and_validate_cmd(const char *name, char **fullpath, \
 		const char *caller)
@@ -69,6 +72,7 @@ extern int	find_and_validate_cmd(const char *name, char **fullpath, \
  * a child process.
  * a null cmd name is valid, nothing runs
  * Execute module handles redirects and forking in exec_fork_execve()
+ * 
  */
 int	run_cmd(t_state *s, t_ast_node *a)
 {
@@ -78,9 +82,9 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	if (p_get_type(a) != AST_NODE_CMD || NULL == p_get_cmd(a))
 		return (EINVAL);
 	if (0 != find_and_validate_cmd(p_get_cmd(a), &c->fullpath, NULL))
-		return (ERR_CMD_NOT_FOUND);
+		return (s_free_cmd(s), ERR_CMD_NOT_FOUND);
 	if (c->fullpath)
-		debug_print("Found command! at %s\n", c->fullpath);
+		debug_print("Cmd: Found command! at %s\n", c->fullpath);
 	if (CTXT_PIPELINE == st_peek(get_cmd(s)->st)
 		|| CTXT_PROC == st_peek(get_cmd(s)->st))
 	{
@@ -88,6 +92,7 @@ int	run_cmd(t_state *s, t_ast_node *a)
 			err("run_cmd ERR execve() \n");
 	}
 	else if (0 != exec_fork_execve(s))
-		err("ERR fork and run\n");
+		err("ERR fork and run nonzero exit status\n");
+	s_free_cmd(s);
 	return (0);
 }

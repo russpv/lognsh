@@ -31,6 +31,8 @@ t_list					*ft_lstlast(t_list *lst);
 t_list					*ft_lstmap(t_list *lst, void *(*f)(void *),
 							void (*del)(void *));
 t_list					*ft_lstnew(void *content);
+t_list	*ft_lstnew_copystr(void *content, char *(*f)(const char *));
+
 int						ft_lstsize(t_list *lst);
 t_list					*ft_lstcopy(t_list *orig, void *(*f)(const void *),
 							void (*d)(void *));

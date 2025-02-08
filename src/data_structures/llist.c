@@ -3,6 +3,7 @@
 /* LSTADD_BACK
 ** Returns single node for empty list, or adds new to end of
 ** linked list, keeps ptr to head ptr intact
+** TODO: error propagation 
 */
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
@@ -105,9 +106,12 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 
 	if (!*lst || !del || !lst)
 		return ;
+	debug_print("[DEBUG] ft_lstclear got lst = %p, head = %p\n", (void*)lst, (void*)*lst);
+
 	tmp = *lst;
 	while (tmp)
 	{
+		debug_print("[DEBUG] ft_lstclear deleting node = %p\n", (void*)tmp);
 		next = tmp->next;
 		ft_lstdelone(lst, tmp, del);
 		tmp = next;

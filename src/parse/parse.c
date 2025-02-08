@@ -14,23 +14,23 @@
  */
 t_ast_node	*parse_full_cmd(t_parser *p)
 {
-	debug_print("######## parse_full_cmd ########\n");
-	debug_print("parse_full_cmd: got tok of %s \n", tok_get_raw(peek(p)));
+	debug_print("Parser: ######## parse_full_cmd ########\n");
+	debug_print("Parser: parse_full_cmd: got tok of %s \n", tok_get_raw(peek(p)));
 	if (is_at_end(p))
 	{
-		debug_print("reached end of tokens\n");
+		debug_print("Parser: reached end of tokens\n");
 		return (NULL);
 	}
 	if (is_open_paren(peek(p)))
 		return (parse_proc(p));
-	debug_print("not a proc...\n");
+	debug_print("Parser: not a proc...\n");
 	if ((is_cmd_token(peek(p)) || is_redir_token(peek(p)))
 		&& (st_peek(p->st) > 0 || !p->last_node))
 		return (parse_cmd(p));
-	debug_print("not a cmd...\n");
+	debug_print("Parser: not a cmd...\n");
 	if (p->last_node && is_pipe_token(peek(p)))
 		return (parse_pipeline(p));
-	debug_print("not a pipe...\n");
+	debug_print("Parser: not a pipe...\n");
 	if (p->last_node && is_log_token(peek(p)))
 		return (parse_logical(p));
 	err("Syntax error near: (TODO, empty cmd okay)\n");
@@ -65,7 +65,7 @@ t_ast_node	*parse(t_state *s, char *input)
 		return (null_and_stat(s, ERR_TOKEN)); // Ctrl+D abort
 	tokens = lex_get_tokens(lexer);
 	parser = create_parser(s, tokens);
-	debug_print("\t###### parse ####### \n");
+	debug_print("Parser: \t###### parse ####### \n");
 	while (!is_at_end(parser) && !parser->parse_error)
 		ast = parse_full_cmd(parser);
 	parser->ast = ast;

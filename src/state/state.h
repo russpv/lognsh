@@ -77,12 +77,8 @@ void							register_parser_destroy(t_state *s,
 void							register_lexer_destroy(t_state *s,
 									t_destroy_fn fn);
 void							s_free_cmd(t_state *s);
+void	s_free_cmd_lex_parse(t_state *state);
 
-extern char						*readline(const char *prompt);
-extern void						add_history(const char *line);
-extern void						rl_replace_line(const char *text, \
-									int clear_undo);
-extern void						rl_redisplay(void);
-extern int						rl_on_new_line(void);
+
 
 #endif

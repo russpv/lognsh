@@ -1,6 +1,7 @@
 #include "env.h"
 
-/* returns paths array */
+/* returns new paths array 
+ * getenv does not rerurn heap memory */
 char **s_getenv(void)
 {
 	char **res;
@@ -15,7 +16,6 @@ char **s_getenv(void)
 	if (!res)
 	{
 		perror("ft_split error\n");
-		free((char *)path_env);
 		return (NULL);
 	}
 	return (res);

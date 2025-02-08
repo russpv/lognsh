@@ -13,7 +13,7 @@ static inline int	_get_eof_word(t_lex *l)
 		l->buf[buf_idx++] = *l->ptr++;
 	if (0 == ft_strlen(l->buf))
 	{
-		debug_print("ERROR: heredoc EOF not found.\n");
+		debug_print("Lexer: ERROR: heredoc EOF not found.\n");
 		return (0);
 	}
 	l->eof_word = ft_strdup(l->buf);
@@ -22,7 +22,7 @@ static inline int	_get_eof_word(t_lex *l)
 		ft_memset(l->buf, 0, LEX_BUFSZ);
 		return (1);
 	}
-	debug_print("Captured Heredoc Delimiter: %s\n", l->eof_word);
+	debug_print("Lexer: Captured Heredoc Delimiter: %s\n", l->eof_word);
 	ft_memset(l->buf, 0, LEX_BUFSZ);
 	return (0);
 }
@@ -65,14 +65,14 @@ static inline t_tok	*_match_heredoc(t_lex *l)
 		line = readline("> ");
 		if (NULL == line)
 		{
-			debug_print("Input interrupted.\n");
+			debug_print("Lexer: Input interrupted.\n");
 			free(l->eof_word);
 			l->eof_word = NULL;
 			return (NULL);
 		}
 		if (true == _line_is_eof(l, line))
 		{
-			debug_print("Heredoc delimiter found, exiting heredoc mode.\n");
+			debug_print("Lexer: Heredoc delimiter found, exiting heredoc mode.\n");
 			token = lex_create_token(l, TOK_HEREDOC_WORD);
 			free(l->eof_word);
 			l->eof_word = NULL;
@@ -94,11 +94,11 @@ int	tokenize_heredoc(t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print("<< tokenize_heredoc:\n");
+	debug_print("Lexer: << tokenize_heredoc:\n");
 	if (1 == _get_eof_word(lexer))
 		return (1);
 	token = _match_heredoc(lexer);
-	debug_print("ptr at:_%c_\n", *lexer->ptr);
+	debug_print("Lexer: ptr at:_%c_\n", *lexer->ptr);
 	if (token)
 	{
 		if (0 != add_token(lexer, token))
@@ -107,7 +107,7 @@ int	tokenize_heredoc(t_lex *lexer)
 	}
 	else
 	{
-		debug_print("##### Error heredoc\n");
+		debug_print("Lexer: ##### Error heredoc\n");
 		return (1);
 	}
 	return (0);

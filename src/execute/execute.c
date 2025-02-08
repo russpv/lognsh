@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:00:49 by dayeo             #+#    #+#             */
-/*   Updated: 2025/01/27 13:43:05 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/02/08 13:16:11 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ void	waitchild(int *status, int childc)
 		child_pid = waitpid(-1, status, 0);
 		{
 			if (child_pid > 0 && WIFEXITED(*status))
-				debug_print("Child %d exited w/ stat:%d\n", child_pid, \
+				debug_print("Exec: Child %d exited w/ stat:%d\n", child_pid, \
 					WEXITSTATUS(*status));
 			else if (child_pid > 0 && WIFSIGNALED(*status))
-				debug_print("Child %d exited by sig:%d\n", child_pid, \
+				debug_print("Exec: Child %d exited by sig:%d\n", child_pid, \
 					WTERMSIG(*status));
 		}
 	}
-	debug_print("All child processes have terminated\n");
+	debug_print("Exec: All child processes have terminated\n");
 }
 
 /* Interpret waitpid() exit status (signals ignored here) */

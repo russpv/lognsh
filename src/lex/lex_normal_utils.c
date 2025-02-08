@@ -8,13 +8,13 @@ bool is_dollar_question(t_lex *lexer)
 
 bool	is_normal_delim(unsigned char s)
 {
-	debug_print("--------_is_normal_delim:_%c_", s);
+	debug_print("Lexer: --------_is_normal_delim:_%c_", s);
 	if (ft_strchr(NORMALDELIMS, s))
 	{
-		debug_print("YES\n");
+		debug_print("Lexer: YES\n");
 		return (true);
 	}
-	debug_print("NO\n");
+	debug_print("Lexer: NO\n");
 	return (false);
 }
 
@@ -23,10 +23,10 @@ bool	is_normal_delim(unsigned char s)
  */
 bool	is_transition_char(t_lex *l, unsigned char s)
 {
-	debug_print("--------_is_transition_char:_%c_", s);
+	debug_print("Lexer: --------_is_transition_char:_%c_", s);
 	if (s == 0)
 	{
-		debug_print("YES-NULL\n");
+		debug_print("Lexer: YES-NULL\n");
 		return (true);
 	}
 	if (ft_strchr(NORMALTRANSITIONS, s))
@@ -35,38 +35,38 @@ bool	is_transition_char(t_lex *l, unsigned char s)
 		{
 			if ('<' == *(l->ptr + 1))
 			{
-				debug_print("YES\n");
+				debug_print("Lexer: YES\n");
 				return (true);
 			}
 		}
 		else
 		{
-			debug_print("YES\n");
+			debug_print("Lexer: YES\n");
 			return (true);
 		}
 	}
-	debug_print("NO\n");
+	debug_print("Lexer: NO\n");
 	return (false);
 }
 
 int	word_or_name(const char *s)
 {
-	debug_print("--------_word_or_name:_%s_", s);
+	debug_print("Lexer: --------_word_or_name:_%s_", s);
 	if (!*s)
 	{
-		debug_print("ERR\n");
+		debug_print("Lexer: ERR\n");
 		return (TOK_ERR);
 	}
 	while (*s)
 	{
 		if (!(ft_isalnum(*s) || '_' == *s))
 		{
-			debug_print("WORD\n");
+			debug_print("Lexer: WORD\n");
 			return (TOK_WORD);
 		}
 		s++;
 	}
-	debug_print("NAME\n");
+	debug_print("Lexer: NAME\n");
 	return (TOK_NAME);
 }
 

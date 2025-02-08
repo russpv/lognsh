@@ -5,7 +5,7 @@ static int	_setup_pipes(t_cmd *c)
 	if (0 != exec_create_pipes(&c->fildes, c->curr_cmdc))
 		return (err("ERR pipe creation\n"), -1);
  	for (int i = 0; i < c->curr_cmdc - 1; i++)
-        debug_print("\tPipe %d: read fd=%d, write fd=%d\n", i, c->fildes[i][0], c->fildes[i][1]);
+        debug_print("Cmd: \tPipe %d: read fd=%d, write fd=%d\n", i, c->fildes[i][0], c->fildes[i][1]);
     return (0);
 }
 
@@ -30,25 +30,26 @@ static int	_do_pipe_commands(t_state *s, t_list *cmds, t_cmd *c)
 	while (cmds && ++i < c->curr_cmdc)
 	{
 		a = (t_ast_node *)cmds->content;
-		if (0 != exec_fork_redirect_run(s, a, i, cmd_execute_full))
+		if (0 != exec_pipe_fork_redirect_run(s, a, i, cmd_execute_full))
 			return (-1);
 		cmds = cmds->next;
 	}
 	return (0);
 }
 
-/* Executes commands within pipeline node 
+/* Executes commands within pipeline node
+ * Not guaranteed to have forked, so no cleanup done.
  */
 int cmd_exec_pipe(t_state *s, t_ast_node *pipe)
 {
 	t_cmd *cmd; 
 	
-	debug_print("\t### cmd_exec_pipe ###\n");
+	debug_print("Cmd: \t### cmd_exec_pipe ###\n");
 	cmd = get_cmd(s);
 	if (!cmd)
 		return (-1);
 	cmd->curr_cmdc = p_get_pipe_cmdc(pipe);
-	debug_print("\t got %d cmds\n", cmd->curr_cmdc);
+	debug_print("Cmd: \t got %d cmds\n", cmd->curr_cmdc);
 	if (cmd->curr_cmdc < 2)
 		return (-1);
 	if (0 != _setup_pipes(cmd))

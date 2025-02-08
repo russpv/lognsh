@@ -108,11 +108,13 @@ typedef struct s_tok	t_tok;
 
 t_tok					*create_token(const char *s, int type, size_t pos);
 t_tok					*create_ht_token(void);
-void					*copy_token_data(const void *data);
+void	*copy_token(const void *tok);
 void					destroy_token(void *token);
 
 int						tok_set_globbing(t_tok *token);
 int						tok_set_expansion(t_tok *token);
+int tok_set_dqoute(t_tok *token);
+
 char					*tok_get_raw(t_tok *token);
 enum e_tok_type			tok_get_type(t_tok *token);
 bool					tok_get_option(t_tok *token);

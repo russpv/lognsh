@@ -3,6 +3,7 @@
 // Fn to map command names to corresponding built-ins
 t_builtin_fn    get_builtin(char *command)
 {
+    debug_print("get_builtin...\n");
     if (NULL != command)
     {
         if (ft_strcmp(command, BI_ECHO) == 0)

@@ -12,7 +12,7 @@ static t_tok	*_match_normal_token(t_lex *lexer, int *buf_idx)
 		if (1 == process_special_operators(lexer))
 			continue ;
 		lexer->buf[(*buf_idx)++] = *lexer->ptr++;
-		debug_print("------Buffer content: '%s'\n", lexer->buf);
+		debug_print("Lexer: ------Buffer content: '%s'\n", lexer->buf);
 		res = lex_ht_lookup(lexer);
 		if (res)
 			return (res);
@@ -25,13 +25,13 @@ static t_tok	*_match_word_or_name_or_exception(t_lex *lexer, int *buf_idx)
 {
     if (true == is_dollar_question(lexer))
     {
-        debug_print("----_match_word_or_name: got $? \n");
+        debug_print("Lexer: ----_match_word_or_name: got $? \n");
 		lexer->buf[(*buf_idx)++] = *lexer->ptr++;
         return lex_create_token(lexer, TOK_EXIT_STATUS);
     }
 	if (true == is_normal_delim(*lexer->ptr) && ft_strlen(lexer->buf) > 0)
 	{
-		debug_print("----_match_word_or_name: got %s\n", lexer->buf);
+		debug_print("Lexer: ----_match_word_or_name: got %s\n", lexer->buf);
 		if ('$' == lexer->buf[0])
 			return (lex_create_token(lexer, TOK_ENV_VAR));
 		return (lex_create_token(lexer, word_or_name(lexer->buf)));
@@ -48,11 +48,11 @@ static t_tok	*_match_normal_op(t_lex *lexer)
 	if (true == is_normal_delim(*lexer->ptr))
 	{
 		lexer->buf[0] = *lexer->ptr++;
-		debug_print("----_match_normal_op: got _%s_\n", lexer->buf);
+		debug_print("Lexer: ----_match_normal_op: got _%s_\n", lexer->buf);
 		res = lex_ht_lookup(lexer);
 		if (res)
 		{
-			debug_print("----_match_normal_op: match %s\n", lexer->buf);
+			debug_print("Lexer: ----_match_normal_op: match %s\n", lexer->buf);
 			return (res);
 		}
 	}
@@ -70,7 +70,7 @@ static t_tok	*_match_normal(t_lex *lexer)
 	t_tok	*res;
 	int		buf_idx;
 
-	debug_print("----_match_normal\n");
+	debug_print("Lexer: ----_match_normal\n");
 	res = NULL;
 	buf_idx = 0;
 	while (' ' == *lexer->ptr)
@@ -85,13 +85,13 @@ static t_tok	*_match_normal(t_lex *lexer)
 		return (res);
 	if ((unsigned char)OP_NULL == *lexer->ptr)
 	{
-		debug_print("----FOUND NULL\n");
+		debug_print("Lexer: ----FOUND NULL\n");
 		return (NULL);
 	}
 	res = _match_normal_op(lexer);
 	if (res)
 		return (res);
-	debug_print("----_match_normal DONE\n");
+	debug_print("Lexer: ----_match_normal DONE\n");
 	return (NULL);
 }
 
@@ -103,17 +103,17 @@ int	tokenize_normal(t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print("tokenize_normal\n");
+	debug_print("Lexer: tokenize_normal\n");
 	while (lexer->ptr && !is_transition_char(lexer, *lexer->ptr))
 	{
 		token = _match_normal(lexer);
-		debug_print("ptr at:_%c_\n", *lexer->ptr);
+		debug_print("Lexer: ptr at:_%c_\n", *lexer->ptr);
 		if (token)
 			if (0 != add_token(lexer, token))
 				return (1);
 		if (OP_NULL == *lexer->ptr)
 		{
-			debug_print("##### TOK EOF FOUND\n");
+			debug_print("Lexer: ##### TOK EOF FOUND\n");
 			return (0);
 		}
 	}

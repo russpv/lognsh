@@ -6,7 +6,7 @@ t_tok	*create_token(const char *s, int type, size_t pos)
 
 	if (!s)
 		return (NULL);
-	debug_print("create_token, init'g: %s_ t_%d \n", s, type);
+	debug_print("Token: create_token, init'g: %s_ t_%d \n", s, type);
 	token = malloc(sizeof(t_tok));
 	if (token)
 	{
@@ -35,12 +35,12 @@ void	destroy_token(void *token)
 	token = NULL;
 }
 
-void	*copy_token_data(const void *data)
+void	*copy_token(const void *tok)
 {
 	t_tok	*token;
 	t_tok	*new_token;
 
-	token = (t_tok *)data;
+	token = (t_tok *)tok;
 	new_token = malloc(sizeof(t_tok));
 	if (new_token == NULL)
 		return (NULL);
@@ -55,7 +55,7 @@ void	*copy_token_data(const void *data)
 int	tok_set_globbing(t_tok *token)
 {
 	token->do_globbing = true;
-	debug_print("tok_set_globbing: %s_ glob_%d \n", tok_get_raw(token), tok_get_globbing(token));
+	debug_print("Token: tok_set_globbing: %s_ glob_%d \n", tok_get_raw(token), tok_get_globbing(token));
 	return (0);
 }
 
@@ -68,7 +68,7 @@ int tok_set_dqoute(t_tok *token)
 int	tok_set_expansion(t_tok *token)
 {
 	token->do_expansion = true;
-	debug_print("tok_set_expansion: %s_ glob_%d \n", tok_get_raw(token), tok_get_expansion(token));
+	debug_print("Token: tok_set_expansion: %s_ glob_%d \n", tok_get_raw(token), tok_get_expansion(token));
 	return (0);
 }
 

@@ -19,7 +19,7 @@
 
 #define SHELL_EXE "./minish"
 
-#define RUN_E2E_TEST(test_name, input) \
+#define DEFINE_E2E_TEST(test_name, input) \
     void test_name(void) { \
         char *my_shell_output = run_my_shell(input); \
         char *bash_output = run_bash(input); \

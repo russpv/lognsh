@@ -26,7 +26,7 @@ int	push(t_pstack *stack)
 	}
 	else
 	{
-		debug_print("ERROR: Exceeded maximum parentheses.\n");
+		debug_print("Parser: ERROR: Exceeded maximum parentheses.\n");
 		return (1);
 	}
 }
@@ -35,7 +35,7 @@ int	pop(t_pstack *stack)
 {
 	if (--stack->depth < 0)
 	{
-		debug_print("ERROR: Unmatched parentheses.\n");
+		debug_print("Parser: ERROR: Unmatched parentheses.\n");
 		return (1);
 	}
 	return (0);

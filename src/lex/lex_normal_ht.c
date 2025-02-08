@@ -21,12 +21,12 @@ t_tok	*lex_ht_lookup(t_lex *lexer)
 	res = ht_lookup(lexer->hasht, lexer->buf);
 	if (res)
 	{
-		debug_print("Found hasht match. Ptr: %c\n", *lexer->ptr);
+		debug_print("Lexer: Found hasht match. Ptr: %c\n", *lexer->ptr);
 		if (true == ((t_ht_data)(ht_get_payload(res)))->is_substring)
 			res = do_one_char_lookahead(lexer, res);
 		if (true == is_normal_delim(*lexer->ptr) || true == _is_not_delimd(lexer->buf))
 		{
-			debug_print("Creating token...\n");
+			debug_print("Lexer: Creating token...\n");
 			return (lex_create_token(lexer,
 					((t_ht_data)ht_get_payload(res))->type));
 		}
@@ -50,7 +50,7 @@ struct s_ht_entry	*do_one_char_lookahead(t_lex *lexer, struct s_ht_entry *res)
 	if (!lexer->ptr || !*(s) || 0 == buflen)
 		return (NULL);
 	lexer->buf[buflen] = *(s);
-	debug_print("------_do_one_char_lookahead with:_%s_\n", lexer->buf);
+	debug_print("Lexer: ------_do_one_char_lookahead with:_%s_\n", lexer->buf);
 	test = ht_lookup(lexer->hasht, lexer->buf);
 	if (test)
 	{

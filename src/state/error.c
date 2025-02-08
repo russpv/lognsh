@@ -45,6 +45,7 @@ void print_command_not_found(const char *cmd, const char *caller)
     {
         write(STDERR_FILENO, caller, ft_strlen(caller));
         write(STDERR_FILENO, ": ", 2);
+        free((char *)caller);
     }
     write(STDERR_FILENO, cmd, ft_strlen(cmd));
     write(STDERR_FILENO, ": command not found\n", 20);

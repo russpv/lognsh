@@ -80,7 +80,7 @@ char *run_my_shell(const char *cmd)
 
         // Read the output from the pipe
         int bytesRead;
-        while ((bytesRead = read(outpipefds[0], buffer, sizeof(buffer) - 1)) > 0) {
+        while ((bytesRead = (int)read(outpipefds[0], buffer, sizeof(buffer) - 1)) > 0) {
             buffer[bytesRead] = '\0';
             strcat(result, buffer);  // Append the output
         }
