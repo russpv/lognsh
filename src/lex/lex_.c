@@ -27,7 +27,7 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 {
 	t_lex	*lexer;
 
-	debug_print("create_lexer\n");
+	debug_print("Lexer: create_lexer\n");
 	lexer = malloc(sizeof(t_lex));
 	if (lexer)
 	{
@@ -55,27 +55,27 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 void	destroy_lexer(void *instance)
 {
 	t_lex *lexer = (t_lex *)instance;
-	debug_print("destroy_lexer...\n");
+	debug_print("Lexer: destroy_lexer...\n");
 	if (!lexer)
 		return ;
 	if (lexer->buf)
 	{
-		debug_print("destroy_lexer buf...\n");
+		debug_print("Lexer: destroy_lexer buf...\n");
 		free(lexer->buf);
 	}
 	if (lexer->eof_word)
 	{
-		debug_print("destroy_lexer eof_word...\n");
+		debug_print("Lexer: destroy_lexer eof_word...\n");
 		free(lexer->eof_word);
 	}
 	if (lexer->hasht)
 	{
-		debug_print("destroy_lexer hasht...\n");
+		debug_print("Lexer: destroy_lexer hasht...\n");
 		ht_destroy(lexer->hasht, lex_destroy_ht_node);
 	}
 	if (lexer->token_list)
 	{
-		debug_print("destroy_lexer token_list...\n");
+		debug_print("Lexer: destroy_lexer token_list...\n");
 		ft_lstclear(&lexer->token_list, destroy_token);
 	}
 	free(lexer);
@@ -100,7 +100,7 @@ t_lex	*tokenize(t_state *s, const char *input)
 		{
 			if (1 == lexer->tokenizer(lexer))
 			{
-				debug_print("tokenizer ERR\n");
+				debug_print("Lexer: tokenizer ERR\n");
 				destroy_lexer(lexer);
 				return (NULL);
 			}

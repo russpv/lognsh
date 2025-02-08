@@ -25,7 +25,7 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	const t_cmd			*c = (const t_cmd *)get_cmd(s);
 	const t_builtin_fn	bi = get_builtin(p_get_cmd(a));
 
-	debug_print("\t### cmd_exec_simple ###\n");
+	debug_print("Cmd: \t### cmd_exec_simple ###\n");
 	if (!c || !a)
 		return (-1);
 	if (p_get_type(a) != AST_NODE_CMD)
@@ -34,7 +34,7 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	exit_code = -1;
 	//TODO expansion on redirs, then
 	//TODO globbing on args and redirs (throw err ambiguous redir)
-	args = p_do_arg_processing(a);
+	args = p_do_arg_processing(a); // this needs to be freed
 	exit_code = _handle_no_command(a, args);
 	if (0 == exit_code)
 		return (exit_code);
@@ -42,17 +42,13 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	((t_cmd *)c)->argc = p_get_argc(a) + 1;
 	if (0 != p_do_redir_processing(a))
 		return (ERR_AMBIGUOUS_REDIR);
-	printf("Finished redirs.\n");
 	if (bi)
 		exit_code = exec_bi_call(s, bi);
 	else
 	{
-		printf("Doing log_command_info.\n");
 		log_command_info((t_cmd *)c, a);
-		printf("Doing run_cmd.\n");
-
 		exit_code = run_cmd(s, a);
 	}
-	printf("Finished command.\n");
+	debug_print("Cmd: Finished command.\n");
 	return (exit_code);
 }

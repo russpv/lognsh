@@ -52,17 +52,20 @@ static inline int	get_word_count(char const *p, char ch)
 	return (count);
 }
 
-static inline void	*do_ops(char const *s, char ***arr, char const *temp,
+static inline void	*copy_word(char const *s, char ***arr, char const *temp,
 		unsigned int i)
 {
-	(*arr)[i] = malloc(sizeof(char) * (temp - s + 1));
+	size_t len;
+
+	len = temp - s;
+	(*arr)[i] = malloc(sizeof(char) * (len + 1));
 	if (!(*arr)[i])
 	{
 		arr_free((*arr), i);
 		return (NULL);
 	}
-	(*arr)[i][temp - s] = 0;
-	ft_memmove((*arr)[i], s, temp - s);
+	(*arr)[i][len] = 0;
+	ft_memmove((*arr)[i], s, len);
 	return ((*arr)[i]);
 }
 
@@ -86,7 +89,7 @@ char	**ft_split(char const *s, char c)
 			temp = ft_strchr(s, 0);
 		if (temp - s > 0)
 		{
-			if (!do_ops(s, &arr, temp, i++))
+			if (!copy_word(s, &arr, temp, i++))
 				return (NULL);
 			--count;
 		}

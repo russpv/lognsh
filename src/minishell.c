@@ -1,11 +1,11 @@
-#include "minishell.h"
+#include "../include/minishell.h"
 
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_ast_node	*ast;
 	t_state		*s;
-	char input[MAX_INPUT];
+	char input[INPUT_BUF_SZ];
 
 	(void)argv;
 	(void)argc;
@@ -26,6 +26,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		while (1)
 		{
+			g_last_signal = -1;
 			set_input(s, readline(PROMPT));
 			if (NULL == get_input(s)) // handles Ctrl-D in parent process
 			{
@@ -40,7 +41,7 @@ int	main(int argc, char **argv, char **envp)
 			if (!ast)
 				err("ERR parse()\n"); //TODO refactor errors
 			set_exit_status(s, cmd_execute(s, ast));
-			s_free_cmd(s);
+			s_free_cmd_lex_parse(s);
 		}
 	}
 	destroy_state(s);

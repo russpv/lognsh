@@ -15,7 +15,7 @@ static int	_check_special_expansions(t_arg_data *data, const char *buf, char **v
 			*value = ft_itoa(*stat);
 		if (*value == NULL)
 			return (-1);
-		debug_print("_check_special_expansions got: %s\n", *value);
+		debug_print("Parser: _check_special_expansions got: %s\n", *value);
 		return (0);
 	}
 	return (1);
@@ -36,7 +36,7 @@ static void	p_do_expansion(void *c)
 	value = NULL;
 	ft_memset(buf, 0, sizeof(buf));
 	content = (t_arg_data *)c;
-	debug_print("p_do_expansion got: %s\n", content->raw);
+	debug_print("Parser: p_do_expansion got: %s\n", content->raw);
 	if (content->do_expansion)
 	{
 		raw_len = ft_strnlen(content->raw, 1024);
@@ -63,7 +63,7 @@ static void	p_do_expansion(void *c)
 				content->raw = new_raw;
 			}
 		}
-		debug_print("p_do_expansion found: %s\n", value);
+		debug_print("Parser: p_do_expansion found: %s\n", value);
 	}
 }
 
@@ -79,9 +79,9 @@ char	**p_do_arg_processing(t_ast_node *a)
 		return (NULL);
 	args = p_get_args(a);
 	ft_lstiter(*args, p_do_expansion); //TODO test that this does not corrupt the args list
-	debug_print("Before globbing: head: %p, first node: %p\n", args, *args ? (*args)->content : NULL);
+	debug_print("Parser: Before globbing: head: %p, first node: %p\n", args, *args ? (*args)->content : NULL);
 	ft_lstiter_ins_rwd(args, p_do_globbing);
-	debug_print("After globbing: head: %p, first node: %p\n", args, *args ? (*args)->content : NULL);
+	debug_print("Parser: After globbing: head: %p, first node: %p\n", args, *args ? (*args)->content : NULL);
 
 	a->data.cmd.argc = ft_lstsize(*args);
 	tmp = list_to_array(*args, a->data.cmd.argc);
@@ -101,7 +101,7 @@ int	p_do_redir_processing(t_ast_node *a)
 		return (-1);
 	redirs = p_get_redirs(a);
 	ft_lstiter(redirs, p_do_expansion);
-	debug_print("p_do_redir_processing...\n");
+	debug_print("Parser: p_do_redir_processing...\n");
 	orig_filen = ft_lstiterstr(redirs, p_do_globbing_redirs);
 	if (NULL != orig_filen)
 	{

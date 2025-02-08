@@ -20,7 +20,7 @@ static int	_do_child_ops(t_state *s)
 	if (-1 == p_do_redirections(c_getnode((t_cmd *)c)))
 		return (-1);
 	//destroy_state(s);
-	debug_print("Child exec'g %s\n", fullpath);
+	debug_print("Exec: Child exec'g %s\n", fullpath);
 	if (NULL == fullpath)
 		return (-1);
 	else if (-1 == execve(fullpath, (char **)argv, (char **)envp))
@@ -36,18 +36,19 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
 	const int	argc = (const int)c_get_argc((t_cmd *)c);
 
-	debug_print("exec_bi_call...\n");
+	debug_print("Exec: exec_bi_call...\n");
 	if (!argv || !bi || !c)
 		return (err("exec_bi_run: ERR null command parameters\n"), -1);
-	debug_print("exec_bi_call saving redir fns...\n");
+	debug_print("Exec: exec_bi_call saving redir fns...\n");
 	save_redirs((t_cmd *)c);
-	debug_print("exec_bi_call doing redirs ...\n");
+	debug_print("Exec: exec_bi_call doing redirs ...\n");
 	if (-1 == p_do_redirections(c_getnode((t_cmd *)c)))
 		return (-1);
-	debug_print("Shell exec'g builtin\n");
+	debug_print("Exec: Shell exec'g builtin\n");
 	if (-1 == bi(s, (char **)argv, argc))
-		debug_print("ERR bi()\n");
+		debug_print("Exec: ERR bi()\n");
 	restore_redirs((t_cmd *)c);
+	s_free_cmd(s);
 	return (0);
 }
 
@@ -55,6 +56,7 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 int	exec_fork_execve(t_state *s)
 {
 	pid_t	p;
+	int	exit_code;
 
 	p = fork();
 	if (0 == p)
@@ -68,7 +70,8 @@ int	exec_fork_execve(t_state *s)
 	}
 	else if (p < 0)
 		err("ERR exec_fork_execve");
-	waitchild(get_status(s), 1);
-	// cleanup(&st);
-	return (get_exit_status(*get_status(s)));
+	waitchild(&exit_code, 1);
+	set_exit_status(s, exit_code);
+	s_free_cmd(s);
+	return (exit_code);
 }

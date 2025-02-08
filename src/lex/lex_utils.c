@@ -3,7 +3,7 @@
 /* add to llist tail a new token, clear buf */
 int	add_token(t_lex *lexer, t_tok *token)
 {
-	debug_print("add_token\n");
+	debug_print("Lexer: add_token\n");
 	if (token && lexer)
 	{
 		memset(lexer->buf, 0, LEX_BUFSZ);
@@ -18,7 +18,7 @@ t_tok	*lex_create_token(t_lex *lexer, int type)
 {
 	t_tok	*token;
 
-	debug_print("lex_create_token\n");
+	debug_print("Lexer: lex_create_token\n");
 	if (!lexer)
 		return (NULL);
 	token = create_token(lexer->buf, type, (size_t)(lexer->ptr \
@@ -42,7 +42,7 @@ inline bool	is_too_long(const char *input)
 		return (true);
 	if (ft_strlen(input) >= LEX_BUFSZ)
 	{
-		debug_print("ERROR: Input exceeds buf size.\n");
+		debug_print("Lexer: ERROR: Input exceeds buf size.\n");
 		return (true);
 	}
 	return (false);

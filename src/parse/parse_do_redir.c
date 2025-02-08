@@ -17,14 +17,14 @@ void handle_redirect_in(const t_redir_data *node)
 
 void handle_heredoc(const t_redir_data *node)
 {
-	if (!node->doc)
+	if (!node->heredoc_body)
 		err("No heredoc for input redirection.\n");
 	const int append = false;
 	int fildes[2];
 
 	if (pipe(fildes) < 0)
 		err("heredoc pipe()");
-	write(fildes[1], node->doc, ft_strlen(node->doc));
+	write(fildes[1], node->heredoc_body, ft_strlen(node->heredoc_body));
 	close(fildes[1]);
 	if (-1 == redirect(&fildes[0], NULL, STDIN_FILENO, append))
 		err("Heredoc redirection issue\n");
@@ -58,7 +58,7 @@ static void	_p_do_redirection(void *content)
 {
 	if (NULL == content)
 		return ;
-	debug_print("_p_do_redirection...\n");
+	debug_print("Parser: _p_do_redirection...\n");
 	const t_redir_data *node = (t_redir_data *)content;
     redir_fn handlers[] = {
         [TOK_REDIRECT_IN] = handle_redirect_in,
@@ -69,10 +69,10 @@ static void	_p_do_redirection(void *content)
 
 	if (!node->type)
 	{
-		debug_print("_p_do_redirection got NULL\n");
+		debug_print("Parser: _p_do_redirection got NULL\n");
 		return ;
 	}
-	debug_print("_p_do_redirection got smthg and executing...\n");
+	debug_print("Parser: _p_do_redirection got smthg and executing...\n");
     if (handlers[node->type]) 
         handlers[node->type](node);
 	else 
@@ -91,7 +91,7 @@ int	p_do_redirections(t_ast_node *a)
 		return (EINVAL);
 	if (!node_has_redirects(a))
 		return (0);
-	debug_print("p_do_redirections, doing redirs...\n");
+	debug_print("Parser: p_do_redirections, doing redirs...\n");
 	ft_lstiter(a->data.cmd.redirs, _p_do_redirection);
 	return (0);
 }

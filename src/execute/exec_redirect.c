@@ -25,7 +25,7 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 		fd = open(topath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
 		fd = -1;
-	debug_print("_redirect_logic fd:%d\n", fd);
+	debug_print("Exec: _redirect_logic fd:%d\n", fd);
 	return (fd);
 }
 

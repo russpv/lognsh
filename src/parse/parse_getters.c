@@ -5,7 +5,7 @@ char *p_get_cmd(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)
 		return (NULL);
-	debug_print("p_get_cmd got: _%s_\n", a->data.cmd.name);
+	debug_print("Parser: p_get_cmd got: _%s_\n", a->data.cmd.name);
 	return (a->data.cmd.name);
 }
 
@@ -18,7 +18,7 @@ t_list **p_get_args(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)
 		return (NULL);
-	debug_print("p_get_args got: _%s_\n", a->data.cmd.name);
+	debug_print("Parser: p_get_args got: _%s_\n", a->data.cmd.name);
 	return (&a->data.cmd.args);
 }
 
@@ -28,24 +28,47 @@ t_list *p_get_args(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)
 		return (NULL);
-	debug_print("p_get_args got: _%s_\n", a->data.cmd.name);
+	debug_print("Parser: p_get_args got: _%s_\n", a->data.cmd.name);
 	return (a->data.cmd.args);
 }*/
 
-/* Returns a t_ast_node's t_list *redirs of t_redir_data if type is AST_NODE_CMD*/
+/* Returns a t_ast_node's t_list *redirs of t_redir_data */
 t_list *p_get_redirs(t_ast_node *a)
 {
-	if (a->type != AST_NODE_CMD)
-		return (NULL);
-	debug_print("p_get_redirs got: _%s_\n", a->data.cmd.name);
-	return (a->data.cmd.redirs);
+	if (a->type == AST_NODE_CMD)
+	{
+		debug_print("Parser: p_get_redirs got: _%s_\n", a->data.cmd.name);
+		return (a->data.cmd.redirs);
+	}
+	else if (a->type == AST_NODE_PROC)
+	{
+		debug_print("Parser: p_get_redirs got a proc\n");
+		return (a->data.proc.redirs); //TODO
+	}
+	return (NULL);
+}
+
+/* Returns a t_ast_node's t_list **redirs of t_redir_data for modification */
+t_list **p_get_redirs_ptr(t_ast_node *a)
+{
+	if (a->type == AST_NODE_CMD)
+	{
+		debug_print("Parser: p_get_redirs_ptr got: _%s_\n", a->data.cmd.name);
+		return (&a->data.cmd.redirs);
+	}
+	else if (a->type == AST_NODE_PROC)
+	{
+		debug_print("Parser: p_get_redirs_ptr got a proc\n");
+		return (&a->data.proc.redirs); //TODO
+	}
+	return (NULL);
 }
 
 int		p_get_argc(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)
 		return (-1);
-	debug_print("p_get_argc got: _%s_\n", a->data.cmd.name);
+	debug_print("Parser: p_get_argc got: _%s_\n", a->data.cmd.name);
 	return (a->data.cmd.argc);
 }
 

@@ -40,7 +40,7 @@ static t_list	*_match_glob(const char *pattern)
 	t_list *lst = NULL;
 	struct dirent *res;
 
-	debug_print("match_glob got pattern: %s\n", pattern);
+	debug_print("Parser: match_glob got pattern: %s\n", pattern);
 	DIR *dir = opendir(".");
 	if (!dir)
 	{
@@ -50,10 +50,10 @@ static t_list	*_match_glob(const char *pattern)
 	res = readdir(dir);
 	while (res)
 	{
-		debug_print("match_glob readdir: %s\n", res->d_name);
+		debug_print("Parser: match_glob readdir: %s\n", res->d_name);
 		if (true == _matches_pattern(res->d_name, pattern))
 		{
-			debug_print("match_glob matched: %s\n", res->d_name);
+			debug_print("Parser: match_glob matched: %s\n", res->d_name);
 			ft_lstadd_back(&lst, ft_lstnew(ft_strdup(res->d_name))); // TODO malloc guard
 		}
 		res = readdir(dir);
@@ -68,13 +68,13 @@ int	p_do_globbing_redirs(void *c)
 	t_list *lst = NULL;
 
 	t_redir_data *content = (t_redir_data *)c;
-	debug_print("p_do_globbing_redirs got redir type: %d fn:%s doc: %s do_glob:%d\n", content->type, content->filename, content->doc, content->do_globbing);
+	debug_print("Parser: p_do_globbing_redirs got redir type: %d fn:%s doc: %s do_glob:%d\n", content->type, content->filename, content->heredoc_body, content->do_globbing);
 	if (true == content->do_globbing)
 	{
 		lst = _match_glob((const char *)content->filename);
 		if (lst)
 		{
-			debug_print("p_do_globbing_redirs found (1st): %s\n", (char *)lst->content);
+			debug_print("Parser: p_do_globbing_redirs found (1st): %s\n", (char *)lst->content);
 			if (ft_lstsize(lst) > 1) 
 				return (-1);
 			else
@@ -112,13 +112,13 @@ void	p_do_globbing(t_list **lst_node, void *lst_c)
 {
 	t_list *lst = NULL;
 	t_arg_data *content = (t_arg_data *)lst_c;
-	debug_print("p_do_globbing got arg: %s, lst:%p\n", content->raw, (void*)lst_node);
+	debug_print("Parser: p_do_globbing got arg: %s, lst:%p\n", content->raw, (void*)lst_node);
 	if (true == content->do_globbing)
 	{
 		lst = _match_glob(content->raw);
 		if (lst)
 		{
-			debug_print("p_do_globbing found %d matches, 1st: %s\n", ft_lstsize(lst), lst->content);
+			debug_print("Parser: p_do_globbing found %d matches, 1st: %s\n", ft_lstsize(lst), lst->content);
 			if (ft_lstsize(lst) > 1) //need to insert
 			{
 				ft_lstdelone_rwd(lst_node, lst_node, destroy_arg);

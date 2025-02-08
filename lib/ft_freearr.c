@@ -7,8 +7,10 @@ void	ft_freearr(void **arr, int size)
 	int		i;
 
 	i = -1;
+	if (NULL == arr)
+		return ;
 	ptr = (char **)arr;
-	if (size)
+	if (size > 0)
 	{
 		while (++i < size)
 			if (ptr[i])

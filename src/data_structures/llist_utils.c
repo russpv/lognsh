@@ -79,8 +79,8 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 
 /* LSTNEW
 ** Returns new linked list head ptr with one node
+** But content is not copied
 */
-
 t_list	*ft_lstnew(void *content)
 {
 	t_list	*ll;
@@ -95,8 +95,8 @@ t_list	*ft_lstnew(void *content)
 }
 
 
-/*
-t_list	*ft_lstnew_copy(void *content, void *(*f)(void *))
+/* Returns new linked list node with new content. */
+t_list	*ft_lstnew_copystr(void *content, char *(*f)(const char *))
 {
 	t_list	*new_node;
 
@@ -112,7 +112,7 @@ t_list	*ft_lstnew_copy(void *content, void *(*f)(void *))
 	new_node->next = NULL;
 	new_node->prev = NULL;
 	return (new_node);
-}*/
+}
 
 /* LSTSIZE
 ** Returns the node count of the linked list
