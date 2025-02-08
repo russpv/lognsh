@@ -1,29 +1,35 @@
 #include "parse_int.h"
 
-/* Deletes llist content */
+/* Fully frees a struct s_redir, for use in llist destroy */
 void	destroy_redir(void *in)
 {
 	t_redir_data *redir = (t_redir_data *)in;
-	debug_print("Parser: destroy_redir...\n");
 
+	if (NULL == redir)
+		return ;
+	debug_print("Parser: destroy_redir...\n");
 	if (redir->symbol)
 		free(redir->symbol);
 //	if (redir->filename)
 //		free(redir->filename); //note: free lexer to clean
 	if (redir->heredoc_body)
 		free(redir->heredoc_body);
+	free(redir);
 }
 
-/* Deletes llist content */
+/* Fully frees a struct s_arg, for use in llist destroy */
 void	destroy_arg(void *in)
 {
 	t_arg_data *arg = (t_arg_data *)in;
 	debug_print("Parser: destroy_arg...\n");
 
+	if (NULL == arg)
+		return ;
 	if (arg->raw)
 		free(arg->raw);
 	if (arg->tmp)
 		ft_freearr((void **)arg->tmp, -1);
+	free(arg);
 }
 
 void	destroy_cmd_node(void *n)
@@ -32,6 +38,8 @@ void	destroy_cmd_node(void *n)
 
 	debug_print("Parser: destroy_cmd_node...\n");
 
+	if (NULL == node)
+		return ;
 	if (node->type != AST_NODE_CMD)
 		return ;
 	if (node->data.cmd.name)
@@ -49,9 +57,15 @@ void	destroy_proc_node(void *n)
 
 	debug_print("Parser: destroy_proc_node...\n");
 
+	if (NULL == node)
+		return ;
 	if (AST_NODE_PROC != node->type)
 		return ;
-	ft_lstclear(&node->data.proc.cmds, destroy_ast);
+	if (node->data.proc.redirs)
+		ft_lstclear(&node->data.proc.redirs, destroy_redir);
+	if (node->data.proc.cmds)	
+		ft_lstclear(&node->data.proc.cmds, destroy_ast_node);
+	free(node);
 }
 
 // destroy t_list cmds, char **operators
@@ -61,11 +75,15 @@ void	destroy_log_node(void *n)
 
 	debug_print("Parser: destroy_log_node...\n");
 
+	if (NULL == node)
+		return ;
 	if (AST_NODE_LOG != node->type)
 		return ;
 	if (node->data.log.operators)
 		ft_lstclear(&node->data.log.operators, free);
-	ft_lstclear(&node->data.log.cmds, destroy_ast);
+	if (node->data.log.cmds)
+		ft_lstclear(&node->data.log.cmds, destroy_ast_node);
+	free(node);
 }
 
 void	destroy_pipe_node(void *n)
@@ -74,17 +92,25 @@ void	destroy_pipe_node(void *n)
 
 	debug_print("Parser: destroy_pipe_node...\n");
 
+	if (NULL == node)
+		return ;
 	if (AST_NODE_PIPELINE != node->type)
 		return ;
-	ft_lstclear(&node->data.pipe.cmds, destroy_ast);
+	ft_lstclear(&node->data.pipe.cmds, destroy_ast_node);
+	free(node);
 }
 
-void	destroy_ast(void *node)
+/* Switch for freeing various t_ast_node types 
+ * For use in llist destroy
+ */
+void	destroy_ast_node(void *node)
 {
 	t_ast_node *ast = (t_ast_node *)node;
 
 	debug_print("Parser: destroy_ast...\n");
 
+	if (NULL == ast)
+		return ;
 	if (AST_NODE_PROC == ast->type)
 		destroy_proc_node(ast);
 	else if (AST_NODE_CMD == ast->type)
@@ -144,7 +170,7 @@ void	destroy_parser(void *instance)
 	debug_print("Parser: destroy_parser...\n");
 	if (p->ast)
 	{
-		destroy_ast(p->ast);
+		destroy_ast_node(p->ast);
 		p->ast = NULL;
 	}
 	if (p->tokens)

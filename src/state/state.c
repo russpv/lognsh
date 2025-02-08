@@ -45,6 +45,9 @@ t_state	*init_state(char **envp)
 		s->current_cmd = NULL;
 		s->input = NULL;
 		s->envp = envp;
+		s->destroy_command = NULL;
+		s->destroy_lexer = NULL;
+		s->destroy_parser = NULL;
 	}
 	return (s);
 }

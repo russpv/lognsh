@@ -5,7 +5,6 @@
  */
 bool	is_at_end(t_parser *p)
 {
-	debug_print("\tParser: is_at_end found TOK_EOF\n");
 	return (p->curr_idx >= p->token_count || tok_get_type(peek(p)) == TOK_EOF);
 }
 

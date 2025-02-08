@@ -5,7 +5,8 @@ void	destroy_cmd(void *c)
 	t_cmd	*cmd;
 
 	cmd = (t_cmd *)c;
-	st_destroy(cmd->st);
+	if (cmd->st)
+		st_destroy(cmd->st);
 	if (cmd->fullpath)
 		free(cmd->fullpath);
 	if (cmd->redirs)

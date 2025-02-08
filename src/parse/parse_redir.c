@@ -81,7 +81,6 @@ static int	_add_redir(t_ast_node *node, t_redir_data *red)
 /* Consumes redir tokens and adds them to node (arg 2) linked list
  * Returns NULL if syntax error
  * Heredocs already turned into TOK_HEREDOC_WORD
- * TODO: handle TOK_HEREDOC_WORDs
  */
 static t_list	*_parse_redir(t_parser *p, t_ast_node *node)
 {
@@ -95,9 +94,9 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *node)
 	while (!is_at_end(p) && is_redir_token(tok))
 	{
 		red = _init_redir(node, tok_get_type((t_tok *)tok));
-		tok = advance(p);
 		if (false == is_heredoc_token((t_tok *)tok))
 		{
+			tok = advance(p);
 			if (0 != _process_normal_redir(p, tok, &name, red))
 				return (NULL);
 		}
@@ -112,14 +111,18 @@ static t_list	*_parse_redir(t_parser *p, t_ast_node *node)
 	return (p_get_redirs(node));
 }
 
-/* Adds redirections to node's t_list */
+/* PROCESS REDIR
+ * Adds redirections to node's t_list 
+ * Upon failure, frees any downstream heap mem
+ * and returns. Does nothing to args. 
+ */
 int	process_redir(t_parser *p, t_ast_node *ast_node)
 {
 	if (is_redir_token(peek(p)))
 	{
-		if (!_parse_redir(p, ast_node))
+		if (NULL == _parse_redir(p, ast_node))
 		{
-			free(ast_node);
+			//free(ast_node);
 			err("Failed to parse redirection\n");
 			return (1);
 		}

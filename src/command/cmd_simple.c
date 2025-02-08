@@ -49,6 +49,6 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 		log_command_info((t_cmd *)c, a);
 		exit_code = run_cmd(s, a);
 	}
-	debug_print("Cmd: Finished command.\n");
+	debug_print("Cmd: Finished cmd_exec_simple.\n");
 	return (exit_code);
 }

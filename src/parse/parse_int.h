@@ -187,7 +187,7 @@ typedef struct s_parser
 	t_ast_node				*ref_node;
 	int						curr_idx;
 	t_tok					*curr_cmd;
-	t_ast_node				*ast;
+	t_ast_node				*ast; 			/* Ptr to root AST node */
 	bool					parse_error;
 	t_state					*global_state;
 }							t_parser;
@@ -249,7 +249,7 @@ void handle_heredoc(const t_redir_data *node);
 char						**list_to_array(t_list *args, int argc);
 
 /* AST list frees */
-void	destroy_ast(void *node);
+void	destroy_ast_node(void *node);
 void	destroy_pipe_node(void *n);
 void	destroy_cmd_node(void *n);
 void	destroy_proc_node(void *n);

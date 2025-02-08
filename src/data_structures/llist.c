@@ -131,6 +131,8 @@ void	ft_lstdelone(t_list **lst, t_list *node, void (*del)(void *))
 {
 	if (!lst || !node || !del)
 		return ;
+	if (!*lst)
+		return ;
     if (node->prev)
         node->prev->next = node->next;
     if (node->next)
