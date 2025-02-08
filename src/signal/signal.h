@@ -24,13 +24,6 @@ void    set_signal_handlers(void);
 // un-register signal handlers back to defaults
 void	reset_signal_handlers(void);
 
-// turn this into an ADT 
-/*
-struct s_signal_manager;
-{
+// RKP: this module doesn't manage any state, or need to, so struct is not really needed
 
-}
-
-typedef struct s_signal_manager *t_signal_mgr;
-*/
 #endif
