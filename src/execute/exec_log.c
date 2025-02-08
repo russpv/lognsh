@@ -10,7 +10,7 @@ int	exec_fork_run(t_state *s, t_ast_node *node, int i, execute_fn executor)
 	pid_t pid;
 	int exit_status;
 
-	debug_print("exec_fork_run: got %dth\n", i);
+	debug_print("Exec: exec_fork_run: got %dth\n", i);
 	pid = fork();
 	if (pid < 0)
 	{

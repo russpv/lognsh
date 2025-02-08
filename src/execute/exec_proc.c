@@ -3,7 +3,7 @@
 /* Forks child and runs executor for 
  * higher-level AST nodes.
  */
-int exec_fork_func(t_state *s, t_ast_node *node, execute_fn executor)
+int exec_fork_wait(t_state *s, t_ast_node *node, execute_fn executor)
 {
 	pid_t pid;
 	int status;

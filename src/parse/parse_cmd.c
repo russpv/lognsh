@@ -1,5 +1,18 @@
 #include "parse_int.h"
 
+// Takes generic ast_node, creates cmd_node in it
+static void	_init_cmd_node(t_ast_node *ast_node)
+{
+	ast_node->type = AST_NODE_CMD;
+	ast_node->data.cmd.args = NULL;
+	ast_node->data.cmd.redirs = NULL;
+	ast_node->data.cmd.redc = 0;
+	ast_node->data.cmd.argc = 0;
+	ast_node->data.cmd.do_expansion = false;
+	ast_node->data.cmd.do_globbing = false;
+	ast_node->data.cmd.do_redir_globbing = false;
+}
+
 /* t_arg_data llist copy constructor using a llist of char*.
  * Returns new void *content for llist construction/duplication.
  */
@@ -20,7 +33,7 @@ void *create_arg_data_node(void *content)
 	return ((void *)arg_data);
 }
 
-/* Must deep copy token strings to decouple token-list/ast */
+/* Must deep copy token strings to decouple token-list/ast. */
 static void	_init_arg_data(t_parser *p, t_ast_node *cmd_node, t_arg_data *arg, t_tok *tok)
 {
 	arg->raw = ft_strdup(tok_get_raw(tok));
@@ -38,8 +51,9 @@ static void	_init_arg_data(t_parser *p, t_ast_node *cmd_node, t_arg_data *arg, t
 		cmd_node->data.cmd.do_globbing = true;
 }
 
-/* Consumes arg tokens and adds them to command node linked list
- * Returns NULL if syntax error
+/* This helper consumes argument tokens and adds them to ast node's 
+ * linked list.
+ * Returns NULL if syntax error.
  */
 static t_list	*_parse_args(t_parser *p, t_ast_node *cmd_node)
 {
@@ -62,13 +76,17 @@ static t_list	*_parse_args(t_parser *p, t_ast_node *cmd_node)
 			free(arg);
 			return (NULL);
 		}
-		debug_print("\t_parse_args adding arg:%s\n", arg->raw);
+		debug_print("Parser: \t_parse_args adding arg:%s\n", arg->raw);
 		ft_lstadd_back(&cmd_node->data.cmd.args, new);
 		cmd_node->data.cmd.argc++;
 	}
 	return (cmd_node->data.cmd.args);
 }
 
+/* This helper consumes any redirection tokens, before or after the command name,
+ * and its following arguments, if any.
+ * If the command name is an expansion, handled later in Commmand module.
+ */
 static t_ast_node	*_process_cmd(t_parser *p, t_ast_node *cmd_node)
 {	
 	if (0 != process_redir(p, cmd_node))
@@ -93,31 +111,21 @@ static t_ast_node	*_process_cmd(t_parser *p, t_ast_node *cmd_node)
 	return (cmd_node);
 }
 
-static void	_init_cmd_data(t_ast_node *cmd_node)
-{
-	cmd_node->type = AST_NODE_CMD;
-	cmd_node->data.cmd.args = NULL;
-	cmd_node->data.cmd.redirs = NULL;
-	cmd_node->data.cmd.redc = 0;
-	cmd_node->data.cmd.argc = 0;
-	cmd_node->data.cmd.do_expansion = false;
-	cmd_node->data.cmd.do_globbing = false;
-	cmd_node->data.cmd.do_redir_globbing = false;
-
-}
-
-/* Parsing of atomic command. */
+/* PARSE_CMD
+ * Creates node of type AST_NODE_CMD 
+ * and adds it to AST
+ */
 t_ast_node	*parse_cmd(t_parser *p)
 {
-	t_ast_node	*cmd_node;
+	t_ast_node	*ast_node;
 
 	st_push(p->st, AST_NODE_CMD);
-	cmd_node = malloc(sizeof(t_ast_node));
-	if (cmd_node)
+	ast_node = malloc(sizeof(struct s_node));
+	if (ast_node)
 	{
-		debug_print("cmd tok: %s\n", tok_get_raw(peek(p)));
-		_init_cmd_data(cmd_node);
-		if (!_process_cmd(p, cmd_node))
+		debug_print("Parser: cmd tok: %s\n", tok_get_raw(peek(p)));
+		_init_cmd_node(ast_node);
+		if (!_process_cmd(p, ast_node))
 			return (NULL);
 	}
 	else
@@ -125,7 +133,7 @@ t_ast_node	*parse_cmd(t_parser *p)
 		err("Memory allocation failed for command node\n");
 		return (NULL);
 	}
-	p->last_node = cmd_node;
+	p->last_node = ast_node;
 	st_pop(p->st);
-	return (cmd_node);
+	return (ast_node);
 }

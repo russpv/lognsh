@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 17:11:09 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/04 09:23:30 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/02/08 01:50:53 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,28 @@ void	set_signal_handlers(void)
 
 void	reset_signal_handlers(void)
 {
-	signal(SIGINT, SIG_DFL);  
-	signal(SIGQUIT, SIG_DFL); 
+	debug_print("reset_signal_handlers\n");
+///	signal(SIGINT, SIG_DFL);  
+	//signal(SIGQUIT, SIG_DFL); 
+
+	    // Reset SIGINT to default action (usually terminate the process)
+    struct sigaction sa_int;
+    sa_int.sa_handler = SIG_DFL;        // Set the handler to the default action
+    sigemptyset(&sa_int.sa_mask);       // Clear the signal mask (no signals are blocked during handler)
+    sa_int.sa_flags = 0;                // No special flags
+    sigaction(SIGINT, &sa_int, NULL);   // Apply the SIGINT handler
+
+    // Reset SIGQUIT to default action (usually terminate the process and dump core)
+    struct sigaction sa_quit;
+    sa_quit.sa_handler = SIG_DFL;       // Set the handler to the default action
+    sigemptyset(&sa_quit.sa_mask);      // Clear the signal mask
+    sa_quit.sa_flags = 0;               // No special flags
+    sigaction(SIGQUIT, &sa_quit, NULL); // Apply the SIGQUIT handler
+}
+
+int	handle_last_signal(void)
+{
+	if (SIGINT == g_last_signal)
+		return (128 + SIGINT);
+	return (0);
 }

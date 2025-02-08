@@ -68,7 +68,7 @@ void	destroy_state(t_state *s)
 /* Destroys parser before lexer 
  * as parser wraps some lexer token content
  */
-void	s_free_cmd(t_state *state)
+void	s_free_cmd_lex_parse(t_state *state)
 {
 	if (TESTFLAG == 0)
 		free(state->input);
@@ -83,6 +83,18 @@ void	s_free_cmd(t_state *state)
 		state->destroy_lexer(state->current_lexer);
 		state->current_lexer = NULL;
 	}
+	if (state->current_cmd)
+	{
+		state->destroy_command(state->current_cmd);
+		state->current_cmd = NULL;
+	}
+}
+
+/* Destroys parser before lexer 
+ * as parser wraps some lexer token content
+ */
+void	s_free_cmd(t_state *state)
+{
 	if (state->current_cmd)
 	{
 		state->destroy_command(state->current_cmd);

@@ -25,7 +25,8 @@ TESTDIR = test
 CC = cc 
 CFLAGS = -Wall -Wextra -Werror -Wpedantic -Wunreachable-code -Wconversion \
 	-Wformat -Wmissing-declarations -Wuninitialized -Wmaybe-uninitialized \
-	-Wshadow -Wclobbered -Wsign-compare -Wredundant-decls -g -DDEBUGMODE -DLOGMODE # -fsanitize=address
+	-Wshadow -Wclobbered -Wsign-compare -Wredundant-decls -g  -DDEBUGMODE -DLOGMODE # -fsanitize=address
+TEST_CFLAGS = -Wall -Wextra -Werror -g 
 EXT_CFLAGS = -DEXTENDEDFUNC 
 LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses # -fsanitize=address
 LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses 
@@ -110,11 +111,11 @@ $(TEST_TARGET) : $(UNITY_OBJ) $(LIB_PATH) $(TEST_OBJECTS)
 # Compile Unity
 $(OBJDIR)/$(TESTDIR)/%.$(OBJEXT): $(EXTDIR)/unity/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I$(EXTDIR)/unity -c $< -o $@
+	$(CC) $(TEST_CFLAGS) -I$(EXTDIR)/unity -c $< -o $@
 
 $(OBJDIR)/$(TESTDIR)/%.$(OBJEXT): $(TESTDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I$(EXTDIR)/unity -c $< -o $@
+	$(CC) $(TEST_CFLAGS) -I$(EXTDIR)/unity -c $< -o $@
 
 
 bonus: .bonus_made

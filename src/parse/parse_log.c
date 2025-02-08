@@ -1,5 +1,8 @@
 #include "parse_int.h"
 
+
+// TODO init_log();
+
 t_ast_node	*parse_logical(t_parser *p)
 {
 	t_ast_node	*log_node;
@@ -10,7 +13,7 @@ t_ast_node	*parse_logical(t_parser *p)
 
 	if (!p->last_node) // need to have something parsed already
 		return (NULL);
-	debug_print("parsing logical\n");
+	debug_print("Parser: parsing logical\n");
 	st_push(p->st, AST_NODE_LOG);
 	log_node = malloc(sizeof(t_ast_node));
 	if (log_node)
@@ -21,7 +24,7 @@ t_ast_node	*parse_logical(t_parser *p)
 		log_node->data.log.operators = NULL;
 		while (!is_at_end(p) && is_log_token(peek(p)))
 		{
-			op = ft_lstnew(tok_get_raw(peek(p))); // store the op token
+			op = ft_lstnew_copystr(tok_get_raw(peek(p)), ft_strdup); // store the op token
 			if (op)
 			{
 				ft_lstadd_back(&log_node->data.log.operators, op);
@@ -45,7 +48,7 @@ t_ast_node	*parse_logical(t_parser *p)
 				free(log_node);
 				return (NULL);
 			}
-			debug_print("parsing logical: getting next cmd...\n");
+			debug_print("Parser: parsing logical: getting next cmd...\n");
 			next_cmd = parse_full_cmd(p);
 			if (!next_cmd)
 			{
@@ -67,7 +70,7 @@ t_ast_node	*parse_logical(t_parser *p)
 			return (NULL); // Return NULL on error
 		}
 	}
-	debug_print("parsed logical of %d cmds\n", log_node->data.log.cmdc);
+	debug_print("Parser: parsed logical of %d cmds\n", log_node->data.log.cmdc);
 	st_pop(p->st);
 	p->last_node = log_node;
 	return (log_node);

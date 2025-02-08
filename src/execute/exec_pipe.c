@@ -96,7 +96,7 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
 	int	counter;
 	const int **fildes = c_get_fildes(c);
 
-	debug_print("_close_other_pipe_ends on %dth cmd.\n", i);
+	debug_print("Exec: _close_other_pipe_ends on %dth cmd.\n", i);
 	pipe = -1;
 	counter = 0;
 	while (++pipe < c_get_cmdc(c) - 1)
@@ -112,7 +112,7 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
 			counter++;
 		}
 	}
-	debug_print("Child %d: closed %d pipe ends (%d cmds)\n", getpid(), counter, \
+	debug_print("Exec: Child %d: closed %d pipe ends (%d cmds)\n", getpid(), counter, \
 		c_get_cmdc(c));
 	return (1);
 }
@@ -120,13 +120,14 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
 /* Child processing for pipe command
  * Forks, redirects to pipe, recursively
  * calls top level node executor
+ * Calling command func will wait for exit status
  */
-int	exec_fork_redirect_run(t_state *s, t_ast_node *node, int i, execute_fn executor)
+int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i, execute_fn executor)
 {
 	pid_t pid;
 	int exit_status;
 
-	debug_print("exec_fork_func_child: got %dth\n", i);
+	debug_print("Exec: exec_fork_func_child: got %dth\n", i);
 	pid = fork();
 	if (pid < 0)
 	{
@@ -137,6 +138,8 @@ int	exec_fork_redirect_run(t_state *s, t_ast_node *node, int i, execute_fn execu
 	{
 		_close_other_pipe_ends(get_cmd(s), i);
 		_redirect_pipes(get_cmd(s), i);
+		if (0 != handle_last_signal())
+			return (handle_last_signal());
 		exit_status = executor(s, node);
 		destroy_state(s);
 		exit(exit_status);

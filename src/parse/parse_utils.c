@@ -11,12 +11,13 @@ t_tok	*advance(t_parser *p)
 	}
 	return (tmp);
 }
-
+// Returns current token ptr token
 t_tok	*peek(t_parser *p)
 {
 	return (p->curr_tok->content);
 }
 
+// Returns p->curr_tok->next->content
 t_tok	*lookahead(t_parser *p)
 {
 	if (is_at_end(p))

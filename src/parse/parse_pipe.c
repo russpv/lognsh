@@ -1,5 +1,8 @@
 #include "parse_int.h"
 
+
+//TODO init_pipe()
+
 /* Adds parsed cmds to a pipeline. First cmd must be parsed already. */
 t_ast_node	*parse_pipeline(t_parser *p)
 {
@@ -10,7 +13,7 @@ t_ast_node	*parse_pipeline(t_parser *p)
 
 	if (!p->last_node)
 		return (NULL);
-	debug_print("parsing pipeline\n");
+	debug_print("Parser: parsing pipeline\n");
 	st_push(p->st, AST_NODE_PIPELINE);
 	pipe_node = malloc(sizeof(t_ast_node));
 	if (pipe_node)
@@ -33,7 +36,7 @@ t_ast_node	*parse_pipeline(t_parser *p)
 				free(pipe_node);
 				return (NULL); // Return NULL on error
 			}
-			debug_print("parsing pipeline: getting next cmd...\n");
+			debug_print("Parser: parsing pipeline: getting next cmd...\n");
 			next_cmd = parse_full_cmd(p);
 			if (!next_cmd)
 			{
@@ -57,7 +60,7 @@ t_ast_node	*parse_pipeline(t_parser *p)
 	}
 	else
 		err("Memory allocation error on pipe node\n");
-	debug_print("parsed pipeline of %d cmds\n", pipe_node->data.pipe.cmdc);
+	debug_print("Parser: parsed pipeline of %d cmds\n", pipe_node->data.pipe.cmdc);
 	p->last_node = pipe_node;
 	st_pop(p->st);
 	return (pipe_node);

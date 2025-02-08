@@ -30,7 +30,7 @@ static inline t_tok	*_match_double(t_lex *lexer)
 	t_tok	*token;
 	int		buf_idx;
 
-	debug_print("_match_double\n");
+	debug_print("Lexer: _match_double\n");
 	token = NULL;
 	buf_idx = 0;
 	if (lexer->ptr)
@@ -41,7 +41,7 @@ static inline t_tok	*_match_double(t_lex *lexer)
 			if (token)
 				return (token);
 			lexer->escape_mode = false;
-			debug_print("    Got:_%c_\n", *lexer->ptr);
+			debug_print("Lexer:     Got:_%c_\n", *lexer->ptr);
 			lexer->buf[buf_idx++] = *lexer->ptr;
 		}
 		lexer->is_incomplete = true;
@@ -63,15 +63,15 @@ int	tokenize_double_quotes(t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print("tokenize_double_quotes\n");
+	debug_print("Lexer: tokenize_double_quotes\n");
 	if (lexer)
 	{
 		token = _match_double(lexer);
 		if (!token)
 			return (1);
-		debug_print("created token\n");
+		debug_print("Lexer: created token\n");
 		lexer->ptr++;
-		debug_print("ptr at _%c_\n", *lexer->ptr);
+		debug_print("Lexer: ptr at _%c_\n", *lexer->ptr);
 		if (0 != add_token(lexer, token))
 			return (1);
 	}
