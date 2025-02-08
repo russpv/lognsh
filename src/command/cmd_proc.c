@@ -1,7 +1,10 @@
 #include "command_int.h"
 
-// Even though it stores a t_list, it can 
-// only be one command
+/* CMD EXEC PROC
+ *
+ * Note: though it stores a t_list, proc can 
+ * only be one command
+ */
 int cmd_exec_proc(t_state *s, t_ast_node *a)
 {
 	debug_print("Cmd: \t### cmd_exec_proc ###\n");

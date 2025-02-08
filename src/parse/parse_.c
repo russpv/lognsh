@@ -1,0 +1,66 @@
+#include "parse_int.h"
+
+static inline void	_init_parser(t_state *s, t_parser *p)
+{
+	p->ast = NULL;
+	p->curr_idx = -1;
+	p->curr_cmd = NULL;
+	p->last_node = NULL;
+	p->ref_node = NULL;
+	p->parse_error = false;
+	p->global_state = s;
+    register_parser_destroy(s, destroy_parser);
+}
+
+t_parser	*create_parser(t_state *s, t_list *tokens)
+{
+	t_parser	*p;
+
+	if (!tokens)
+		return (NULL);
+	p = (t_parser *)malloc(sizeof(t_parser));
+	if (p)
+	{
+		p->tokens = ft_lstcopy(tokens, copy_token, destroy_token);
+		if (!p->tokens)
+		{
+			free(p);
+			return (NULL);
+		}
+		p->curr_tok = tokens;
+		p->token_count = ft_lstsize(tokens);
+		_init_parser(s, p);
+		p->st = st_create();
+		if (!p->st)
+		{
+			free(p);
+			return (NULL);
+		}
+	}
+	return (p);
+}
+
+void	destroy_parser(void *instance)
+{
+	t_parser *p = (t_parser *)instance;
+	if (!p)
+		return ;
+	debug_print("Parser: destroy_parser...\n");
+	if (p->ast)
+	{
+		destroy_ast_node(p->ast);
+		p->ast = NULL;
+	}
+	if (p->tokens)
+	{
+		debug_print("Parser: destroy_parser destroying p->tokens...\n");
+		ft_lstclear(&p->tokens, destroy_token);
+		p->tokens = NULL;
+	}
+	if (p->st)
+	{
+		st_destroy(p->st);
+		p->st = NULL;
+	}
+	free(p);
+}

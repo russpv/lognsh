@@ -1,7 +1,7 @@
 #include "parse_int.h"
 
 // Allocates new ast node on the heap
-static t_ast_node	*init_proc(void)
+static t_ast_node	*_init_proc(void)
 {
 	t_ast_node *proc_node;
 	
@@ -19,6 +19,51 @@ static t_ast_node	*init_proc(void)
 	return (proc_node);
 }
 
+/* Stores command. Assumes parser is on 
+ * correct token. 
+ */
+static int	_process_cmd(t_parser *p, t_ast_node *proc_node)
+{
+	t_list *cmd_node;
+
+	if (!p || !proc_node)
+		return (ERR_ARGS);
+	debug_print("Parser: Proc got a node of type %d\n", p->last_node->type);
+	cmd_node = ft_lstnew(p->last_node);
+	if (cmd_node)
+	{
+		ft_lstadd_back(&proc_node->data.proc.cmds, cmd_node);
+		proc_node->data.proc.cmdc++;
+	}
+	else
+	{
+		err("Memory allocation error while creating proc's command node\n");
+		return (ERR_MEM);
+	}
+	return (0);
+}
+/* Consumes open ( and adds command(s) */
+static int	_process_proc(t_parser *p, t_ast_node *proc_node)
+{
+	if (!p || !proc_node)
+		return (ERR_ARGS);
+	if (!is_open_paren(peek(p)))
+		return (err("Expected '(' to start a process\n"), ERR_SYNTAX);
+	advance(p);
+	while (!is_at_end(p) && !is_close_paren(peek(p)))
+	{
+		debug_print("Parser: parsing proc: getting next cmd...\n");
+		if (NULL == parse_full_cmd(p))
+			return (err("Failed to parse proc command\n"), ERR_GENERAL);
+		if (0 != _process_cmd(p, proc_node))
+			return (ERR_GENERAL);
+	}
+	if (!is_close_paren(peek(p)))
+		return (err("Expected ')' to close process\n"), ERR_SYNTAX);
+	advance(p);
+	return (0);
+}
+
 /* PARSE PROC
  * Consumes tokens to create a subshell node on the AST.
  * Adds any redirections AFTER the parentheses.
@@ -28,57 +73,24 @@ static t_ast_node	*init_proc(void)
  */
 t_ast_node	*parse_proc(t_parser *p)
 {
-	t_ast_node	*proc_node;
-	t_ast_node	*cmd_node;
-	t_list		*new_cmd;
+	t_ast_node	*ast_node;
 
-	debug_print("Parser: parsing PROC\n");
 	st_push(p->st, AST_NODE_PROC);
-	p->ref_node = p->last_node;
-	if (tok_get_type(peek(p)) != TOK_OPEN_PAREN)
+	debug_print("Parser: parse_proc tok: %s\n", tok_get_raw(peek(p)));
+	ast_node = _init_proc();
+	if (NULL == ast_node)
+		return (err("Allocation failed for proc node\n"), NULL);
+	if (0 != _process_proc(p, ast_node))
 	{
-		err("Expected '(' to start a process\n");
+		destroy_ast_node(ast_node);
 		return (NULL);
 	}
-	advance(p);
-	proc_node = init_proc();
-	if (!proc_node)
-		return (NULL);
-	while (!is_at_end(p) && tok_get_type(peek(p)) != TOK_CLOSE_PAREN)
-	{
-		cmd_node = parse_full_cmd(p); //sets p->last_node
-		if (!cmd_node)
-		{
-			free(proc_node);
-			err("Failed to parse command inside process\n");
-			return (NULL);
-		}
-		debug_print("Parser: Proc got a node of type %d\n", cmd_node->type);
-		// TODO error if multiple commands or nodes found
-	}
-	if (tok_get_type(peek(p)) != TOK_CLOSE_PAREN)
-	{
-		free(proc_node); //TODO free this properly
-		err("Expected ')' to close process\n");
-		return (NULL);
-	}
-	if (p->ref_node != p->last_node)
-	{
-		new_cmd = ft_lstnew(p->last_node);
-		if (!new_cmd)
-		{
-			free(proc_node); //TODO free this properly
-			err("Memory allocation error while adding command to process\n");
-			return (NULL);
-		}
-		ft_lstadd_back(&proc_node->data.proc.cmds, new_cmd);
-		proc_node->data.proc.cmdc++;
-	}
-	advance(p);
-	process_redir(p, proc_node); //TODO test this
-	p->last_node = proc_node;
-	debug_print("Parser: parsed proc of %d cmds\n", proc_node->data.proc.cmdc);
+	debug_print("Parser: curr peek tok: %s\n", tok_get_raw(peek(p)));
+	debug_print("Parser: parse_proc doing redirs\n");
+	process_redir(p, ast_node); //TODO test this
+	p->last_node = ast_node;
 	st_pop(p->st);
-	p->last_node = proc_node;
-	return (proc_node);
+	debug_print("Parser: parsed proc of %d cmds\n", ast_node->data.proc.cmdc);
+	debug_print("Parser: curr peek tok: %s\n", tok_get_raw(peek(p)));
+	return (ast_node);
 }

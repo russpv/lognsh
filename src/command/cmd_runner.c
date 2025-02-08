@@ -77,6 +77,7 @@ extern int	find_and_validate_cmd(const char *name, char **fullpath, \
 int	run_cmd(t_state *s, t_ast_node *a)
 {
 	t_cmd	*c;
+	int	exit_status;
 
 	c = get_cmd(s);
 	if (p_get_type(a) != AST_NODE_CMD || NULL == p_get_cmd(a))
@@ -88,11 +89,15 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	if (CTXT_PIPELINE == st_peek(get_cmd(s)->st)
 		|| CTXT_PROC == st_peek(get_cmd(s)->st))
 	{
-		if (execve(c->fullpath, c->argv, get_envp(s)) == -1)
-			err("run_cmd ERR execve() \n");
+		if (-1 == execve(c->fullpath, c->argv, get_envp(s)))
+			err("run_cmd ERR execve()\n");
 	}
-	else if (0 != exec_fork_execve(s))
-		err("ERR fork and run nonzero exit status\n");
+	else 
+	{
+		exit_status = exec_fork_execve(s);
+		if (SIGINT_BEFORE_FORK == exit_status)
+			debug_print("Cmd: Received SIGINT before fork\n");
+	}
 	s_free_cmd(s);
 	return (0);
 }

@@ -9,15 +9,19 @@ static int	_setup_pipes(t_cmd *c)
     return (0);
 }
 
-// Returns exit status
-//TODO cleanup
-static int _wait_and_clean(t_cmd *c)
+/* Closes all pipes in the parent, 
+ * waits for all pipeline children, 
+ * then sets and returns exit status of 
+ * last pipeline command.
+ */
+static int _wait_all(t_state *s, t_cmd *c)
 {
 	int status;
 
 	if (0 != exec_close_pipes(c->fildes, c->curr_cmdc))
 		return (-1);
 	waitchild(&status, c->curr_cmdc);
+	set_exit_status(s, get_exit_status(status));
 	return (get_exit_status(status));
 }
 
@@ -56,5 +60,5 @@ int cmd_exec_pipe(t_state *s, t_ast_node *pipe)
 		return (-1);
 	if (0 != _do_pipe_commands(s, p_get_pipe_cmds(pipe), cmd))
 		return (-1);
-	return (_wait_and_clean(cmd));
+	return (_wait_all(s, cmd));
 }

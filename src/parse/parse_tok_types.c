@@ -1,11 +1,16 @@
 #include "parse_int.h"
 
-
-bool	is_open_paren(t_tok *tok)
+/* Returns true parser index is equal or gtr than token count or
+ * token pointer (unconsumed) is a TOK_EOF
+ */
+bool	is_at_end(t_parser *p)
 {
-	return (tok_get_type(tok) == TOK_OPEN_PAREN);
+	return (p->curr_idx >= p->token_count || tok_get_type(peek(p)) == TOK_EOF);
 }
 
+/* Returns true if TOK_WORD, TOK_NAME, TOK_BI, TOK_ENV_VAR
+ * or any reserved word 
+ */
 bool	is_cmd_token(t_tok *tok)
 {
 	const enum e_tok_type	type = tok_get_type(tok);
@@ -17,6 +22,8 @@ bool	is_cmd_token(t_tok *tok)
 		|| type == TOK_FI || type == TOK_IN || type == TOK_THEN \
 		|| type == TOK_WHILE || type == TOK_UNTIL);
 }
+
+/* Returns true if TOK_ANDIF or TOK_ORIF */
 bool	is_log_token(t_tok *tok)
 {
 	const enum e_tok_type	type = tok_get_type(tok);
@@ -24,6 +31,7 @@ bool	is_log_token(t_tok *tok)
 	return (type == TOK_ANDIF || type == TOK_ORIF);
 }
 
+/* Returns true if TOK_PIPE */
 bool	is_pipe_token(t_tok *tok)
 {
 	return (tok_get_type(tok) == TOK_PIPE);
@@ -38,27 +46,3 @@ bool	is_op_token(t_tok *tok)
 		|| type == TOK_ORIF);
 }
 
-/* Added builtins so that they can be considered 
- * args. Ex: exec echo haha, or cat echo 
- */
-bool	is_arg_token(t_tok *tok)
-{
-	const enum e_tok_type	type = tok_get_type(tok);
-
-	return (type == TOK_WORD || type == TOK_NAME || type == TOK_ENV_VAR || type == TOK_EXIT_STATUS \
-            || type == TOK_BI);
-}
-
-/* True if token type needs to be expanded.
- */
-bool	is_expansion(t_tok *tok)
-{
-	const enum e_tok_type	type = tok_get_type(tok);
-
-	return (type == TOK_EXIT_STATUS || type == TOK_ENV_VAR || true == tok_get_expansion(tok));
-}
-
-bool	is_globbing(t_tok *tok)
-{
-	return (true == tok_get_globbing(tok));
-}

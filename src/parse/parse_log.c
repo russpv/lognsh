@@ -1,20 +1,9 @@
 #include "parse_int.h"
 
-
-// TODO init_log();
-
-t_ast_node	*parse_logical(t_parser *p)
+static t_ast_node	*_init_log(void)
 {
-	t_ast_node	*log_node;
-	t_list		*first;
-	t_ast_node	*next_cmd;
-	t_list		*next;
-	t_list		*op;
+	t_ast_node *log_node;
 
-	if (!p->last_node) // need to have something parsed already
-		return (NULL);
-	debug_print("Parser: parsing logical\n");
-	st_push(p->st, AST_NODE_LOG);
 	log_node = malloc(sizeof(t_ast_node));
 	if (log_node)
 	{
@@ -22,56 +11,97 @@ t_ast_node	*parse_logical(t_parser *p)
 		log_node->data.log.cmds = NULL;
 		log_node->data.log.cmdc = 0;
 		log_node->data.log.operators = NULL;
-		while (!is_at_end(p) && is_log_token(peek(p)))
-		{
-			op = ft_lstnew_copystr(tok_get_raw(peek(p)), ft_strdup); // store the op token
-			if (op)
-			{
-				ft_lstadd_back(&log_node->data.log.operators, op);
-			}
-			else
-			{
-				err("Memory allocation error while creating operator node\n");
-				free(log_node);
-				return (NULL);
-			}			
-			advance(p);
-			first = ft_lstnew(p->last_node);
-			if (first)
-			{
-				ft_lstadd_back(&log_node->data.log.cmds, first);
-				log_node->data.log.cmdc++;
-			}
-			else
-			{
-				err("Memory allocation error while creating the first command node\n");
-				free(log_node);
-				return (NULL);
-			}
-			debug_print("Parser: parsing logical: getting next cmd...\n");
-			next_cmd = parse_full_cmd(p);
-			if (!next_cmd)
-			{
-				free(log_node);
-				err("Failed to parse command after logical\n");
-				return (NULL);
-			}
-		}
-		next = ft_lstnew(p->last_node);
-		if (next)
-		{
-			ft_lstadd_back(&log_node->data.log.cmds, next);
-			log_node->data.log.cmdc++;
-		}
-		else
-		{
-			err("Memory allocation error while creating subsequent pipe node\n");
-			free(log_node);
-			return (NULL); // Return NULL on error
-		}
 	}
-	debug_print("Parser: parsed logical of %d cmds\n", log_node->data.log.cmdc);
-	st_pop(p->st);
-	p->last_node = log_node;
 	return (log_node);
+}
+
+/* Stores command. Assumes parser is on 
+ * correct token. 
+ */
+static int	_process_cmd(t_parser *p, t_ast_node *log_node)
+{
+	t_list *cmd_node;
+
+	if (!p || !log_node)
+		return (ERR_ARGS);
+	cmd_node = ft_lstnew(p->last_node);
+	if (cmd_node)
+	{
+		ft_lstadd_back(&log_node->data.log.cmds, cmd_node);
+		log_node->data.log.cmdc++;
+	}
+	else
+	{
+		err("Memory allocation error while creating logical's command node\n");
+		return (ERR_MEM);
+	}
+	return (0);
+}
+
+/* Stores the operator token. Assumes parser is on 
+ * correct token. 
+ */
+static int	_process_op(t_parser *p, t_ast_node *log_node)
+{
+	t_list		*op;
+
+	if (!p || !log_node)
+		return (ERR_ARGS);
+	op = ft_lstnew_copystr(tok_get_raw(peek(p)), ft_strdup);
+	if (op)
+		ft_lstadd_back(&log_node->data.log.operators, op);
+	else
+	{
+		err("Memory allocation error while creating operator node\n");
+		return (ERR_MEM);
+	}
+	return (0);
+}
+
+/* Adds commands and logical operator to logical ast_node
+ * Must have parsed an ast_node prior.
+ */
+static int	_process_log(t_parser *p, t_ast_node *log_node)
+{
+	if (!p || !log_node)
+		return (ERR_ARGS);
+	if (NULL == p->last_node)
+		return (ERR_SYNTAX);
+	if (0 != _process_cmd(p, log_node))
+		return (ERR_GENERAL);
+	while (!is_at_end(p) && is_log_token(peek(p)))
+	{
+		if (0 != _process_op(p, log_node))
+			return (ERR_GENERAL);
+		advance(p);
+		debug_print("Parser: parsing logical: getting next cmd...\n");
+		if (NULL == parse_full_cmd(p))
+			return (err("Failed to parse command after logical op\n"), ERR_GENERAL);
+		if (0 != _process_cmd(p, log_node))
+			return (ERR_GENERAL);
+	}
+	return (0);
+}
+
+/* PARSE LOGICAL
+ * 
+ */
+t_ast_node	*parse_logical(t_parser *p)
+{
+	t_ast_node	*ast_node;
+
+	st_push(p->st, AST_NODE_LOG);
+	debug_print("Parser: parse_logical tok: %s\n", tok_get_raw(peek(p)));
+	ast_node = _init_log();
+	if (NULL == ast_node)
+		return (err("Allocation failed for log node\n"), NULL);
+	if (0 != _process_log(p, ast_node))
+	{
+		destroy_ast_node(ast_node);
+		return (NULL);
+	}
+	p->last_node = ast_node;
+	st_pop(p->st);
+	debug_print("Parser: parsed logical of %d cmds\n", ast_node->data.log.cmdc);
+	return (ast_node);
 }

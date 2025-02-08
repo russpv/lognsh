@@ -122,3 +122,23 @@ char	**list_to_array(t_list *args, int argc)
 	array[argc] = NULL;
 	return (array);
 }
+
+/* t_arg_data llist copy constructor using a llist of char*.
+ * Returns new void *content for llist construction/duplication.
+ */
+void *create_arg_data_node(void *content)
+{
+	content = (char *)content;
+	t_arg_data *arg_data = malloc(sizeof(t_arg_data)); 
+	if (arg_data)
+	{
+		arg_data->do_expansion = false;
+		arg_data->do_globbing = false;
+		arg_data->global_state = NULL;
+		arg_data->in_dquotes = false;
+		arg_data->option = false;
+		arg_data->tmp = NULL;
+		arg_data->raw = content;
+	}
+	return ((void *)arg_data);
+}

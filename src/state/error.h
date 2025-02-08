@@ -11,6 +11,7 @@
 #define ERR_FILE_NOT_FOUND 3
 #define ERR_TOKEN 4
 #define ERR_MEM 5
+#define ERR_ARGS 6
 
 #define ERR_CMD_NOT_FOUND 127
 #define ERR_CMD_NOT_EXEC 126

@@ -121,6 +121,7 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
  * Forks, redirects to pipe, recursively
  * calls top level node executor
  * Calling command func will wait for exit status
+ * Parent does not wait (until all pipe commands are forked).
  */
 int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i, execute_fn executor)
 {
@@ -128,6 +129,8 @@ int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i, execute_fn 
 	int exit_status;
 
 	debug_print("Exec: exec_fork_func_child: got %dth\n", i);
+	if (SIGINT == g_last_signal)
+		return (SIGINT_BEFORE_FORK);
 	pid = fork();
 	if (pid < 0)
 	{
@@ -136,10 +139,9 @@ int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i, execute_fn 
 	}
 	else if (0 == pid)
 	{
+		reset_signal_handlers();
 		_close_other_pipe_ends(get_cmd(s), i);
 		_redirect_pipes(get_cmd(s), i);
-		if (0 != handle_last_signal())
-			return (handle_last_signal());
 		exit_status = executor(s, node);
 		destroy_state(s);
 		exit(exit_status);

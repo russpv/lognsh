@@ -55,6 +55,7 @@ int	st_pop(t_stack *s)
 	return (tmp);
 }
 
+/* Returns top number on stack or -1 if empty */
 int	st_peek(t_stack *s)
 {
 	int	thing;

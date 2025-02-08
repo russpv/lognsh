@@ -19,7 +19,6 @@ static int	_do_child_ops(t_state *s)
 		return (err("_do_child_ops: ERR null t_cmd parameters\n"), -1);
 	if (-1 == p_do_redirections(c_getnode((t_cmd *)c)))
 		return (-1);
-	//destroy_state(s);
 	debug_print("Exec: Child exec'g %s\n", fullpath);
 	if (NULL == fullpath)
 		return (-1);
@@ -52,12 +51,16 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 	return (0);
 }
 
-// TODO cleanup
+/* Forks, resets signal handlers, execve's, sets exit status.
+ * Returns early in case SIGINT recieved. 
+ */
 int	exec_fork_execve(t_state *s)
 {
 	pid_t	p;
 	int	exit_code;
 
+	if (SIGINT == g_last_signal)
+		return (SIGINT_BEFORE_FORK);
 	p = fork();
 	if (0 == p)
 	{
@@ -65,7 +68,8 @@ int	exec_fork_execve(t_state *s)
 		if (-1 == _do_child_ops(s))
 		{
 			write(STDERR_FILENO, "ERR child ops\n", sizeof("ERR child ops\n"));
-			exit(127); // cleanup
+			destroy_state(s);
+			exit(127);
 		}
 	}
 	else if (p < 0)

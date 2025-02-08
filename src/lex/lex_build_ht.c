@@ -85,6 +85,6 @@ void	build_hasht(t_lex *lexer)
 	ht_install(ht, "'\n'", lex_create_ht_node(false, TOK_NEWLINE), \
 		NULL);
 	_insert_operators(ht);
-	_insert_reserved_words(ht);
+	//_insert_reserved_words(ht);
 	_insert_builtins(ht);
 }

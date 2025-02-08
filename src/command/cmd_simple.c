@@ -10,7 +10,9 @@ static int	_handle_no_command(t_ast_node *a, char **args)
 }
 
 
-/* For an AST COMMAND node only
+/* CMD EXEC SIMPLE
+ *
+ * For an AST COMMAND node only
  * Checks for no command, builtin, then PATH
  * Prints diagnostic info.
  * Runs expansion then globbing and stores 

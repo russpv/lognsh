@@ -33,7 +33,7 @@ t_ast_node	*parse_full_cmd(t_parser *p)
 	debug_print("Parser: not a pipe...\n");
 	if (p->last_node && is_log_token(peek(p)))
 		return (parse_logical(p));
-	err("Syntax error near: (TODO, empty cmd okay)\n");
+	err("Syntax error near: [TODO, empty cmd okay]\n");
 	p->parse_error = true;
 	return (NULL);
 }

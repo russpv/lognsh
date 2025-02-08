@@ -7,7 +7,11 @@ int exec_fork_wait(t_state *s, t_ast_node *node, execute_fn executor)
 {
 	pid_t pid;
 	int status;
+	int exit_status;
 	
+	exit_status = 0;
+	if (SIGINT == g_last_signal)
+		return (SIGINT_BEFORE_FORK);
 	pid = fork();
 	if (0 > pid)
 	{
@@ -17,7 +21,7 @@ int exec_fork_wait(t_state *s, t_ast_node *node, execute_fn executor)
 	else if (0 == pid)
 	{
 		reset_signal_handlers();
-		int exit_status = executor(s, node);
+		exit_status = executor(s, node);
 		destroy_state(s);
 		exit(exit_status); // No cleanup?
 	}

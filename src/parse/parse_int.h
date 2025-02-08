@@ -233,6 +233,7 @@ bool						is_op_token(t_tok *tok);
 bool						is_heredoc_token(t_tok *tok);
 bool						is_arg_token(t_tok *tok);
 bool						is_expansion(t_tok *tok);
+bool	is_close_paren(t_tok *tok);
 
 /* For traversing the AST */
 bool	node_has_redirects(t_ast_node *n);
