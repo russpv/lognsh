@@ -32,7 +32,7 @@ unsigned int	hash(const char *s)
 	if (NULL == s)
 		return (0);
 	while (*s)
-		hashval = *s++ + 31 * hashval;
+		hashval = (unsigned char)*s++ + 31 * hashval;
 	return (hashval % HASHSIZE);
 }
 
