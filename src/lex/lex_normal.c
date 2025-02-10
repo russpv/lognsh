@@ -6,7 +6,7 @@ static t_tok	*_match_normal_token(t_lex *lexer, int *buf_idx)
 	t_tok	*res;
 
 	res = NULL;
-	while (*lexer->ptr && false == is_normal_delim(*lexer->ptr))
+	while (*lexer->ptr && false == is_normal_delim((unsigned char) *lexer->ptr))
 	{
 		process_escape_sequence(lexer);
 		if (1 == process_special_operators(lexer))
@@ -29,7 +29,7 @@ static t_tok	*_match_word_or_name_or_exception(t_lex *lexer, int *buf_idx)
 		lexer->buf[(*buf_idx)++] = *lexer->ptr++;
         return lex_create_token(lexer, TOK_EXIT_STATUS);
     }
-	if (true == is_normal_delim(*lexer->ptr) && ft_strlen(lexer->buf) > 0)
+	if (true == is_normal_delim((unsigned char) *lexer->ptr) && ft_strlen(lexer->buf) > 0)
 	{
 		debug_print("Lexer: ----_match_word_or_name: got %s\n", lexer->buf);
 		if ('$' == lexer->buf[0])
@@ -45,7 +45,7 @@ static t_tok	*_match_normal_op(t_lex *lexer)
 	t_tok	*res;
 
 	res = NULL;
-	if (true == is_normal_delim(*lexer->ptr))
+	if (true == is_normal_delim((unsigned char) *lexer->ptr))
 	{
 		lexer->buf[0] = *lexer->ptr++;
 		debug_print("Lexer: ----_match_normal_op: got _%s_\n", lexer->buf);
@@ -75,7 +75,7 @@ static t_tok	*_match_normal(t_lex *lexer)
 	buf_idx = 0;
 	while (' ' == *lexer->ptr)
 		lexer->ptr++;
-	if (true == is_transition_char(lexer, *lexer->ptr))
+	if (true == is_transition_char(lexer, (unsigned char) *lexer->ptr))
 		return (NULL);
 	res = _match_normal_token(lexer, &buf_idx);
 	if (res)
@@ -104,7 +104,7 @@ int	tokenize_normal(t_lex *lexer)
 	t_tok	*token;
 
 	debug_print("Lexer: tokenize_normal\n");
-	while (lexer->ptr && !is_transition_char(lexer, *lexer->ptr))
+	while (lexer->ptr && !is_transition_char(lexer, (unsigned char) *lexer->ptr))
 	{
 		token = _match_normal(lexer);
 		debug_print("Lexer: ptr at:_%c_\n", *lexer->ptr);
