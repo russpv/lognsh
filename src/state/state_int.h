@@ -5,6 +5,7 @@
 
 struct s_global_state {
 	char **envp;
+	t_env	*env_list;
 	char *pwd; 
 	int current_exit_code; 
 	int error_code;
