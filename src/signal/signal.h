@@ -26,6 +26,4 @@ void    set_signal_handlers(void);
 // un-register signal handlers back to defaults
 void	reset_signal_handlers(void);
 
-int	    handle_last_signal(void);
-
 #endif

@@ -12,10 +12,10 @@
 #include "env_int.h"
 
 // this returns a system-managed string. Do not modify!
-char **s_getenv(void)
+char	**s_getenv(void)
 {
-	char **res;
-	const char *path_env = getenv("PATH");
+	char		**res;
+	const char	*path_env = getenv("PATH");
 
 	if (!path_env)
 	{
@@ -31,7 +31,6 @@ char **s_getenv(void)
 	return (res);
 }
 
-
 // looks for an environment variable in the linked list and returns its value
 char	*s_getenv_value(const char *key, t_env *env)
 {
@@ -46,15 +45,15 @@ char	*s_getenv_value(const char *key, t_env *env)
 	return (NULL);
 }
 // print all env variables
-void	print_env(t_env	*env)
+void	print_env(t_env *env)
 {
 	while (env)
 	{
 		printf("%s=", env->key);
-        if (env->value)
-            printf("%s\n", env->value);
-        else
-            printf("\n");
-        env = env->next;        
+		if (env->value)
+			printf("%s\n", env->value);
+		else
+			printf("\n");
+		env = env->next;
 	}
 }

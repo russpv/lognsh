@@ -16,7 +16,7 @@
 // helper function for copy_envp() to get env size
 int	get_env_size(char **envp)
 {
-	int		size;
+	int	size;
 
 	size = 0;
 	while (envp[size])
@@ -25,9 +25,9 @@ int	get_env_size(char **envp)
 }
 
 // get list size of env in linked list
-int		get_env_list_size(t_env *env_list)
+int	get_env_list_size(t_env *env_list)
 {
-	int		count;
+	int	count;
 
 	count = 0;
 	while (env_list)
@@ -49,8 +49,6 @@ void	free_env_list(t_env *env)
 		free(tmp->key);
 		if (tmp->value)
 			free(tmp->value);
-		free(tmp); 
+		free(tmp);
 	}
 }
-
-

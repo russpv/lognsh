@@ -48,7 +48,8 @@ SOURCES = ft_memcpy.c \
 		  ft_print_memory.c \
 		  ft_memccpy.c \
 		  ft_strncpy.c \
-		  ft_strscpy.c
+		  ft_strscpy.c \
+		  ft_strndup.c
 
 OBJECTS = $(SOURCES:.c=.o)
 

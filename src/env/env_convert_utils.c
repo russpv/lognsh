@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "env_int.h"
 #include "env.h"
+#include "env_int.h"
 
 void	copy_key_value(char *dest, const char *key, const char *value)
 {
@@ -20,11 +20,12 @@ void	copy_key_value(char *dest, const char *key, const char *value)
 	if (value)
 		ft_strcat(dest, value);
 }
+
 char	*malloc_pair_string(const char *key, const char *value)
 {
-	size_t		key_len;
-	size_t		value_len;
-	size_t		total_len;
+	size_t	key_len;
+	size_t	value_len;
+	size_t	total_len;
 	char	*pair_space;
 
 	key_len = ft_strlen(key);
@@ -47,9 +48,8 @@ char	**alloc_env_array(t_env *env_list)
 
 	// count no. of env vars
 	if (!env_list)
-        return (NULL);    
-    	count = get_env_list_size(env_list);
-		
+		return (NULL);
+	count = get_env_list_size(env_list);
 	// allocate an array of pointers
 	env_array = malloc(sizeof(char *) * (size_t)(count + 1));
 	if (!env_array)
@@ -60,22 +60,22 @@ char	**alloc_env_array(t_env *env_list)
 	while (tmp)
 	{
 		env_array[count] = malloc_pair_string(tmp->key, tmp->value);
-		//free array, if failure
+		// free array, if failure
 		if (!env_array[count])
 		{
 			free_env_array(env_array);
-			return (NULL); 
+			return (NULL);
 		}
 		count++;
 		tmp = tmp->next;
 	}
-	env_array[count] = NULL; 
+	env_array[count] = NULL;
 	return (env_array);
 }
 
 void	free_env_array(char **env_array)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (!env_array)
@@ -94,15 +94,13 @@ char	**lst_to_array(t_env *env_list)
 	t_env	*tmp;
 	int		count;
 
-    count = 0;
+	count = 0;
 	tmp = env_list;
 	if (!env_list)
-        return (NULL); 
-    env_array = alloc_env_array(env_list);
-    if (!env_array)
 		return (NULL);
-	
-
+	env_array = alloc_env_array(env_list);
+	if (!env_array)
+		return (NULL);
 	// copy each env-value pair into allocated array
 	while (tmp)
 	{

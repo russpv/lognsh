@@ -20,7 +20,6 @@ t_env	*create_env_node(const char *key, const char *value)
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return (NULL);
-
 	new_node->key = ft_strdup(key);
 	if (!new_node->key)
 	{
@@ -38,7 +37,7 @@ t_env	*create_env_node(const char *key, const char *value)
 void	add_env_node(t_env **env, t_env *new_node)
 {
 	t_env	*tmp;
-	
+
 	if (!env || !new_node)
 		return ;
 	if (*env == NULL)
@@ -48,7 +47,7 @@ void	add_env_node(t_env **env, t_env *new_node)
 	}
 	tmp = *env;
 	while (tmp->next != NULL)
-		tmp =tmp->next;
+		tmp = tmp->next;
 	tmp->next = new_node;
 }
 
@@ -61,7 +60,6 @@ void	remove_env_node(t_env **env, const char *key)
 		return ;
 	tmp = *env;
 	prev = NULL;
-
 	while (tmp != NULL && ft_strcmp(tmp->key, key) != 0)
 	{
 		prev = tmp;
@@ -98,7 +96,6 @@ int	extract_key_value(const char *env_str, char **key, char **value)
 	return (0);
 }
 
-
 // copy env vars from envp array into a linked list
 t_env	*copy_envp(char **envp)
 {
@@ -107,7 +104,7 @@ t_env	*copy_envp(char **envp)
 	char	*value;
 	int		i;
 	t_env	*new_node;
-	
+
 	env_list = NULL;
 	i = 0;
 	while (envp[i] != NULL)
@@ -131,15 +128,8 @@ t_env	*copy_envp(char **envp)
 	return (env_list);
 }
 
-
-
-
-
-/* returns new paths array 
+/* returns new paths array
  * getenv does not return heap memory */
-
-
-
 
 /*
 get_env_var(const char *key)
