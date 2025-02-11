@@ -1,19 +1,18 @@
 #include "execute_int.h"
 
-
 /* Does the correct open() and returns new fd
- * If input file can't be opened, opens /dev/null/ to allow cmd 
+ * If input file can't be opened, opens /dev/null/ to allow cmd
  * to run otherwise and prints
  * warning as fish does
-*/
+ */
 static inline int	_redirect_logic(char *topath, int from, bool append)
 {
 	int	fd;
 
 	if (from == STDIN_FILENO && access(topath, R_OK) == -1)
 	{
-		printf("warning: An error occurred while redirecting file '%s'\n", \
-				topath);
+		printf("warning: An error occurred while redirecting file '%s'\n",
+			topath);
 		fd = open("/dev/null", O_RDONLY);
 		errno = EACCES;
 	}
@@ -29,7 +28,7 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 	return (fd);
 }
 
-/* REDIRECT() 
+/* REDIRECT()
  * Encapsulates open() and dup2() and returns origin fd
  * or -1
  * Either:
@@ -37,12 +36,12 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
  * 2. Opens output file for writing
  * And closes the duped fd.
  * Error message is FISH version
- * 
- * Uses to-fd (e.g. pipe fds) unless NULL, then to-path 
+ *
+ * Uses to-fd (e.g. pipe fds) unless NULL, then to-path
  * to: output fd
  * topath: output fd file path
  * from: input fd
- * append: for opt <</>> here_doc 
+ * append: for opt <</>> here_doc
  * from file is only ever stdin or stdout
  */
 int	redirect(int *to, char *topath, int from, bool ifappend)

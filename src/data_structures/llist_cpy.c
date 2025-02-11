@@ -19,7 +19,7 @@ t_list	*ft_lstcopy_node(const t_list *orig, void *(*f)(const void *))
 	return (new_node);
 }
 
-/* Deep copies linked lists 
+/* Deep copies linked lists
  * f - content deep copy func; d - content delete func
  */
 t_list	*ft_lstcopy(t_list *orig, void *(*f)(const void *), void (*d)(void *))

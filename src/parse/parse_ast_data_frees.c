@@ -3,8 +3,9 @@
 /* Fully frees a struct s_redir, for use in llist destroy */
 void	destroy_redir(void *in)
 {
-	t_redir_data *redir = (t_redir_data *)in;
+	t_redir_data	*redir;
 
+	redir = (t_redir_data *)in;
 	if (NULL == redir)
 		return ;
 	debug_print("Parser: destroy_redir...\n");
@@ -20,9 +21,10 @@ void	destroy_redir(void *in)
 /* Fully frees a struct s_arg, for use in llist destroy */
 void	destroy_arg(void *in)
 {
-	t_arg_data *arg = (t_arg_data *)in;
-	debug_print("Parser: destroy_arg...\n");
+	t_arg_data	*arg;
 
+	arg = (t_arg_data *)in;
+	debug_print("Parser: destroy_arg...\n");
 	if (NULL == arg)
 		return ;
 	if (arg->raw)

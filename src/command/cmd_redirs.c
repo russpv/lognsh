@@ -16,12 +16,12 @@ int	restore_redirs(t_cmd *c)
 		return (err("restore_redirs: ERR null command parameters\n"), -1);
 	dup2(c->saved_stderr, STDERR_FILENO);
 	close(c->saved_stderr);
-    c->saved_stderr = -1;
+	c->saved_stderr = -1;
 	dup2(c->saved_stdin, STDIN_FILENO);
 	close(c->saved_stdin);
-    c->saved_stdin = -1;
+	c->saved_stdin = -1;
 	dup2(c->saved_stdout, STDOUT_FILENO);
 	close(c->saved_stdout);
-    c->saved_stdout = -1;
+	c->saved_stdout = -1;
 	return (0);
 }

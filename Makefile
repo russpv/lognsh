@@ -31,6 +31,7 @@ LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
 
 ifeq ($(shell uname), Darwin)  # macOS
     INC += -I$(INCDIR) -I/usr/local/opt/readline/include/
+	CFLAGS += -DMACOS
 else  # Linux
     INC += -I$(INCDIR) -I/usr/include/readline # $(shell pkg-config --cflags readline)
 endif

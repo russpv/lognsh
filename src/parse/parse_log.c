@@ -2,7 +2,7 @@
 
 static t_ast_node	*_init_log(void)
 {
-	t_ast_node *log_node;
+	t_ast_node	*log_node;
 
 	log_node = malloc(sizeof(t_ast_node));
 	if (log_node)
@@ -15,12 +15,12 @@ static t_ast_node	*_init_log(void)
 	return (log_node);
 }
 
-/* Stores command. Assumes parser is on 
- * correct token. 
+/* Stores command. Assumes parser is on
+ * correct token.
  */
 static int	_process_cmd(t_parser *p, t_ast_node *log_node)
 {
-	t_list *cmd_node;
+	t_list	*cmd_node;
 
 	if (!p || !log_node)
 		return (ERR_ARGS);
@@ -38,12 +38,12 @@ static int	_process_cmd(t_parser *p, t_ast_node *log_node)
 	return (0);
 }
 
-/* Stores the operator token. Assumes parser is on 
- * correct token. 
+/* Stores the operator token. Assumes parser is on
+ * correct token.
  */
 static int	_process_op(t_parser *p, t_ast_node *log_node)
 {
-	t_list		*op;
+	t_list	*op;
 
 	if (!p || !log_node)
 		return (ERR_ARGS);
@@ -76,7 +76,8 @@ static int	_process_log(t_parser *p, t_ast_node *log_node)
 		advance(p);
 		debug_print("Parser: parsing logical: getting next cmd...\n");
 		if (NULL == parse_full_cmd(p))
-			return (err("Failed to parse command after logical op\n"), ERR_GENERAL);
+			return (err("Failed to parse command after logical op\n"),
+				ERR_GENERAL);
 		if (0 != _process_cmd(p, log_node))
 			return (ERR_GENERAL);
 	}
@@ -84,7 +85,7 @@ static int	_process_log(t_parser *p, t_ast_node *log_node)
 }
 
 /* PARSE LOGICAL
- * 
+ *
  */
 t_ast_node	*parse_logical(t_parser *p)
 {

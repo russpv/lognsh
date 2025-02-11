@@ -4,10 +4,10 @@
  * Validates token type, parses args into list
  * For commands, checks for redirect operator(s) before or after
  * REDIR WORD REDIR WORD
- * 
+ *
  * Parses proc when the token is an open parentheses
  * Parses command when: the token starts a new command AND
- * 	it's either in the middle of parsing a group node (stack non empty), or 
+ * 	it's either in the middle of parsing a group node (stack non empty), or
  * 	it's the first node
  * Parses pipe when it's none of the above and its currently a pipe token
  * Parses logical when it's none of the above and its currently a logical token
@@ -15,7 +15,8 @@
 t_ast_node	*parse_full_cmd(t_parser *p)
 {
 	debug_print("Parser: ######## parse_full_cmd ########\n");
-	debug_print("Parser: parse_full_cmd: got tok of %s \n", tok_get_raw(peek(p)));
+	debug_print("Parser: parse_full_cmd: got tok of %s \n",
+		tok_get_raw(peek(p)));
 	if (is_at_end(p))
 	{
 		debug_print("Parser: reached end of tokens\n");

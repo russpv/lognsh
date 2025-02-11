@@ -1,4 +1,4 @@
-# include "parse_int.h"
+#include "parse_int.h"
 
 /* Returns true if tok is an in, out, append or heredoc_word */
 bool	is_redir_token(t_tok *tok)
@@ -27,5 +27,5 @@ bool	is_filename_token(t_tok *tok)
 
 bool	node_has_redirects(t_ast_node *n)
 {
-    return (n->type == AST_NODE_CMD && n->data.cmd.redc > 0);
+	return (n->type == AST_NODE_CMD && n->data.cmd.redc > 0);
 }

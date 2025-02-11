@@ -7,7 +7,7 @@ void	debug_print(const char *format, ...)
 	if (DEBUG)
 	{
 		va_start(args, format);
-		fprintf(stderr, BLUE "[PID %d] ", getpid());
+		fprintf(stderr, BLUE "[PID %d] [DEBUG]", getpid());
 		vfprintf(stderr, format, args);
 		fprintf(stderr, RESET);
 		va_end(args);
@@ -28,7 +28,7 @@ void	colored_printf(const char *color, const char *format, ...)
 	}
 }
 
-void	log_printf(const char *s, ...)
+void	log_print(const char *s, ...)
 {
 	va_list	args;
 

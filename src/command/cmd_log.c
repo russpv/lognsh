@@ -5,24 +5,24 @@
  */
 static int	_do_log_commands(t_state *s, t_list *cmds, t_cmd *c)
 {
-	t_ast_node *a;
-	const t_list *ops = (const t_list *)p_get_log_ops(c->curr_node);
-	int exit_status;
-	int i;
+	t_ast_node		*a;
+	const t_list	*ops = (const t_list *)p_get_log_ops(c->curr_node);
+	int				exit_status;
+	int				i;
 
 	i = -1;
 	while (cmds && ++i < c->curr_cmdc)
 	{
 		a = (t_ast_node *)cmds->content;
 		debug_print("Cmd: \t### _do_log_commands got cmd:%s\n", p_get_cmd(a));
-		if (0 != exec_fork_run(s, a, i, cmd_execute_full))	
+		if (0 != exec_fork_run(s, a, i, cmd_execute_full))
 			return (-1);
 		waitchild(&exit_status, 1);
 		debug_print("Cmd: \t### _do_log_commands got exit:%d\n", exit_status);
 		if (!ops)
 			break ;
 		debug_print("Cmd: \t### _do_log_commands got op:%s\n", ops->content);
-		if ((0 != exit_status && 0 == ft_strcmp(OP_ANDIF, ops->content)) \
+		if ((0 != exit_status && 0 == ft_strcmp(OP_ANDIF, ops->content))
 			|| (0 == exit_status && 0 == ft_strcmp(OP_ORIF, ops->content)))
 		{
 			debug_print("Cmd: Operator evalution stopping further exection\n");
@@ -35,12 +35,12 @@ static int	_do_log_commands(t_state *s, t_list *cmds, t_cmd *c)
 	return (exit_status);
 }
 
-int cmd_exec_log(t_state *s, t_ast_node *node)
+int	cmd_exec_log(t_state *s, t_ast_node *node)
 {
-	t_cmd *cmd; 
-	int exit_status;
+	t_cmd	*cmd;
+	int		exit_status;
 
-	debug_print("Cmd: \t### cmd_exec_log ###\n");
+	log_print("Cmd: \t### cmd_exec_log ###\n");
 	cmd = get_cmd(s);
 	if (!cmd)
 		return (-1);
@@ -55,6 +55,6 @@ int cmd_exec_log(t_state *s, t_ast_node *node)
 		debug_print("Cmd: \t### cmd_exec_log: got negative exit, returning\n");
 		return (-1);
 	}
-	debug_print("Cmd: \t### cmd_exec_log: got exit, returning\n");
+	log_print("Cmd: \t### cmd_exec_log: got exit, returning\n");
 	return (exit_status);
 }

@@ -77,4 +77,3 @@ int	ht_destroy(t_ht hasht, void (*del)(void *))
 	free(hasht);
 	return (0);
 }
-

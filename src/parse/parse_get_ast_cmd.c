@@ -1,7 +1,7 @@
 #include "parse_int.h"
 
 /* Returns the cmd name of an AST_NODE_CMD node */
-char *p_get_cmd(t_ast_node *a)
+char	*p_get_cmd(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)
 		return (NULL);
@@ -9,15 +9,16 @@ char *p_get_cmd(t_ast_node *a)
 	return (a->data.cmd.name);
 }
 
-t_list **p_get_args(t_ast_node *a)
+/* Returns AST command node's arguments list */
+t_list	**p_get_args(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)
 		return (NULL);
-	debug_print("Parser: p_get_args got: _%s_\n", a->data.cmd.name);
+	debug_print("Parser: p_get_args got cmd: _%s_\n", a->data.cmd.name);
 	return (&a->data.cmd.args);
 }
 
-int		p_get_argc(t_ast_node *a)
+int	p_get_argc(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)
 		return (-1);

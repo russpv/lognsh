@@ -1,14 +1,14 @@
 #include "execute_int.h"
 
-/* Forks child and runs executor for 
+/* Forks child and runs executor for
  * higher-level AST nodes.
  */
-int exec_fork_wait(t_state *s, t_ast_node *node, execute_fn executor)
+int	exec_fork_wait(t_state *s, t_ast_node *node, t_execute_fn executor)
 {
-	pid_t pid;
-	int status;
-	int exit_status;
-	
+	pid_t	pid;
+	int		status;
+	int		exit_status;
+
 	exit_status = 0;
 	if (SIGINT == g_last_signal)
 		return (SIGINT_BEFORE_FORK);
@@ -23,9 +23,8 @@ int exec_fork_wait(t_state *s, t_ast_node *node, execute_fn executor)
 		reset_signal_handlers();
 		exit_status = executor(s, node);
 		destroy_state(s);
-		exit(exit_status); // No cleanup?
+		exit(exit_status);
 	}
 	waitchild(&status, 1);
 	return (get_exit_status(status));
 }
-

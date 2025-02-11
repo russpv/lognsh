@@ -3,8 +3,8 @@
 // Allocates new ast node on the heap
 static t_ast_node	*_init_proc(void)
 {
-	t_ast_node *proc_node;
-	
+	t_ast_node	*proc_node;
+
 	proc_node = malloc(sizeof(struct s_node));
 	if (!proc_node)
 	{
@@ -19,12 +19,12 @@ static t_ast_node	*_init_proc(void)
 	return (proc_node);
 }
 
-/* Stores command. Assumes parser is on 
- * correct token. 
+/* Stores command. Assumes parser is on
+ * correct token.
  */
 static int	_process_cmd(t_parser *p, t_ast_node *proc_node)
 {
-	t_list *cmd_node;
+	t_list	*cmd_node;
 
 	if (!p || !proc_node)
 		return (ERR_ARGS);
@@ -87,7 +87,7 @@ t_ast_node	*parse_proc(t_parser *p)
 	}
 	debug_print("Parser: curr peek tok: %s\n", tok_get_raw(peek(p)));
 	debug_print("Parser: parse_proc doing redirs\n");
-	process_redir(p, ast_node); //TODO test this
+	process_redir(p, ast_node); // TODO test this
 	p->last_node = ast_node;
 	st_pop(p->st);
 	debug_print("Parser: parsed proc of %d cmds\n", ast_node->data.proc.cmdc);

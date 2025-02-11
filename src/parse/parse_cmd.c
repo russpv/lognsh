@@ -3,7 +3,9 @@
 /* Returns new AST cmd_node */
 static t_ast_node	*_init_cmd_node(void)
 {
-	t_ast_node *node = malloc(sizeof(struct s_node));
+	t_ast_node	*node;
+
+	node = malloc(sizeof(struct s_node));
 	if (node)
 	{
 		node->type = AST_NODE_CMD;
@@ -19,11 +21,11 @@ static t_ast_node	*_init_cmd_node(void)
 	return (node);
 }
 
-/* Must deep copy token strings to decouple token-list/ast. 
+/* Must deep copy token strings to decouple token-list/ast.
  */
 static t_arg_data	*_init_arg(t_parser *p, t_ast_node *cmd_node, t_tok *tok)
 {
-	t_arg_data *arg;
+	t_arg_data	*arg;
 
 	if (!p || !cmd_node || !tok)
 		return (NULL);
@@ -47,7 +49,7 @@ static t_arg_data	*_init_arg(t_parser *p, t_ast_node *cmd_node, t_tok *tok)
 	return (arg);
 }
 
-/* This helper consumes argument tokens and adds them to ast node's 
+/* This helper consumes argument tokens and adds them to ast node's
  * linked list.
  * Returns NULL if syntax error.
  */
@@ -77,14 +79,15 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
 	return (0);
 }
 
-/* This helper consumes any redirection tokens, before or after the command name,
+/* This helper consumes any redirection tokens,
+	before or after the command name,
  * and its following arguments, if any.
  * If the command name is an expansion, handled later in Command module.
  * In case of parsing failure, frees any downstream memory and returns.
  * Does nothing to args.
  */
 static int	_process_cmd(t_parser *p, t_ast_node *cmd_node)
-{	
+{
 	if (!p || !cmd_node)
 		return (ERR_ARGS);
 	if (0 != process_redir(p, cmd_node))
@@ -105,7 +108,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *cmd_node)
 }
 
 /* PARSE_CMD
- * Creates node of type AST_NODE_CMD 
+ * Creates node of type AST_NODE_CMD
  * and adds it to AST
  */
 t_ast_node	*parse_cmd(t_parser *p)
@@ -116,7 +119,7 @@ t_ast_node	*parse_cmd(t_parser *p)
 	debug_print("Parser: parse_cmd tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = _init_cmd_node();
 	if (NULL == ast_node)
-		return(err("Allocation failed for cmd node\n"), NULL);
+		return (err("Allocation failed for cmd node\n"), NULL);
 	if (0 != _process_cmd(p, ast_node))
 	{
 		destroy_ast_node(ast_node);

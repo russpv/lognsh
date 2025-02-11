@@ -18,10 +18,12 @@ void	sigint_handler(int signo)
 	if (signo == SIGINT)
 	{
 		g_last_signal = SIGINT;
-        write(STDOUT_FILENO, "\n", 1);
+       // write(STDOUT_FILENO, "\n", 1);
+#ifndef	MACOS
         rl_replace_line("", 0);
         rl_on_new_line();
         rl_redisplay();
+#endif
 	}
 }
 

@@ -52,12 +52,12 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 }
 
 /* Forks, resets signal handlers, execve's, sets exit status.
- * Returns early in case SIGINT recieved. 
+ * Returns early in case SIGINT recieved.
  */
 int	exec_fork_execve(t_state *s)
 {
 	pid_t	p;
-	int	exit_code;
+	int		exit_code;
 
 	if (SIGINT == g_last_signal)
 		return (SIGINT_BEFORE_FORK);

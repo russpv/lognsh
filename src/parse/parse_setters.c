@@ -17,7 +17,7 @@ int	p_update_redc(t_ast_node *a, int amt)
 	if (AST_NODE_CMD == a->type)
 	{
 		a->data.cmd.redc += amt;
-		return(a->data.cmd.redc);
+		return (a->data.cmd.redc);
 	}
 	else if (AST_NODE_PROC == a->type)
 	{

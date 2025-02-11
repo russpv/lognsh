@@ -44,7 +44,7 @@ t_cmd	*init_cmd(t_state *s, t_ast_node *a)
 
 int	cmd_execute_full(t_state *s, t_ast_node *a)
 {
-	debug_print("Cmd: ######## cmd_execute_full ########\n");
+	log_print("Cmd: ######## cmd_execute_full ########\n");
 	if (AST_NODE_PROC == p_get_type(a))
 		return (cmd_exec_proc(s, a));
 	debug_print("Cmd: node not a proc...\n");

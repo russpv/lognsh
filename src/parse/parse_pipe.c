@@ -45,7 +45,8 @@ static int	_process_pipe(t_parser *p, t_ast_node *pipe_node)
 		advance(p);
 		debug_print("Parser: parsing pipeline: getting next cmd...\n");
 		if (NULL == parse_full_cmd(p))
-			return (err("Failed to parse command after logical op\n"), ERR_GENERAL);
+			return (err("Failed to parse command after logical op\n"),
+				ERR_GENERAL);
 		if (0 != _process_cmd(p, pipe_node))
 			return (ERR_GENERAL);
 	}
@@ -63,13 +64,14 @@ t_ast_node	*parse_pipeline(t_parser *p)
 	debug_print("Parser: parse_pipeline tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = _init_pipe();
 	if (NULL == ast_node)
-		return(err("Allocation failed for cmd node\n"), NULL);
+		return (err("Allocation failed for cmd node\n"), NULL);
 	if (0 != _process_pipe(p, ast_node))
 	{
 		destroy_ast_node(ast_node);
 		return (NULL);
 	}
-	debug_print("Parser: parsed pipeline of %d cmds\n", ast_node->data.pipe.cmdc);
+	debug_print("Parser: parsed pipeline of %d cmds\n",
+		ast_node->data.pipe.cmdc);
 	p->last_node = ast_node;
 	st_pop(p->st);
 	return (ast_node);

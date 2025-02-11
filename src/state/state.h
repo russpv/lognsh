@@ -1,13 +1,14 @@
 #ifndef STATE_H
 # define STATE_H
 
-# include "../include/libft.h"
 # include "../debug.h"
+# include "../include/libft.h"
 # include "../signal/signal.h"
 # include "error.h"
 # include <errno.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdbool.h>
 
 # define SHELL_NAME "minish"
 
@@ -69,8 +70,11 @@ void							set_command(t_state *s, t_cmd *c);
 int								*get_status(t_state *s);
 char							*get_input(t_state *s);
 t_cmd							*get_cmd(t_state *s);
+
 char							**get_envp(t_state *s);
-t_env							*get_sh_env(t_state *s, const char *key);
+char							*get_sh_env(t_state *s, const char *key);
+char							**get_sh_path(t_state *s);
+//int	set_sh_env(t_state *s, const char *key, const char *value);
 
 void							register_command_destroy(t_state *s,
 									t_destroy_fn fn);
@@ -82,4 +86,5 @@ void							s_free_cmd(t_state *s);
 void							s_free_cmd_lex_parse(t_state *state);
 
 void							s_env_print(t_state *s);
+bool							has_sh_envp(t_state *s);
 #endif

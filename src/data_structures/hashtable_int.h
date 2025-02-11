@@ -12,4 +12,4 @@ struct					s_ht
 	struct s_ht_entry	*buckets[HASHSIZE];
 };
 
-unsigned int	hash(const char *s);
+unsigned int			hash(const char *s);

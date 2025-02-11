@@ -1,22 +1,24 @@
 #include "command_int.h"
 
+//TODO remove for loop
 static int	_setup_pipes(t_cmd *c)
 {
 	if (0 != exec_create_pipes(&c->fildes, c->curr_cmdc))
 		return (err("ERR pipe creation\n"), -1);
- 	for (int i = 0; i < c->curr_cmdc - 1; i++)
-        debug_print("Cmd: \tPipe %d: read fd=%d, write fd=%d\n", i, c->fildes[i][0], c->fildes[i][1]);
-    return (0);
+	for (int i = 0; i < c->curr_cmdc - 1; i++)
+		debug_print("Cmd: \tPipe %d: read fd=%d, write fd=%d\n", i,
+			c->fildes[i][0], c->fildes[i][1]);
+	return (0);
 }
 
-/* Closes all pipes in the parent, 
- * waits for all pipeline children, 
- * then sets and returns exit status of 
+/* Closes all pipes in the parent,
+ * waits for all pipeline children,
+ * then sets and returns exit status of
  * last pipeline command.
  */
-static int _wait_all(t_state *s, t_cmd *c)
+static int	_wait_all(t_state *s, t_cmd *c)
 {
-	int status;
+	int	status;
 
 	if (0 != exec_close_pipes(c->fildes, c->curr_cmdc))
 		return (-1);
@@ -27,8 +29,8 @@ static int _wait_all(t_state *s, t_cmd *c)
 
 static int	_do_pipe_commands(t_state *s, t_list *cmds, t_cmd *c)
 {
-	t_ast_node *a;
-	int i;
+	t_ast_node	*a;
+	int			i;
 
 	i = -1;
 	while (cmds && ++i < c->curr_cmdc)
@@ -44,11 +46,11 @@ static int	_do_pipe_commands(t_state *s, t_list *cmds, t_cmd *c)
 /* Executes commands within pipeline node
  * Not guaranteed to have forked, so no cleanup done.
  */
-int cmd_exec_pipe(t_state *s, t_ast_node *pipe)
+int	cmd_exec_pipe(t_state *s, t_ast_node *pipe)
 {
-	t_cmd *cmd; 
-	
-	debug_print("Cmd: \t### cmd_exec_pipe ###\n");
+	t_cmd	*cmd;
+
+	log_print("Cmd: \t### cmd_exec_pipe ###\n");
 	cmd = get_cmd(s);
 	if (!cmd)
 		return (-1);

@@ -9,7 +9,7 @@ static inline void	_init_parser(t_state *s, t_parser *p)
 	p->ref_node = NULL;
 	p->parse_error = false;
 	p->global_state = s;
-    register_parser_destroy(s, destroy_parser);
+	register_parser_destroy(s, destroy_parser);
 }
 
 t_parser	*create_parser(t_state *s, t_list *tokens)
@@ -42,7 +42,9 @@ t_parser	*create_parser(t_state *s, t_list *tokens)
 
 void	destroy_parser(void *instance)
 {
-	t_parser *p = (t_parser *)instance;
+	t_parser	*p;
+
+	p = (t_parser *)instance;
 	if (!p)
 		return ;
 	debug_print("Parser: destroy_parser...\n");

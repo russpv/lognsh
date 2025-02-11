@@ -7,7 +7,7 @@ void	*ht_get_payload(struct s_ht_entry *e)
 }
 
 /* Optionally copies the data before assigning it. */
-static int	_install_data(struct s_ht_entry *np, void *data, \
+static int	_install_data(struct s_ht_entry *np, void *data,
 		void *(*cpy)(void *))
 {
 	if (NULL != data)
@@ -30,8 +30,8 @@ static int	_install_data(struct s_ht_entry *np, void *data, \
 struct s_ht_entry	*ht_install(t_ht ht, char *name, void *data,
 		void *(*cpy_data)(void *))
 {
-	struct s_ht_entry *np;
-	unsigned int hashval;
+	struct s_ht_entry	*np;
+	unsigned int		hashval;
 
 	if (NULL == name)
 		return (NULL);

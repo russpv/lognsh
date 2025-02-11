@@ -11,15 +11,13 @@ int	bi_exec(t_state *s, char **argv, int argc)
 	int		ret;
 	char	**environ;
 
+	(void)argc;
 	if (!argv || !argv[1])
 	{
 		write(STDERR_FILENO, "Usage: exec <command>\n", sizeof("Usage: exec <command>\n"));
 		return (-1);
 	}
 	fullpath = NULL;
-	for (int i = 0; i < argc; i++) { //debugging
-        //printf("Argument %d: %s\n", i, argv[i]);
-    }
 	ret = find_and_validate_cmd(s, argv[1], &fullpath, "exec");
 	if (ret != 0)
 		return (-1);
@@ -27,7 +25,7 @@ int	bi_exec(t_state *s, char **argv, int argc)
 	{
 		perror("execve failed");
 		free(fullpath);
-		exit(1);
+		exit(ERR_GENERAL);
 	}
 	free(fullpath);
 	return (0);

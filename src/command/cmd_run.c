@@ -19,30 +19,30 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 	int		i;
 
 	i = -1;
-	if (!(paths = get_sh_env(s, SHELL_PATH)))
+	if (!(paths = get_sh_path(s)))
 		return (1);
 	while (paths[++i])
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		if (NULL == tmp)
-			return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"), \
-			1);
+			return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"),
+				ERR_GENERAL);
 		*fullpath = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!*fullpath)
-			return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"), \
-				1);
+			return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"),
+				ERR_GENERAL);
 		if (0 == _check_access(*fullpath))
 			return (ft_freearr((void **)paths, -1), 0);
 		free(*fullpath);
 		*fullpath = NULL;
 	}
-	return (ft_freearr((void **)paths, -1), 1);
+	return (ft_freearr((void **)paths, -1), ERR_GENERAL);
 }
 
 /* Stores command path in fullpath, if valid.
  * Checks PATH, or absolute path if slash is in the name */
-extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath, \
+extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath,
 		const char *caller)
 {
 	if (NULL != name && '\0' != name[0])
@@ -72,12 +72,12 @@ extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath, 
  * a child process.
  * a null cmd name is valid, nothing runs
  * Execute module handles redirects and forking in exec_fork_execve()
- * 
+ *
  */
 int	run_cmd(t_state *s, t_ast_node *a)
 {
 	t_cmd	*c;
-	int	exit_status;
+	int		exit_status;
 
 	c = get_cmd(s);
 	if (p_get_type(a) != AST_NODE_CMD || NULL == p_get_cmd(a))
@@ -85,18 +85,18 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	if (0 != find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath, NULL))
 		return (s_free_cmd(s), ERR_CMD_NOT_FOUND);
 	if (c->fullpath)
-		debug_print("Cmd: Found command! at %s\n", c->fullpath);
+		log_print("Cmd: Found command! at %s\n", c->fullpath);
 	if (CTXT_PIPELINE == st_peek(get_cmd(s)->st)
 		|| CTXT_PROC == st_peek(get_cmd(s)->st))
 	{
 		if (-1 == execve(c->fullpath, c->argv, get_envp(s)))
 			err("run_cmd ERR execve()\n");
 	}
-	else 
+	else
 	{
 		exit_status = exec_fork_execve(s);
 		if (SIGINT_BEFORE_FORK == exit_status)
-			debug_print("Cmd: Received SIGINT before fork\n");
+			log_print("Cmd: Received SIGINT before fork\n");
 	}
 	s_free_cmd(s);
 	return (0);

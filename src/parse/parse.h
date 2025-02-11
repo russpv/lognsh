@@ -50,13 +50,10 @@ typedef struct s_node			t_ast_node;
 t_ast_node						*parse(t_state *s, char *input);
 
 int								p_get_type(t_ast_node *a);
-
 char							*p_get_cmd(t_ast_node *a);
 t_list							**p_get_args(t_ast_node *a);
 t_list							*p_get_redirs(t_ast_node *a);
-
 int								p_get_argc(t_ast_node *a);
-
 bool							p_get_expansion(t_ast_node *a);
 
 /* Command getters */
@@ -69,9 +66,11 @@ int								p_get_log_cmdc(t_ast_node *a);
 t_list							*p_get_log_ops(t_ast_node *a);
 
 /* These methods are called by Command */
-char							**p_do_arg_processing(t_ast_node *a);
-int								p_do_redir_processing(t_ast_node *a);
-//char	**p_do_arg_expansions(t_ast_node *a); // TODO hide
+char							**p_do_arg_processing(t_state *s,
+									t_ast_node *a);
+int								p_do_redir_processing(t_state *s,
+									t_ast_node *a);
+// char	**p_do_arg_expansions(t_ast_node *a); // TODO hide
 int								p_do_redirections(t_ast_node *a);
 int								p_set_cmd(t_ast_node *a, const char *cmd);
 
@@ -79,8 +78,7 @@ void							print_ast(t_ast_node *ast, int depth);
 
 void							destroy_redir(void *in);
 
-bool	is_globbing(t_tok *tok);
-
+bool							is_globbing(t_tok *tok);
 
 /*  Expansions */
 // tilde ~ ?

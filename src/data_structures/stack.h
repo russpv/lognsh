@@ -1,8 +1,8 @@
 #ifndef STACK_H
 # define STACK_H
 
-# include "../debug.h"
 # include "../../include/libft.h"
+# include "../debug.h"
 # include <stdlib.h>
 
 struct s_stack;

@@ -5,10 +5,10 @@
  * calls top level node executor
  * Note: cannot return exit status of child to parent here
  */
-int	exec_fork_run(t_state *s, t_ast_node *node, int i, execute_fn executor)
+int	exec_fork_run(t_state *s, t_ast_node *node, int i, t_execute_fn executor)
 {
-	pid_t pid;
-	int exit_status;
+	pid_t	pid;
+	int		exit_status;
 
 	debug_print("Exec: exec_fork_run: got %dth\n", i);
 	pid = fork();
@@ -20,7 +20,6 @@ int	exec_fork_run(t_state *s, t_ast_node *node, int i, execute_fn executor)
 	else if (0 == pid)
 	{
 		reset_signal_handlers();
-		//destroy_state(s);
 		exit_status = executor(s, node);
 		exit(exit_status);
 	}

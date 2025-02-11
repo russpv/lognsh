@@ -1,14 +1,4 @@
-#include "stack.h"
-
-#define MAX_ST_DEPTH 10
-
-struct					s_stack
-{
-	int					st[MAX_ST_DEPTH];
-	int					depth;
-};
-
-typedef struct s_stack	t_stack;
+#include "stack_int.h"
 
 t_stack	*st_create(void)
 {
@@ -24,7 +14,6 @@ t_stack	*st_create(void)
 }
 void	st_destroy(t_stack *s)
 {
-	
 	free(s);
 }
 

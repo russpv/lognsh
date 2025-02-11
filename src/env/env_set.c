@@ -32,7 +32,7 @@ int		env_set_var(t_env **env, const char *key, const char *value)
     new_node = create_env_node(key, value);
 	if (!new_node)
 		return (-1);
-	// if a key does not exisit, add it as a new node
+	// if a key does not exist, add it as a new node
     add_env_node(env, new_node);
     return (0);
 }

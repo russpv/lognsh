@@ -32,7 +32,6 @@ char	**c_argstoargv(char **args, char *cmd, int argc)
 		}
 		argv[i] = NULL;
 		ft_freearr((void **)args, -1);
-
 	}
 	return (argv);
 }

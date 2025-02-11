@@ -2,9 +2,9 @@
 
 #define MAX_STACK_DEPTH 100
 
-t_pstack *create_stack(void)
+t_pstack	*create_stack(void)
 {
-	t_pstack *s;
+	t_pstack	*s;
 
 	s = malloc(sizeof(t_pstack));
 	if (s)

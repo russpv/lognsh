@@ -1,6 +1,6 @@
 #include "parse_int.h"
 
-static t_redir_data *_init_redir(t_ast_node *target, enum e_tok_type type)
+static t_redir_data	*_init_redir(t_ast_node *target, enum e_tok_type type)
 {
 	t_redir_data	*red;
 
@@ -29,20 +29,25 @@ static t_redir_data *_init_redir(t_ast_node *target, enum e_tok_type type)
  */
 static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red)
 {
-	t_tok *tok_name;
+	t_tok	*tok_name;
 
 	if (!p || !red || !tok)
 		return (ERR_ARGS);
 	red->symbol = ft_strdup(tok_get_raw((t_tok *)tok));
 	if (!red->symbol)
 		return (err("Allocation for redirection symbol failed\n"), ERR_MEM);
-	debug_print("Parser: Redirection: type=%d symbol=%s\n", red->type, red->symbol);
+	debug_print("Parser: Redirection: type=%d symbol=%s\n", red->type,
+		red->symbol);
 	if (is_at_end(p))
-		return (err("Expected a filename after redirection operator, found EOF\n"), ERR_SYNTAX);
+		return (err("Expected a filename after redirection operator,\
+				found EOF\n"), ERR_SYNTAX);
 	tok_name = advance(p);
-	debug_print("Parser: _process_normal_redir filename:%s\n", tok_get_raw(tok_name));
-	if (!(is_filename_token((t_tok *)tok_name) || is_expansion((t_tok *)tok_name)))
-		return (err("Expected a valid filename after redirection operator\n"), ERR_SYNTAX);
+	debug_print("Parser: _process_normal_redir filename:%s\n",
+		tok_get_raw(tok_name));
+	if (!(is_filename_token((t_tok *)tok_name)
+			|| is_expansion((t_tok *)tok_name)))
+		return (err("Expected a valid filename after redirection operator\n"),
+			ERR_SYNTAX);
 	red->do_globbing = tok_get_globbing((t_tok *)tok_name);
 	red->do_expansion = tok_get_expansion((t_tok *)tok_name);
 	red->filename = ft_strdup(tok_get_raw((t_tok *)tok_name));
@@ -74,7 +79,7 @@ static int	_process_heredoc_redir(t_redir_data *red, t_tok *tok)
 /* Freeing handled by caller */
 static int	_add_redir(t_ast_node *node, t_redir_data *red)
 {
-	t_list			*new;
+	t_list	*new;
 
 	if (!red || !node)
 		return (ERR_ARGS);
@@ -84,8 +89,9 @@ static int	_add_redir(t_ast_node *node, t_redir_data *red)
 		err("Failed to create execution node for redirection\n");
 		return (ERR_MEM);
 	}
-	debug_print("Parser: Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n", red->symbol,
-		red->filename, red->heredoc_body, red->do_globbing, red->do_expansion);
+	debug_print("Parser: Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n",
+		red->symbol, red->filename, red->heredoc_body, red->do_globbing,
+		red->do_expansion);
 	ft_lstadd_back(p_get_redirs_ptr(node), new);
 	p_update_redc(node, 1);
 	return (0);
@@ -119,14 +125,15 @@ static int	_parse_redir(t_parser *p, t_ast_node *node)
 		if (0 != _add_redir(node, red))
 			return (destroy_redir(red), ERR_GENERAL);
 	}
-	debug_print("Parser: _parse_redir: curr peek tok: %s\n", tok_get_raw(peek(p)));
+	debug_print("Parser: _parse_redir: curr peek tok: %s\n",
+		tok_get_raw(peek(p)));
 	return (0);
 }
 
 /* PROCESS REDIR
- * Adds redirections to node's t_list 
+ * Adds redirections to node's t_list
  * Upon failure, frees any downstream heap mem
- * and returns. Does nothing to args. 
+ * and returns. Does nothing to args.
  */
 int	process_redir(t_parser *p, t_ast_node *ast_node)
 {
@@ -134,12 +141,11 @@ int	process_redir(t_parser *p, t_ast_node *ast_node)
 	{
 		if (0 != _parse_redir(p, ast_node))
 		{
-			//free(ast_node);
 			err("Failed to parse redirection\n");
-			return (1);
+			return (ERR_GENERAL);
 		}
 	}
 	else
-		debug_print("Not a redir:%s\n", tok_get_raw(peek(p)));
+		debug_print("Parser: Not a redir:%s\n", tok_get_raw(peek(p)));
 	return (0);
 }

@@ -2,10 +2,10 @@
 
 void	destroy_cmd_node(void *n)
 {
-	t_ast_node *node = (t_ast_node *)n;
+	t_ast_node	*node;
 
-	debug_print("Parser: destroy_cmd_node...\n");
-
+	node = (t_ast_node *)n;
+	log_print("Parser: destroy_cmd_node...\n");
 	if (NULL == node)
 		return ;
 	if (node->type != AST_NODE_CMD)
@@ -21,17 +21,17 @@ void	destroy_cmd_node(void *n)
 
 void	destroy_proc_node(void *n)
 {
-	t_ast_node *node = (t_ast_node *)n;
+	t_ast_node	*node;
 
-	debug_print("Parser: destroy_proc_node...\n");
-
+	node = (t_ast_node *)n;
+	log_print("Parser: destroy_proc_node...\n");
 	if (NULL == node)
 		return ;
 	if (AST_NODE_PROC != node->type)
 		return ;
 	if (node->data.proc.redirs)
 		ft_lstclear(&node->data.proc.redirs, destroy_redir);
-	if (node->data.proc.cmds)	
+	if (node->data.proc.cmds)
 		ft_lstclear(&node->data.proc.cmds, destroy_ast_node);
 	free(node);
 }
@@ -39,10 +39,10 @@ void	destroy_proc_node(void *n)
 // destroy t_list cmds, char **operators
 void	destroy_log_node(void *n)
 {
-	t_ast_node *node = (t_ast_node *)n;
+	t_ast_node	*node;
 
-	debug_print("Parser: destroy_log_node...\n");
-
+	node = (t_ast_node *)n;
+	log_print("Parser: destroy_log_node...\n");
 	if (NULL == node)
 		return ;
 	if (AST_NODE_LOG != node->type)
@@ -56,10 +56,10 @@ void	destroy_log_node(void *n)
 
 void	destroy_pipe_node(void *n)
 {
-	t_ast_node *node = (t_ast_node *)n;
+	t_ast_node	*node;
 
-	debug_print("Parser: destroy_pipe_node...\n");
-
+	node = (t_ast_node *)n;
+	log_print("Parser: destroy_pipe_node...\n");
 	if (NULL == node)
 		return ;
 	if (AST_NODE_PIPELINE != node->type)
@@ -68,15 +68,15 @@ void	destroy_pipe_node(void *n)
 	free(node);
 }
 
-/* Switch for freeing various t_ast_node types 
+/* Switch for freeing various t_ast_node types
  * For use in llist destroy
  */
 void	destroy_ast_node(void *node)
 {
-	t_ast_node *ast = (t_ast_node *)node;
+	t_ast_node	*ast;
 
-	debug_print("Parser: destroy_ast...\n");
-
+	ast = (t_ast_node *)node;
+	log_print("Parser: destroy_ast...\n");
 	if (NULL == ast)
 		return ;
 	if (AST_NODE_PROC == ast->type)

@@ -18,24 +18,24 @@
 /* ENV
  * Run a program in a modified environment...
  * Except in this pared down version, 
- * only prints current environ content line by line
+ * only prints current shell envp content line by line
  */
  int	bi_env(t_state *s, char **argv, int argc)
 {
 	(void)argc;
 	// env should not take any parameters
 	if (!argv || !argv[0])
-		return (1);
+		return (ERR_GENERAL);
 	if (argv[1])
 	{
 		write(2, "env: too many arguments\n", 24);
-		return (1);
+		return (ERR_GENERAL);
 	}
 	// check if env list exists(error code matches bash)
-	if (!s || !get_envp(s))
+	if (!s || !has_sh_envp(s))
 	{
 		write(2, "env: failed to retrieve environment\n", 35);
-		return (1);
+		return (ERR_GENERAL);
 	}
 	write(2, "\033[32m[DEBUG] Printing copied environment...\033[0m\n", 49);
 	s_env_print(s);
