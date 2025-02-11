@@ -44,10 +44,16 @@ t_state	*init_state(char **envp)
 		s->current_lexer = NULL;
 		s->current_cmd = NULL;
 		s->input = NULL;
-		s->envp = envp;
 		s->destroy_command = NULL;
 		s->destroy_lexer = NULL;
 		s->destroy_parser = NULL;
+		s->envp = envp;
+		s->env_list = copy_envp(envp);
+		if (!s->env_list)
+		{
+			free(s);
+			return (NULL);
+		}
 	}
 	return (s);
 }
@@ -65,6 +71,10 @@ void	destroy_state(t_state *s)
 		s->destroy_command(s->current_cmd);
 	if (s->input)
 		free(s->input);
+	if (s->env_list)
+		free(s->env_list);
+	//free (e->envp)
+	//	free(s->envp);
 	free(s);
 }
 
