@@ -6,6 +6,7 @@
 # include "../execute/execute.h"
 # include "../parse/parse.h"
 # include "../state/state.h"
+# include "../env/env.h"
 
 /* COMMAND ADT
  * Sequences execution
