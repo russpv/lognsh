@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "bi_int.h"
+#include "../state/state_int.h"
 
 # define CMD_NAME "env"
 
@@ -19,6 +20,31 @@
  * Except in this pared down version, 
  * only prints current environ content line by line
  */
+ 
+ int	bi_env(t_state *s, char **argv, int argc)
+{
+	(void)argc;
+	// env should not take any parameters
+	if (!argv || !argv[0])
+		return (1);
+	if (argv[1])
+	{
+		write(2, "env: too many arguments\n", 24);
+		return (1);
+	}
+	// check if env list exists(error code matches bash)
+	if (!s || !s->env_list)
+	{
+		write(2, "env: failed to retrieve environment\n", 35);
+		return (1);
+	}
+	write(2, "\033[32m[DEBUG] Printing copied environment...\033[0m\n", 49);
+	print_env(s->env_list);
+	write(2, "\033[32m[DEBUG] Finished printing copied environment!\033[0m\n", 56);
+	return (0);
+}
+ 
+ /* old env
 int	bi_env(t_state *s, char **argv, int argc)
 {
 	extern char	**environ;
@@ -41,4 +67,4 @@ int	bi_env(t_state *s, char **argv, int argc)
 		i++;
 	}
 	return (0);
-}
+} */
