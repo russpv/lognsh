@@ -8,7 +8,11 @@ char *get_input(t_state *s)
 
 char	**get_envp(t_state *s)
 {
-	return (s->envp);
+	if (!s)
+		return (NULL);
+	if (!s->env_list)
+		return (NULL);
+	return (lst_to_array(s->env_list));
 }
 
 t_cmd	*get_cmd(t_state *s)
