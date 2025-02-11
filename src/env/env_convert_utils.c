@@ -88,6 +88,7 @@ void	free_env_array(char **env_array)
 	free(env_array);
 }
 
+/* Returns heap array */
 char	**lst_to_array(t_env *env_list)
 {
 	char	**env_array;

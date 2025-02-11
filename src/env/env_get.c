@@ -9,10 +9,11 @@
 /*   Updated: 2025/02/09 08:59:52 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "env_int.h"
 
 // this returns a system-managed string. Do not modify!
-char	**s_getenv(void)
+char	**env_getenv(void)
 {
 	char		**res;
 	const char	*path_env = getenv("PATH");
@@ -32,7 +33,7 @@ char	**s_getenv(void)
 }
 
 // looks for an environment variable in the linked list and returns its value
-char	*s_getenv_value(const char *key, t_env *env)
+char	*env_getenv_value(const char *key, t_env *env)
 {
 	if (!key || !env)
 		return (NULL);
@@ -43,17 +44,4 @@ char	*s_getenv_value(const char *key, t_env *env)
 		env = env->next;
 	}
 	return (NULL);
-}
-// print all env variables
-void	print_env(t_env *env)
-{
-	while (env)
-	{
-		printf("%s=", env->key);
-		if (env->value)
-			printf("%s\n", env->value);
-		else
-			printf("\n");
-		env = env->next;
-	}
 }

@@ -20,7 +20,6 @@ int	bi_unset(t_state *s, char **argv, int argc)
 	int	i;
 	int	j;
 	
-	
 	(void)s;
 	if (argc < 2)
 		return (0);

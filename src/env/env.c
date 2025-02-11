@@ -116,7 +116,7 @@ t_env	*copy_envp(char **envp)
 			{
 				free(key);
 				free(value);
-				free_env_list(env_list);
+				env_free(env_list);
 				return (NULL);
 			}
 			add_env_node(&env_list, new_node);

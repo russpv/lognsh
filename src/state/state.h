@@ -1,13 +1,13 @@
 #ifndef STATE_H
 # define STATE_H
 
+# include "../include/libft.h"
 # include "../debug.h"
 # include "../signal/signal.h"
-# include "../env/env.h"
 # include "error.h"
 # include <errno.h>
-# include <readline/readline.h>
 # include <readline/history.h>
+# include <readline/readline.h>
 
 # define SHELL_NAME "minish"
 
@@ -53,6 +53,7 @@ typedef void					(*t_attach_fn)(void *instance);
 typedef struct s_parser			t_parser;
 typedef struct s_lex			t_lex;
 typedef struct s_cmd			t_cmd;
+typedef struct s_env			t_env;
 
 // Methods
 t_state							*init_state(char **envp);
@@ -69,6 +70,7 @@ int								*get_status(t_state *s);
 char							*get_input(t_state *s);
 t_cmd							*get_cmd(t_state *s);
 char							**get_envp(t_state *s);
+t_env							*get_sh_env(t_state *s, const char *key);
 
 void							register_command_destroy(t_state *s,
 									t_destroy_fn fn);
@@ -77,8 +79,7 @@ void							register_parser_destroy(t_state *s,
 void							register_lexer_destroy(t_state *s,
 									t_destroy_fn fn);
 void							s_free_cmd(t_state *s);
-void	s_free_cmd_lex_parse(t_state *state);
+void							s_free_cmd_lex_parse(t_state *state);
 
-
-
+void							s_env_print(t_state *s);
 #endif

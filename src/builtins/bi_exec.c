@@ -1,6 +1,6 @@
 #include "bi_int.h"
 
-int	find_and_validate_cmd(const char *name, char **fullpath, const char *caller);
+extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath, const char *caller);
 
 /* Takes first argument
  * Note: retains state, does not do cleanup.
@@ -9,7 +9,7 @@ int	bi_exec(t_state *s, char **argv, int argc)
 {
 	char	*fullpath;
 	int		ret;
-	char	**envp;
+	char	**environ;
 
 	if (!argv || !argv[1])
 	{
@@ -20,11 +20,10 @@ int	bi_exec(t_state *s, char **argv, int argc)
 	for (int i = 0; i < argc; i++) { //debugging
         //printf("Argument %d: %s\n", i, argv[i]);
     }
-	ret = find_and_validate_cmd(argv[1], &fullpath, "exec");
+	ret = find_and_validate_cmd(s, argv[1], &fullpath, "exec");
 	if (ret != 0)
 		return (-1);
-	envp = get_envp(s);
-	if (execve(fullpath, argv + 1, envp) == -1)
+	if (execve(fullpath, argv + 1, environ) == -1)
 	{
 		perror("execve failed");
 		free(fullpath);

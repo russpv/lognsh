@@ -13,7 +13,7 @@
 #include "env_int.h"
 
 // Set or update an environment variable
-int		set_env_var(t_env **env, const char *key, const char *value)
+int		env_set_var(t_env **env, const char *key, const char *value)
 {
 	t_env	*tmp;
 	t_env	*new_node;
@@ -38,7 +38,7 @@ int		set_env_var(t_env **env, const char *key, const char *value)
 }
 
 // remove an enviroment var
-int		unset_env_var(t_env **env, const char *key)
+int		env_unset_var(t_env **env, const char *key)
 {
 	if (!env || !key)
 		return (-1);

@@ -20,7 +20,7 @@ int    bi_pwd(t_state *s, char **args, int argc)
     (void)argc;
     if (args[1])
     {
-        write(STDERR_FILENO, "minishell: pwd: too many arguments\n", sizeof("minishell: pwd: too many arguments\n"));
+        write(STDERR_FILENO, SHELL_NAME": pwd: too many arguments\n", sizeof(SHELL_NAME": pwd: too many arguments\n"));
         return (1);
     }
     cwd = getcwd(NULL, 0);
@@ -32,7 +32,7 @@ int    bi_pwd(t_state *s, char **args, int argc)
     }
     else
     {
-        perror("minishell: pwd");
+        perror(SHELL_NAME": pwd");
         return (1);
     }
 }

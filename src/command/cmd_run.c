@@ -12,14 +12,14 @@ static int	_check_access(const char *path)
 }
 
 /* Returns 0 if absolute fullpath is found */
-static int	_search_path(const char *cmd, char **fullpath)
+static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 {
 	char	**paths;
 	char	*tmp;
 	int		i;
 
 	i = -1;
-	if (!(paths = s_getenv()))
+	if (!(paths = get_sh_env(s, SHELL_PATH)))
 		return (1);
 	while (paths[++i])
 	{
@@ -42,7 +42,7 @@ static int	_search_path(const char *cmd, char **fullpath)
 
 /* Stores command path in fullpath, if valid.
  * Checks PATH, or absolute path if slash is in the name */
-extern int	find_and_validate_cmd(const char *name, char **fullpath, \
+extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath, \
 		const char *caller)
 {
 	if (NULL != name && '\0' != name[0])
@@ -57,7 +57,7 @@ extern int	find_and_validate_cmd(const char *name, char **fullpath, \
 		}
 		else
 		{
-			if (0 == _search_path(name, fullpath))
+			if (0 == _search_path(s, name, fullpath))
 				if (0 == _check_access(*fullpath))
 					return (0);
 		}
@@ -82,7 +82,7 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	c = get_cmd(s);
 	if (p_get_type(a) != AST_NODE_CMD || NULL == p_get_cmd(a))
 		return (EINVAL);
-	if (0 != find_and_validate_cmd(p_get_cmd(a), &c->fullpath, NULL))
+	if (0 != find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath, NULL))
 		return (s_free_cmd(s), ERR_CMD_NOT_FOUND);
 	if (c->fullpath)
 		debug_print("Cmd: Found command! at %s\n", c->fullpath);

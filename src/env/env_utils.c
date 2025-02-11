@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "env.h"
 #include "env_int.h"
 
 // helper function for copy_envp() to get env size
@@ -37,8 +36,9 @@ int	get_env_list_size(t_env *env_list)
 	}
 	return (count);
 }
+
 // free all env variables
-void	free_env_list(t_env *env)
+void	env_free(t_env *env)
 {
 	t_env	*tmp;
 
@@ -50,5 +50,19 @@ void	free_env_list(t_env *env)
 		if (tmp->value)
 			free(tmp->value);
 		free(tmp);
+	}
+}
+
+// print all env variables
+void	env_print(t_env *env)
+{
+	while (env)
+	{
+		printf("%s=", env->key);
+		if (env->value)
+			printf("%s\n", env->value);
+		else
+			printf("\n");
+		env = env->next;
 	}
 }

@@ -48,8 +48,8 @@ t_state	*init_state(char **envp)
 		s->destroy_lexer = NULL;
 		s->destroy_parser = NULL;
 		s->envp = envp;
-		s->env_list = copy_envp(envp);
-		if (!s->env_list)
+		s->sh_env_list = copy_envp(envp);
+		if (!s->sh_env_list)
 		{
 			free(s);
 			return (NULL);
@@ -71,8 +71,8 @@ void	destroy_state(t_state *s)
 		s->destroy_command(s->current_cmd);
 	if (s->input)
 		free(s->input);
-	if (s->env_list)
-		free(s->env_list);
+	if (s->sh_env_list)
+		env_free(s->sh_env_list);
 	//free (e->envp)
 	//	free(s->envp);
 	free(s);

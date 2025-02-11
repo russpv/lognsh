@@ -22,7 +22,7 @@ static char	*_expand_variable(const char *arg)
 	
 	if (arg[0] == '$')
 	{
-		env_value = getenv(arg + 1); // remove '$' and get value
+		env_value = getenv(arg + 1); // remove '$' and get value //RKP: this needs to get shell env?
 		if (env_value)
 			return (ft_strdup(env_value));
 		return (ft_strdup("")); // return empty string if variable is not set

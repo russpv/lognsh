@@ -1,5 +1,4 @@
-#include "../include/libft.h"
-
+#include "libft.h"
 
 /* STRDUP
 ** This returns pointer to new string
@@ -11,8 +10,6 @@ char	*ft_strdup(const char *s)
 	char	*newstr;
 	size_t	len;
 
-	if (!s)
-		return (NULL);
 	len = ft_strlen(s);
 	newstr = (char *)malloc(sizeof(char) * len + 1);
 	if (!newstr)
