@@ -1,7 +1,7 @@
 #include "command_int.h"
 
 /* CMD EXEC PROC
- *
+ * Executes proc node.
  * Note: though it stores a t_list, proc can
  * only be one command
  */
@@ -21,13 +21,12 @@ int	cmd_exec_proc(t_state *s, t_ast_node *a)
 	while (++i < cmdc)
 	{
 		// push onto s->command stack?
-		// TODO include redirections, but only AFTER the (...)
 		node = cmd->content;
-		debug_print("Cmd: \t### cmd_exec_proc got cmd type:%d\n",
+		debug_print("Cmd: \t### cmd_exec_proc got cmd type:%d\n",\
 			p_get_type(node));
 		exit_status = exec_fork_wait(s, node, cmd_execute_full);
-		if (exit_status != 0) // Handle failure scenario
-			debug_print("Cmd: Command failed with exit status: %d\n",
+		if (exit_status != 0)
+			debug_print("Cmd: Command failed with exit status: %d\n",\
 				exit_status);
 		cmd = cmd->next;
 	}

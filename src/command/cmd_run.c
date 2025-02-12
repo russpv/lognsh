@@ -42,8 +42,7 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 
 /* Stores command path in fullpath, if valid.
  * Checks PATH, or absolute path if slash is in the name */
-extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath,
-		const char *caller)
+extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 {
 	if (NULL != name && '\0' != name[0])
 	{
@@ -62,7 +61,7 @@ extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath,
 					return (0);
 		}
 	}
-	print_command_not_found(name, ft_strdup(caller));
+	print_command_not_found(name);
 	return (ERR_CMD_NOT_FOUND);
 }
 
@@ -82,7 +81,7 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	c = get_cmd(s);
 	if (p_get_type(a) != AST_NODE_CMD || NULL == p_get_cmd(a))
 		return (EINVAL);
-	if (0 != find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath, NULL))
+	if (0 != find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath))
 		return (s_free_cmd(s), ERR_CMD_NOT_FOUND);
 	if (c->fullpath)
 		log_print("Cmd: Found command! at %s\n", c->fullpath);

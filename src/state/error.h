@@ -1,8 +1,7 @@
 #ifndef ERROR_H
 # define ERROR_H
 
-#include "state.h"
-#include <signal.h>
+#include "../globals/globals.h"
 
 #define ERR_NONE 0
 #define ERR_AMBIGUOUS_REDIR 1
@@ -26,11 +25,10 @@ void* null_and_stat(t_state* s, int error_code);
 const char *get_error_message(int error_code);
 
 /* specific error messages */
-void	print_command_not_found(const char *cmd, const char *caller);
+void	print_command_not_found(const char *cmd);
 void    print_permission_denied(const char *path);
 void	print_lex_buffer_overflow(void);
 void    print_ambiguous_redirect(const char *orig_fn);
 void    print_too_many_args(const char *caller);
-
 
 #endif

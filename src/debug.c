@@ -25,6 +25,7 @@ void	colored_printf(const char *color, const char *format, ...)
 		vfprintf(stderr, format, args);
 		fprintf(stderr, "%s", RESET);
 		va_end(args);
+		fflush(stderr);
 	}
 }
 
@@ -39,6 +40,7 @@ void	log_print(const char *s, ...)
 		vfprintf(stderr, s, args);
 		fprintf(stderr, "%s", BLUE);
 		va_end(args);
+		fflush(stderr);
 	}
 }
 

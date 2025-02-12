@@ -182,7 +182,7 @@ typedef struct s_parser
 	t_list					*tokens;
 	int						token_count;
 	t_list					*curr_tok;
-	t_stack					*st;
+	t_ptr_stack				*st;
 	t_ast_node				*last_node;
 	t_ast_node				*ref_node;
 	int						curr_idx;

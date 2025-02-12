@@ -1,15 +1,15 @@
 #include "bi_int.h"
 
 extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath, const char *caller);
+extern 	char	**environ;
 
 /* Takes first argument
- * Note: retains state, does not do cleanup.
+ * Note: retains state, does not do cleanup or pass shell vars.
  */
 int	bi_exec(t_state *s, char **argv, int argc)
 {
 	char	*fullpath;
 	int		ret;
-	char	**environ;
 
 	(void)argc;
 	if (!argv || !argv[1])

@@ -42,7 +42,9 @@ static int	_process_cmd(t_parser *p, t_ast_node *proc_node)
 	}
 	return (0);
 }
-/* Consumes open ( and adds command(s) */
+/* Consumes open ( and adds command(s) 
+ * Can only be one command
+ */
 static int	_process_proc(t_parser *p, t_ast_node *proc_node)
 {
 	if (!p || !proc_node)
@@ -64,6 +66,43 @@ static int	_process_proc(t_parser *p, t_ast_node *proc_node)
 	return (0);
 }
 
+/* Adjusts child node of p->last_node in case a 
+ * lower priority grouping node 
+ * was parsed afterwards (due to infix operator grammar)
+ * Pops node stack until last parsed node remains
+ */
+// if we find an operator that is higher priority than the thing 
+// we just parsed, swap. if lower, stop
+// so 	cmd && cmd2 || cmd3, is a swap (for the log) - log calls full_cmd and get the return 
+// 		cmd || cmd3 && cmd 4 is a stop (for the pipe) - pipe returns, log gets pipe as last_node
+// 		(cmd && cmd2 || cmd3 && cmd4) proc swaps for log, log swaps for pipe
+//		(cmd || cmd2 && cmd 3 || cmd 4) - proc needs to find the log. so it would be two swaps. 
+
+//	soln: in _process_cmd, check next operator, if lower prec than the last_node, do not attach last_node
+//  	then _process_proc parses next node, which calls a log node and that associates the higher node just parsed
+// 		and that will not return until EOF or ) since its lowest priority. we look ahead, see its ), so keep the 
+//		last_node and return.
+//		Repeat logic for process_log. process_pipe has nothing to swap for as it only works on procs or atoms,
+//		and the default parse (an atom cmd) is always valid, and a proc is prefixed not infixed. 
+int	p_swap_child_node(t_parser *p)
+{
+	t_ast_node *node;
+
+	if (!p)
+		return (1);
+	if (!st_ptr_peek(p->st) || !p->last_node)
+		return (0);
+	while (st_ptr_peek(p->st) != p->last_node)
+	{
+		node = st_ptr_pop(p->st);
+		if (node->type < p->last_node->type
+		st_ptr_pop(p->st);
+	}
+	return (0);
+}
+
+
+
 /* PARSE PROC
  * Consumes tokens to create a subshell node on the AST.
  * Adds any redirections AFTER the parentheses.
@@ -75,7 +114,7 @@ t_ast_node	*parse_proc(t_parser *p)
 {
 	t_ast_node	*ast_node;
 
-	st_push(p->st, AST_NODE_PROC);
+	st_ptr_push(p->st, &ast_node);
 	debug_print("Parser: parse_proc tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = _init_proc();
 	if (NULL == ast_node)
@@ -89,7 +128,8 @@ t_ast_node	*parse_proc(t_parser *p)
 	debug_print("Parser: parse_proc doing redirs\n");
 	process_redir(p, ast_node); // TODO test this
 	p->last_node = ast_node;
-	st_pop(p->st);
+	// if cmd node was stored
+	p_swap_child_node(p);
 	debug_print("Parser: parsed proc of %d cmds\n", ast_node->data.proc.cmdc);
 	debug_print("Parser: curr peek tok: %s\n", tok_get_raw(peek(p)));
 	return (ast_node);

@@ -1,10 +1,10 @@
 #include "stack_int.h"
 
-t_stack	*st_create(void)
+t_int_stack	*st_int_create(void)
 {
-	t_stack	*s;
+	t_int_stack	*s;
 
-	s = malloc(sizeof(struct s_stack));
+	s = malloc(sizeof(struct s_int_stack));
 	if (s)
 	{
 		ft_memset(&s->st, 0, MAX_ST_DEPTH * sizeof(int));
@@ -12,12 +12,12 @@ t_stack	*st_create(void)
 	}
 	return (s);
 }
-void	st_destroy(t_stack *s)
+void	st_int_destroy(t_int_stack *s)
 {
 	free(s);
 }
 
-int	st_push(t_stack *s, int thing)
+int	st_int_push(t_int_stack *s, int thing)
 {
 	if (s->depth >= MAX_ST_DEPTH)
 	{
@@ -29,7 +29,7 @@ int	st_push(t_stack *s, int thing)
 	return (0);
 }
 
-int	st_pop(t_stack *s)
+int	st_int_pop(t_int_stack *s)
 {
 	int	tmp;
 
@@ -45,7 +45,7 @@ int	st_pop(t_stack *s)
 }
 
 /* Returns top number on stack or -1 if empty */
-int	st_peek(t_stack *s)
+int	st_int_peek(t_int_stack *s)
 {
 	int	thing;
 

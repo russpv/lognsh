@@ -1,37 +1,5 @@
 #include "state_int.h"
 
-/* BUILD COMMAND
- * Use command.h methods
- */
-/*
-t_cmd	build_command(char *input)
-{
-	//TODO, use command.h methods
-}
-
-char	*get_env_var(t_state *s, const char *key)
-{
-	//TODO, use env.h methods
-}
-
-void	set_env_var(t_state *s, const char *key, const char *value)
-{
-	//TODO, use env.h methods
-}
-
-char	*search_path(const char *command)
-{
-	//TODO
-	//wrapper required for COMMAND for parsing
-}
-
-char	**expand_glob(const char *pattern)
-{
-	//TODO
-	//wrapper required for COMMAND for parsing
-}
-*/
-
 t_state	*init_state(char **envp)
 {
  	t_state *s = malloc(sizeof(struct s_global_state));
@@ -73,8 +41,6 @@ void	destroy_state(t_state *s)
 		free(s->input);
 	if (s->sh_env_list)
 		env_free(s->sh_env_list);
-	//free (e->envp)
-	//	free(s->envp);
 	free(s);
 }
 
