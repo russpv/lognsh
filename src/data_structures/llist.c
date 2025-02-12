@@ -85,8 +85,7 @@ void	ft_lstadd_insert(t_list **lst, t_list *new)
 	new->prev = *lst;
 	debug_print("[DEBUG] Inserted new node after the first node. new->prev = %p,\
 		(*lst)->next = %p\n", (void *)new->prev, (void *)(*lst)->next);
-	// Link the last node of the new node to the saved next node,
-		if there was one
+	// Link the last node of the new node to the saved next node, if there was one
 	last_new_node->next = save_next;
 	if (save_next)
 	{
