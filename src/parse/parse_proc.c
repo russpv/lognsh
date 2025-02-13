@@ -19,10 +19,10 @@ static t_ast_node	*_init_proc(void)
 	return (proc_node);
 }
 
-/* Stores command. Assumes parser is on
- * correct token.
+/* Stores command. 
+ * Assumes parser is on correct token.
  */
-static int	_process_cmd(t_parser *p, t_ast_node *proc_node)
+static int	_add_cmd(t_parser *p, t_ast_node *proc_node)
 {
 	t_list	*cmd_node;
 
@@ -36,16 +36,16 @@ static int	_process_cmd(t_parser *p, t_ast_node *proc_node)
 		proc_node->data.proc.cmdc++;
 	}
 	else
-	{
-		err("Memory allocation error while creating proc's command node\n");
-		return (ERR_MEM);
-	}
+		return (err("Memory allocation error while creating \
+			proc's command node\n"), ERR_MEM);
 	return (0);
 }
-/* Consumes open ( and adds command(s) 
- * Can only be one command
+
+/* Consumes open (, adds the sub-command, consumes close ) 
+ * Note: we don't need the loop with current grammar. 
+ * Remains for extension with ';'.
  */
-static int	_process_proc(t_parser *p, t_ast_node *proc_node)
+static int	_process_proc(t_state *s, t_parser *p, t_ast_node *proc_node)
 {
 	if (!p || !proc_node)
 		return (ERR_ARGS);
@@ -55,53 +55,47 @@ static int	_process_proc(t_parser *p, t_ast_node *proc_node)
 	while (!is_at_end(p) && !is_close_paren(peek(p)))
 	{
 		debug_print("Parser: parsing proc: getting next cmd...\n");
-		if (NULL == parse_full_cmd(p))
+		if (NULL == parse_full_cmd(s, p))
 			return (err("Failed to parse proc command\n"), ERR_GENERAL);
-		if (0 != _process_cmd(p, proc_node))
-			return (ERR_GENERAL);
+		
 	}
 	if (!is_close_paren(peek(p)))
 		return (err("Expected ')' to close process\n"), ERR_SYNTAX);
+	if (0 != _add_cmd(p, proc_node))
+		return (ERR_GENERAL);
 	advance(p);
 	return (0);
 }
 
-/* Adjusts child node of p->last_node in case a 
- * lower priority grouping node 
- * was parsed afterwards (due to infix operator grammar)
- * Pops node stack until last parsed node remains
+/*
+ * Adjusts the child node of p->last_node when a lower-priority grouping node
+ * is parsed after a higher-priority operator, which can occur due to infix 
+ * operator grammar.
+ *
+ * The function processes operators based on their precedence:
+ * - If an operator with higher precedence is encountered, a swap is made.
+ * - If an operator with lower precedence is encountered, the function stops.
+ *
+ * Example behavior:
+ * - In expressions like `cmd && cmd2 | cmd3`, the swap happens because 
+ *   `|` has higher precedence than `&&`.
+ * - In `cmd | cmd3 && cmd4`, parsing stops when `&&` is encountered after the pipeline.
+ * - Complex expressions such as `(cmd && cmd2 | cmd3 && cmd4)` will result 
+ *   in a series of swaps for logical and subordinate pipe node.
+ * - For `(cmd | cmd2 && cmd3 | cmd4)`, the parsing involves two swaps to 
+ *   correctly identify the logical operator beneath the proc.
+ *
+ * Notes:
+ * - In `_add_cmd`, the next operator is checked after the parsed command. 
+ *   If it does not terminate the expression, (and it is a lower priority node)
+ *  `last_node` is not added as the proc node child. 
+ * - `_process_proc` will then parse the next node (as a grouping node) that 
+ *   associates with the higher-priority node just parsed. This node will not return 
+ *   until `)` is encountered, as it has the lowest priority.
+ * - For `process_log`, the same logic applies. `process_pipe` does not swap nodes 
+ *   since it works only on `proc` or `atom`, and `proc` is always prefixed (not infixed).
+ * - p->last_node is how information is obtained from sub-nodes.
  */
-// if we find an operator that is higher priority than the thing 
-// we just parsed, swap. if lower, stop
-// so 	cmd && cmd2 || cmd3, is a swap (for the log) - log calls full_cmd and get the return 
-// 		cmd || cmd3 && cmd 4 is a stop (for the pipe) - pipe returns, log gets pipe as last_node
-// 		(cmd && cmd2 || cmd3 && cmd4) proc swaps for log, log swaps for pipe
-//		(cmd || cmd2 && cmd 3 || cmd 4) - proc needs to find the log. so it would be two swaps. 
-
-//	soln: in _process_cmd, check next operator, if lower prec than the last_node, do not attach last_node
-//  	then _process_proc parses next node, which calls a log node and that associates the higher node just parsed
-// 		and that will not return until EOF or ) since its lowest priority. we look ahead, see its ), so keep the 
-//		last_node and return.
-//		Repeat logic for process_log. process_pipe has nothing to swap for as it only works on procs or atoms,
-//		and the default parse (an atom cmd) is always valid, and a proc is prefixed not infixed. 
-int	p_swap_child_node(t_parser *p)
-{
-	t_ast_node *node;
-
-	if (!p)
-		return (1);
-	if (!st_ptr_peek(p->st) || !p->last_node)
-		return (0);
-	while (st_ptr_peek(p->st) != p->last_node)
-	{
-		node = st_ptr_pop(p->st);
-		if (node->type < p->last_node->type
-		st_ptr_pop(p->st);
-	}
-	return (0);
-}
-
-
 
 /* PARSE PROC
  * Consumes tokens to create a subshell node on the AST.
@@ -110,27 +104,29 @@ int	p_swap_child_node(t_parser *p)
  * Current token must be a '('.
  * Must end on a ')' to add ONE subnode.
  */
-t_ast_node	*parse_proc(t_parser *p)
+t_ast_node	*parse_proc(t_state *s, t_parser *p)
 {
 	t_ast_node	*ast_node;
+	int res;
 
-	st_ptr_push(p->st, &ast_node);
+	st_int_push(p->st, AST_NODE_PROC);
 	debug_print("Parser: parse_proc tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = _init_proc();
 	if (NULL == ast_node)
 		return (err("Allocation failed for proc node\n"), NULL);
-	if (0 != _process_proc(p, ast_node))
+	res = _process_proc(s, p, ast_node);
+	if (0 != res)
 	{
+		set_error(s, res);
 		destroy_ast_node(ast_node);
 		return (NULL);
 	}
 	debug_print("Parser: curr peek tok: %s\n", tok_get_raw(peek(p)));
 	debug_print("Parser: parse_proc doing redirs\n");
-	process_redir(p, ast_node); // TODO test this
+	process_redir(p, ast_node);
 	p->last_node = ast_node;
-	// if cmd node was stored
-	p_swap_child_node(p);
 	debug_print("Parser: parsed proc of %d cmds\n", ast_node->data.proc.cmdc);
 	debug_print("Parser: curr peek tok: %s\n", tok_get_raw(peek(p)));
+	st_int_pop(p->st);
 	return (ast_node);
 }

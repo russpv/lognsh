@@ -12,7 +12,7 @@
  * Parses pipe when it's none of the above and its currently a pipe token
  * Parses logical when it's none of the above and its currently a logical token
  */
-t_ast_node	*parse_full_cmd(t_parser *p)
+t_ast_node	*parse_full_cmd(t_state *s, t_parser *p)
 {
 	debug_print("Parser: ######## parse_full_cmd ########\n");
 	debug_print("Parser: parse_full_cmd: got tok of %s \n",
@@ -23,36 +23,36 @@ t_ast_node	*parse_full_cmd(t_parser *p)
 		return (NULL);
 	}
 	if (is_open_paren(peek(p)))
-		return (parse_proc(p));
+		return (parse_proc(s, p));
 	debug_print("Parser: not a proc...\n");
 	if ((is_cmd_token(peek(p)) || is_redir_token(peek(p)))
-		&& (st_peek(p->st) > 0 || !p->last_node))
-		return (parse_cmd(p));
+		&& (st_int_peek(p->st) > 0 || !p->last_node))
+		return (parse_cmd(s, p));
 	debug_print("Parser: not a cmd...\n");
 	if (p->last_node && is_pipe_token(peek(p)))
-		return (parse_pipeline(p));
+		return (parse_pipeline(s, p));
 	debug_print("Parser: not a pipe...\n");
 	if (p->last_node && is_log_token(peek(p)))
-		return (parse_logical(p));
+		return (parse_logical(s, p));
 	err("Syntax error near: [TODO, empty cmd okay]\n");
 	p->parse_error = true;
 	return (NULL);
 }
 
 /* Inserts easily into test function */
-t_ast_node	*test_parse(t_parser *parser)
+t_ast_node	*test_parse(t_state *s, t_parser *parser)
 {
 	t_ast_node	*ast;
 
 	while (!is_at_end(parser) && !parser->parse_error)
-		ast = parse_full_cmd(parser);
+		ast = parse_full_cmd(s, parser);
 	parser->ast = ast;
 	/*if (true == lex_get_incomplete(lexer))
 		tokens = tokenize_more_input(lexer); */
 	return (ast);
 }
 
-// TODO error handling
+// 
 t_ast_node	*parse(t_state *s, char *input)
 {
 	t_lex		*lexer;
@@ -68,7 +68,7 @@ t_ast_node	*parse(t_state *s, char *input)
 	parser = create_parser(s, tokens);
 	debug_print("Parser: \t###### parse ####### \n");
 	while (!is_at_end(parser) && !parser->parse_error)
-		ast = parse_full_cmd(parser);
+		ast = parse_full_cmd(s, parser);
 	parser->ast = ast;
 	set_parser(s, parser);
 	set_lexer(s, lexer);

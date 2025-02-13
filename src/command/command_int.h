@@ -6,7 +6,7 @@
 /* Holds context for current command */
 struct					s_cmd
 {
-	t_stack				*st;
+	t_int_stack			*st;		/* Holds execution context */
 	char				*fullpath;
 	char				**argv;
 	t_list				*redirs;

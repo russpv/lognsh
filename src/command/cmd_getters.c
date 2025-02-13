@@ -10,7 +10,7 @@ char	**c_get_argv(t_cmd *c)
 	return (c->argv);
 }
 
-t_stack	*c_getctxt(t_cmd *c)
+t_int_stack	*c_getctxt(t_cmd *c)
 {
 	return (c->st);
 }

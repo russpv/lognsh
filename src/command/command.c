@@ -6,7 +6,7 @@ void	destroy_cmd(void *c)
 
 	cmd = (t_cmd *)c;
 	if (cmd->st)
-		st_destroy(cmd->st);
+		st_int_destroy(cmd->st);
 	if (cmd->fullpath)
 		free(cmd->fullpath);
 	if (cmd->redirs)
@@ -26,7 +26,7 @@ t_cmd	*init_cmd(t_state *s, t_ast_node *a)
 	if (c)
 	{
 		c->fildes = NULL;
-		c->st = st_ptr_create();
+		c->st = st_int_create();
 		c->argv = NULL;
 		c->argc = 0;
 		c->redirs = NULL;

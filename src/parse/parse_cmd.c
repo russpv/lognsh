@@ -111,22 +111,25 @@ static int	_process_cmd(t_parser *p, t_ast_node *cmd_node)
  * Creates node of type AST_NODE_CMD
  * and adds it to AST
  */
-t_ast_node	*parse_cmd(t_parser *p)
+t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 {
 	t_ast_node	*ast_node;
+	int res;
 
-	st_push(p->st, AST_NODE_CMD);
+	st_int_push(p->st, AST_NODE_CMD);
 	debug_print("Parser: parse_cmd tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = _init_cmd_node();
 	if (NULL == ast_node)
 		return (err("Allocation failed for cmd node\n"), NULL);
-	if (0 != _process_cmd(p, ast_node))
+	res = _process_cmd(p, ast_node);
+	if (0 != res)
 	{
+		set_error(s, res);
 		destroy_ast_node(ast_node);
 		return (NULL);
 	}
 	p->last_node = ast_node;
-	st_pop(p->st);
+	st_int_pop(p->st);
 	debug_print("Parser: parsed cmd %s\n", ast_node->data.cmd.name);
 	return (ast_node);
 }

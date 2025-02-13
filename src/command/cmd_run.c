@@ -66,12 +66,10 @@ extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 }
 
 /* Forks depending on execution context
- * In the context of a proc or pipeline,
- * forking would already be done and be in
- * a child process.
- * a null cmd name is valid, nothing runs
+ * In the context of a proc or pipeline, forking would already 
+ * be done and be in a child process.
+ * A null cmd name is valid, nothing runs.
  * Execute module handles redirects and forking in exec_fork_execve()
- *
  */
 int	run_cmd(t_state *s, t_ast_node *a)
 {
@@ -85,8 +83,8 @@ int	run_cmd(t_state *s, t_ast_node *a)
 		return (s_free_cmd(s), ERR_CMD_NOT_FOUND);
 	if (c->fullpath)
 		log_print("Cmd: Found command! at %s\n", c->fullpath);
-	if (CTXT_PIPELINE == st_peek(get_cmd(s)->st)
-		|| CTXT_PROC == st_peek(get_cmd(s)->st))
+	if (CTXT_PIPELINE == st_int_peek(get_cmd(s)->st)
+		|| CTXT_PROC == st_int_peek(get_cmd(s)->st))
 	{
 		if (-1 == execve(c->fullpath, c->argv, get_envp(s)))
 			err("run_cmd ERR execve()\n");

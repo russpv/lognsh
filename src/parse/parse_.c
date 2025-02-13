@@ -30,7 +30,7 @@ t_parser	*create_parser(t_state *s, t_list *tokens)
 		p->curr_tok = tokens;
 		p->token_count = ft_lstsize(tokens);
 		_init_parser(s, p);
-		p->st = st_create();
+		p->st = st_int_create();
 		if (!p->st)
 		{
 			free(p);
@@ -61,7 +61,7 @@ void	destroy_parser(void *instance)
 	}
 	if (p->st)
 	{
-		st_destroy(p->st);
+		st_int_destroy(p->st);
 		p->st = NULL;
 	}
 	free(p);

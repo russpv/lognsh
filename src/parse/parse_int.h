@@ -182,7 +182,7 @@ typedef struct s_parser
 	t_list					*tokens;
 	int						token_count;
 	t_list					*curr_tok;
-	t_ptr_stack				*st;
+	t_int_stack				*st;
 	t_ast_node				*last_node;
 	t_ast_node				*ref_node;
 	int						curr_idx;
@@ -203,11 +203,11 @@ t_tok						*advance(t_parser *p);
 bool						is_at_end(t_parser *p);
 
 /* Recursive descent functions */
-t_ast_node					*parse_cmd(t_parser *p);
-t_ast_node					*parse_full_cmd(t_parser *p);
-t_ast_node					*parse_pipeline(t_parser *p);
-t_ast_node					*parse_proc(t_parser *p);
-t_ast_node					*parse_logical(t_parser *p);
+t_ast_node					*parse_cmd(t_state *s, t_parser *p);
+t_ast_node					*parse_full_cmd(t_state *s, t_parser *p);
+t_ast_node					*parse_pipeline(t_state *s, t_parser *p);
+t_ast_node					*parse_proc(t_state *s, t_parser *p);
+t_ast_node					*parse_logical(t_state *s, t_parser *p);
 
 /* Parsing helpers */
 int							process_redir(t_parser *p, t_ast_node *cmd_node);
@@ -234,6 +234,7 @@ bool						is_heredoc_token(t_tok *tok);
 bool						is_arg_token(t_tok *tok);
 bool						is_expansion(t_tok *tok);
 bool						is_close_paren(t_tok *tok);
+bool						is_group_op_token(t_tok *tok);
 
 /* For traversing the AST */
 bool						node_has_redirects(t_ast_node *n);
@@ -259,7 +260,7 @@ void						destroy_arg(void *in);
 
 /* Debugging */
 void						parse_print(t_ast_node *ast);
-t_ast_node					*test_parse(t_parser *parser);
+t_ast_node					*test_parse(t_state *s, t_parser *parser);
 
 /* Setters and Getters */
 int							p_update_redc(t_ast_node *a, int amt);
