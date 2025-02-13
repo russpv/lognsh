@@ -1,9 +1,9 @@
 #ifndef TOKEN_INT_H
 # define TOKEN_INT_H
 
-#include "token.h"
+# include "token.h"
 
-struct s_tok
+struct				s_tok
 {
 	enum e_tok_type	type;
 	char			*raw;

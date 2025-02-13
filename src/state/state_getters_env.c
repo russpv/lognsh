@@ -3,7 +3,7 @@
 /* Returns new heap array each call */
 char	**get_envp(t_state *s)
 {
-	extern char **environ;
+	extern char	**environ;
 
 	if (!s)
 		return (NULL);

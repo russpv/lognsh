@@ -34,7 +34,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *pipe_node)
 
 /* This adds the previously parsed node as the first command,
  * continues adding commands for each pipe token found.
- */ 
+ */
 static int	_process_pipe(t_state *s, t_parser *p, t_ast_node *pipe_node)
 {
 	if (!p || !pipe_node)

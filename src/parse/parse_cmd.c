@@ -114,7 +114,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *cmd_node)
 t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 {
 	t_ast_node	*ast_node;
-	int res;
+	int			res;
 
 	st_int_push(p->st, AST_NODE_CMD);
 	debug_print("Parser: parse_cmd tok: %s\n", tok_get_raw(peek(p)));

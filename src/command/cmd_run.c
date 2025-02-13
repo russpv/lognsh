@@ -19,7 +19,8 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 	int		i;
 
 	i = -1;
-	if (!(paths = get_sh_path(s)))
+	paths = get_sh_path(s);
+	if (NULL == paths)
 		return (1);
 	while (paths[++i])
 	{
@@ -66,7 +67,7 @@ extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 }
 
 /* Forks depending on execution context
- * In the context of a proc or pipeline, forking would already 
+ * In the context of a proc or pipeline, forking would already
  * be done and be in a child process.
  * A null cmd name is valid, nothing runs.
  * Execute module handles redirects and forking in exec_fork_execve()

@@ -58,14 +58,14 @@ static int	_process_op(t_parser *p, t_ast_node *log_node)
 	return (0);
 }
 
-/* Returns cmp if it is a lower priority operator than 
+/* Returns cmp if it is a lower priority operator than
  * that represented by ref.
  */
 t_tok	*which_lower_priority(t_ast_node *ref, t_tok *cmp)
 {
 	if (!ref | !cmp)
 		return (NULL);
-	if (is_close_paren(cmp) || tok_get_type(cmp) == TOK_EOF) 
+	if (is_close_paren(cmp) || tok_get_type(cmp) == TOK_EOF)
 		return (cmp);
 	if (is_group_op_token(cmp))
 	{
@@ -78,8 +78,7 @@ t_tok	*which_lower_priority(t_ast_node *ref, t_tok *cmp)
 static int	_do_ops(t_state *s, t_parser *p, t_ast_node *log_node)
 {
 	if (NULL == parse_full_cmd(s, p))
-		return (err("Failed to parse command after logical op\n"),
-			ERR_GENERAL);
+		return (err("Failed to parse command after logical op\n"), ERR_GENERAL);
 	if (peek(p) == which_lower_priority(log_node, peek(p)))
 	{
 		if (0 != _process_cmd(p, log_node))
@@ -98,12 +97,12 @@ static int	_do_ops(t_state *s, t_parser *p, t_ast_node *log_node)
 
 /* Adds commands and logical operator to logical ast_node
  * Must have parsed an ast_node prior.
- * Determines whether to add the following command or to 
+ * Determines whether to add the following command or to
  * let it associate with higher priority next operator.
  */
 static int	_process_log(t_state *s, t_parser *p, t_ast_node *log_node)
 {
-	int res;
+	int	res;
 
 	if (!p || !log_node)
 		return (ERR_ARGS);
@@ -130,7 +129,7 @@ static int	_process_log(t_state *s, t_parser *p, t_ast_node *log_node)
 t_ast_node	*parse_logical(t_state *s, t_parser *p)
 {
 	t_ast_node	*ast_node;
-	int res;
+	int			res;
 
 	st_int_push(p->st, AST_NODE_LOG);
 	debug_print("Parser: parse_logical tok: %s\n", tok_get_raw(peek(p)));

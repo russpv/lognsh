@@ -19,7 +19,7 @@ static t_ast_node	*_init_proc(void)
 	return (proc_node);
 }
 
-/* Stores command. 
+/* Stores command.
  * Assumes parser is on correct token.
  */
 static int	_add_cmd(t_parser *p, t_ast_node *proc_node)
@@ -41,8 +41,8 @@ static int	_add_cmd(t_parser *p, t_ast_node *proc_node)
 	return (0);
 }
 
-/* Consumes open (, adds the sub-command, consumes close ) 
- * Note: we don't need the loop with current grammar. 
+/* Consumes open (, adds the sub-command, consumes close )
+ * Note: we don't need the loop with current grammar.
  * Remains for extension with ';'.
  */
 static int	_process_proc(t_state *s, t_parser *p, t_ast_node *proc_node)
@@ -57,7 +57,6 @@ static int	_process_proc(t_state *s, t_parser *p, t_ast_node *proc_node)
 		debug_print("Parser: parsing proc: getting next cmd...\n");
 		if (NULL == parse_full_cmd(s, p))
 			return (err("Failed to parse proc command\n"), ERR_GENERAL);
-		
 	}
 	if (!is_close_paren(peek(p)))
 		return (err("Expected ')' to close process\n"), ERR_SYNTAX);
@@ -69,7 +68,7 @@ static int	_process_proc(t_state *s, t_parser *p, t_ast_node *proc_node)
 
 /*
  * Adjusts the child node of p->last_node when a lower-priority grouping node
- * is parsed after a higher-priority operator, which can occur due to infix 
+ * is parsed after a higher-priority operator, which can occur due to infix
  * operator grammar.
  *
  * The function processes operators based on their precedence:
@@ -77,23 +76,25 @@ static int	_process_proc(t_state *s, t_parser *p, t_ast_node *proc_node)
  * - If an operator with lower precedence is encountered, the function stops.
  *
  * Example behavior:
- * - In expressions like `cmd && cmd2 | cmd3`, the swap happens because 
+ * - In expressions like `cmd && cmd2 | cmd3`, the swap happens because
  *   `|` has higher precedence than `&&`.
- * - In `cmd | cmd3 && cmd4`, parsing stops when `&&` is encountered after the pipeline.
- * - Complex expressions such as `(cmd && cmd2 | cmd3 && cmd4)` will result 
+ * - In `cmd | cmd3 && cmd4`, parsing stops when `&&` is encountered 
+ *   after the pipeline.
+ * - Complex expressions such as `(cmd && cmd2 | cmd3 && cmd4)` will result
  *   in a series of swaps for logical and subordinate pipe node.
- * - For `(cmd | cmd2 && cmd3 | cmd4)`, the parsing involves two swaps to 
+ * - For `(cmd | cmd2 && cmd3 | cmd4)`, the parsing involves two swaps to
  *   correctly identify the logical operator beneath the proc.
  *
  * Notes:
- * - In `_add_cmd`, the next operator is checked after the parsed command. 
- *   If it does not terminate the expression, (and it is a lower priority node)
- *  `last_node` is not added as the proc node child. 
- * - `_process_proc` will then parse the next node (as a grouping node) that 
- *   associates with the higher-priority node just parsed. This node will not return 
- *   until `)` is encountered, as it has the lowest priority.
- * - For `process_log`, the same logic applies. `process_pipe` does not swap nodes 
- *   since it works only on `proc` or `atom`, and `proc` is always prefixed (not infixed).
+ * - In `_add_cmd`, the next operator is checked after the parsed command.
+ *   	If it does not terminate the expression, (and it is a lower 
+ * 		priority node) `last_node` is not added as the proc node child.
+ * - `_process_proc` will then parse the next node (as a grouping node) that
+ * 	 	associates with the higher-priority node just parsed. This node 
+ * 		will not return until `)` is encountered, as it has the lowest priority.
+ * - For `process_log`, the same logic applies. `process_pipe` does 
+ * 		not swap nodes since it works only on `proc` or `atom`, and `proc`
+ * 		is always prefixed (not infixed).
  * - p->last_node is how information is obtained from sub-nodes.
  */
 
@@ -107,7 +108,7 @@ static int	_process_proc(t_state *s, t_parser *p, t_ast_node *proc_node)
 t_ast_node	*parse_proc(t_state *s, t_parser *p)
 {
 	t_ast_node	*ast_node;
-	int res;
+	int			res;
 
 	st_int_push(p->st, AST_NODE_PROC);
 	debug_print("Parser: parse_proc tok: %s\n", tok_get_raw(peek(p)));

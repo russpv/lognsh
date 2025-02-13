@@ -24,7 +24,8 @@ t_tok	*lex_ht_lookup(t_lex *lexer)
 		debug_print("Lexer: Found hasht match. Ptr: %c\n", *lexer->ptr);
 		if (true == ((t_ht_data)(ht_get_payload(res)))->is_substring)
 			res = do_one_char_lookahead(lexer, res);
-		if (true == is_normal_delim((unsigned char) *lexer->ptr) || true == _is_not_delimd(lexer->buf))
+		if (true == is_normal_delim((unsigned char) *lexer->ptr) \
+			|| true == _is_not_delimd(lexer->buf))
 		{
 			debug_print("Lexer: Creating token...\n");
 			return (lex_create_token(lexer,

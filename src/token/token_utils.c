@@ -19,5 +19,5 @@ char	*tok_get_raw(t_tok *token)
 
 enum e_tok_type	tok_get_type(t_tok *token)
 {
-	return(token->type);
+	return (token->type);
 }

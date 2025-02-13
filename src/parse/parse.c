@@ -47,8 +47,6 @@ t_ast_node	*test_parse(t_state *s, t_parser *parser)
 	while (!is_at_end(parser) && !parser->parse_error)
 		ast = parse_full_cmd(s, parser);
 	parser->ast = ast;
-	/*if (true == lex_get_incomplete(lexer))
-		tokens = tokenize_more_input(lexer); */
 	return (ast);
 }
 
@@ -63,7 +61,7 @@ t_ast_node	*parse(t_state *s, char *input)
 	ast = NULL;
 	lexer = tokenize(s, input);
 	if (NULL == lexer)
-		return (null_and_stat(s, ERR_TOKEN)); // Ctrl+D abort
+		return (null_and_stat(s, ERR_TOKEN));
 	tokens = lex_get_tokens(lexer);
 	parser = create_parser(s, tokens);
 	debug_print("Parser: \t###### parse ####### \n");

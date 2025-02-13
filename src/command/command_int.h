@@ -6,7 +6,7 @@
 /* Holds context for current command */
 struct					s_cmd
 {
-	t_int_stack			*st;		/* Holds execution context */
+	t_int_stack			*st;
 	char				*fullpath;
 	char				**argv;
 	t_list				*redirs;
@@ -37,6 +37,6 @@ int						cmd_exec_proc(t_state *s, t_ast_node *a);
 int						find_and_validate_cmd(t_state *s, const char *name,
 							char **fullpath);
 
-void	print_pipes(t_cmd *c);
+void					print_pipes(t_cmd *c);
 
 #endif

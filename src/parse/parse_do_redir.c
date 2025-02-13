@@ -7,19 +7,18 @@
 static void	_p_do_redirection(void *content)
 {
 	const t_redir_data	*node = (t_redir_data *)content;
-	redir_fn			handlers[] = {[TOK_REDIRECT_IN] = handle_redirect_in,
-					[TOK_REDIRECT_OUT] = handle_redirect_out,
-					[TOK_REDIRECT_APPEND] = handle_redirect_append,
-					[TOK_HEREDOC_WORD] = handle_heredoc};
+	const t_redir_fn	handlers[] = {
+	[TOK_REDIRECT_IN] = handle_redirect_in,
+	[TOK_REDIRECT_OUT] = handle_redirect_out,
+	[TOK_REDIRECT_APPEND] = handle_redirect_append,
+	[TOK_HEREDOC_WORD] = handle_heredoc
+	};
 
 	if (NULL == content)
 		return ;
 	debug_print("Parser: _p_do_redirection...\n");
 	if (!node->type)
-	{
-		debug_print("Parser: _p_do_redirection got NULL\n");
-		return ;
-	}
+		return (debug_print("Parser: _p_do_redirection got NULL\n"));
 	debug_print("Parser: _p_do_redirection got smthg and executing...\n");
 	if (handlers[node->type])
 		handlers[node->type](node);
@@ -34,7 +33,7 @@ static void	_p_do_redirection(void *content)
 int	p_do_redirections(t_ast_node *a)
 {
 	if (!a)
-		return (err("ERR no node given\n"), -1);
+		return (err("ERR no node given\n"), ERR_ARGS);
 	if (a->type != AST_NODE_CMD)
 		return (EINVAL);
 	if (!node_has_redirects(a))

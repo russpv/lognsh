@@ -14,6 +14,7 @@ void	set_input(t_state *s, char *input)
 {
 	s->input = input;
 }
+
 void	set_command(t_state *s, t_cmd *c)
 {
 	s->current_cmd = c;

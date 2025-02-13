@@ -58,7 +58,7 @@ static t_list	*_match_glob(const char *pattern)
 		{
 			debug_print("Parser: match_glob matched: %s\n", res->d_name);
 			ft_lstadd_back(&lst, ft_lstnew(ft_strdup(res->d_name)));
-				// TODO malloc guard
+			// TODO malloc guard
 		}
 		res = readdir(dir);
 	}
@@ -76,8 +76,11 @@ int	p_do_globbing_redirs(void *c)
 	lst = NULL;
 	content = (t_redir_data *)c;
 	debug_print("Parser: p_do_globbing_redirs got redir type: %d fn:%s doc:\
-		%s do_glob:%d\n", content->type, content->filename,
-		content->heredoc_body, content->do_globbing);
+		%s do_glob:%d\n",
+				content->type,
+				content->filename,
+				content->heredoc_body,
+				content->do_globbing);
 	if (true == content->do_globbing)
 	{
 		lst = _match_glob((const char *)content->filename);
@@ -91,7 +94,7 @@ int	p_do_globbing_redirs(void *c)
 			{
 				new_fn = ft_strdup(lst->content);
 				if (!new_fn)
-					return (1); // TODO malloc processing
+					return (ERR_MEM);
 				free(content->filename);
 				content->filename = new_fn;
 			}
@@ -136,7 +139,7 @@ void	p_do_globbing(t_list **lst_node, void *lst_c)
 		{
 			debug_print("Parser: p_do_globbing found %d matches, 1st: %s\n",
 				ft_lstsize(lst), lst->content);
-			if (ft_lstsize(lst) > 1) // need to insert
+			if (ft_lstsize(lst) > 1)
 			{
 				ft_lstdelone_rwd(lst_node, lst_node, destroy_arg);
 				new_arg_data_lst = ft_lstmap(lst, create_arg_data_node,
@@ -147,7 +150,7 @@ void	p_do_globbing(t_list **lst_node, void *lst_c)
 			{
 				new_arg = ft_strdup(lst->content);
 				if (!new_arg)
-					return ; // TODO malloc processing
+					return ;
 				free(content->raw);
 				content->raw = new_arg;
 				ft_lstclear(&lst, free);

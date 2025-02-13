@@ -24,16 +24,16 @@
  * a command which exits with a zero exit status has succeeded.
 
 	* A non-zero exit status indicates failure. This seemingly
-	 counter-intuitive scheme is used
-	* so there is one well-defined way to indicate success and 
-	a variety of ways to indicate various failure modes. When 
+		counter-intuitive scheme is used
+	* so there is one well-defined way to indicate success and
+	a variety of ways to indicate various failure modes. When
 	a command terminates on a fatal signal whose number is N,
  * Bash uses the value 128+N as the exit status.
 
  * If a command is not found,
 	the child process created to execute it returns a status of 127.
- * If a command is found but is not executable, the return 
- 	status is 126.
+ * If a command is found but is not executable, the return
+	status is 126.
  *
  * If a command fails because of an error during expansion or redirection,
 	the exit status is greater than zero.
@@ -43,7 +43,7 @@
 ** A centralized singleton-like pattern for tracking global state
 ** including environment, command history, execution state.
 */
-struct s_global_state;
+struct							s_global_state;
 typedef struct s_global_state	t_state;
 
 typedef void					(*t_destroy_fn)(void *instance);
@@ -73,7 +73,8 @@ t_cmd							*get_cmd(t_state *s);
 char							**get_envp(t_state *s);
 char							*get_sh_env(t_state *s, const char *key);
 char							**get_sh_path(t_state *s);
-//int	set_sh_env(t_state *s, const char *key, const char *value); //For export()
+// int	set_sh_env(t_state *s, const char *key, const char *value);
+		//For export()
 
 void							register_command_destroy(t_state *s,
 									t_destroy_fn fn);

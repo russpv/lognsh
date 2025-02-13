@@ -93,7 +93,7 @@ char	**p_do_arg_processing(t_state *s, t_ast_node *a)
 		return (NULL);
 	args = p_get_args(a);
 	_lstiter_state(s, *args, p_do_expansion);
-		// TODO test that this does not corrupt the args list
+	// TODO test that this does not corrupt the args list
 	debug_print("Parser: Before globbing: head: %p, first node: %p\n", args,
 		*args ? (*args)->content : NULL);
 	ft_lstiter_ins_rwd(args, p_do_globbing);

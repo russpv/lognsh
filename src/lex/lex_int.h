@@ -3,12 +3,13 @@
 #define FAIL_TOKEN 10 // TODO group somewhere else
 
 /* chars that need to be quoted if meant literally */
-#define NORMALDELIMS \
-	"^()=|{}[]`<>?~;&\n\t \'\""    //$ should not break tokens,
-									// backslash also,
-									//	# is escape only
-									// Removed '*' so that it is included in token raws
-#define NORMALTRANSITIONS "\'\"<\0" // the '\0' isn't tested, keep at end,
+#define NORMALDELIMS "^()=|{}[]`<>?~;&\n\t \'\""
+//$ should not break tokens,
+// backslash also,
+//	# is escape only
+// Removed '*' so that it is included in token raws
+#define NORMALTRANSITIONS "\'\"<\0"
+// the '\0' isn't tested, keep at end,
 //	< for heredoc
 #define LEX_BUFSZ 1024
 #define INIT 0
@@ -124,7 +125,7 @@ typedef struct s_lex
 	enum e_lex_state		state;
 	bool					escape_mode;
 	t_tokenizer				tokenizer;
-	t_list					*token_list; /* t_tok */
+	t_list					*token_list;
 	t_ht					hasht;
 	char					*buf;
 	int						do_expansion;
@@ -143,8 +144,8 @@ struct						s_ht_data
 
 typedef struct s_ht_data	*t_ht_data;
 
-t_lex						*create_lexer(t_state *st, int start_state, \
-							const char *s);
+t_lex						*create_lexer(t_state *st, int start_state,
+								const char *s);
 void						destroy_lexer(void *instance);
 
 void						build_hasht(t_lex *lexer);
@@ -165,7 +166,7 @@ bool						is_dollar_question(t_lex *lexer);
 int							word_or_name(const char *s);
 void						process_escape_sequence(t_lex *l);
 int							process_special_operators(t_lex *lexer);
-struct s_ht_entry			*do_one_char_lookahead(t_lex *lexer, \
+struct s_ht_entry			*do_one_char_lookahead(t_lex *lexer,
 								struct s_ht_entry *res);
 t_tok						*lex_ht_lookup(t_lex *lexer);
 int							do_state_transition(t_lex *lexer);

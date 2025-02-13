@@ -43,7 +43,7 @@ void	ft_lstadd_front(t_list **lst, t_list *new)
 	*lst = new;
 }
 
-/* Adds llist in lst */
+/* Adds llist within lst */
 void	ft_lstadd_insert(t_list **lst, t_list *new)
 {
 	t_list	*save_next;
@@ -66,7 +66,8 @@ void	ft_lstadd_insert(t_list **lst, t_list *new)
 		*lst = new;
 		new->prev = NULL;
 		debug_print("[DEBUG] List is empty. Added new node as the first element:\
-			%p\n", (void *)new);
+			%p\n",
+					(void *)new);
 		debug_print("[DEBUG] Insert completed successfully.\n");
 		return ;
 	}
@@ -78,20 +79,26 @@ void	ft_lstadd_insert(t_list **lst, t_list *new)
 	{
 		save_next = (*lst)->next;
 		debug_print("[DEBUG] Current list has a next node. Save next node:\
-			%p\n", (void *)save_next);
+			%p\n",
+					(void *)save_next);
 	}
 	// Insert the new node after the first node
 	(*lst)->next = new;
 	new->prev = *lst;
-	debug_print("[DEBUG] Inserted new node after the first node. new->prev = %p,\
-		(*lst)->next = %p\n", (void *)new->prev, (void *)(*lst)->next);
-	// Link the last node of the new node to the saved next node, if there was one
+	debug_print("[DEBUG] Inserted new node after the first node. new->prev =\
+		%p,\
+		(*lst)->next = %p\n",
+				(void *)new->prev,
+				(void *)(*lst)->next);
+	// Link the last node of the new node to the saved next node,
+	//	if there was one
 	last_new_node->next = save_next;
 	if (save_next)
 	{
 		save_next->prev = last_new_node;
 		debug_print("[DEBUG] Linked last node of new list to the saved next node: save_next->prev =\
-			%p\n", (void *)save_next->prev);
+			%p\n",
+					(void *)save_next->prev);
 	}
 	debug_print("[DEBUG] Insert completed successfully.\n");
 }
@@ -128,7 +135,6 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 ** node: node to free
 ** del: ptr to func that deletes node.content
 */
-
 void	ft_lstdelone(t_list **lst, t_list *node, void (*del)(void *))
 {
 	if (!lst || !node || !del)
@@ -145,6 +151,7 @@ void	ft_lstdelone(t_list **lst, t_list *node, void (*del)(void *))
 	free(node);
 	node = NULL;
 }
+
 /* LSTDELONE
 ** Removes passed node in doubly linked list
 ** Assuming REAR to HEAD iteration direction
@@ -153,45 +160,26 @@ void	ft_lstdelone(t_list **lst, t_list *node, void (*del)(void *))
 ** del: ptr to func that deletes node.content
 ** Handles case where same pointer passed in arg 1 and 2
 */
-
 void	ft_lstdelone_rwd(t_list **lst, t_list **node, void (*del)(void *))
 {
 	t_list	*tmp;
 
-	debug_print("[DEBUG] ft_lstdelone_rwd got (head: %p)\n", (void *)lst);
 	if (!lst || !node || !(*node) || !del)
 		return ;
-	debug_print("[DEBUG] Deleting node: %p (content: %p) (head: %p)\n",
+	debug_print("lstdelone_rwd: Deleting node: %p (content: %p) (head: %p)\n",
 		(void *)(*node), (void *)((*node)->content), (void *)lst);
 	tmp = (*node)->prev;
 	if ((*node)->prev)
-	{
-		debug_print("[DEBUG] Setting prev->next (%p -> %p)\n",
-			(void *)(*node)->prev, (void *)(*node)->next);
 		(*node)->prev->next = (*node)->next;
-	}
 	if ((*node)->next)
-	{
-		debug_print("[DEBUG] Setting next->prev (%p -> %p)\n",
-			(void *)(*node)->next, (void *)(*node)->prev);
 		(*node)->next->prev = (*node)->prev;
-	}
 	if ((*node)->content)
-	{
-		debug_print("[DEBUG] Freeing content at %p\n",
-			(void *)(*node)->content);
 		del((*node)->content);
-	}
-	debug_print("[DEBUG] Freeing node at %p\n", (void *)(*node));
 	free(*node);
 	*node = NULL;
 	if (*lst == *node)
-	{
-		debug_print("[DEBUG] Adjusting head: old head=%p, new head=%p\n",
-			(void *)(*lst), (void *)(tmp));
 		*lst = tmp;
-	}
-	debug_print("[DEBUG] Node deleted successfully\n");
+	debug_print("lstdelone_rwd: Node deleted successfully\n");
 }
 
 /* LSTITER
@@ -217,37 +205,25 @@ void	ft_lstiter_ins_rwd(t_list **lst, void (*f)(t_list **, void *))
 	t_list	*lst_rear;
 	t_list	*tmp;
 
-	debug_print("[DEBUG] ft_lstiter_ins_rwd got lst: %p, head:%p.\n",
-		(void *)lst, (void *)*lst);
-	// Check if the input list is NULL
+	debug_print("lstiter_ins_rwd: got lst: %p, head:%p.\n", (void *)lst,
+		(void *)*lst);
 	if (lst == NULL)
-	{
-		debug_print("[DEBUG] Input list is NULL. Returning.\n");
-		return ;
-	}
-	// Initialize lst_rear to the last node
+		return (debug_print("lstiter_ins_rwd: NULL input.\n"));
 	lst_rear = ft_lstlast(*lst);
-	debug_print("[DEBUG] Starting iteration from last node: %p\n",
-		(void *)lst_rear);
-	// Iterate backwards through the list
+	debug_print("lstiter_ins_rwd: Starting from end: %p\n", (void *)lst_rear);
 	while (lst_rear)
 	{
-		// Save the previous node before applying the function
 		tmp = lst_rear->prev;
-		// Print the current node's address and content
-		debug_print("[DEBUG] Iterating node: %p, content: %p\n",
+		debug_print("lstiter_ins_rwd: Iterating node: %p, content: %p\n",
 			(void *)lst_rear, (void *)lst_rear->content);
-		// Apply the function f to the node
 		f(&(lst_rear), lst_rear->content);
-		debug_print("[DEBUG] Function f applied to node: %p\n",
+		debug_print("lstiter_ins_rwd: Function f applied to node: %p\n",
 			(void *)lst_rear);
-		// Move to the previous node in the list
 		if (NULL == tmp)
 			*lst = lst_rear;
 		lst_rear = tmp;
 	}
-	// Finished iterating through the list
-	debug_print("[DEBUG] ft_lstiter_ins_rwd Iteration complete.\n");
+	debug_print("lstiter_ins_rwd: ft_lstiter_ins_rwd Iteration complete.\n");
 }
 
 /* LSTITERSTR

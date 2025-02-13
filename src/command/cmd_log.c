@@ -1,5 +1,22 @@
 #include "command_int.h"
 
+#define HALT_EXEC -1
+
+static int	_do_more_ops(const t_list *ops, int exit_status)
+{
+	debug_print("Cmd: \t### _do_log_commands got exit:%d\n", exit_status);
+	if (!ops)
+		return (HALT_EXEC);
+	debug_print("Cmd: \t### _do_log_commands got op:%s\n", ops->content);
+	if ((0 != exit_status && 0 == ft_strcmp(OP_ANDIF, ops->content))
+		|| (0 == exit_status && 0 == ft_strcmp(OP_ORIF, ops->content)))
+	{
+		log_print("Cmd: Operator evalution stopping further exection\n");
+		return (HALT_EXEC);
+	}
+	return (0);
+}
+
 /* Evaluates logical operators for conditional
  * execution and returns the last exit status
  */
@@ -18,16 +35,8 @@ static int	_do_log_commands(t_state *s, t_list *cmds, t_cmd *c)
 		if (0 != exec_fork_run(s, a, i, cmd_execute_full))
 			return (-1);
 		waitchild(&exit_status, 1);
-		debug_print("Cmd: \t### _do_log_commands got exit:%d\n", exit_status);
-		if (!ops)
+		if (HALT_EXEC == _do_more_ops(ops, exit_status))
 			break ;
-		debug_print("Cmd: \t### _do_log_commands got op:%s\n", ops->content);
-		if ((0 != exit_status && 0 == ft_strcmp(OP_ANDIF, ops->content))
-			|| (0 == exit_status && 0 == ft_strcmp(OP_ORIF, ops->content)))
-		{
-			debug_print("Cmd: Operator evalution stopping further exection\n");
-			break ;
-		}
 		cmds = cmds->next;
 		ops = ops->next;
 	}

@@ -40,7 +40,7 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 		lexer->token_list = NULL;
 		lexer->eof_word = NULL;
 		lexer->is_incomplete = false;
-    	register_lexer_destroy(st, destroy_lexer);
+		register_lexer_destroy(st, destroy_lexer);
 		if (false == _allocate_buf_and_hasht(lexer))
 		{
 			free(lexer);
@@ -54,28 +54,26 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 /* Doesn't free raw_string */
 void	destroy_lexer(void *instance)
 {
-	t_lex *lexer = (t_lex *)instance;
+	t_lex	*lexer;
+
+	lexer = (t_lex *)instance;
 	debug_print("Lexer: destroy_lexer...\n");
 	if (!lexer)
 		return ;
 	if (lexer->buf)
 	{
-		debug_print("Lexer: destroy_lexer buf...\n");
 		free(lexer->buf);
 	}
 	if (lexer->eof_word)
 	{
-		debug_print("Lexer: destroy_lexer eof_word...\n");
 		free(lexer->eof_word);
 	}
 	if (lexer->hasht)
 	{
-		debug_print("Lexer: destroy_lexer hasht...\n");
 		ht_destroy(lexer->hasht, lex_destroy_ht_node);
 	}
 	if (lexer->token_list)
 	{
-		debug_print("Lexer: destroy_lexer token_list...\n");
 		ft_lstclear(&lexer->token_list, destroy_token);
 	}
 	free(lexer);

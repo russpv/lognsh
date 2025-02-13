@@ -7,7 +7,7 @@
 static int	_do_child_ops(t_state *s)
 {
 	const t_cmd	*c = (const t_cmd *)get_cmd(s);
-	const char	*fullpath = (const char *)c_getfullpath((t_cmd *)c);
+	const char	*fullpath = (const char *)c_get_fullpath((t_cmd *)c);
 	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
 	const char	**envp = (const char **)get_envp(s);
 
@@ -17,7 +17,7 @@ static int	_do_child_ops(t_state *s)
 		return (err("_do_child_ops: ERR null fullpath parameters\n"), -1);
 	if (!c)
 		return (err("_do_child_ops: ERR null t_cmd parameters\n"), -1);
-	if (-1 == p_do_redirections(c_getnode((t_cmd *)c)))
+	if (-1 == p_do_redirections(c_get_node((t_cmd *)c)))
 		return (-1);
 	debug_print("Exec: Child exec'g %s\n", fullpath);
 	if (NULL == fullpath)
@@ -41,7 +41,7 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 	debug_print("Exec: exec_bi_call saving redir fns...\n");
 	save_redirs((t_cmd *)c);
 	debug_print("Exec: exec_bi_call doing redirs ...\n");
-	if (-1 == p_do_redirections(c_getnode((t_cmd *)c)))
+	if (-1 == p_do_redirections(c_get_node((t_cmd *)c)))
 		return (-1);
 	debug_print("Exec: Shell exec'g builtin\n");
 	if (-1 == bi(s, (char **)argv, argc))

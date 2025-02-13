@@ -13,6 +13,7 @@ t_tok	*advance(t_parser *p)
 	}
 	return (tmp);
 }
+
 // Returns current token ptr token
 t_tok	*peek(t_parser *p)
 {

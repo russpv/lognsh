@@ -1,6 +1,6 @@
 #include "lex_int.h"
 
-/* Loads a char into buf. 
+/* Loads a char into buf.
  * Checks for the closing single quote. Returns 1 if found
  * without incrementing ptr.
  * Stops buffer overflow.
@@ -10,7 +10,7 @@ static inline int	_load_buf(t_lex *lexer, int *buf_idx)
 	debug_print("Lexer: _load_buf... ptr:_%c_\n", *lexer->ptr);
 	if ((unsigned char)OP_SQUOTE == *lexer->ptr)
 	{
-		debug_print("Lexer: tokenize_single_quotes: found closing quote\n");
+		debug_print("Lexer: ': found closing quote\n");
 		return (1);
 	}
 	else
@@ -19,7 +19,7 @@ static inline int	_load_buf(t_lex *lexer, int *buf_idx)
 		{
 			if ((unsigned char)OP_NULL == *lexer->ptr)
 			{
-				debug_print("Lexer: tokenize_single_quotes: found null before closing quote\n");
+				debug_print("Lexer: ': found null before closing quote\n");
 				return (1);
 			}
 			lexer->buf[(*buf_idx)] = *lexer->ptr;
@@ -72,7 +72,8 @@ int	tokenize_null(t_lex *lexer)
 	debug_print("Lexer: tokenize_null...\n");
 	if (lexer)
 	{
-		token = create_token("\0", TOK_EOF, (size_t)(lexer->ptr - lexer->raw_string));
+		token = create_token("\0", TOK_EOF, (size_t)(lexer->ptr
+					- lexer->raw_string));
 		if (token)
 			add_token(lexer, token);
 		else

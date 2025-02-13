@@ -2,10 +2,12 @@
 
 t_state	*init_state(char **envp)
 {
- 	t_state *s = malloc(sizeof(struct s_global_state));
+	t_state	*s;
+
+	s = malloc(sizeof(struct s_global_state));
 	if (s)
 	{
-		s->pwd = NULL; // TODO remove?
+		s->pwd = NULL;
 		s->current_exit_code = 0;
 		s->error_code = 0;
 		s->current_parser = NULL;
@@ -27,7 +29,7 @@ t_state	*init_state(char **envp)
 	return (s);
 }
 
-/* Destroys parser before lexer 
+/* Destroys parser before lexer
  * as parser wraps some lexer token content
  */
 void	destroy_state(t_state *s)
@@ -45,7 +47,7 @@ void	destroy_state(t_state *s)
 	free(s);
 }
 
-/* Destroys parser before lexer 
+/* Destroys parser before lexer
  * as parser wraps some lexer token content
  */
 void	s_free_cmd_lex_parse(t_state *state)
@@ -70,7 +72,7 @@ void	s_free_cmd_lex_parse(t_state *state)
 	}
 }
 
-/* Destroys parser before lexer 
+/* Destroys parser before lexer
  * as parser wraps some lexer token content
  */
 void	s_free_cmd(t_state *state)

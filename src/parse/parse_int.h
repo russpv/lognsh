@@ -5,20 +5,6 @@
 
 # define MAX_CMD_ARGS 10
 
-// TODO: $ and * expansions. Send to lexer. Create tokens_insert method.
-// unsure when redirect expansion occurs; might as well do it asap.
-// if multiple words result, throw 'bash: $VAR: ambiguous redirect'
-
-// TODO expand_env_var(): if expansion flag is set, searches ENV for value.
-// TODO expand_exit_status(): if TOK_EXIT_STATUS, gets last value.
-// TODO split_words(): split on IFS, default space, tab, newline.
-
-// Note: multi-word expansions trigger an error for redirects. they cannot introduce functionality,
-//	so lexing is different.
-// Note: redirections can supersede piping
-// Note: expansion does not alter the parse tree structure. All words are treated as arguments,
-// unless no command was parsed,
-//	then the first word is treated as the command name.
 /*
 From Bash Manual:
 These (expansion) operations are performed in this order:
@@ -95,6 +81,7 @@ expansion of word to be opened for writing on file descriptor n,
 
 Note: any split words on an expansion of a redirection fd results in an error
 */
+
 
 typedef struct
 {
@@ -240,7 +227,7 @@ bool						is_group_op_token(t_tok *tok);
 bool						node_has_redirects(t_ast_node *n);
 
 /* Redirect function table */
-typedef void				(*redir_fn)(const t_redir_data *node);
+typedef void				(*t_redir_fn)(const t_redir_data *node);
 
 void						handle_redirect_in(const t_redir_data *node);
 void						handle_redirect_out(const t_redir_data *node);

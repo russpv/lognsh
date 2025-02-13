@@ -7,8 +7,6 @@
  * Inspired by K&R Ch 6.6
  */
 
-// static struct s_ht_entry	*g_hasht[HASHSIZE];
-
 t_ht	ht_create(void)
 {
 	int		i;
@@ -44,7 +42,7 @@ struct s_ht_entry	*ht_lookup(t_ht ht, char *s)
 	np = ht->buckets[hash(s)];
 	while (NULL != np)
 	{
-		if (0 == ft_strncmp(s, np->name, (size_t)-1))
+		if (0 == ft_strncmp(s, np->name, (size_t)(-1)))
 			return (np);
 		np = np->next;
 	}

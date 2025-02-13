@@ -26,51 +26,27 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	t_list	*new;
 	void	*new_content;
 
-	debug_print("[DEBUG] ft_lstmap.\n");
-	// Check if the input list is NULL
-	if (!lst)
-	{
-		debug_print("[DEBUG] Input list is NULL. Returning NULL.\n");
-		return (NULL);
-	}
-	// Initialize the new list
 	newlst = NULL;
-	// Loop through the original list
+	if (!lst)
+		return (debug_print("ft_lstmap: NULL input.\n"), NULL);
 	while (lst)
 	{
-		debug_print("[DEBUG] Mapping node: %p, content: %p\n", (void *)lst,
-			(void *)lst->content);
-		// Apply the function to the content
 		new_content = f(lst->content);
-		if (!new_content)
-		{
-			debug_print("[DEBUG] Function f returned NULL for content: %p\n",
-				(void *)lst->content);
-		}
-		// Create a new node with the mapped content
 		new = ft_lstnew(new_content);
 		if (!new)
 		{
-			debug_print("[DEBUG] Memory allocation failed for new node. Cleaning up.\n");
-			// If new node creation fails, delete the content and clear the list
 			(*del)(new_content);
 			if (newlst)
 			{
 				ft_lstclear(&newlst, del);
 				newlst = NULL;
 			}
-			return (NULL);
+			return (debug_print("ft_lstmap: Malloc err.\n"), NULL);
 		}
-		// Add the new node to the new list
 		ft_lstadd_back(&newlst, new);
-		debug_print("[DEBUG] Added new node to new list: %p\n", (void *)new);
-		// Move to the next node in the original list
 		lst = lst->next;
 	}
-	// Return the new list
-	debug_print("[DEBUG] Mapping complete. Returning new list: %p\n",
-		(void *)newlst);
-	return (newlst);
+	return (debug_print("ft_lstmap: Modded: %p\n", (void *)newlst), newlst);
 }
 
 /* LSTNEW
@@ -112,7 +88,6 @@ t_list	*ft_lstnew_copystr(void *content, char *(*f)(const char *))
 /* LSTSIZE
 ** Returns the node count of the linked list
 */
-
 int	ft_lstsize(t_list *lst)
 {
 	int	count;

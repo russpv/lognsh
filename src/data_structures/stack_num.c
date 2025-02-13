@@ -12,6 +12,7 @@ t_int_stack	*st_int_create(void)
 	}
 	return (s);
 }
+
 void	st_int_destroy(t_int_stack *s)
 {
 	free(s);

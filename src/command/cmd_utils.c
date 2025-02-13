@@ -24,11 +24,8 @@ char	**c_argstoargv(char **args, char *cmd, int argc)
 			else if (!cmd && i != 0 && args && argc > 0)
 				argv[i] = ft_strdup(args[i]);
 			if (!argv[i])
-			{
-				ft_freearr((void **)args, -1);
-				ft_freearr((void **)argv, -1);
-				return (NULL);
-			}
+				return (ft_freearr((void **)args, -1), \
+						ft_freearr((void **)argv, -1), NULL);
 		}
 		argv[i] = NULL;
 		ft_freearr((void **)args, -1);
@@ -38,7 +35,7 @@ char	**c_argstoargv(char **args, char *cmd, int argc)
 
 void	print_pipes(t_cmd *c)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < c->curr_cmdc)

@@ -72,7 +72,8 @@ static inline t_tok	*_match_heredoc(t_lex *l)
 		}
 		if (true == _line_is_eof(l, line))
 		{
-			debug_print("Lexer: Heredoc delimiter found, exiting heredoc mode.\n");
+			debug_print("Lexer: Heredoc delimiter found,\
+				exiting heredoc mode.\n");
 			token = lex_create_token(l, TOK_HEREDOC_WORD);
 			free(l->eof_word);
 			l->eof_word = NULL;
@@ -103,7 +104,6 @@ int	tokenize_heredoc(t_lex *lexer)
 	{
 		if (0 != add_token(lexer, token))
 			return (1);
-		//lexer->state = ON_EOF; //heredoc can be anywhere
 	}
 	else
 	{

@@ -42,6 +42,9 @@ t_cmd	*init_cmd(t_state *s, t_ast_node *a)
 	return (c);
 }
 
+/* Determines which parser to call given current token
+ * note: cmd_exec_simple is atomic and does not recurse
+ */
 int	cmd_execute_full(t_state *s, t_ast_node *a)
 {
 	log_print("Cmd: ######## cmd_execute_full ########\n");
@@ -49,7 +52,7 @@ int	cmd_execute_full(t_state *s, t_ast_node *a)
 		return (cmd_exec_proc(s, a));
 	debug_print("Cmd: node not a proc...\n");
 	if (AST_NODE_CMD == p_get_type(a))
-		return (cmd_exec_simple(s, a)); // this one does not recurse
+		return (cmd_exec_simple(s, a));
 	debug_print("Cmd: node not a cmd...\n");
 	if (AST_NODE_PIPELINE == p_get_type(a))
 		return (cmd_exec_pipe(s, a));
@@ -57,26 +60,27 @@ int	cmd_execute_full(t_state *s, t_ast_node *a)
 	if (AST_NODE_LOG == p_get_type(a))
 		return (cmd_exec_log(s, a));
 	debug_print("Cmd: ERR unknown node...\n");
-	return (1);
+	return (ERR_SYNTAX);
 }
 
 /* CMD EXECUTE
  * Recursively executes the AST from Parser
- * Sets current_cmd in State then calls 
+ * Sets current_cmd in State then calls
  * top 'switchboard' func
  * Returns last exit_code from input
- * 
+ *
  * Setting cmd in State allows multiple accesses
  * for expansions, globbing, etc.
- * 
+ *
  * The Command ADT stack tracks current AST depth
  * When a sub-method is called, the current node is
- * pushed. And when that sub-method returns, it is 
+ * pushed. And when that sub-method returns, it is
  * popped. Why?
  */
 int	cmd_execute(t_state *s, t_ast_node *a)
 {
-	init_cmd(s, a);
+	if (NULL == init_cmd(s, a))
+		return (ERR_MEM);
 	print_ast(a, 10);
-	return (cmd_execute_full(s, a)); //TODO clean up exit code mgmt
+	return (cmd_execute_full(s, a));
 }
