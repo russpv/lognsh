@@ -84,10 +84,7 @@ static t_tok	*_match_normal(t_lex *lexer)
 	if (res)
 		return (res);
 	if ((unsigned char)OP_NULL == *lexer->ptr)
-	{
-		debug_print("Lexer: ----FOUND NULL\n");
-		return (NULL);
-	}
+		return (debug_print("Lexer: ----FOUND NULL\n"), NULL);
 	res = _match_normal_op(lexer);
 	if (res)
 		return (res);

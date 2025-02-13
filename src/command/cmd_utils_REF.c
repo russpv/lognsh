@@ -35,3 +35,13 @@ char	**c_argstoargv(char **args, char *cmd, int argc)
 	}
 	return (argv);
 }
+
+void	print_pipes(t_cmd *c)
+{
+	int i;
+
+	i = -1;
+	while (++i < c->curr_cmdc)
+		debug_print("Cmd: \tPipe %d: read fd=%d, write fd=%d\n", i,
+			c->fildes[i][0], c->fildes[i][1]);
+}

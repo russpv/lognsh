@@ -20,7 +20,6 @@ int	cmd_exec_proc(t_state *s, t_ast_node *a)
 		return (0);
 	while (++i < cmdc)
 	{
-		// push onto s->command stack?
 		node = cmd->content;
 		debug_print("Cmd: \t### cmd_exec_proc got cmd type:%d\n",\
 			p_get_type(node));

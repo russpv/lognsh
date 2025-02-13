@@ -100,9 +100,8 @@ t_lex	*tokenize(t_state *s, const char *input)
 		{
 			if (1 == lexer->tokenizer(lexer))
 			{
-				debug_print("Lexer: tokenizer ERR\n");
 				destroy_lexer(lexer);
-				return (NULL);
+				return (debug_print("Lexer: tokenizer ERR\n"), NULL);
 			}
 			do_state_transition(lexer);
 		}

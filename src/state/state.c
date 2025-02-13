@@ -22,6 +22,7 @@ t_state	*init_state(char **envp)
 			free(s);
 			return (NULL);
 		}
+		set_signal_handlers();
 	}
 	return (s);
 }

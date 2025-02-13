@@ -45,7 +45,7 @@ int	cmd_exec_log(t_state *s, t_ast_node *node)
 	if (!cmd)
 		return (-1);
 	cmd->curr_cmdc = p_get_log_cmdc(node);
-	cmd->curr_node = node; // This might be problematic and we need a stack
+	cmd->curr_node = node;
 	debug_print("Cmd: \t got %d cmds\n", cmd->curr_cmdc);
 	if (cmd->curr_cmdc < 2)
 		return (-1);

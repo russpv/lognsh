@@ -14,6 +14,7 @@ void	debug_print(const char *format, ...)
 		fflush(stderr);
 	}
 }
+
 void	colored_printf(const char *color, const char *format, ...)
 {
 	va_list	args;

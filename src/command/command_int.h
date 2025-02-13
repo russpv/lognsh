@@ -37,4 +37,6 @@ int						cmd_exec_proc(t_state *s, t_ast_node *a);
 int						find_and_validate_cmd(t_state *s, const char *name,
 							char **fullpath);
 
+void	print_pipes(t_cmd *c);
+
 #endif

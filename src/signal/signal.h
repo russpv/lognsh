@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 17:02:00 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/09 03:03:13 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/02/13 18:55:39 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <signal.h>
 
 # define SIGINT_BEFORE_FORK -130
+# define SIGEOF_AT_INPUT 300
 
 // register signal handlers
 void    set_signal_handlers(void);
