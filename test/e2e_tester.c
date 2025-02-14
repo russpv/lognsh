@@ -85,15 +85,15 @@ int main(void) {
     fflush(stdout);
     RUN_TEST_GROUP(basic);
     
-    printf(CYAN"### Running Pipes Tests ###\n"RESET);
+    printf(UYEL"### Running Pipes Tests ###\n"RESET);
     fflush(stdout);
     RUN_TEST_GROUP(pipes);
     
-    printf(CYAN"### Running Logical Operators Tests ###\n"RESET);
+    printf(UYEL"### Running Logical Operators Tests ###\n"RESET);
     fflush(stdout);
     RUN_TEST_GROUP(logicals);
     
-    printf(CYAN"### Running Subshells Tests ###\n"RESET);
+    printf(UYEL"### Running Subshells Tests ###\n"RESET);
     fflush(stdout);
     RUN_TEST_GROUP(subshells);
     

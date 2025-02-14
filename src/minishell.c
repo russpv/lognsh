@@ -7,8 +7,8 @@ static void	_do_test(t_state *s)
 
 	if (NULL == fgets(input, sizeof(input), stdin))
 		return ;
-	set_input(s, input);
-	ast = parse(s, get_input(s));
+	//set_input(s, input);
+	ast = parse(s, input);//get_input(s));
 	if (!ast)
 		err("ERR parse()\n");
 	set_exit_status(s, cmd_execute(s, ast));

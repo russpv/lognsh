@@ -4,13 +4,17 @@
 #define LOGMSG_CEXEC_ANNOUNCE "Cmd: \t### cmd_exec_simple ###\n"
 #define LOGMSG_CEXEC_DONE "Cmd: \tFinished cmd_exec_simple.\n"
 
-/* In case of no command name string, determines if 
- * the cmd is not an expansion, or there is an expansion to do
+/* Adds arg[0] as command name if no name string present
+ * if node expansion flag is set. Removes arg[0] then.
  */
 static int	_handle_no_command(t_ast_node *a, char **args)
 {
 	if (true == p_get_expansion(a) && NULL == p_get_cmd(a))
+	{
 		p_set_cmd(a, args[0]);
+		p_update_argc(a, -1);
+		fprintf(stderr, "Got a env variable only\n");
+	}
 	else if (false == p_get_expansion(a) && NULL == p_get_cmd(a))
 		return (NO_CMD);
 	return (0);

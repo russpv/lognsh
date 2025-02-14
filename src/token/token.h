@@ -4,7 +4,7 @@
 /* TOKEN ADT */
 
 # include "../debug.h"
-# include "../include/libft.h"
+# include "../../include/libft.h"
 # include "../state/state.h"
 # include <stdbool.h>
 # include <stddef.h>

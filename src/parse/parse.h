@@ -66,12 +66,14 @@ int								p_get_log_cmdc(t_ast_node *a);
 t_list							*p_get_log_ops(t_ast_node *a);
 
 /* These methods are called by Command */
-int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args);
+int								p_do_arg_processing(t_state *s, \
+									t_ast_node *a, char ***args);
 int								p_do_redir_processing(t_state *s,\
 									t_ast_node *a);
-// char	**p_do_arg_expansions(t_ast_node *a); // TODO hide
+
 int								p_do_redirections(t_ast_node *a);
 int								p_set_cmd(t_ast_node *a, const char *cmd);
+int								p_update_argc(t_ast_node *a, int amt);
 
 void							print_ast(t_ast_node *ast, int depth);
 

@@ -9,6 +9,7 @@
 # include "../external/unity/unity_internals.h"
 # include "../external/unity/unity_fixture.h"
 # include "../external/unity/unity_fixture_internals.h"
+# include "ansi_colors.h"
 
 # ifdef TESTMODE
 

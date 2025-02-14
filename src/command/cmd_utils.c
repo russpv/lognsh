@@ -1,7 +1,7 @@
 #include "command_int.h"
 
 /* Can accept null args and cmd
- * If no cmd, copies first arg as cmd
+ * If no cmd, copies first arg as cmd, and removes it from args
  * Does not need to handle no-command situation
  */
 char	**c_argstoargv(char **args, char *cmd, int argc)

@@ -3,19 +3,26 @@
 # include "command/command.h"
 
 
-void	log_command_info(t_cmd *c, t_ast_node *a)
+void log_command_info(t_cmd *c, t_ast_node *a)
 {
-	debug_print("log_command_info: \n");
+    int i;
+
+    i = -1;
 	if (LOGGING)
 	{
-		colored_printf(YELLOW, "\tExecuting command: %s\n", p_get_cmd(a));
+		if (p_get_cmd(a)) 
+			colored_printf(YELLOW, "\tExecuting command: %s\n", p_get_cmd(a));
+		else
+			colored_printf(RED, "\tExecuting command: (NULL)\n");
 		colored_printf(YELLOW, "\tArguments:\n");
 		if (c_get_argv(c))
 		{
-			for (int i = 0; c_get_argv(c)[i] != NULL; i++)
-				colored_printf(YELLOW, "\t  argv[%d]: %s\n", i,
-					c_get_argv(c)[i]);
+            while (++i < c_get_argc(c))
+				colored_printf(YELLOW, "\t  argv[%d]: %s\n", i, c_get_argv(c)[i]);
 		}
-		colored_printf(YELLOW, "\t  argv[%d]: (NULL)\n", p_get_argc(a) + 1);
+		if (p_get_argc(a) > 0 && c_get_argv(c) && c_get_argv(c)[p_get_argc(a)] == NULL)
+			colored_printf(YELLOW, "\t  argv[%d]: (NULL)\n", p_get_argc(a));
 	}
+    (void)i;
 }
+

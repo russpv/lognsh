@@ -18,6 +18,9 @@ char *run_bash(const char *cmd) {
         strcat(result, buffer);
     }
     pclose(pipe);
+    fprintf(stderr, "%s", CYN);
+    fprintf(stderr, "Got from bash:%s", buffer);
+    fprintf(stderr, "%s", CRESET);
     return result;
 }
 
@@ -49,13 +52,12 @@ char *run_my_shell(const char *cmd)
         perror("fork");
         return NULL;
     }
-
     if (pid == 0) {
         // In the child process
 
         // Redirect stdout to the pipe
         close(outpipefds[0]);  // Close unused read end of the pipe
-        //dup2(outpipefds[1], STDOUT_FILENO);  // Redirect stdout to the pipe
+        dup2(outpipefds[1], STDOUT_FILENO);  // Redirect stdout to the pipe
         close(outpipefds[1]);
 
         close(inpipefds[1]);
@@ -91,7 +93,9 @@ char *run_my_shell(const char *cmd)
         close(outpipefds[0]);
 
     }
-
+    fprintf(stderr, "%s", BLU);
+    printf("Got from minish:%s", result);
+    fprintf(stderr, "%s", CRESET);
     return result;
 }
 

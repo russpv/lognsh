@@ -1,5 +1,12 @@
 #include "parse_int.h"
 
+#define ERRMSG_PPIPE_MALLOC "Memory allocation error while creating pipe's command node\n"
+#define ERRMSG_PPIPE_SYNTAX "Failed to parse command after pipe operator\n"
+#define DBGMSG_PPIPE_NEXT "Parser: parsing pipeline: getting next cmd...\n"
+#define DBGMSG_PPIPE_GOT "Parser: parse_pipeline tok: %s\n"
+#define ERRMSG_PPIPE_GEN "Parser: pipeline parsing error\n"
+#define DBGMSG_PPIPE_DONE "Parser: parsed pipeline of %d cmds\n"
+
 static t_ast_node	*_init_pipe(void)
 {
 	t_ast_node	*pipe_node;
@@ -26,7 +33,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *pipe_node)
 	}
 	else
 	{
-		err("Memory allocation error while creating pipe's command node\n");
+		err(ERRMSG_PPIPE_MALLOC);
 		return (ERR_MEM);
 	}
 	return (0);
@@ -39,17 +46,16 @@ static int	_process_pipe(t_state *s, t_parser *p, t_ast_node *pipe_node)
 {
 	if (!p || !pipe_node)
 		return (ERR_ARGS);
-	if (NULL == p->last_node)
-		return (ERR_SYNTAX);
+	if (NULL == p->last_node || TOK_PIPE == tok_get_type(previous(p)))
+		return (p->parse_error = true, ERR_SYNTAX);
 	if (0 != _process_cmd(p, pipe_node))
 		return (ERR_GENERAL);
 	while (!is_at_end(p) && is_pipe_token(peek(p)))
 	{
 		advance(p);
-		debug_print("Parser: parsing pipeline: getting next cmd...\n");
+		debug_print(DBGMSG_PPIPE_NEXT);
 		if (NULL == parse_full_cmd(s, p))
-			return (err("Failed to parse command after pipe op\n"),
-				ERR_GENERAL);
+			return (err(ERRMSG_PPIPE_SYNTAX), ERR_GENERAL);
 		if (0 != _process_cmd(p, pipe_node))
 			return (ERR_GENERAL);
 	}
@@ -65,19 +71,19 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 	if (!p || !p->last_node)
 		return (NULL);
 	st_int_push(p->st, AST_NODE_PIPELINE);
-	debug_print("Parser: parse_pipeline tok: %s\n", tok_get_raw(peek(p)));
+	debug_print(DBGMSG_PPIPE_GOT, tok_get_raw(peek(p)));
 	ast_node = _init_pipe();
 	if (NULL == ast_node)
-		return (err("Allocation failed for cmd node\n"), NULL);
+		return (err(ERRMSG_PPIPE_MALLOC), NULL);
 	res = _process_pipe(s, p, ast_node);
 	if (0 != res)
 	{
 		set_error(s, res);
 		destroy_ast_node(ast_node);
+		err(ERRMSG_PPIPE_GEN);
 		return (NULL);
 	}
-	debug_print("Parser: parsed pipeline of %d cmds\n",
-		ast_node->data.pipe.cmdc);
+	debug_print(DBGMSG_PPIPE_DONE, ast_node->data.pipe.cmdc);
 	p->last_node = ast_node;
 	st_int_pop(p->st);
 	return (ast_node);

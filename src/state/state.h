@@ -2,7 +2,7 @@
 # define STATE_H
 
 # include "../debug.h"
-# include "../include/libft.h"
+# include "../../include/libft.h"
 # include "../signal/signal.h"
 # include "error.h"
 # include <errno.h>

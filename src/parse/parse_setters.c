@@ -24,5 +24,15 @@ int	p_update_redc(t_ast_node *a, int amt)
 		a->data.proc.redc += amt;
 		return (a->data.proc.redc);
 	}
-	return (-1);
+	return (ERR_ARGS);
+}
+// Adds amt to argument count for command node type
+int	p_update_argc(t_ast_node *a, int amt)
+{
+	if (AST_NODE_CMD == a->type)
+	{
+		a->data.cmd.argc += amt;
+		return (a->data.cmd.argc);
+	}
+	return (ERR_ARGS);
 }

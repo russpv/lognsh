@@ -1,5 +1,14 @@
 #include "parse_int.h"
 
+#define DBGMSG_P_ANNOUNCE "Parser: \t###### parse ####### \n"
+#define DBGMSG_PNODE_ANNOUNCE "Parser: ######## parse_full_cmd ########\n"
+#define DBGMSG_PNODE_GOT "Parser: parse_full_cmd: got tok of %s \n"
+#define DBGMSG_PNODE_STOP "Parser: reached end of tokens\n"
+#define DBGMSG_PNODE_NOTPROC "Parser: not a proc...\n"
+#define DBGMSG_PNODE_NOTCMD "Parser: not a cmd...\n"
+#define DBGMSG_PNODE_NOTPIPE "Parser: not a pipe...\n"
+#define ERRMSG_PNODE_SYNTAX "Syntax error near: [TODO, empty cmd okay]\n"
+
 /* Returns AST node.
  * Validates token type, parses args into list
  * For commands, checks for redirect operator(s) before or after
@@ -14,27 +23,26 @@
  */
 t_ast_node	*parse_full_cmd(t_state *s, t_parser *p)
 {
-	debug_print("Parser: ######## parse_full_cmd ########\n");
-	debug_print("Parser: parse_full_cmd: got tok of %s \n",
-		tok_get_raw(peek(p)));
+	debug_print(DBGMSG_PNODE_ANNOUNCE);
+	debug_print(DBGMSG_PNODE_GOT, tok_get_raw(peek(p)));
 	if (is_at_end(p))
 	{
-		debug_print("Parser: reached end of tokens\n");
+		debug_print(DBGMSG_PNODE_STOP);
 		return (NULL);
 	}
 	if (is_open_paren(peek(p)))
 		return (parse_proc(s, p));
-	debug_print("Parser: not a proc...\n");
+	debug_print(DBGMSG_PNODE_NOTPROC);
 	if ((is_cmd_token(peek(p)) || is_redir_token(peek(p)))
 		&& (st_int_peek(p->st) > 0 || !p->last_node))
 		return (parse_cmd(s, p));
-	debug_print("Parser: not a cmd...\n");
+	debug_print(DBGMSG_PNODE_NOTCMD);
 	if (p->last_node && is_pipe_token(peek(p)))
 		return (parse_pipeline(s, p));
-	debug_print("Parser: not a pipe...\n");
+	debug_print(DBGMSG_PNODE_NOTPIPE);
 	if (p->last_node && is_log_token(peek(p)))
 		return (parse_logical(s, p));
-	err("Syntax error near: [TODO, empty cmd okay]\n");
+	err(ERRMSG_PNODE_SYNTAX);
 	p->parse_error = true;
 	return (NULL);
 }
@@ -64,7 +72,7 @@ t_ast_node	*parse(t_state *s, char *input)
 		return (set_error(s, ERR_TOKEN), NULL);
 	tokens = lex_get_tokens(lexer);
 	parser = create_parser(s, tokens);
-	debug_print("Parser: \t###### parse ####### \n");
+	debug_print(DBGMSG_P_ANNOUNCE);
 	while (!is_at_end(parser) && !parser->parse_error)
 		ast = parse_full_cmd(s, parser);
 	parser->ast = ast;

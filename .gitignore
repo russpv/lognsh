@@ -6,3 +6,6 @@
 **/*.o
 obj/
 vgcore.*
+minish
+testsh
+libft.a
