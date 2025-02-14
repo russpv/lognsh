@@ -1,6 +1,11 @@
 #include "execute_int.h"
 
 #define NO_APND false
+#define DBGMSG_EPIPE_ANNOUNCE "Exec: exec_fork_run: got %dth\n"
+#define DBGMSG_EPIPE_ANNOUNCE2 "Exec: _close_other_pipe_ends on %dth cmd.\n"
+#define DBGMSG_EPIPE_CLOSED "Exec: Child %d: closed %d pipe ends (%d cmds)\n"
+#define ERRMSG_EPIPE_REDIR "ERR redirect middle cmd stdin\n"
+#define ERRMSG_EPIPE_REDIR2 "ERR redirect did nothing\n"
 
 // depending on cmd, closes
 // the right end of the pipe(s)
@@ -19,13 +24,13 @@ static int	_redirect_pipes(const t_cmd *c, int i)
 	{
 		r = redirect(&fildes[i - 1][0], NULL, STDIN_FILENO, NO_APND);
 		if (-1 == r)
-			return (err("ERR redirect middle cmd stdin\n"), -1);
+			return (err(ERRMSG_EPIPE_REDIR), -1);
 		r = redirect(&fildes[i][1], NULL, STDOUT_FILENO, NO_APND);
 	}
 	else if (i == c_get_cmdc(c) - 1)
 		r = redirect(&fildes[i - 1][0], NULL, STDIN_FILENO, NO_APND);
 	if (-1 == r)
-		return (err("ERR redirect did nothing\n"), -1);
+		return (err(ERRMSG_EPIPE_REDIR2), -1);
 	return (0);
 }
 
@@ -44,7 +49,7 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
 	int			counter;
 	const int	**fildes = c_get_fildes(c);
 
-	debug_print("Exec: _close_other_pipe_ends on %dth cmd.\n", i);
+	debug_print(DBGMSG_EPIPE_ANNOUNCE2, i);
 	pipe = -1;
 	counter = 0;
 	while (++pipe < c_get_cmdc(c) - 1)
@@ -60,8 +65,8 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
 			counter++;
 		}
 	}
-	debug_print("Exec: Child %d: closed %d pipe ends (%d cmds)\n", getpid(),
-		counter, c_get_cmdc(c));
+	if (DEBUG)
+		debug_print(DBGMSG_EPIPE_CLOSED, getpid(), counter, c_get_cmdc(c));
 	return (1);
 }
 
@@ -71,20 +76,20 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
  * Calling command func will wait for exit status
  * Parent does not wait (until all pipe commands are forked).
  */
-int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,
+int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,\
 		t_execute_fn executor)
 {
 	pid_t	pid;
 	int		exit_status;
 
-	debug_print("Exec: exec_fork_func_child: got %dth\n", i);
+	debug_print(DBGMSG_EPIPE_ANNOUNCE, i);
 	if (SIGINT == g_last_signal)
 		return (SIGINT_BEFORE_FORK);
 	pid = fork();
 	if (pid < 0)
 	{
-		err("ERR exec_fork_func\n");
-		return (-1);
+		err(ERRMSG_FORK);
+		return (ERR_FORK);
 	}
 	else if (0 == pid)
 	{

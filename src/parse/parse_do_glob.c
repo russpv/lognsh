@@ -132,6 +132,7 @@ static int	_do_ops(t_list **lst_node, t_list **lst, t_arg_data	*content)
 		content->raw = new_arg;
 		ft_lstclear(lst, free);
 	}
+	return (0);
 }
 
 /* DO GLOBBING

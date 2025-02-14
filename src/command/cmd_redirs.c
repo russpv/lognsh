@@ -1,9 +1,12 @@
 #include "command_int.h"
 
+#define ERRMSG_REDIRSV_NULLARG "save_redirs: ERR null command parameters\n"
+#define ERRMSG_REDIRRS_NULLARG "restore_redirs: ERR null command parameters\n"
+
 int	save_redirs(t_cmd *c)
 {
 	if (!c)
-		return (err("save_redirs: ERR null command parameters\n"), -1);
+		return (err(ERRMSG_REDIRSV_NULLARG), ERR_ARGS);
 	c->saved_stderr = dup(STDERR_FILENO);
 	c->saved_stdin = dup(STDIN_FILENO);
 	c->saved_stdout = dup(STDOUT_FILENO);
@@ -13,7 +16,7 @@ int	save_redirs(t_cmd *c)
 int	restore_redirs(t_cmd *c)
 {
 	if (!c)
-		return (err("restore_redirs: ERR null command parameters\n"), -1);
+		return (err(ERRMSG_REDIRRS_NULLARG), ERR_ARGS);
 	dup2(c->saved_stderr, STDERR_FILENO);
 	close(c->saved_stderr);
 	c->saved_stderr = -1;

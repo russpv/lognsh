@@ -1,5 +1,9 @@
 #include "execute_int.h"
 
+#define DBGMSG_EXEC_EXITCODE "Exec: Child %d exited w/ stat:%d\n"
+#define DBGMSG_EXEC_EXITSIG "Exec: Child %d exited by sig:%d\n"
+#define DBGMSG_EXEC_DONE "Exec: All child processes have terminated\n"
+
 /* This wait()'s for all child processes; called by parent
  * Note: assuming waitpid() behaves irrespective of actual
  * number of children.
@@ -15,14 +19,14 @@ void	waitchild(int *status, int childc)
 		child_pid = waitpid(-1, status, 0);
 		{
 			if (child_pid > 0 && WIFEXITED(*status))
-				debug_print("Exec: Child %d exited w/ stat:%d\n", child_pid,
+				debug_print(DBGMSG_EXEC_EXITCODE, child_pid,
 					WEXITSTATUS(*status));
 			else if (child_pid > 0 && WIFSIGNALED(*status))
-				debug_print("Exec: Child %d exited by sig:%d\n", child_pid,
+				debug_print(DBGMSG_EXEC_EXITSIG, child_pid,
 					WTERMSIG(*status));
 		}
 	}
-	debug_print("Exec: All child processes have terminated\n");
+	debug_print(DBGMSG_EXEC_DONE);
 }
 
 /* Interpret waitpid() exit status (signals ignored here) */

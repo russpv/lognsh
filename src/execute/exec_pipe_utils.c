@@ -1,5 +1,7 @@
 #include "execute.h"
 
+#define ERRMSG_EPIPE_FORK "ERR exec_fork_run\n"
+
 /* Frees allocated pipes */
 void	free_pipes(int **fildes, int count)
 {
@@ -18,9 +20,11 @@ int	exec_create_pipes(int ***fildes, int cmd_count)
 	int	i;
 
 	i = 0;
+	if (cmd_count < 2)
+		return (ERR_INSUFFICIENT_CMDS);
 	*fildes = (int **)malloc((sizeof(int *)) * (size_t)(cmd_count));
 	if (!(*fildes))
-		return (err("ERR malloc"), -1);
+		return (err(ERRMSG_MALLOC), ERR_MEM);
 	(*fildes)[cmd_count - 1] = NULL;
 	while (i < cmd_count - 1)
 	{
@@ -28,12 +32,12 @@ int	exec_create_pipes(int ***fildes, int cmd_count)
 		if (!(*fildes)[i])
 		{
 			free_pipes((*fildes), i);
-			return (err("malloc"), -1);
+			return (err(ERRMSG_MALLOC), ERR_MEM);
 		}
 		if (pipe((*fildes)[i]) < 0)
 		{
 			free_pipes((*fildes), i);
-			return (err("pipe"), -1);
+			return (err(ERRMSG_PIPE), ERR_PIPE);
 		}
 		i++;
 	}

@@ -1,5 +1,12 @@
 #include "llist.h"
 
+#define DBGMSG_LSTINSRWD_ANNOUNCE "lstiter_ins_rwd: got lst: %p, head:%p.\n"
+#define DBGMSG_LSTINSRWD_NULLARG "lstiter_ins_rwd: NULL input.\n"
+#define DBGMSG_LSTINSRWD_ENDNODE "lstiter_ins_rwd: Starting from end: %p\n"
+#define DBGMSG_LSTINSRWD_PREF "lstiter_ins_rwd: Iterating node: %p, content: %p\n"
+#define DBGMSG_LSTINSRWD_POSTF "lstiter_ins_rwd: Function f applied to node: %p\n"
+#define DBGMSG_LSTINSRWD_SUCCESS "lstiter_ins_rwd: ft_lstiter_ins_rwd Iteration complete.\n"
+
 /* LSTITER
 ** Iterates linked list and applies func f to node.content
 ** lst: ptr to node
@@ -23,25 +30,23 @@ void	ft_lstiter_ins_rwd(t_list **lst, int (*f)(t_list **, void *))
 	t_list	*lst_rear;
 	t_list	*tmp;
 
-	debug_print("lstiter_ins_rwd: got lst: %p, head:%p.\n", (void *)lst,
-		(void *)*lst);
+	debug_print(DBGMSG_LSTINSRWD_ANNOUNCE, (void *)lst, (void *)*lst);
 	if (lst == NULL)
-		return (debug_print("lstiter_ins_rwd: NULL input.\n"));
+		return (debug_print(DBGMSG_LSTINSRWD_NULLARG));
 	lst_rear = ft_lstlast(*lst);
-	debug_print("lstiter_ins_rwd: Starting from end: %p\n", (void *)lst_rear);
+	debug_print(DBGMSG_LSTINSRWD_ENDNODE, (void *)lst_rear);
 	while (lst_rear)
 	{
 		tmp = lst_rear->prev;
-		debug_print("lstiter_ins_rwd: Iterating node: %p, content: %p\n",
-			(void *)lst_rear, (void *)lst_rear->content);
+		debug_print(DBGMSG_LSTINSRWD_PREF,(void *)lst_rear, \
+					(void *)lst_rear->content);
 		f(&(lst_rear), lst_rear->content);
-		debug_print("lstiter_ins_rwd: Function f applied to node: %p\n",
-			(void *)lst_rear);
+		debug_print(DBGMSG_LSTINSRWD_POSTF, (void *)lst_rear);
 		if (NULL == tmp)
 			*lst = lst_rear;
 		lst_rear = tmp;
 	}
-	debug_print("lstiter_ins_rwd: ft_lstiter_ins_rwd Iteration complete.\n");
+	debug_print(DBGMSG_LSTINSRWD_SUCCESS);
 }
 
 /* LSTITERSTR

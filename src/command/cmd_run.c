@@ -1,5 +1,10 @@
 #include "command_int.h"
 
+#define ERRMSG_RUNC_STRJ "Path strjoin err\n"
+#define ERRMSG_RUNC_EXEC "run_cmd ERR execve()\n"
+#define LOGMSG_RUNC_GOT "Cmd: Found command! at %s\n"
+#define LOGMSG_RUNC_SIGINT "Cmd: Received SIGINT before fork\n"
+
 static int	_check_access(const char *path)
 {
 	if (0 == access((const char *)path, F_OK))
@@ -10,6 +15,7 @@ static int	_check_access(const char *path)
 	}
 	return (-1);
 }
+
 
 /* Returns 0 if absolute fullpath is found */
 static int	_search_path(t_state *s, const char *cmd, char **fullpath)
@@ -26,12 +32,12 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		if (NULL == tmp)
-			return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"),
+			return (ft_freearr((void **)paths, -1), err(ERRMSG_RUNC_STRJ),
 				ERR_GENERAL);
 		*fullpath = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!*fullpath)
-			return (ft_freearr((void **)paths, -1), err("Path strjoin err\n"),
+			return (ft_freearr((void **)paths, -1), err(ERRMSG_RUNC_STRJ),
 				ERR_GENERAL);
 		if (0 == _check_access(*fullpath))
 			return (ft_freearr((void **)paths, -1), 0);
@@ -83,18 +89,18 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	if (0 != find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath))
 		return (s_free_cmd(s), ERR_CMD_NOT_FOUND);
 	if (c->fullpath)
-		log_print("Cmd: Found command! at %s\n", c->fullpath);
+		log_print(LOGMSG_RUNC_GOT, c->fullpath);
 	if (CTXT_PIPELINE == st_int_peek(get_cmd(s)->st)
 		|| CTXT_PROC == st_int_peek(get_cmd(s)->st))
 	{
 		if (-1 == execve(c->fullpath, c->argv, get_envp(s)))
-			err("run_cmd ERR execve()\n");
+			err(ERRMSG_RUNC_EXEC);
 	}
 	else
 	{
 		exit_status = exec_fork_execve(s);
 		if (SIGINT_BEFORE_FORK == exit_status)
-			log_print("Cmd: Received SIGINT before fork\n");
+			log_print(LOGMSG_RUNC_SIGINT);
 	}
 	s_free_cmd(s);
 	return (0);

@@ -1,5 +1,7 @@
 #include "parse_int.h"
 
+#define MAX_VAR_LEN 1024
+
 # define ERRMSG_PATH_MALLOC "Allocation for path value failed.\n"
 # define ERRMSG_NULL_EXPAN "Null expansion variable.\n"
 
@@ -71,12 +73,12 @@ static int	_p_do_expansion(t_state *s, void *c)
 	char				*value;
 	const t_arg_data	*content = (t_arg_data *)c;
 	int					res;
-	char				buf[MAX_INPUT];
+	char				buf[MAX_VAR_LEN];
 	size_t				raw_len;
 
 	res = 0;
 	value = NULL;
-	raw_len = ft_strnlen(content->raw, MAX_INPUT);
+	raw_len = ft_strnlen(content->raw, MAX_VAR_LEN);
 	if (raw_len <= 1)
 		return (err(ERRMSG_NULL_EXPAN), ERR_ARGS);
 	ft_memset(buf, 0, sizeof(buf));
@@ -101,14 +103,17 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 	t_list	**argl;
 	int		res;
 
+	argl = NULL;
 	if (a->type != AST_NODE_CMD)
-		return (ERR_ARGS);
+		return (ERR_INVALID_CMD_TYPE);
 	argl = p_get_args(a);
-	if (argl)
+	if (*argl)
 	{
+		debug_print("We got non null args \n");
 		res = lstiter_state(s, *argl, _p_do_expansion);
 		if (0 != res)
 			return (res);
+		debug_print("We done with expansions\n");
 		debug_print(DEBUGMSG_ARGP_PRE_G, argl, *argl);
 		ft_lstiter_ins_rwd(argl, p_do_globbing);
 		debug_print(DEBUGMSG_ARGP_POST_G, argl, *argl);
@@ -132,15 +137,18 @@ int	p_do_redir_processing(t_state *s, t_ast_node *a)
 	if (a->type != AST_NODE_CMD)
 		return (ERR_ARGS);
 	redirs = p_get_redirs(a);
-	res = lstiter_state(s, redirs, _p_do_expansion);
-	if (0 != res)
-		return (res);
-	debug_print(DEBUGMSG_REDIRP_ANNOUNCE);
-	orig_filen = ft_lstiterstr(redirs, p_do_globbing_redirs);
-	if (NULL != orig_filen)
+	if (redirs)
 	{
-		print_ambiguous_redirect(((t_redir_data *)orig_filen)->filename);
-		return (ERR_AMBIGUOUS_REDIR);
+		res = lstiter_state(s, redirs, _p_do_expansion);
+		if (0 != res)
+			return (res);
+		debug_print(DEBUGMSG_REDIRP_ANNOUNCE);
+		orig_filen = ft_lstiterstr(redirs, p_do_globbing_redirs);
+		if (NULL != orig_filen)
+		{
+			print_ambiguous_redirect(((t_redir_data *)orig_filen)->filename);
+			return (ERR_AMBIGUOUS_REDIR);
+		}
 	}
 	return (0);
 }

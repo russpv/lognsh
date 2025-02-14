@@ -1,17 +1,25 @@
 #include "command_int.h"
 
 #define HALT_EXEC -1
+#define DBGMSG_CLOGI_ANNOUNCE "Cmd: \t### cmd_exec_log ###\n"
+#define DBGMSG_CLOGI_DONE "Cmd: \t### cmd_exec_log: got exit, returning\n"
+#define DBGMSG_CLOGI_EXECERR "Cmd: \t### cmd_exec_log: got negative exit, returning\n"
+#define DBGMSG_CLOGI_GOT "Cmd: \t got %d cmds\n"
+#define DBGMSG_CLOGI_GOT2 "Cmd: \t### _do_log_commands got cmd:%s\n"
+#define DBGMSG_CLOGI_GOT3 "Cmd: \t### _do_log_commands got exit:%d\n"
+#define DBGMSG_CLOGI_GOT4 "Cmd: \t### _do_log_commands got op:%s\n"
+#define LOGMSG_CLOGI_STOP "Cmd: Operator evalution stopping further execution\n"
 
 static int	_do_more_ops(const t_list *ops, int exit_status)
 {
-	debug_print("Cmd: \t### _do_log_commands got exit:%d\n", exit_status);
+	debug_print(DBGMSG_CLOGI_GOT3, exit_status);
 	if (!ops)
 		return (HALT_EXEC);
-	debug_print("Cmd: \t### _do_log_commands got op:%s\n", ops->content);
+	debug_print(DBGMSG_CLOGI_GOT4, ops->content);
 	if ((0 != exit_status && 0 == ft_strcmp(OP_ANDIF, ops->content))
 		|| (0 == exit_status && 0 == ft_strcmp(OP_ORIF, ops->content)))
 	{
-		log_print("Cmd: Operator evalution stopping further exection\n");
+		log_print(LOGMSG_CLOGI_STOP);
 		return (HALT_EXEC);
 	}
 	return (0);
@@ -31,7 +39,7 @@ static int	_do_log_commands(t_state *s, t_list *cmds, t_cmd *c)
 	while (cmds && ++i < c->curr_cmdc)
 	{
 		a = (t_ast_node *)cmds->content;
-		debug_print("Cmd: \t### _do_log_commands got cmd:%s\n", p_get_cmd(a));
+		debug_print(DBGMSG_CLOGI_GOT2, p_get_cmd(a));
 		if (0 != exec_fork_run(s, a, i, cmd_execute_full))
 			return (-1);
 		waitchild(&exit_status, 1);
@@ -49,21 +57,21 @@ int	cmd_exec_log(t_state *s, t_ast_node *node)
 	t_cmd	*cmd;
 	int		exit_status;
 
-	log_print("Cmd: \t### cmd_exec_log ###\n");
+	log_print(DBGMSG_CLOGI_ANNOUNCE);
 	cmd = get_cmd(s);
 	if (!cmd)
 		return (-1);
 	cmd->curr_cmdc = p_get_log_cmdc(node);
 	cmd->curr_node = node;
-	debug_print("Cmd: \t got %d cmds\n", cmd->curr_cmdc);
+	debug_print(DBGMSG_CLOGI_GOT, cmd->curr_cmdc);
 	if (cmd->curr_cmdc < 2)
 		return (-1);
 	exit_status = _do_log_commands(s, p_get_log_cmds(node), cmd);
 	if (exit_status < 0)
 	{
-		debug_print("Cmd: \t### cmd_exec_log: got negative exit, returning\n");
+		debug_print(DBGMSG_CLOGI_EXECERR);
 		return (-1);
 	}
-	log_print("Cmd: \t### cmd_exec_log: got exit, returning\n");
+	log_print(DBGMSG_CLOGI_DONE);
 	return (exit_status);
 }

@@ -1,5 +1,13 @@
 #include "llist.h"
 
+#define DBGMSG_LSIZE_NULL "ft_lstsize: List is NULL, returning 0\n"
+#define DBGMSG_LSIZE_START "Starting ft_lstsize traversal. Initial lst: %p\n"
+#define DBGMSG_LSIZE_ONNODE "Visiting node %p (next: %p)\n"
+#define DBGMSG_LSIZE_DONE "Finished traversal. Node count: %d\n"
+#define DBGMSG_LMAP_NULLARG "ft_lstmap: NULL input.\n"
+#define ERRMSG_LMAP_MALLOC "ft_lstmap: Malloc err.\n"
+#define DBGMSG_LMAP_DONE "ft_lstmap: Modded: %p\n"
+
 /* LSTLAST
 ** Returns last node of a list
 */
@@ -27,7 +35,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 
 	newlst = NULL;
 	if (!lst)
-		return (debug_print("ft_lstmap: NULL input.\n"), NULL);
+		return (debug_print(DBGMSG_LMAP_NULLARG), NULL);
 	while (lst)
 	{
 		new_content = f(lst->content);
@@ -40,12 +48,12 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 				ft_lstclear(&newlst, del);
 				newlst = NULL;
 			}
-			return (debug_print("ft_lstmap: Malloc err.\n"), NULL);
+			return (err(ERRMSG_LMAP_MALLOC), NULL);
 		}
 		ft_lstadd_back(&newlst, new);
 		lst = lst->next;
 	}
-	return (debug_print("ft_lstmap: Modded: %p\n", (void *)newlst), newlst);
+	return (debug_print(DBGMSG_LMAP_DONE, (void *)newlst), newlst);
 }
 
 /* LSTNEW
@@ -94,18 +102,17 @@ int	ft_lstsize(t_list *lst)
 	count = 0;
 	if (lst == NULL)
 	{
-		debug_print("[DEBUG] ft_lstsize: List is NULL, returning 0\n");
+		debug_print(DBGMSG_LSIZE_NULL);
 		return (0);
 	}
-	debug_print("[DEBUG] Starting ft_lstsize traversal. Initial lst: %p\n",
-		(void *)lst);
+	debug_print(DBGMSG_LSIZE_START, (void *)lst);
 	while (lst)
 	{
-		debug_print("[DEBUG] Visiting node %p (next: %p)\n", (void *)lst,
+		debug_print(DBGMSG_LSIZE_ONNODE, (void *)lst,
 			(void *)lst->next);
 		count++;
 		lst = lst->next;
 	}
-	debug_print("[DEBUG] Finished traversal. Node count: %d\n", count);
+	debug_print(DBGMSG_LSIZE_DONE, count);
 	return (count);
 }

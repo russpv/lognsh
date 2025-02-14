@@ -104,27 +104,3 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 	}
 	*lst = NULL;
 }
-
-/* LSTDELONE
-** Removes passed node in doubly linked list
-** Assuming head to rear iteration direction
-** lst: parent list
-** node: node to free
-** del: ptr to func that deletes node.content
-*/
-void	ft_lstdelone(t_list **lst, t_list *node, void (*del)(void *))
-{
-	if (!lst || !node || !del)
-		return ;
-	if (!*lst)
-		return ;
-	if (node->prev)
-		node->prev->next = node->next;
-	if (node->next)
-		node->next->prev = node->prev;
-	if (node == *lst)
-		*lst = node->next;
-	del(node->content);
-	free(node);
-	node = NULL;
-}

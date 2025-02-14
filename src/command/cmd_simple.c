@@ -1,26 +1,29 @@
 #include "command_int.h"
 
-#define NO_CMD 0
+#define NO_CMD -10
+#define LOGMSG_CEXEC_ANNOUNCE "Cmd: \t### cmd_exec_simple ###\n"
+#define LOGMSG_CEXEC_DONE "Cmd: \tFinished cmd_exec_simple.\n"
 
 /* In case of no command name string, determines if 
  * the cmd is not an expansion, or there is an expansion to do
  */
 static int	_handle_no_command(t_ast_node *a, char **args)
 {
-	if (true == p_get_expansion(a) && !p_get_cmd(a))
+	if (true == p_get_expansion(a) && NULL == p_get_cmd(a))
 		p_set_cmd(a, args[0]);
-	if (false == p_get_expansion(a) && !p_get_cmd(a))
+	else if (false == p_get_expansion(a) && NULL == p_get_cmd(a))
 		return (NO_CMD);
-	return (-1);
+	return (0);
 }
 
-static int	_do_ops(t_state *s, t_ast_node *a, const t_cmd *c)
+/* Stores several command parameters. */
+static int	_do_ops(t_state *s, t_ast_node *a, t_cmd *c)
 {
 	char	**args;
 	int		exit_code;
 	int		res;
 
-	((t_cmd *)c)->curr_node = a;
+	c->curr_node = a;
 	args = NULL;
 	res = p_do_arg_processing(s, a, &args);
 	if (0 != res)
@@ -28,8 +31,8 @@ static int	_do_ops(t_state *s, t_ast_node *a, const t_cmd *c)
 	exit_code = _handle_no_command(a, args);
 	if (NO_CMD == exit_code)
 		return (exit_code);
-	((t_cmd *)c)->argv = c_argstoargv(args, p_get_cmd(a), p_get_argc(a));
-	((t_cmd *)c)->argc = p_get_argc(a) + 1;
+	c->argv = c_argstoargv(args, p_get_cmd(a), p_get_argc(a));
+	c->argc = p_get_argc(a) + 1;
 	if (0 != p_do_redir_processing(s, a))
 		return (ERR_AMBIGUOUS_REDIR);
 	return (exit_code);
@@ -48,14 +51,15 @@ static int	_do_ops(t_state *s, t_ast_node *a, const t_cmd *c)
 int	cmd_exec_simple(t_state *s, t_ast_node *a)
 {
 	int					exit_code;
-	const t_cmd			*c = (const t_cmd *)get_cmd(s);
+	t_cmd				*c;
 	const t_builtin_fn	bi = get_builtin(p_get_cmd(a));
 
-	log_print("Cmd: \t### cmd_exec_simple ###\n");
+	c = get_cmd(s);
+	log_print(LOGMSG_CEXEC_ANNOUNCE);
 	if (!c || !a)
 		return (ERR_ARGS);
 	if (p_get_type(a) != AST_NODE_CMD)
-		return (-1);
+		return (ERR_INVALID_CMD_TYPE);
 	exit_code = _do_ops(s, a, c);
 	if (ERR_AMBIGUOUS_REDIR == exit_code || NO_CMD == exit_code)
 		return (exit_code);
@@ -66,6 +70,6 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 		log_command_info((t_cmd *)c, a);
 		exit_code = run_cmd(s, a);
 	}
-	log_print("Cmd: \tFinished cmd_exec_simple.\n");
+	log_print(LOGMSG_CEXEC_DONE);
 	return (exit_code);
 }

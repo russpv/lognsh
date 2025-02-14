@@ -9,7 +9,7 @@ char	*p_get_cmd(t_ast_node *a)
 	return (a->data.cmd.name);
 }
 
-/* Returns AST command node's arguments list */
+/* Returns AST command node's POINTER to arguments llist */
 t_list	**p_get_args(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)

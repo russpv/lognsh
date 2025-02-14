@@ -1,5 +1,18 @@
 #include "execute_int.h"
 
+#define ERRMSG_ECMD_NULLARGV "_do_child_ops: ERR null argv parameters\n"
+#define ERRMSG_ECMD_NULLPATH "_do_child_ops: ERR null fullpath parameters\n"
+#define ERRMSG_ECMD_NULLTCMD "_do_child_ops: ERR null t_cmd parameters\n"
+#define DBGMSG_ECMD_DOEXEC "Exec: Child exec'g %s\n"
+#define DBGMSG_ECMD_ANNOUNCE "Exec: exec_bi_call...\n"
+#define DBGMSG_ECMD_DOEXEC "Exec: Child exec'g %s\n"
+#define ERRMSG_ECMD_CHILD "ERR child ops\n"
+#define ERRMSG_ECMD_ARGS "exec_bi_run: ERR null command parameters\n"
+#define DBGMSG_ECMD_REDIRSV "Exec: exec_bi_call saving redir fns...\n"
+#define DBGMSG_ECMD_REDIRDO "Exec: exec_bi_call doing redirs ...\n"
+#define DBGMSG_ECMD_DOBLTIN "Exec: Shell exec'g builtin\n"
+#define DBGMSG_ECMD_ERRBLTIN "Exec: ERR bi()\n"
+
 /* This execve's a simple cmd and
  * manages the various I/O redirections
  * And cleans up state (useless to child)
@@ -12,18 +25,18 @@ static int	_do_child_ops(t_state *s)
 	const char	**envp = (const char **)get_envp(s);
 
 	if (!argv)
-		return (err("_do_child_ops: ERR null argv parameters\n"), -1);
+		return (err(ERRMSG_ECMD_NULLARGV), -1);
 	if (!fullpath)
-		return (err("_do_child_ops: ERR null fullpath parameters\n"), -1);
+		return (err(ERRMSG_ECMD_NULLPATH), -1);
 	if (!c)
-		return (err("_do_child_ops: ERR null t_cmd parameters\n"), -1);
+		return (err(ERRMSG_ECMD_NULLTCMD), -1);
 	if (-1 == p_do_redirections(c_get_node((t_cmd *)c)))
 		return (-1);
-	debug_print("Exec: Child exec'g %s\n", fullpath);
+	debug_print(DBGMSG_ECMD_DOEXEC, fullpath);
 	if (NULL == fullpath)
 		return (-1);
 	else if (-1 == execve(fullpath, (char **)argv, (char **)envp))
-		err("exec_simple ERR execve()\n");
+		err(ERRMSG_EXECVE);
 	destroy_state(s);
 	return (0);
 }
@@ -35,17 +48,19 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
 	const int	argc = (const int)c_get_argc((t_cmd *)c);
 
-	debug_print("Exec: exec_bi_call...\n");
+	debug_print(DBGMSG_ECMD_ANNOUNCE);
+	if (!argv)
+		fprintf(stderr, "SHIT\n");
 	if (!argv || !bi || !c)
-		return (err("exec_bi_run: ERR null command parameters\n"), -1);
-	debug_print("Exec: exec_bi_call saving redir fns...\n");
+		return (err(ERRMSG_ECMD_ARGS), -1);
+	debug_print(DBGMSG_ECMD_REDIRSV);
 	save_redirs((t_cmd *)c);
-	debug_print("Exec: exec_bi_call doing redirs ...\n");
+	debug_print(DBGMSG_ECMD_REDIRDO);
 	if (-1 == p_do_redirections(c_get_node((t_cmd *)c)))
 		return (-1);
-	debug_print("Exec: Shell exec'g builtin\n");
+	debug_print(DBGMSG_ECMD_DOBLTIN);
 	if (-1 == bi(s, (char **)argv, argc))
-		debug_print("Exec: ERR bi()\n");
+		debug_print(DBGMSG_ECMD_ERRBLTIN);
 	restore_redirs((t_cmd *)c);
 	s_free_cmd(s);
 	return (0);
@@ -67,13 +82,13 @@ int	exec_fork_execve(t_state *s)
 		reset_signal_handlers();
 		if (-1 == _do_child_ops(s))
 		{
-			write(STDERR_FILENO, "ERR child ops\n", sizeof("ERR child ops\n"));
+			err(ERRMSG_ECMD_CHILD);
 			destroy_state(s);
 			exit(127);
 		}
 	}
 	else if (p < 0)
-		err("ERR exec_fork_execve");
+		err(ERRMSG_FORK);
 	waitchild(&exit_code, 1);
 	set_exit_status(s, exit_code);
 	s_free_cmd(s);

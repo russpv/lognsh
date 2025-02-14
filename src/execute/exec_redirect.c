@@ -5,14 +5,16 @@
  * to run otherwise and prints
  * warning as fish does
  */
+#define LOGMSG_EREDIR_DONE "\tRedirect: dup2 from %d to %d\n"
+#define DBGMSG_EREDIR_FD "Exec: _redirect_logic fd:%d\n"
+
 static inline int	_redirect_logic(char *topath, int from, bool append)
 {
 	int	fd;
 
 	if (from == STDIN_FILENO && access(topath, R_OK) == -1)
 	{
-		printf("warning: An error occurred while redirecting file '%s'\n",
-			topath);
+		print_redirect_error(topath);
 		fd = open("/dev/null", O_RDONLY);
 		errno = EACCES;
 	}
@@ -24,7 +26,7 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 		fd = open(topath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
 		fd = -1;
-	debug_print("Exec: _redirect_logic fd:%d\n", fd);
+	debug_print(DBGMSG_EREDIR_FD, fd);
 	return (fd);
 }
 
@@ -56,7 +58,7 @@ int	redirect(int *to, char *topath, int from, bool ifappend)
 	}
 	else
 		fd = *to;
-	colored_printf(GREEN, "\tRedirect: dup2 from %d to %d\n", from, fd);
+	colored_printf(GREEN, LOGMSG_EREDIR_DONE, from, fd);
 	if (dup2(fd, from) == -1)
 		return (-1);
 	close(fd);

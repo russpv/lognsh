@@ -33,12 +33,19 @@ char	**c_argstoargv(char **args, char *cmd, int argc)
 	return (argv);
 }
 
-void	print_pipes(t_cmd *c)
+void print_pipes(t_cmd *c)
 {
-	int	i;
+    int i;
 
-	i = -1;
-	while (++i < c->curr_cmdc)
-		debug_print("Cmd: \tPipe %d: read fd=%d, write fd=%d\n", i,
-			c->fildes[i][0], c->fildes[i][1]);
+    if (c == NULL || c->fildes == NULL) 
+	{
+        debug_print("Error: fildes is NULL\n");
+        return;
+    }
+    i = -1;
+    while (++i < c->curr_cmdc - 1)
+    {
+        debug_print("Cmd: \tPipe %d: read fd=%d, write fd=%d", \
+		i, c->fildes[i][0], c->fildes[i][1]);
+    }
 }

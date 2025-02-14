@@ -1,5 +1,8 @@
 #include "stack_int.h"
 
+#define DBGMSG_STPUSH_OVERFLOW "Stack overflow!\n"
+#define DBGMSG_STPOP_UNDERFL "Stack underflow!\n"
+
 t_ptr_stack	*st_ptr_create(void)
 {
 	t_ptr_stack	*s;
@@ -22,7 +25,7 @@ int	st_ptr_push(t_ptr_stack *s, void *thing)
 {
 	if (s->depth >= MAX_ST_DEPTH)
 	{
-		debug_print("Stack overflow!\n");
+		debug_print(DBGMSG_STPUSH_OVERFLOW);
 		return (1);
 	}
 	s->st[s->depth] = thing;
@@ -36,7 +39,7 @@ void	*st_ptr_pop(t_ptr_stack *s)
 
 	if (s->depth == 0)
 	{
-		debug_print("Stack underflow!\n");
+		debug_print(DBGMSG_STPOP_UNDERFL);
 		return (NULL);
 	}
 	tmp = s->st[s->depth - 1];

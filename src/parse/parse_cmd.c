@@ -76,6 +76,7 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
 		ft_lstadd_back(&cmd_node->data.cmd.args, new);
 		cmd_node->data.cmd.argc++;
 	}
+	debug_print("Parser: argparse done on %d args\n", cmd_node->data.cmd.argc);
 	return (0);
 }
 
@@ -130,6 +131,7 @@ t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 	}
 	p->last_node = ast_node;
 	st_int_pop(p->st);
-	debug_print("Parser: parsed cmd %s\n", ast_node->data.cmd.name);
+	debug_print("Parser: parsed cmd args: %p\n", p_get_args(ast_node));
+	debug_print("Parser: parsed cmd: %s\n", ast_node->data.cmd.name);
 	return (ast_node);
 }

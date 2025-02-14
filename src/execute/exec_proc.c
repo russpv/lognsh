@@ -15,7 +15,7 @@ int	exec_fork_wait(t_state *s, t_ast_node *node, t_execute_fn executor)
 	pid = fork();
 	if (0 > pid)
 	{
-		err("ERR exec_fork_func\n");
+		err(ERRMSG_FORK);
 		return (-1);
 	}
 	else if (0 == pid)

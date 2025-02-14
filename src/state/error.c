@@ -1,10 +1,4 @@
 #include "error.h"
-#include <signal.h>
-#include <unistd.h>
-
-/* To avoid circular includes: */
-extern void	set_error(t_state *s, int e);
-extern int	ft_strlen(const char *s);
 
 /* Prints ": ambiguous redirect\n"*/
 void	print_ambiguous_redirect(const char *orig_fn)
