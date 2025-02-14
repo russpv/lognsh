@@ -40,7 +40,7 @@ t_list					*ft_lstcopy(t_list *orig, void *(*f)(const void *),
 t_list					*ft_lstcopy_node(const t_list *orig,
 							void *(*f)(const void *));
 
-void					ft_lstiter_ins_rwd(t_list **lst, void (*f)(t_list **,
+void					ft_lstiter_ins_rwd(t_list **lst, int (*f)(t_list **,
 								void *));
 void					ft_lstadd_insert(t_list **lst, t_list *new);
 void					ft_lstdelone_rwd(t_list **lst, t_list **node,

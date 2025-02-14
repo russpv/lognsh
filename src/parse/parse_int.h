@@ -181,6 +181,8 @@ typedef struct s_parser
 
 t_parser					*create_parser(t_state *s, t_list *tokens);
 void						destroy_parser(void *instance);
+t_ast_node	*init_log(void);
+t_redir_data	*init_redir(t_ast_node *target, enum e_tok_type type);
 
 /* Token list navigation */
 t_tok						*peek(t_parser *p);
@@ -205,7 +207,7 @@ int							push(t_pstack *stack);
 int							pop(t_pstack *stack);
 
 /* Execution helpers */
-void						p_do_globbing(t_list **parent_lst, void *c);
+int							p_do_globbing(t_list **parent_lst, void *c);
 int							p_do_globbing_redirs(void *c);
 
 /* Tests */
@@ -222,6 +224,7 @@ bool						is_arg_token(t_tok *tok);
 bool						is_expansion(t_tok *tok);
 bool						is_close_paren(t_tok *tok);
 bool						is_group_op_token(t_tok *tok);
+t_tok	*which_lower_priority(t_ast_node *ref, t_tok *cmp);
 
 /* For traversing the AST */
 bool						node_has_redirects(t_ast_node *n);
@@ -236,6 +239,7 @@ void						handle_heredoc(const t_redir_data *node);
 
 /* Utils */
 char						**list_to_array(t_list *args, int argc);
+int	lstiter_state(t_state *s, t_list *lst, int (*f)(t_state *, void *));
 
 /* AST list frees */
 void						destroy_ast_node(void *node);

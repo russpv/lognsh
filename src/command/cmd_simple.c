@@ -18,9 +18,13 @@ static int	_do_ops(t_state *s, t_ast_node *a, const t_cmd *c)
 {
 	char	**args;
 	int		exit_code;
+	int		res;
 
 	((t_cmd *)c)->curr_node = a;
-	args = p_do_arg_processing(s, a);
+	args = NULL;
+	res = p_do_arg_processing(s, a, &args);
+	if (0 != res)
+		return (res);
 	exit_code = _handle_no_command(a, args);
 	if (NO_CMD == exit_code)
 		return (exit_code);

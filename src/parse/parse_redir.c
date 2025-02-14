@@ -1,26 +1,34 @@
 #include "parse_int.h"
 
-static t_redir_data	*_init_redir(t_ast_node *target, enum e_tok_type type)
-{
-	t_redir_data	*red;
+# define ERRMSG_REDIR_FN "Allocation for redirection filename failed\n"
+# define ERRMSG_REDIR_FN_INVALID "Expected a valid filename after redirection operator\n"
+# define ERRMSG_REDIR_FN_EOF "Expected a filename after redirection operator,found EOF\n"
+# define ERRMSG_REDIR_SYM_MALLOC "Allocation for redirection symbol failed\n"
+# define ERRMSG_HEREDOC_MALLOC "Memory allocation failed for redirection heredoc\n"
+# define ERRMSG_REDIR_NODE_MALLOC "Failed to create execution node for redirection\n"
+# define ERRMSG_REDIR_FAIL "Failed to parse redirection\n"
 
-	if (!target)
-		return (NULL);
-	red = malloc(sizeof(t_redir_data));
-	if (!red)
+/* Creates new redir node and adds to t_list.
+ * Freeing handled by caller.
+ */
+static int	_add_redir(t_ast_node *node, t_redir_data *red)
+{
+	t_list	*new;
+
+	if (!red || !node)
+		return (ERR_ARGS);
+	new = ft_lstnew(red);
+	if (!new)
 	{
-		err("Memory allocation failed for redirection data\n");
-		return (NULL);
+		err(ERRMSG_REDIR_NODE_MALLOC);
+		return (ERR_MEM);
 	}
-	red->type = type;
-	red->target_ptr = target;
-	red->do_globbing = false;
-	red->do_expansion = false;
-	red->heredoc_body = NULL;
-	red->symbol = NULL;
-	red->filename = NULL;
-	red->global_state = NULL;
-	return (red);
+	debug_print("Parser: Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n",\
+		red->symbol, red->filename, red->heredoc_body, red->do_globbing,\
+		red->do_expansion);
+	ft_lstadd_back(p_get_redirs_ptr(node), new);
+	p_update_redc(node, 1);
+	return (0);
 }
 
 // Stores redirection symbol, globbing, expansion, filename, and advances parser
@@ -35,30 +43,28 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red)
 		return (ERR_ARGS);
 	red->symbol = ft_strdup(tok_get_raw((t_tok *)tok));
 	if (!red->symbol)
-		return (err("Allocation for redirection symbol failed\n"), ERR_MEM);
-	debug_print("Parser: Redirection: type=%d symbol=%s\n", red->type,
+		return (err(ERRMSG_REDIR_SYM_MALLOC), ERR_MEM);
+	debug_print("Parser: Redirection: type=%d symbol=%s\n", red->type,\
 		red->symbol);
 	if (is_at_end(p))
-		return (err("Expected a filename after redirection operator,\
-				found EOF\n"), ERR_SYNTAX);
+		return (err(ERRMSG_REDIR_FN_EOF), ERR_SYNTAX);
 	tok_name = advance(p);
-	debug_print("Parser: _process_normal_redir filename:%s\n",
+	debug_print("Parser: _process_normal_redir filename:%s\n",\
 		tok_get_raw(tok_name));
 	if (!(is_filename_token((t_tok *)tok_name)
 			|| is_expansion((t_tok *)tok_name)))
-		return (err("Expected a valid filename after redirection operator\n"),
-			ERR_SYNTAX);
+		return (err(ERRMSG_REDIR_FN_INVALID), ERR_SYNTAX);
 	red->do_globbing = tok_get_globbing((t_tok *)tok_name);
 	red->do_expansion = tok_get_expansion((t_tok *)tok_name);
 	red->filename = ft_strdup(tok_get_raw((t_tok *)tok_name));
 	if (!red->filename)
-		return (err("Allocation for redirection filename failed\n"), ERR_MEM);
+		return (err(ERRMSG_REDIR_FN), ERR_MEM);
 	return (0);
 }
 
-/* Copies TOK_HEREDOC_WORD content to redir data
- * Returns ERR_MEM if malloc fails
- * Freeing handled by caller
+/* Copies TOK_HEREDOC_WORD content to redir data.
+ * Returns ERR_MEM if malloc fails.
+ * Freeing handled by caller.
  */
 static int	_process_heredoc_redir(t_redir_data *red, t_tok *tok)
 {
@@ -70,30 +76,9 @@ static int	_process_heredoc_redir(t_redir_data *red, t_tok *tok)
 	red->heredoc_body = ft_strdup(tok_get_raw((t_tok *)tok));
 	if (!red->heredoc_body)
 	{
-		err("Memory allocation failed for redirection heredoc\n");
+		err(ERRMSG_HEREDOC_MALLOC);
 		return (ERR_MEM);
 	}
-	return (0);
-}
-
-/* Freeing handled by caller */
-static int	_add_redir(t_ast_node *node, t_redir_data *red)
-{
-	t_list	*new;
-
-	if (!red || !node)
-		return (ERR_ARGS);
-	new = ft_lstnew(red);
-	if (!new)
-	{
-		err("Failed to create execution node for redirection\n");
-		return (ERR_MEM);
-	}
-	debug_print("Parser: Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n",
-		red->symbol, red->filename, red->heredoc_body, red->do_globbing,
-		red->do_expansion);
-	ft_lstadd_back(p_get_redirs_ptr(node), new);
-	p_update_redc(node, 1);
 	return (0);
 }
 
@@ -111,7 +96,7 @@ static int	_parse_redir(t_parser *p, t_ast_node *node)
 	while (!is_at_end(p) && is_redir_token(peek(p)))
 	{
 		tok = advance(p);
-		red = _init_redir(node, tok_get_type((t_tok *)tok));
+		red = init_redir(node, tok_get_type((t_tok *)tok));
 		if (false == is_heredoc_token((t_tok *)tok))
 		{
 			if (0 != _process_normal_redir(p, tok, red))
@@ -141,7 +126,7 @@ int	process_redir(t_parser *p, t_ast_node *ast_node)
 	{
 		if (0 != _parse_redir(p, ast_node))
 		{
-			err("Failed to parse redirection\n");
+			err(ERRMSG_REDIR_FAIL);
 			return (ERR_GENERAL);
 		}
 	}

@@ -1,19 +1,9 @@
 #include "parse_int.h"
 
-static t_ast_node	*_init_log(void)
-{
-	t_ast_node	*log_node;
-
-	log_node = malloc(sizeof(t_ast_node));
-	if (log_node)
-	{
-		log_node->type = AST_NODE_LOG;
-		log_node->data.log.cmds = NULL;
-		log_node->data.log.cmdc = 0;
-		log_node->data.log.operators = NULL;
-	}
-	return (log_node);
-}
+#define ERRMSG_LOGI_PARSE "Failed to parse command after logical op\n"
+#define ERRMSG_LOGI_NODE_MALLOC "Allocation failed for logical node\n"
+#define ERRMSG_LOGI_CMD_MALLOC "Memory allocation error while creating logical's command node\n"
+#define ERRMSG_LOGI_OP_MALLOC "Memory allocation error while creating operator node\n"
 
 /* Stores command. Assumes parser is on
  * correct token.
@@ -32,7 +22,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *log_node)
 	}
 	else
 	{
-		err("Memory allocation error while creating logical's command node\n");
+		err(ERRMSG_LOGI_CMD_MALLOC);
 		return (ERR_MEM);
 	}
 	return (0);
@@ -52,33 +42,16 @@ static int	_process_op(t_parser *p, t_ast_node *log_node)
 		ft_lstadd_back(&log_node->data.log.operators, op);
 	else
 	{
-		err("Memory allocation error while creating operator node\n");
+		err(ERRMSG_LOGI_OP_MALLOC);
 		return (ERR_MEM);
 	}
 	return (0);
 }
 
-/* Returns cmp if it is a lower priority operator than
- * that represented by ref.
- */
-t_tok	*which_lower_priority(t_ast_node *ref, t_tok *cmp)
-{
-	if (!ref | !cmp)
-		return (NULL);
-	if (is_close_paren(cmp) || tok_get_type(cmp) == TOK_EOF)
-		return (cmp);
-	if (is_group_op_token(cmp))
-	{
-		if (ref->type == AST_NODE_PIPELINE && is_log_token(cmp))
-			return (cmp);
-	}
-	return (NULL);
-}
-
 static int	_do_ops(t_state *s, t_parser *p, t_ast_node *log_node)
 {
 	if (NULL == parse_full_cmd(s, p))
-		return (err("Failed to parse command after logical op\n"), ERR_GENERAL);
+		return (err(ERRMSG_LOGI_PARSE), ERR_GENERAL);
 	if (peek(p) == which_lower_priority(log_node, peek(p)))
 	{
 		if (0 != _process_cmd(p, log_node))
@@ -87,8 +60,7 @@ static int	_do_ops(t_state *s, t_parser *p, t_ast_node *log_node)
 	else
 	{
 		if (NULL == parse_full_cmd(s, p))
-			return (err("Failed to parse command after logical \
-				op\n"), ERR_GENERAL);
+			return (err(ERRMSG_LOGI_PARSE), ERR_GENERAL);
 		if (0 != _process_cmd(p, log_node))
 			return (ERR_GENERAL);
 	}
@@ -133,9 +105,9 @@ t_ast_node	*parse_logical(t_state *s, t_parser *p)
 
 	st_int_push(p->st, AST_NODE_LOG);
 	debug_print("Parser: parse_logical tok: %s\n", tok_get_raw(peek(p)));
-	ast_node = _init_log();
+	ast_node = init_log();
 	if (NULL == ast_node)
-		return (err("Allocation failed for log node\n"), NULL);
+		return (err(ERRMSG_LOGI_NODE_MALLOC), NULL);
 	res = _process_log(s, p, ast_node);
 	if (0 != res)
 	{

@@ -10,6 +10,7 @@ t_cmd	*get_cmd(t_state *s)
 	return (s->current_cmd);
 }
 
+/* Returns the last exit code. */
 int	*get_status(t_state *s)
 {
 	return (&s->current_exit_code);

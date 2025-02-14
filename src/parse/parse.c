@@ -61,7 +61,7 @@ t_ast_node	*parse(t_state *s, char *input)
 	ast = NULL;
 	lexer = tokenize(s, input);
 	if (NULL == lexer)
-		return (null_and_stat(s, ERR_TOKEN));
+		return (set_error(s, ERR_TOKEN), NULL);
 	tokens = lex_get_tokens(lexer);
 	parser = create_parser(s, tokens);
 	debug_print("Parser: \t###### parse ####### \n");

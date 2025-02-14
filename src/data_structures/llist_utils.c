@@ -19,7 +19,6 @@ t_list	*ft_lstlast(t_list *lst)
 ** del: used if allocation fails
 ** UNPROTECTED: returns NULL only when !lst
 */
-
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
 	t_list	*newlst;

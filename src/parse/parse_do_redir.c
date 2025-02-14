@@ -1,5 +1,8 @@
 #include "parse_int.h"
 
+# define ERRMSG_REDIR_HANDLER "Redirection handler issue\n"
+# define ERRMSG_REDIR_NULLNODE "ERR no node given\n"
+
 /* Executes redirection of t_redir_data llist
  * Accepts a t_redir_data.
  * Note: parser does not node-rize TOK_HEREDOC
@@ -23,7 +26,7 @@ static void	_p_do_redirection(void *content)
 	if (handlers[node->type])
 		handlers[node->type](node);
 	else
-		err("redirection handler issue\n");
+		err(ERRMSG_REDIR_HANDLER);
 }
 
 /* Executes redirections of a cmd node in order.
@@ -33,7 +36,7 @@ static void	_p_do_redirection(void *content)
 int	p_do_redirections(t_ast_node *a)
 {
 	if (!a)
-		return (err("ERR no node given\n"), ERR_ARGS);
+		return (err(ERRMSG_REDIR_NULLNODE), ERR_ARGS);
 	if (a->type != AST_NODE_CMD)
 		return (EINVAL);
 	if (!node_has_redirects(a))

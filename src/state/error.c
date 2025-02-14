@@ -6,23 +6,6 @@
 extern void	set_error(t_state *s, int e);
 extern int	ft_strlen(const char *s);
 
-// Function to return NULL and set the error code in the state
-void	*null_and_stat(t_state *s, int error_code)
-{
-	if (s)
-	{
-		set_error(s, error_code);
-	}
-	return (NULL);
-}
-
-// TODO
-const char	*get_error_message(int error_code)
-{
-	(void)error_code;
-	return (NULL);
-}
-
 /* Prints ": ambiguous redirect\n"*/
 void	print_ambiguous_redirect(const char *orig_fn)
 {
