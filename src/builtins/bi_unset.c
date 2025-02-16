@@ -6,45 +6,52 @@
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:27:21 by dayeo             #+#    #+#             */
-/*   Updated: 2025/01/28 09:27:24 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/02/16 15:15:53 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bi_int.h"
 
-extern	char	**environ;
+void	env_remove_key(t_env **env_list, const char *key)
+{
+	t_env	*current;
+	t_env	*prev;
+
+	current = *env_list;
+	prev = NULL;
+	while (current)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				*env_list = current->next;
+			free(current->key);
+			free(current->value);
+			free(current);
+		}
+		prev = current;
+		current = current->next;
+	}
+}
 
 int	bi_unset(t_state *s, char **argv, int argc)
 {
-	
 	int	i;
-	int	j;
-	
-	(void)s;
-	if (argc < 2)
+
+	if (argc == 1)
 		return (0);
 	i = 1;
 	while (argv[i])
 	{
-		j = 0;
-		while (environ[j])
+		if (!is_valid_key(argv[i]))
 		{
-			if (ft_strncmp(environ[j], argv[i], ft_strlen(argv[i])) == 0 \
-				&& environ[j][ft_strlen(argv[i])] == '=')
-			{
-				while (environ[j])
-				{
-					environ[j] = environ[j + 1];
-					j++;
-				}
-				break ;
-			}
-			j++;
+			i++;
+			continue ;
 		}
+		env_remove_key(&(s->sh_env_list), argv[i]);
 		i++;
 	}
 	return (0);
 }
-
-		
-	
