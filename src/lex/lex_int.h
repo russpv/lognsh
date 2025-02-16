@@ -3,7 +3,7 @@
 #define FAIL_TOKEN 10 // TODO group somewhere else
 
 /* chars that need to be quoted if meant literally */
-#define NORMALDELIMS "^()=|{}[]`<>?~;&\n\t \'\""
+#define NORMALDELIMS "^()|{}[]`<>~;&\n\t \'\""
 //$ should not break tokens,
 // backslash also,
 //	# is escape only
