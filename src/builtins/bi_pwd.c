@@ -3,36 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   bi_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:02:05 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/01 01:00:55 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/02/16 15:15:55 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bi_int.h"
 
-int    bi_pwd(t_state *s, char **args, int argc)
+const char	*env_find_value(t_env *env_list, const char *key)
 {
-    char    *cwd;
+	while (env_list)
+	{
+		if (ft_strcmp(env_list->key, key) == 0)
+			return (env_list->value);
+		env_list = env_list->next;
+	}
+	return (NULL);
+}
 
-    (void)s;
-    (void)argc;
-    if (args[1])
-    {
-        write(STDERR_FILENO, SHELL_NAME": pwd: too many arguments\n", sizeof(SHELL_NAME": pwd: too many arguments\n"));
-        return (1);
-    }
-    cwd = getcwd(NULL, 0);
-    if (cwd)
-    {
-        printf("%s\n", cwd);
-        free (cwd);
-        return (0);
-    }
-    else
-    {
-        perror(SHELL_NAME": pwd");
-        return (ERR_GETCWD);
-    }
+int	bi_pwd(t_state *s, char **args, int argc)
+{
+	const char	*pwd_value;
+	char		*cwd;
+
+	(void)args;
+	(void)argc;
+	pwd_value = env_find_value(s->sh_env_list, "PWD");
+	if (pwd_value)
+	{
+		write(STDOUT_FILENO, pwd_value, ft_strlen(pwd_value));
+		write(STDOUT_FILENO, "\n", 1);
+		return (0);
+	}
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("minishell: pwd");
+		return (1);
+	}
+	write(STDOUT_FILENO, cwd, ft_strlen(cwd));
+	write(STDOUT_FILENO, "\n", 1);
+	free(cwd);
+	return (0);
 }
