@@ -17,8 +17,8 @@ int	exec_fork_run(t_state *s, t_ast_node *node, int i, t_execute_fn executor)
 	pid = fork();
 	if (pid < 0)
 	{
-		err(ERRMSG_ELOGI_FORK);
-		return (-1);
+		perror(ERRMSG_ELOGI_FORK);
+		return (ERR_FORK);
 	}
 	else if (0 == pid)
 	{

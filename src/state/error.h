@@ -2,8 +2,10 @@
 # define ERROR_H
 
 # include "../globals/globals.h"
-#include <signal.h>
-#include <unistd.h>
+# include <signal.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <errno.h>
 
 # define ERR_NONE 0
 # define ERR_AMBIGUOUS_REDIR 1
@@ -17,33 +19,56 @@
 # define ERR_FORK 8
 # define ERR_INSUFFICIENT_CMDS 9
 # define ERR_PIPE 10
+# define ERR_ACCESS 11
+# define ERR_DUP 12
+# define ERR_CLOSE 13
+# define ERR_WAITPID 14
+# define ERR_GETCWD 15
+# define ERR_CHDIR 16
+# define ERR_REDIR 17
+# define ERR_EXECVE 18
+# define ERR_DUP2 19
 
+# define ERR_CHILD_FAILED 127
 # define ERR_CMD_NOT_FOUND 127
 # define ERR_CMD_NOT_EXEC 126
 # define ERR_CMD_SIGINTD 130
 # define ERR_EXIT_RANGE 255
 
-#define ERRMSG_MALLOC "ERR malloc\n"
-#define ERRMSG_PIPE "ERR pipe()\n"
-#define ERRMSG_FORK "ERR fork()\n"
-#define ERRMSG_EXECVE "ERR execve()\n"
+# define ERRMSG_MALLOC SHELL_NAME ": malloc"
+# define ERRMSG_PIPE SHELL_NAME ": pipe"
+# define ERRMSG_FORK SHELL_NAME ": fork"
+# define ERRMSG_EXECVE SHELL_NAME ": execve"
+# define ERRMSG_SIGACTION SHELL_NAME ": sigaction"
+# define ERRMSG_ACCESS SHELL_NAME ": "
+# define ERRMSG_OPEN SHELL_NAME ": open"
+# define ERRMSG_CLOSE SHELL_NAME ": close"
+# define ERRMSG_WAIT SHELL_NAME ": wait"
+# define ERRMSG_WAITPID SHELL_NAME ": waitpid"
+# define ERRMSG_GETCWD SHELL_NAME ": getcwd"
+# define ERRMSG_CHDIR SHELL_NAME ": chdir"
+# define ERRMSG_STAT SHELL_NAME ": stat"
+# define ERRMSG_LSTAT SHELL_NAME ": lstat"
+# define ERRMSG_FSTAT SHELL_NAME ": fstat"
+# define ERRMSG_DUP SHELL_NAME ": dup"
+# define ERRMSG_DUP2 SHELL_NAME ": dup2"
+# define ERRMSG_IOCTL SHELL_NAME ": ioctl"
+# define ERRMSG_TCSETATTR SHELL_NAME ": tcsetattr"
+# define ERRMSG_TCGETATTR SHELL_NAME ": tcgetattr"
 
 // no includes, but redefs, due to circular dependency
 typedef struct s_global_state	t_state;
 
-void							*null_and_stat(t_state *s, int error_code);
-const char						*get_error_message(int error_code);
-
 /* specific error messages */
 void							print_command_not_found(const char *cmd);
-void							print_permission_denied(const char *path);
+void							print_access_err(const char *path);
 void							print_lex_buffer_overflow(void);
 void							print_ambiguous_redirect(const char *orig_fn);
 void							print_too_many_args(const char *caller);
-void	print_redirect_error(char *topath);
+void							print_redirect_error(char *topath);
 
 /* To avoid circular includes: */
-extern void	set_error(t_state *s, int e);
-extern size_t	ft_strlen(const char *s);
-
+extern void						set_error(t_state *s, int e);
+extern size_t					ft_strlen(const char *s);
+void	perror(const char *);
 #endif

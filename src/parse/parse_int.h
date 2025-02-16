@@ -99,6 +99,7 @@ typedef struct s_cmd
 	bool					do_globbing;
 	bool					do_expansion;
 	bool					do_redir_globbing;
+	bool					do_redir_expansion; //TODO
 }							t_ast_node_cmd;
 
 typedef struct s_redir
@@ -230,12 +231,12 @@ t_tok	*which_lower_priority(t_ast_node *ref, t_tok *cmp);
 bool						node_has_redirects(t_ast_node *n);
 
 /* Redirect function table */
-typedef void				(*t_redir_fn)(const t_redir_data *node);
+typedef int					(*t_redir_fn)(const t_redir_data *node);
 
-void						handle_redirect_in(const t_redir_data *node);
-void						handle_redirect_out(const t_redir_data *node);
-void						handle_redirect_append(const t_redir_data *node);
-void						handle_heredoc(const t_redir_data *node);
+int							handle_redirect_in(const t_redir_data *node);
+int							handle_redirect_out(const t_redir_data *node);
+int							handle_redirect_append(const t_redir_data *node);
+int							handle_heredoc(const t_redir_data *node);
 
 /* Utils */
 char						**list_to_array(t_list *args, int argc);

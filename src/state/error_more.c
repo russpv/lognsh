@@ -1,5 +1,6 @@
 #include "error.h"
 
+// Don't like the unix error msg
 void	print_redirect_error(char *topath)
 {
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));

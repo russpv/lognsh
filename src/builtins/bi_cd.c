@@ -42,7 +42,7 @@ int	bi_cd(t_state *s, char **argv, int argc)
 		write(STDERR_FILENO, ": ", 2);
 		write(STDERR_FILENO, strerror(errno), ft_strlen(strerror(errno)));
 		write(STDERR_FILENO, "\n", 1);
-		return (ERR_GENERAL);
+		return (ERR_CHDIR);
 	}
 	// new working directory with dynamic allocation
 	new_pwd = getcwd(NULL, 0);
@@ -51,7 +51,7 @@ int	bi_cd(t_state *s, char **argv, int argc)
 		write(STDERR_FILENO,
 			SHELL_NAME ": cd: error retrieving current directory\n",
 			sizeof(SHELL_NAME ": cd: error retrieving current directory\n"));
-		return (ERR_GENERAL);
+		return (ERR_GETCWD);
 	}
 	if (old_pwd)
 		setenv("OLDPWD", old_pwd, 1); // RKP: Can't use this func

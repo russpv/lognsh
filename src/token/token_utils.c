@@ -1,6 +1,6 @@
 #include "token_int.h"
 
-void	tok_print(void *content)
+int	tok_print(void *content)
 {
 	t_tok	*token;
 
@@ -10,6 +10,7 @@ void	tok_print(void *content)
 		log_print("Lexer: Token: %d Exp: %d Value: %s \n", token->type,
 			token->do_expansion, token->raw);
 	}
+	return (0);
 }
 
 char	*tok_get_raw(t_tok *token)

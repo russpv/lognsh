@@ -19,7 +19,7 @@ void	sigint_handler(int signo)
 	{
 		g_last_signal = SIGINT;
        // write(STDOUT_FILENO, "\n", 1);
-#ifndef	MACOS
+#ifndef	MACOS //TODO remove in final
         rl_replace_line("", 0);
         rl_on_new_line();
         rl_redisplay();
@@ -46,11 +46,13 @@ void	set_signal_handlers(void)
 	sa_int.sa_handler = sigint_handler;
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa_int, NULL);
+	if (0 != sigaction(SIGINT, &sa_int, NULL))
+		perror(ERRMSG_SIGACTION);
 	sa_quit.sa_handler = SIG_IGN;
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_flags = 0;
-	sigaction(SIGQUIT, &sa_quit, NULL);
+	if (0 != sigaction(SIGQUIT, &sa_quit, NULL))
+		perror(ERRMSG_SIGACTION);
 }
 
 void	reset_signal_handlers(void)
@@ -62,10 +64,11 @@ void	reset_signal_handlers(void)
     sa_int.sa_handler = SIG_DFL;
     sigemptyset(&sa_int.sa_mask);
     sa_int.sa_flags = 0;
-    sigaction(SIGINT, &sa_int, NULL);
-
+    if (0 != sigaction(SIGINT, &sa_int, NULL))
+		perror(ERRMSG_SIGACTION);
     sa_quit.sa_handler = SIG_DFL;
     sigemptyset(&sa_quit.sa_mask);
     sa_quit.sa_flags = 0;
-    sigaction(SIGQUIT, &sa_quit, NULL);
+    if (0 != sigaction(SIGQUIT, &sa_quit, NULL))
+		perror(ERRMSG_SIGACTION);
 }

@@ -5,7 +5,6 @@
 # include "../../include/libft.h"
 # include "../signal/signal.h"
 # include "error.h"
-# include <errno.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>

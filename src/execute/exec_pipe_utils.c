@@ -37,7 +37,7 @@ int	exec_create_pipes(int ***fildes, int cmd_count)
 		if (pipe((*fildes)[i]) < 0)
 		{
 			free_pipes((*fildes), i);
-			return (err(ERRMSG_PIPE), ERR_PIPE);
+			return (perror(ERRMSG_PIPE), ERR_PIPE);
 		}
 		i++;
 	}
@@ -52,8 +52,10 @@ int	exec_close_pipes(int **fildes, int cmd_count)
 	i = -1;
 	while (++i < cmd_count - 1)
 	{
-		close(fildes[i][0]);
-		close(fildes[i][1]);
+		if (0 != close(fildes[i][0]))
+			return(perror(ERRMSG_CLOSE), ERR_CLOSE);
+		if (0 != close(fildes[i][1]))
+			return(perror(ERRMSG_CLOSE), ERR_CLOSE); 
 	}
 	return (0);
 }

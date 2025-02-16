@@ -4,15 +4,16 @@ static void	_do_test(t_state *s)
 {
 	char		input[INPUT_BUF_SZ];
 	t_ast_node	*ast;
-
-	if (NULL == fgets(input, sizeof(input), stdin))
-		return ;
-	//set_input(s, input);
-	ast = parse(s, input);//get_input(s));
-	if (!ast)
-		err("ERR parse()\n");
-	set_exit_status(s, cmd_execute(s, ast));
-	s_free_cmd(s);
+	if (MYTEST)
+	{
+		if (NULL == fgets(input, sizeof(input), stdin))
+			return ;
+		ast = parse(s, input);
+		if (!ast)
+			err("ERR parse()\n");
+		set_exit_status(s, cmd_execute(s, ast));
+		s_free_cmd(s);
+	}
 }
 
 static int	_do_loop(t_state *s)

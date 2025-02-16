@@ -10,6 +10,7 @@ struct					s_cmd
 	char				*fullpath;
 	char				**argv;
 	t_list				*redirs;
+	int					redc;
 	int					argc;
 	t_ast_node			*curr_node;
 	int					**fildes;

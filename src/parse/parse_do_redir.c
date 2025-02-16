@@ -2,14 +2,20 @@
 
 # define ERRMSG_REDIR_HANDLER "Redirection handler issue\n"
 # define ERRMSG_REDIR_NULLNODE "ERR no node given\n"
+# define DBGMSG_REDIR_ANNOUNCE2 "Parser: _p_do_redirection iterating...\n"
+# define DBGMSG_REDIR_GOTNULL "Parser: _p_do_redirection got NULL\n"
+# define DBGMSG_REDIR_GOT "Parser: _p_do_redirection got smthg and executing...\n"
+# define DBGMSG_REDIR_ANNOUNCE "Parser: p_do_redirections, doing redirs...\n"
 
 /* Executes redirection of t_redir_data llist
  * Accepts a t_redir_data.
+ * Assumes a non-null set of redirections exists.
  * Note: parser does not node-rize TOK_HEREDOC
+ * Note: no error code returns
  */
-static void	_p_do_redirection(void *content)
+static int	_p_do_redirection(void *content)
 {
-	const t_redir_data	*node = (t_redir_data *)content;
+	const t_redir_data	*redir = (t_redir_data *)content;
 	const t_redir_fn	handlers[] = {
 	[TOK_REDIRECT_IN] = handle_redirect_in,
 	[TOK_REDIRECT_OUT] = handle_redirect_out,
@@ -18,20 +24,28 @@ static void	_p_do_redirection(void *content)
 	};
 
 	if (NULL == content)
-		return ;
-	debug_print("Parser: _p_do_redirection...\n");
-	if (!node->type)
-		return (debug_print("Parser: _p_do_redirection got NULL\n"));
-	debug_print("Parser: _p_do_redirection got smthg and executing...\n");
-	if (handlers[node->type])
-		handlers[node->type](node);
+		return (ERR_ARGS);
+	debug_print(DBGMSG_REDIR_ANNOUNCE2);
+	if (!redir->type)
+		return (debug_print(DBGMSG_REDIR_GOTNULL), ERR_ARGS);
+	debug_print(DBGMSG_REDIR_GOT);
+	if (handlers[redir->type])
+	{
+		if (0 != handlers[redir->type](redir))
+			return (err(ERRMSG_REDIR_HANDLER), ERR_GENERAL);
+	}
 	else
-		err(ERRMSG_REDIR_HANDLER);
+		return (err(ERRMSG_REDIR_HANDLER), ERR_GENERAL);
+	return (0);
 }
 
 /* Executes redirections of a cmd node in order.
  * If no redirections to do, returns ...
  * Expansions and globbing are to have been done earlier.
+ * If error during redirection due to...
+ * 	- multiple filenames, aborts command only
+ *  - nonexistent input file, aborts command only
+ *  - nonexistent output file, creates file and proceeds (no error)
  */
 int	p_do_redirections(t_ast_node *a)
 {
@@ -39,9 +53,10 @@ int	p_do_redirections(t_ast_node *a)
 		return (err(ERRMSG_REDIR_NULLNODE), ERR_ARGS);
 	if (a->type != AST_NODE_CMD)
 		return (EINVAL);
-	if (!node_has_redirects(a))
+	if (false == node_has_redirects(a))
 		return (0);
-	debug_print("Parser: p_do_redirections, doing redirs...\n");
-	ft_lstiter(a->data.cmd.redirs, _p_do_redirection);
+	debug_print(DBGMSG_REDIR_ANNOUNCE);
+	if (0 != ft_lstiter(a->data.cmd.redirs, _p_do_redirection))
+		return (ERR_REDIR);
 	return (0);
 }

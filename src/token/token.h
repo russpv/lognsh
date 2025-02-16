@@ -125,6 +125,6 @@ bool					tok_get_expansion(t_tok *token);
 bool					tok_get_dquotes(t_tok *token);
 
 int						tok_set_dquotes(t_tok *token);
-void					tok_print(void *token);
+int						tok_print(void *token);
 
 #endif

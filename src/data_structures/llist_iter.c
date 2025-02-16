@@ -13,15 +13,17 @@
 ** f: ptr to function
 ** UNPROTECTED
 */
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+int	ft_lstiter(t_list *lst, int (*f)(void *))
 {
 	if (lst == NULL)
-		return ;
+		return (-1);
 	while (lst)
 	{
-		f((lst)->content);
+		if (0 != f((lst)->content))
+			return (-1);
 		lst = (lst)->next;
 	}
+	return (0);
 }
 
 /* Iterates BACKWARDS and applies f */

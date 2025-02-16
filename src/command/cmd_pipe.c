@@ -24,7 +24,8 @@ static int	_wait_all(t_state *s, t_cmd *c)
 	int	status;
 
 	exec_close_pipes(c->fildes, c->curr_cmdc);
-	waitchild(&status, c->curr_cmdc);
+	if (0 != waitchild(&status, c->curr_cmdc))
+		return (ERR_WAITPID);
 	set_exit_status(s, get_exit_status(status));
 	return (get_exit_status(status));
 }

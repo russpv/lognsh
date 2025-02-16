@@ -23,8 +23,8 @@ TESTDIR = test
 
 # Compiler and flags
 CC = cc 
-CFLAGS = -Wall -Wextra -g -DTESTMODE # -DDEBUGMODE -DLOGMODE -fsanitize=address
-TEST_CFLAGS = -Wall -Wextra -Werror -g 
+CFLAGS = -Wall -Wextra -g -DDEBUGMODE -DLOGMODE #  -fsanitize=address
+TEST_CFLAGS = -Wall  -g -DTESTMODE  # -Werror -Wextra 
 EXT_CFLAGS = -DEXTENDEDFUNC 
 LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses # -fsanitize=address
 LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses 
@@ -92,7 +92,7 @@ $(OBJDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)  # % ensures obj file associates wi
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 	@$(CC) $(CFLAGS) $(INCDEP) -MM $(SRCDIR)/$*.$(SRCEXT) > $(OBJDIR)/$*.$(DEPEXT)
 	@cp -f $(OBJDIR)/$*.$(DEPEXT) $(OBJDIR)/$*.$(DEPEXT).tmp
-	@sed -e 's|.*:|$(OBJDIR)/$*.$(OBJEXT):|' < $(OBJDIR)/$*.$(DEPEXT).tmp > $(OBJDIR)/$*.$(DEPEXT)
+	@sed -e 's|.*:|$(OBJDIR)/$*.$(OBJEXT):|' < $(OBJDIR)/$*.$(DEPEXT).tmp > $(OBJDIR)/$*.$(DEPEXT) || exit 1
 	@sed -e 's/.*://' -e 's/\\$$//' < $(OBJDIR)/$*.$(DEPEXT).tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $(OBJDIR)/$*.$(DEPEXT)
 	@rm -f $(OBJDIR)/$*.$(DEPEXT).tmp
 	

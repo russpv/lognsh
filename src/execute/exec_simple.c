@@ -30,18 +30,18 @@ static int	_do_child_ops(t_state *s)
 		return (err(ERRMSG_ECMD_NULLPATH), -1);
 	if (!c)
 		return (err(ERRMSG_ECMD_NULLTCMD), -1);
-	if (-1 == p_do_redirections(c_get_node((t_cmd *)c)))
-		return (-1);
+	if (0 != p_do_redirections(c_get_node((t_cmd *)c)))
+		return (ERR_REDIR);
 	debug_print(DBGMSG_ECMD_DOEXEC, fullpath);
 	if (NULL == fullpath)
 		return (-1);
 	else if (-1 == execve(fullpath, (char **)argv, (char **)envp))
-		err(ERRMSG_EXECVE);
+		return (perror(ERRMSG_EXECVE), ERR_EXECVE);
 	destroy_state(s);
 	return (0);
 }
 
-/* Handles redirects and calls built-in */
+/* Executes redirects, if any, and calls built-in */
 int	exec_bi_call(t_state *s, t_builtin_fn bi)
 {
 	const t_cmd	*c = (const t_cmd *)get_cmd(s);
@@ -49,17 +49,13 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 	const int	argc = (const int)c_get_argc((t_cmd *)c);
 
 	debug_print(DBGMSG_ECMD_ANNOUNCE);
-	if (!argv)
-		fprintf(stderr, "SHIT\n");
 	if (!argv || !bi || !c)
-		return (err(ERRMSG_ECMD_ARGS), -1);
-	debug_print(DBGMSG_ECMD_REDIRSV);
+		return (err(ERRMSG_ECMD_ARGS), ERR_ARGS);
 	save_redirs((t_cmd *)c);
-	debug_print(DBGMSG_ECMD_REDIRDO);
-	if (-1 == p_do_redirections(c_get_node((t_cmd *)c)))
-		return (-1);
+	if (0 != p_do_redirections(c_get_node((t_cmd *)c)))
+		return (ERR_REDIR);
 	debug_print(DBGMSG_ECMD_DOBLTIN);
-	if (-1 == bi(s, (char **)argv, argc))
+	if (0 != bi(s, (char **)argv, argc))
 		debug_print(DBGMSG_ECMD_ERRBLTIN);
 	restore_redirs((t_cmd *)c);
 	s_free_cmd(s);
@@ -67,7 +63,8 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 }
 
 /* Forks, resets signal handlers, execve's, sets exit status.
- * Returns early in case SIGINT recieved.
+ * Returns early in case SIGINT received.
+ * If anything errors in the child, exits with 127.
  */
 int	exec_fork_execve(t_state *s)
 {
@@ -80,15 +77,18 @@ int	exec_fork_execve(t_state *s)
 	if (0 == p)
 	{
 		reset_signal_handlers();
-		if (-1 == _do_child_ops(s))
+		if (0 != _do_child_ops(s))
 		{
 			err(ERRMSG_ECMD_CHILD);
 			destroy_state(s);
-			exit(127);
+			exit(ERR_CHILD_FAILED);
 		}
 	}
 	else if (p < 0)
-		err(ERRMSG_FORK);
+	{
+		perror(ERRMSG_FORK);
+		return (ERR_FORK);
+	}
 	waitchild(&exit_code, 1);
 	set_exit_status(s, exit_code);
 	s_free_cmd(s);

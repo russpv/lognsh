@@ -33,6 +33,6 @@ int    bi_pwd(t_state *s, char **args, int argc)
     else
     {
         perror(SHELL_NAME": pwd");
-        return (1);
+        return (ERR_GETCWD);
     }
 }

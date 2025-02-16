@@ -23,7 +23,7 @@ int	bi_exec(t_state *s, char **argv, int argc)
 		return (-1);
 	if (execve(fullpath, argv + 1, environ) == -1)
 	{
-		perror("execve failed");
+		perror(ERRMSG_EXECVE);
 		free(fullpath);
 		exit(ERR_GENERAL);
 	}

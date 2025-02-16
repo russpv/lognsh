@@ -10,12 +10,13 @@ static int	_check_access(const char *path)
 	if (0 == access((const char *)path, F_OK))
 	{
 		if (0 != access((const char *)path, X_OK))
-			return (print_permission_denied(path), ERR_CMD_NOT_EXEC);
+			return (print_access_err(path), ERR_CMD_NOT_EXEC);
 		return (0);
 	}
-	return (-1);
+	else
+		print_access_err(path);
+	return (ERR_CMD_NOT_FOUND);
 }
-
 
 /* Returns 0 if absolute fullpath is found */
 static int	_search_path(t_state *s, const char *cmd, char **fullpath)
@@ -94,7 +95,7 @@ int	run_cmd(t_state *s, t_ast_node *a)
 		|| CTXT_PROC == st_int_peek(get_cmd(s)->st))
 	{
 		if (-1 == execve(c->fullpath, c->argv, get_envp(s)))
-			err(ERRMSG_RUNC_EXEC);
+			perror(ERRMSG_EXECVE);
 	}
 	else
 	{

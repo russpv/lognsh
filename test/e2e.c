@@ -40,11 +40,11 @@ char *run_my_shell(const char *cmd)
 
     // Create a pipe
     if (pipe(outpipefds) == -1) {
-        perror("pipe");
+        perror(ERRMSG_PIPE);
         return NULL;
     }
     if (pipe(inpipefds) == -1) {
-        perror("pipe");
+        perror(ERRMSG_PIPE);
         return NULL;
     }
     pid = fork();

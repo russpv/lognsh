@@ -26,6 +26,8 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 		fd = open(topath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
 		fd = -1;
+	if (fd < 0)
+		return(perror(ERRMSG_OPEN), fd);
 	debug_print(DBGMSG_EREDIR_FD, fd);
 	return (fd);
 }
@@ -54,13 +56,14 @@ int	redirect(int *to, char *topath, int from, bool ifappend)
 	{
 		fd = _redirect_logic(topath, from, ifappend);
 		if (fd < 0)
-			return (-1);
+			return (fd);
 	}
 	else
 		fd = *to;
 	colored_printf(GREEN, LOGMSG_EREDIR_DONE, from, fd);
 	if (dup2(fd, from) == -1)
-		return (-1);
-	close(fd);
+		return (ERR_DUP2);
+	if (0 != close(fd))
+		return (perror(ERRMSG_CLOSE), ERR_CLOSE);
 	return (from);
 }

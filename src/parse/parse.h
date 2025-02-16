@@ -54,6 +54,7 @@ char							*p_get_cmd(t_ast_node *a);
 t_list							**p_get_args(t_ast_node *a);
 t_list							*p_get_redirs(t_ast_node *a);
 int								p_get_argc(t_ast_node *a);
+int								p_get_redc(t_ast_node *a);
 bool							p_get_expansion(t_ast_node *a);
 
 /* Command getters */

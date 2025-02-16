@@ -56,12 +56,14 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
 	{
 		if (pipe != i)
 		{
-			close(fildes[pipe][1]);
+			if (0 != close(fildes[pipe][1]))
+				return (perror(ERRMSG_CLOSE), ERR_CLOSE);
 			counter++;
 		}
 		if (pipe != i - 1)
 		{
-			close(fildes[pipe][0]);
+			if (0 != close(fildes[pipe][0]))
+				return (perror(ERRMSG_CLOSE), ERR_CLOSE);
 			counter++;
 		}
 	}
@@ -88,7 +90,7 @@ int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,\
 	pid = fork();
 	if (pid < 0)
 	{
-		err(ERRMSG_FORK);
+		perror(ERRMSG_FORK);
 		return (ERR_FORK);
 	}
 	else if (0 == pid)

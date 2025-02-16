@@ -13,7 +13,6 @@ static int	_handle_no_command(t_ast_node *a, char **args)
 	{
 		p_set_cmd(a, args[0]);
 		p_update_argc(a, -1);
-		fprintf(stderr, "Got a env variable only\n");
 	}
 	else if (false == p_get_expansion(a) && NULL == p_get_cmd(a))
 		return (NO_CMD);
@@ -37,6 +36,7 @@ static int	_do_ops(t_state *s, t_ast_node *a, t_cmd *c)
 		return (exit_code);
 	c->argv = c_argstoargv(args, p_get_cmd(a), p_get_argc(a));
 	c->argc = p_get_argc(a) + 1;
+	c->redc = p_get_redc(a); 
 	if (0 != p_do_redir_processing(s, a))
 		return (ERR_AMBIGUOUS_REDIR);
 	return (exit_code);

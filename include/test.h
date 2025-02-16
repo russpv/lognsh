@@ -24,6 +24,7 @@
     void test_name(void) { \
         char *my_shell_output = run_my_shell(input); \
         char *bash_output = run_bash(input); \
+        printf("\n"); \
         TEST_ASSERT_EQUAL_STRING(bash_output, my_shell_output); \
         free(my_shell_output); \
         free(bash_output); \

@@ -9,3 +9,5 @@ vgcore.*
 minish
 testsh
 libft.a
+lib/libft.a
+bin/

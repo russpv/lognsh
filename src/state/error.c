@@ -21,13 +21,12 @@ void	print_command_not_found(const char *cmd)
 	write(STDERR_FILENO, ": command not found\n", 20);
 }
 
-/* Prints ": Permission denied\n"*/
-void	print_permission_denied(const char *path)
+/* Prints errno access() err w/ perror */
+void	print_access_err(const char *path)
 {
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	write(STDERR_FILENO, ": ", 2);
-	write(STDERR_FILENO, path, ft_strlen(path));
-	write(STDERR_FILENO, ": Permission denied\n", 20);
+	perror(path);
 }
 
 /* Prints ": Buffer overflow\n"*/

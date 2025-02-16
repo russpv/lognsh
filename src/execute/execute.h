@@ -33,7 +33,7 @@ int						exec_fork_run(t_state *s, t_ast_node *node, int i,
 int						exec_close_pipes(int **fildes, int cmd_count);
 
 int						get_exit_status(int status);
-void					waitchild(int *status, int childc);
+int						waitchild(int *status, int childc);
 
 void					free_pipes(int **fildes, int count);
 
