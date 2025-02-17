@@ -61,11 +61,13 @@ typedef struct s_global_state	t_state;
 
 /* specific error messages */
 void							print_command_not_found(const char *cmd);
-void							print_access_err(const char *path);
+void							print_perror(const char *dingus);
 void							print_lex_buffer_overflow(void);
 void							print_ambiguous_redirect(const char *orig_fn);
 void							print_too_many_args(const char *caller);
 void							print_redirect_error(char *topath);
+void							print_custom_err(const char *dingus, \
+									const char *msg);
 
 /* To avoid circular includes: */
 extern void						set_error(t_state *s, int e);

@@ -16,9 +16,9 @@
 # include "../../include/libft.h"
 # include "../debug.h"
 # include "../state/state.h"
-# include "../state/state_int.h"
+# include "../state/state_int.h"  //Don't like this coupling
 # include "../env/env.h"
-# include "../env/env_int.h"
+# include "../env/env_int.h" //Don't like this coupling
 # include <unistd.h>
 # include <stdio.h>
 

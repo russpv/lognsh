@@ -30,13 +30,6 @@ int					is_valid_key(const char *key);
 int					validate_key(const char *key);
 int					handle_underscore(const char *key);
 int					handle_no_equal(const char *arg, int *error_occurred);
-int					update_existing_var(t_env *existing_key, const char *value);
-int					add_new_var(t_env **sh_env_list, const char *key, \
-					const char *value);
-int					process_arg_validation(const char *arg, char **equal_pos, \
-						int *error_occurred);
-int					process_arg_update_add(t_state *s, const char *arg, \
-						char *equal_pos, int *error_occurred);
 int					process_arg(t_state *s, const char *arg, \
 						int *error_occurred);
 
@@ -48,10 +41,6 @@ const char			*env_find_value(t_env *env_list, const char *key);
 
 // exit helper functions
 int					is_numeric(const char *str);
-void				handle_no_arg(t_state *s);
-void				handle_invalid_arg(t_state *s);
-void				handle_too_many_args(t_state *s);
-void				handle_valid_arg(t_state *s, char *arg);
 
 /* This ensures block buffer is flushed during execution
  * as a background process

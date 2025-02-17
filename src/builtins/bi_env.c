@@ -14,6 +14,8 @@
 #include "../state/state.h"
 
 #define CMD_NAME "env"
+#define ERRMSG_ARGC "too many arguments\n"
+#define ERRMSG_ENV "failed to retrieve environment\n"
 
 int	bi_env(t_state *s, char **argv, int argc)
 {
@@ -22,12 +24,12 @@ int	bi_env(t_state *s, char **argv, int argc)
 		return (ERR_GENERAL);
 	if (argv[1])
 	{
-		write(2, "env: too many arguments\n", 24);
+		print_custom_err(CMD_NAME, ERRMSG_ARGC);
 		return (ERR_GENERAL);
 	}
 	if (!s || !has_sh_envp(s))
 	{
-		write(2, "env: failed to retrieve environment\n", 35);
+		print_custom_err(CMD_NAME, ERRMSG_ENV);
 		return (ERR_GENERAL);
 	}
 	s_env_print(s);

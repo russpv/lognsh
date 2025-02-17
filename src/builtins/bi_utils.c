@@ -12,6 +12,10 @@
 
 #include "bi_int.h"
 
+#define CMD_NAME "export"
+#define ERRMSG_KEY_NOTVALID "not a valid identifier\n"
+
+/* Returns 1 if key is alphanumeric */
 int	is_valid_key(const char *key)
 {
 	int	i;
@@ -33,9 +37,7 @@ int	validate_key(const char *key)
 {
 	if (!is_valid_key(key))
 	{
-		write(STDERR_FILENO, "eport: '", 9);
-		write(STDERR_FILENO, key, ft_strlen(key));
-		write(STDERR_FILENO, "': not a valid identifier\n", 26);
+		print_custom_err(CMD_NAME, ERRMSG_KEY_NOTVALID);
 		return (0);
 	}
 	return (1);
@@ -57,6 +59,7 @@ t_env	*env_find_key(t_env *env_list, const char *key)
 	return (NULL);
 }
 
+/* RKP: is this arch specific? */
 int	handle_underscore(const char *key)
 {
 	if (key[0] == '_')
@@ -70,6 +73,7 @@ int	handle_underscore(const char *key)
 	return (1);
 }
 
+/* RKP: lack of equals doesn't throw err */
 int	handle_no_equal(const char *arg, int *error_occurred)
 {
 	write(STDERR_FILENO, "export: '", 9);

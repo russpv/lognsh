@@ -5,7 +5,6 @@
 ** Skips any isspace(3)
 ** No error checking.
 */
-
 int	ft_atoi(const char *s)
 {
 	int	num;

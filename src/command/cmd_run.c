@@ -5,16 +5,15 @@
 #define LOGMSG_RUNC_GOT "Cmd: Found command! at %s\n"
 #define LOGMSG_RUNC_SIGINT "Cmd: Received SIGINT before fork\n"
 
+/* Note: command not found is thrown in caller */
 static int	_check_access(const char *path)
 {
 	if (0 == access((const char *)path, F_OK))
 	{
 		if (0 != access((const char *)path, X_OK))
-			return (print_access_err(path), ERR_CMD_NOT_EXEC);
+			return (print_perror(path), ERR_CMD_NOT_EXEC);
 		return (0);
 	}
-	else
-		print_access_err(path);
 	return (ERR_CMD_NOT_FOUND);
 }
 
@@ -45,7 +44,7 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 		free(*fullpath);
 		*fullpath = NULL;
 	}
-	return (ft_freearr((void **)paths, -1), ERR_GENERAL);
+	return (ft_freearr((void **)paths, -1), ERR_CMD_NOT_FOUND);
 }
 
 /* Stores command path in fullpath, if valid.

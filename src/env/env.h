@@ -7,7 +7,7 @@
 
 # define	SHELL_PATH "PATH"
 
-struct s_env;
+struct					s_env;
 typedef struct s_env	t_env;
 
 // for environment management

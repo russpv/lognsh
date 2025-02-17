@@ -16,7 +16,6 @@
  * derived from code echo.c in Bash.
  * Option -n.* defeats newline print
  */
-
 int	bi_echo(t_state *s, char **argv, int argc)
 {
 	int		i;

@@ -14,6 +14,13 @@
 #include "../env/env_int.h"
 #include "../state/state_int.h"
 
+#define CMD_NAME "export"
+#define ERRMSG_NOARGS "no arguments specified\n"
+
+/* EXPORT
+ * export [name[=value]]
+ * Marks each name to be passed to child processes in the environment.
+ */
 int	bi_export(t_state *s, char **argv, int argc)
 {
 	int	error_occurred;
@@ -22,9 +29,8 @@ int	bi_export(t_state *s, char **argv, int argc)
 	error_occurred = 0;
 	if (argc == 1)
 	{
-		write(STDERR_FILENO, "minishell: export: \
-			no arguments specified\n", 42);
-		return (1);
+		print_custom_err(CMD_NAME, ERRMSG_NOARGS);
+		return (ERR_GENERAL);
 	}
 	i = 1;
 	while (argv[i])
@@ -37,7 +43,7 @@ int	bi_export(t_state *s, char **argv, int argc)
 		i++;
 	}
 	if (error_occurred)
-		return (1);
+		return (ERR_GENERAL);
 	else
 		return (0);
 }
