@@ -22,5 +22,6 @@ t_redir_data	*init_redir(t_ast_node *target, enum e_tok_type type)
 	red->symbol = NULL;
 	red->filename = NULL;
 	red->global_state = NULL;
+	red->lst_glob = NULL;
 	return (red);
 }

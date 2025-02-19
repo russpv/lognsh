@@ -35,13 +35,16 @@ t_list  *_get_midptr(t_list *lst, t_list *end)
 
     mid = lst;
     tmp = lst;
-	//fprintf(stderr, "get midptr: ");
-	//ft_lstprint_betw(lst, end);
-    if (NULL == tmp || NULL == tmp->next)
+	debug_print( "get midptr: ");
+	ft_lstprint_betw(lst, end);
+	assert(tmp != NULL && end != NULL);
+	assert(tmp->next != NULL);
+	assert(tmp->next->next != NULL);
+	if (NULL == tmp || NULL == tmp->next)
         return (lst);
     if (NULL == tmp->next->next)
         return (end);
-    while (tmp != NULL && tmp->next->next <= end)
+    while (tmp != NULL && tmp->next != NULL && tmp->next->next != NULL && tmp->next->next <= end )
     {
         mid = mid->next;
         tmp = tmp->next->next;
@@ -66,18 +69,19 @@ static t_list	*_merge(t_list **lst, t_list **beg, t_list *mid, t_list **end, int
 	i = 0;
 	tail = beg;
 	tmp = NULL;
-	fprintf(stderr, "merge got l: \n");
+	debug_print( "merge got l: \n");
 	ft_lstprint_betw(*beg, mid);
-	fprintf(stderr, "...and r: \n");
+	debug_print( "...and r: \n");
 	ft_lstprint_betw(mid->next, *end);
+	debug_print( "head: %s, nodecount:%d\n", (*lst)->content, nodec);
     if (ALESSTHANB == _compare(mid, mid->next, cfunc))
 	{
-		fprintf(stderr, "already sorted\n");
+		debug_print( "already sorted\n");
         return (*lst);
 	}
     l = *beg;
     r = mid->next;
-	fprintf(stderr, "merging:...\n");
+	debug_print( "merging:...\n");
     while (NULL != l && NULL != r && mid->next != l && (*end)->next != r && i <= nodec)
     {
         if (ALESSTHANB == _compare(l, r, cfunc))
@@ -90,19 +94,71 @@ static t_list	*_merge(t_list **lst, t_list **beg, t_list *mid, t_list **end, int
 			*tail = r;
 			r = r->next;
 		}
+		else
+			debug_print( RED"WTF COMPARO EQUAL?! %s=%s\n"RESET, l->content, r->content);
 		i++;
-		if ((*tail) != NULL && tmp != NULL)
+		if ((*tail) != NULL && tmp != NULL) //subsequent swaps can be the head ptr with no prev!
 		{
-			fprintf(stderr,BLUE" -reassignin prev to:%s- "RESET, tmp->content);
+			if (NULL != (*tail)->prev)
+				debug_print(BLUE" -reassign prev %s to:%s- "RESET, (*tail)->prev->content, tmp->content);
+			else
+				debug_print(BLUE" -reassign NULL prev to:%s- "RESET, tmp->content);
 			(*tail)->prev = tmp;
-			fprintf(stderr, MAGENTA" prev now linked %s->%s"RESET") -> \n", (*tail)->prev->content, (*tail)->prev->next->content);
+			if (NULL != (*tail)->prev && NULL != (*tail)->prev->prev)
+				debug_print( MAGENTA" prev now linked %s<-%s->%s"RESET") -> \n", \
+					(*tail)->prev->prev->content, (*tail)->prev->content, (*tail)->prev->next->content);
+			else 
+				debug_print( MAGENTA" prev now linked %p<-%s->%s"RESET") -> \n", \
+					(*tail)->prev->prev, (*tail)->prev->content, (*tail)->prev->next->content);
 		}
-		fprintf(stderr, "%s "GREEN"(prev: %s, next: %s), -> \n"RESET, (*tail)->content, (*tail)->prev->content, (*tail)->next->content);
+		if ((*tail) == *lst){
+			debug_print( "%s (head) "GREEN"(prev: %p, next: %s), -> \n"RESET, (*tail)->content, (*tail)->prev, (*tail)->next->content);
+			// set prev to NULL
+		}
+		else if ((*tail)->next)
+			debug_print( "%s "GREEN"(prev: %s, next: %s), -> \n"RESET, (*tail)->content, (*tail)->prev->content, (*tail)->next->content);
+		else
+			debug_print( "%s "GREEN"(prev: %s, next: END), -> \n"RESET, (*tail)->content, (*tail)->prev->content);
+
 		tmp = *tail;
 		tail = &((*tail)->next);
-		fprintf(stderr, BLUE"(tail now at: %s, l at: %s, r at: %s, end: %s, end->next: %s, beg: %s) \n"RESET, (*tail)->content, l->content, r->content, (*end)->content, (*end)->next->content, (*beg)->content);
+		if (NULL != (*tail) && NULL != r)
+		{
+			if (NULL != (*end)->next && NULL != r->next)
+				debug_print( BLUE"(tail now at: %s | l at: %s, l->next: %s, mid: %s, mid->next: %s "\
+				"| r at: %s, r->next: %s, end: %s, end->next: %s "\
+				"| beg: %s) \n"RESET,\
+				(*tail)->content, l->content, l->next->content, mid->content, mid->next->content, \
+				r->content, r->next->content, (*end)->content, (*end)->next->content, \
+				(*beg)->content);
+			else if (NULL == (*end)->next && NULL != r->next)
+				debug_print( BLUE"(tail now at: %s | l at: %s, l->next: %s, mid: %s, mid->next: %s "\
+				"| r at: %s, r->next: %s, end: %s, end->next: (END)) "\
+				"| beg: %s) \n"RESET,\
+				(*tail)->content, l->content, l->next->content, mid->content, mid->next->content, \
+				r->content, r->next->content, (*end)->content, \
+				(*beg)->content);
+			else if (NULL == (*end)->next)
+				debug_print( BLUE"(tail now at: %s | l at: %s, l->next: %s, mid: %s, mid->next: %s "\
+				"| r at: (END), r->next: (END), end: %s, end->next: (END)) "\
+				"| beg: %s) \n"RESET,\
+				(*tail)->content, l->content, l->next->content, mid->content, mid->next->content, \
+				(*end)->content, \
+				(*beg)->content);
+			else if (NULL == (*tail))
+				debug_print( BLUE"(tail now at: END | l at: %s, l->next: %s, mid: %s, mid->next: %s "\
+				"| r at: (END), r->next: (END), end: %s, end->next: (END)) "\
+				"| beg: %s) \n"RESET,\
+				l->content, l->next->content, mid->content, mid->next->content, \
+				(*end)->content, \
+				(*beg)->content);
+			else
+				debug_print( "WTF?!\n");
+		}
 	}
-	fprintf(stderr, "end->next %s, tail:%s tmp:%s\n", (*end)->next->content, (*tail)->content, tmp->content);
+	if (*tail && (*end) && (*end)->next && tmp)
+		debug_print( "end->next %s, tail:%s tmp:%s\n", (*end)->next->content, (*tail)->content, tmp->content);
+	debug_print( "Adding remainders...\n");
 	tmp2 = (*end)->next;
 	if (l != mid->next)
 	{
@@ -114,23 +170,38 @@ static t_list	*_merge(t_list **lst, t_list **beg, t_list *mid, t_list **end, int
 		*tail = r;
 		(*tail)->prev = tmp;
 	}
-	fprintf(stderr, "end->next %s, tail:%s tmp2:%s\n", (*end)->next->content, (*tail)->content, (tmp2)->content);
-	while (i++ != nodec)
+	if ((*tail)->next && (*end)->next && tmp2)
+		debug_print( BLUE"status:end->next %s, tail:%s tail->next: %s, tmp2:%s\n"RESET, (*end)->next->content, (*tail)->content,\
+		(*tail)->next->content, (tmp2)->content);
+	debug_print( "Advancing tail to end to terminate with tmp2 (i=%d)...\n", i);
+	while (++i < nodec)
 		tail = &((*tail)->next);
 	// when on last node:
-	(*tail)->next = tmp2;
-	fprintf(stderr, "rejoining rest of list %s->%s\n", (*tail)->content, tmp2->content);
-	(*end) = (*tail); // make sure end persists after changes.
-	fprintf(stderr, "%s (remainder, "MAGENTA"prev:%s->%s) -> "RESET, (*tail)->content, (*tail)->prev->content, (*tail)->prev->next->content);
+	if (*tail && (*tail)->next && (*end)->content && tmp2)
+		debug_print( BLUE"status: end->next %s, tail:%s tail->next: %s, tmp2:%s\n"RESET, (*end)->next->content, (*tail)->content,\
+		(*tail)->next->content, (tmp2)->content);
+	if (*tail)
+		(*tail)->next = tmp2;
+	if (*tail && tmp2)
+		debug_print( "rejoined to rest of list %s->%s\n", (*tail)->content, tmp2->content);
+	if (*tail && (*end)->next && tmp2)
+		debug_print( BLUE"status: end->next %s, tail:%s tail->next: %s, tmp2:%s\n"RESET, (*end)->next->content, (*tail)->content,\
+		(*tail)->next->content, (tmp2)->content);
+	// if tail refers back onto the sorted list, 
+	if (*tail)
+		(*end) = (*tail); // make sure end persists after changes.
+	if (*tail)
+		debug_print( "%s (remainder, "MAGENTA"prev:%s->%s) -> "RESET, (*tail)->content, (*tail)->prev->content, (*tail)->prev->next->content);
 	if ((*end)->next == NULL && *tail == *end)
 		(*tail)->next = NULL;
-	fprintf(stderr, "DONE:\n");
-	fprintf(stderr, "|beg->next...tail->next : %s->%s...%s->%s|\n", (*beg)->content, (*beg)->next->content, (*tail)->content, (*tail)->next->content);
+	(*lst)->prev = NULL;
+	debug_print( "DONE:\n");
+	if (*tail && (*tail)->next)
+		debug_print( "|beg->next...tail->next : %s->%s...%s->%s|\n", (*beg)->content, (*beg)->next->content, (*tail)->content, (*tail)->next->content);
 	ft_lstprint_betw(*beg, *tail);
 	ft_lstprint_betw(*beg, *end);
-	fprintf(stderr, "RETURNING head %s. \n", (*lst)->content);
+	debug_print( "RETURNING head %s (%p<- ->%s). \n", (*lst)->content, (*lst)->prev, (*lst)->next->content);
 	fflush(stderr);
-	getchar();
 	return (*lst);
 }
 
@@ -138,30 +209,34 @@ static void    _solve(t_list **lst, t_list **beg, t_list **end, int (*cfunc)(con
 {
     t_list *mid;
 
-    if (*beg == NULL || *beg == *end)
+    if (*beg == NULL || *beg == *end) {
+		debug_print("_solve: NULL or one node, skipping\n");
         return ;
+	}
     if ((*beg)->next == *end)
     {
+		debug_print("_solve: two nodes, compare and swapping\n");
         if (AMORETHANB == _compare((*beg), (*end), cfunc))
             _swap((*beg), (*end));
         return ;
     }
+	debug_print( "_solve: end=%s\n", (*end)->content);
     mid = _get_midptr(*beg, *end);
 	if (*beg != mid) {
-		fprintf(stderr,RED"Splitting first half: b:%s m:%s\n"RESET, (*beg)->content, mid->content);
+		debug_print(RED"Splitting first half: b:%s m:%s\n"RESET, (*beg)->content, mid->content);
     	_solve(lst, beg, &mid, cfunc);
 	}
 	if (mid->next != *end) {
-		fprintf(stderr,RED"Splitting latter half: b:%s m:%s\n"RESET, mid->next->content, (*end)->content);
+		debug_print(RED"Splitting latter half: b:%s m:%s\n"RESET, mid->next->content, (*end)->content);
     	_solve(lst, &(mid->next), end, cfunc);
 	}
-	fprintf(stderr, "Solve got: ");
+	debug_print( "Solve got: ");
 	ft_lstprint(*lst);
 	if (*beg != mid && *beg != *end && (*beg)->next != *end)
     	*lst = _merge(lst, beg, mid, end, cfunc);
 }
 
-/* Sorts llist in ascending lexicographic order. */
+// Sorts llist in ascending lexicographic order. 
 t_list *ft_lstsort(t_list **lst, int (*cfunc)(const char *, const char *))
 {
     t_list *last;
@@ -171,7 +246,7 @@ t_list *ft_lstsort(t_list **lst, int (*cfunc)(const char *, const char *))
     if (!*lst)
         return ((t_list *)-1);
     last = ft_lstlast(*lst);
-	fprintf(stderr, "Sort got: ");
+	debug_print( "Sort got: ");
 	ft_lstprint(*lst);
     _solve(lst, lst, &last, cfunc);
     return (*lst);

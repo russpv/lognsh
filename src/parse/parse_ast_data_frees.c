@@ -15,6 +15,8 @@ void	destroy_redir(void *in)
 		free(redir->filename);
 	if (redir->heredoc_body)
 		free(redir->heredoc_body);
+	if (redir->lst_glob)
+		ft_lstclear(&redir->lst_glob, free);
 	free(redir);
 }
 

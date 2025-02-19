@@ -179,5 +179,5 @@ int	ft_lstsize_betw(t_list *lst, t_list *last)
 		count++;
 		lst = lst->next;
 	}
-	return (count);
+	return (count + 1);
 }

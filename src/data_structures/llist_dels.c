@@ -24,7 +24,6 @@ void	ft_lstdelone(t_list **lst, t_list *node, void (*del)(void *))
 		*lst = node->next;
 	del(node->content);
 	free(node);
-	node = NULL;
 }
 
 /* LSTDELONE RWD

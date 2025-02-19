@@ -1,5 +1,5 @@
 #include "../include/libft.h"
-
+#include <stdio.h>
 int	ft_strcmplow(const char *s1, const char *s2)
 {
 	size_t	i;
@@ -8,10 +8,11 @@ int	ft_strcmplow(const char *s1, const char *s2)
 	int res;
 	while (s1[i] || s2[i])
 	{
-		if (s1[i] != s2[i])
+		const unsigned char l = ft_tolower((unsigned char)s1[i]);
+		const unsigned char r = ft_tolower((unsigned char)s2[i]);
+		if (l != r)
 		{
-			res = ft_tolower((unsigned char)s1[i]) \
-			- ft_tolower((unsigned char)s2[i]);
+			res = l - r;
 			return (res);
 		}
 		i++;

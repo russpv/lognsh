@@ -60,10 +60,10 @@ static struct dirent	*_glob_readdir(DIR *dir)
 			perror(SHELL_NAME);
 		return (NULL);
 	}
-	while (0 == ft_strncmp(res->d_name, ".", -1) \
-		|| 0 == ft_strncmp(res->d_name, "..", -1))
+	while (0 == ft_strncmp(res->d_name, ".", 1) \
+		|| 0 == ft_strncmp(res->d_name, "..", 2))
 	{
-		fprintf(stderr,YELLOW"glob_readdir skipping %s\n", res->d_name);
+		log_print(YELLOW"glob_readdir skipping %s\n"RESET, res->d_name);
 		res = readdir(dir);
 	}
 	return (res);
@@ -81,7 +81,7 @@ static t_list	*_match_glob(const char *pattern)
 	struct dirent	*res;
 	DIR				*dir;
 
-	lst = NULL; 	 // DOESN"T RETURN ALL CONTENTS!!!!!
+	lst = NULL;
 	debug_print(DBGMSG_GOTPATTERN, pattern);
 	dir = opendir(".");
 	if (!dir)
@@ -92,9 +92,10 @@ static t_list	*_match_glob(const char *pattern)
 		if (true == _matches_pattern(res->d_name, pattern))
 		{
 			debug_print(DBGMSG_GLOBMATCH, res->d_name);
-			new = ft_lstnew(ft_strdup(res->d_name));
-			if (NULL == new)
-				return (NULL);
+			char *name =ft_strdup(res->d_name);
+			new = ft_lstnew(name);
+			if (NULL == new || NULL == name)
+				return (ft_lstclear(&lst, free), NULL);
 			ft_lstadd_back(&lst, new);
 		}
 		res = _glob_readdir(dir);
@@ -102,33 +103,36 @@ static t_list	*_match_glob(const char *pattern)
 	closedir(dir);
 	ft_lstprint(lst);
 	debug_detect_cycle(lst);
-	return (ft_lstsort(&lst, ft_strcmplow));
+	t_list *got = ft_lstsort(&lst, ft_strcmplow);
+	debug_detect_cycle(got);
+
+	return (got);
 }
 
 /* Operates on a single t_redir_data node. */
 int	p_do_globbing_redirs(void *c)
 {
-	t_list				*lst;
-	const t_redir_data	*r = (t_redir_data *)c;
+	t_redir_data		*r;
 	char				*new_fn;
 
+	r = (t_redir_data *)c;
 	debug_print(DBGMSG_REDIR_NODE, r->type, r->filename,\
 		r->heredoc_body, r->do_globbing);
 	if (true == r->do_globbing)
 	{
-		lst = _match_glob((const char *)r->filename);
-		if (lst)
+		r->lst_glob = _match_glob((const char *)r->filename);
+		if (r->lst_glob)
 		{
-			debug_print(DBGMSG_REDIR_GLOB,(char *)lst->content);
-			if (ft_lstsize(lst) > 1)
+			debug_print(DBGMSG_REDIR_GLOB,(char *)r->lst_glob->content);
+			if (ft_lstsize(r->lst_glob) > 1)
 				return (err(ERRMSG_AMBIG), ERR_AMBIGUOUS_REDIR);
 			else
 			{
-				new_fn = ft_strdup(lst->content);
+				new_fn = ft_strdup(r->lst_glob->content);
 				if (!new_fn)
 					return (ERR_MEM);
 				free(r->filename);
-				((t_redir_data *)r)->filename = new_fn;
+				r->filename = new_fn;
 			}
 		}
 	}
@@ -138,37 +142,38 @@ int	p_do_globbing_redirs(void *c)
 /* 
  * lst is incoming list of glob matches to be inserted 
  * after the lst_node.
+ * content is the existing arg node.
  */
-static int	_do_ops(t_list **lst_node, t_list **lst, t_arg_data	*content)
+static int	_do_ops(t_list **lst_node, t_list **glst, t_arg_data	*content)
 {
 	t_list		*new_arg_data_lst;
 	char		*new_arg;
 
 	new_arg_data_lst = NULL;
 	new_arg = NULL;
-	if (ft_lstsize(*lst) > 1)
+	if (ft_lstsize(*glst) > 1)
 	{
 		ft_lstdelone_rwd(lst_node, lst_node, destroy_arg);
-		new_arg_data_lst = ft_lstmap(*lst, create_arg_data_node,\
+		new_arg_data_lst = ft_lstmap(*glst, create_arg_data_node,\
 			destroy_arg);
 		ft_lstadd_insert(lst_node, new_arg_data_lst);
 	}
 	else
 	{
-		new_arg = ft_strdup((*lst)->content);
+		new_arg = ft_strdup((*glst)->content);
 		if (!new_arg)
 			return (ERR_MEM);
 		free(content->raw);
 		content->raw = new_arg;
-		ft_lstclear(lst, free);
+		ft_lstclear(glst, free);
 	}
 	return (0);
 }
 
 /* DO GLOBBING
  *
- * Passed to t_list *redirs reverse iterator
- *  to handle insertions. 
+ * Called within t_list reverse iterator
+ *  to handle insertions (in args lists)
  * Modifies argument t_list. Called during
  * execution, as globbing is done after parsing. 
  * 
@@ -200,7 +205,7 @@ int	p_do_globbing(t_list **lst_node, void *lst_c)
 		lst = _match_glob(content->raw);
 		if (lst)
 		{
-			debug_print(DBGMSG_MATCHES,ft_lstsize(lst), lst->content);
+			debug_print(DBGMSG_MATCHES, ft_lstsize(lst), lst->content);
 			res = _do_ops(lst_node, &lst, content);
 			if (0 != res)
 				return (res);

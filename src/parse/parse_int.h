@@ -99,7 +99,7 @@ typedef struct s_cmd
 	bool					do_globbing;
 	bool					do_expansion;
 	bool					do_redir_globbing;
-	bool					do_redir_expansion; //TODO
+	bool					do_redir_expansion;
 }							t_ast_node_cmd;
 
 typedef struct s_redir
@@ -111,6 +111,7 @@ typedef struct s_redir
 	t_ast_node				*target_ptr;
 	bool					do_globbing;
 	bool					do_expansion;
+	t_list					*lst_glob;
 	t_state					*global_state;
 }							t_redir_data;
 
