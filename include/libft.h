@@ -43,9 +43,6 @@ char					*ft_strcat(char *dest, const char *src);
 char					*ft_strncat(char *dest, const char *src, size_t n);
 void					*ft_memccpy(void *dest, const void *src, int c,
 							size_t n);
-char					*ft_strstr(const char *str, const char *substr);
-char					*ft_strmap(char const *s, char (*f)(unsigned int,
-								char));
 int						ft_strcmp(const char *s1, const char *s2);
 void					ft_freearr(void **arr, int size);
 size_t					strscpy(char *dest, const char *src, size_t count);
@@ -106,8 +103,6 @@ void					*ft_calloc(size_t nelem, size_t elsize);
 ** Tests
 */
 
-t_bool					ft_isupper(int c);
-t_bool					ft_islower(int c);
 t_bool					ft_isalpha(int c);
 t_bool					ft_isdigit(int c);
 t_bool					ft_isalnum(int c);
@@ -121,5 +116,6 @@ t_bool					ft_isspace(int c);
 
 int						ft_atoi(const char *str);
 char					*ft_itoa(int n);
+int						ft_strcmplow(const char *s1, const char *s2);
 
 #endif

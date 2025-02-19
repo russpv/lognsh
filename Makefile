@@ -23,7 +23,7 @@ TESTDIR = test
 
 # Compiler and flags
 CC = cc 
-CFLAGS = -Wall -Wextra -g #-DTESTMODE -DDEBUGMODE -DLOGMODE #  -fsanitize=address
+CFLAGS = -Wall -Wextra -g -DDEBUGMODE -DLOGMODE # -DTESTMODE  -fsanitize=address
 TEST_CFLAGS = -Wall  -g -DTESTMODE  # -Werror -Wextra 
 EXT_CFLAGS = -DEXTENDEDFUNC 
 LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses # -fsanitize=address
@@ -77,7 +77,7 @@ directories:
 	@mkdir -p $(OBJDIR)
 
 # Pull in dependencies for *existing* .o files
--include $(OBJECTS:.$(OBJEXT)=.$(DEPEXT))
+ #-include $(OBJECTS:.$(OBJEXT)=.$(DEPEXT))
 
 # Link the executable
 $(TARGET): $(OBJECTS) $(LIB_PATH)
@@ -138,9 +138,9 @@ $(LIB_PATH):
 	@cp $(LIB_PATH) .
 
 # clean only objects
-clean:
-	@$(RM) -rf $(OBJDIR)
-	@$(RM) -f $(OBJDIR)/*.d # Remove .d dependency files as well
+clean: 
+	@$(RM) -rf $(OBJDIR) 
+	@$(RM) -f $(OBJDIR)/*.d
 	@$(MAKE) -C $(LIB_DIR) clean
 
 # Clean+, objects and binaries
@@ -169,4 +169,4 @@ so:
 	$(CC) -fPIC $(CFLAGS) -c $(SOURCES) $(BONUS_SOURCES)
 	$(CC) -nostartfiles -shared -o pipex.so $(OBJECTS) $(BONUS_OBJECTS)
 
-.PHONY: all bonus clean cleaner fclean re resources so
+.PHONY: all tst bonus clean cleaner fclean re resources so

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_utils2.c                                    :+:      :+:    :+:   */
+/*   bi_export_do.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 10:47:28 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/16 15:16:00 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/02/18 18:16:22 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	_update_existing_var(t_env *existing_key, const char *value)
 	existing_key->value = ft_strdup(value);
 	if (!existing_key->value)
 	{
-		print_custom_error(CMD_NAME, ERRMSG_BADMALLOC);
+		print_custom_err(CMD_NAME, ERRMSG_BADMALLOC);
 		return (0);
 	}
 	return (1);

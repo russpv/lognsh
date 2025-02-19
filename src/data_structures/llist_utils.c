@@ -116,3 +116,68 @@ int	ft_lstsize(t_list *lst)
 	debug_print(DBGMSG_LSIZE_DONE, count);
 	return (count);
 }
+
+
+void	ft_lstprint(t_list *lst)
+{
+	int count;
+
+	count = 0;
+	if (lst == NULL)
+	{
+		return ;
+	}
+	if (DEBUG)
+	{
+		fprintf(stderr,RED"linkedl: "RESET);
+		while (lst)
+		{
+			count++;
+			fprintf(stderr, YELLOW"%s -> "RESET, lst->content);
+			lst = lst->next;
+		}
+		fprintf(stderr, RED"printed %d nodes.\n"RESET, count);
+	}
+	return ;
+}
+
+// Prints from lst to end
+void	ft_lstprint_betw(t_list *lst, t_list *end)
+{
+	int count;
+
+	count = 0;
+	if (lst == NULL || end == NULL)
+	{
+		return ;
+	}
+	if (DEBUG)
+	{
+		fprintf(stderr,RED"ll segment: "RESET);
+		while (lst != end->next)
+		{
+			count++;
+			fprintf(stderr, YELLOW"%s -> "RESET, lst->content);
+			lst = lst->next;
+		}
+		fprintf(stderr, RED"printed %d nodes.\n"RESET, count);
+	}
+	return ;
+}
+
+int	ft_lstsize_betw(t_list *lst, t_list *last)
+{
+	int	count;
+
+	count = 0;
+	if (lst == NULL)
+	{
+		return (0);
+	}
+	while (lst && lst != last)
+	{
+		count++;
+		lst = lst->next;
+	}
+	return (count);
+}
