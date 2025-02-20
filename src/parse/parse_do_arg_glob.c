@@ -172,7 +172,7 @@ int	p_do_globbing_args(t_list **lst_node, void *lst_c)
 	debug_print(DBGMSG_GOTARGS, arg->raw, (void *)lst_node);
 	if (true == arg->do_globbing)
 	{
-		lst = _match_glob(arg->raw);
+		lst = match_glob(arg->raw);
 		if (lst)
 		{
 			debug_print(DBGMSG_MATCHES, ft_lstsize(lst), lst->content);
