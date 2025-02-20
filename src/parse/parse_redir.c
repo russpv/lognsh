@@ -7,6 +7,8 @@
 # define ERRMSG_HEREDOC_MALLOC "Memory allocation failed for redirection heredoc\n"
 # define ERRMSG_REDIR_NODE_MALLOC "Failed to create execution node for redirection\n"
 # define ERRMSG_REDIR_FAIL "Failed to parse redirection\n"
+# define DBGMSG_REDIR_FN "Parser: _process_normal_redir filename:%s\n"
+# define DBGMSG_REDIR_GOT "Parser: Redirection: type=%d symbol=%s\n"
 
 /* Creates new redir node and adds to t_list.
  * Freeing handled by caller.
@@ -35,28 +37,29 @@ static int	_add_redir(t_ast_node *node, t_redir_data *red)
 /* tok: current redirect token returned from advance()
  * Freeing handled by caller in case of error
  */
-static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red)
+static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red, t_ast_node *n)
 {
-	t_tok	*tok_name;
+	t_tok	*tok_fname;
 
 	if (!p || !red || !tok)
 		return (ERR_ARGS);
 	red->symbol = ft_strdup(tok_get_raw((t_tok *)tok));
 	if (!red->symbol)
 		return (err(ERRMSG_REDIR_SYM_MALLOC), ERR_MEM);
-	debug_print("Parser: Redirection: type=%d symbol=%s\n", red->type,\
-		red->symbol);
+	debug_print(DBGMSG_REDIR_GOT, red->type, red->symbol);
 	if (is_at_end(p))
 		return (err(ERRMSG_REDIR_FN_EOF), ERR_SYNTAX);
-	tok_name = advance(p);
-	debug_print("Parser: _process_normal_redir filename:%s\n",\
-		tok_get_raw(tok_name));
-	if (!(is_filename_token((t_tok *)tok_name)
-			|| is_expansion((t_tok *)tok_name)))
+	tok_fname = advance(p);
+	debug_print(DBGMSG_REDIR_FN, tok_get_raw(tok_fname));
+	if (!(is_filename_token((t_tok *)tok_fname)
+			|| is_expansion((t_tok *)tok_fname)))
 		return (err(ERRMSG_REDIR_FN_INVALID), ERR_SYNTAX);
-	red->do_globbing = tok_get_globbing((t_tok *)tok_name);
-	red->do_expansion = tok_get_expansion((t_tok *)tok_name);
-	red->filename = ft_strdup(tok_get_raw((t_tok *)tok_name));
+	red->do_globbing = tok_get_globbing((t_tok *)tok_fname);
+	red->do_expansion = tok_get_expansion((t_tok *)tok_fname);
+	red->filename = ft_strdup(tok_get_raw((t_tok *)tok_fname));
+	red->target_ptr = n;
+	n->data.cmd.do_redir_expansion |= red->do_expansion;
+	n->data.cmd.do_redir_globbing |= red->do_globbing;
 	if (!red->filename)
 		return (err(ERRMSG_REDIR_FN), ERR_MEM);
 	return (0);
@@ -99,7 +102,7 @@ static int	_parse_redir(t_parser *p, t_ast_node *node)
 		red = init_redir(node, tok_get_type((t_tok *)tok));
 		if (false == is_heredoc_token((t_tok *)tok))
 		{
-			if (0 != _process_normal_redir(p, tok, red))
+			if (0 != _process_normal_redir(p, tok, red, node))
 				return (destroy_redir(red), ERR_GENERAL);
 		}
 		else

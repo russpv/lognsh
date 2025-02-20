@@ -13,6 +13,8 @@
 // TODO Unmatched symbol pairs should be prompted for more input
 // Heredoc Ctrl+D signal: silent abort
 
+#define LEXERKEEP$ 1 // 1 for keeping '$' in expansions
+
 struct					s_lex;
 typedef struct s_lex	t_lex;
 

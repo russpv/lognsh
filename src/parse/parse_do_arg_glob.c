@@ -1,12 +1,8 @@
 #include "parse_int.h"
 
 #define ERRMSG_OPENDIR "ERR opendir()\n"
-#define ERRMSG_AMBIG "ERR multiple redirect targets globbed\n"
-#define DBGMSG_REDIR_NODE "Parser: p_do_globbing_redirs got redir type: %d fn:%s doc:\
-		%s do_glob:%d\n"
-#define DBGMSG_REDIR_GLOB "Parser: p_do_globbing_redirs found:%s...\n"
-#define DBGMSG_GOTARGS "Parser: p_do_globbing - arg: %s, lst:%p\n"
-#define DBGMSG_MATCHES "Parser: p_do_globbing found %d matches, 1st: %s\n"
+#define DBGMSG_GOTARGS "Parser: p_do_globbing_args - arg: %s, lst:%p\n"
+#define DBGMSG_MATCHES "Parser: p_do_globbing_args found %d matches, 1st: %s\n"
 #define DBGMSG_GOTPATTERN "Parser: match_glob got pattern: %s\n"
 #define DBGMSG_GLOBMATCH "Parser: match_glob matched: %s\n"
 
@@ -74,7 +70,7 @@ static struct dirent	*_glob_readdir(DIR *dir)
  * since this will always
  * run from interactive mode and not in background
  */
-static t_list	*_match_glob(const char *pattern)
+t_list	*match_glob(const char *pattern)
 {
 	t_list			*lst;
 	t_list			*new;
@@ -144,38 +140,6 @@ static int	_do_ops(t_list **lst_node, t_list **glst, t_arg_data *content)
 	return (0);
 }
 
-/* The redir version of p_do_globbing. 
- * Operates on a single t_redir_data node. 
- */
-int	p_do_globbing_redirs(void *c)
-{
-	t_redir_data		*r;
-	char				*new_fn;
-
-	r = (t_redir_data *)c;
-	debug_print(DBGMSG_REDIR_NODE, r->type, r->filename,\
-		r->heredoc_body, r->do_globbing);
-	if (true == r->do_globbing)
-	{
-		r->lst_glob = _match_glob((const char *)r->filename);
-		if (r->lst_glob)
-		{
-			debug_print(DBGMSG_REDIR_GLOB,(char *)r->lst_glob->content);
-			if (ft_lstsize(r->lst_glob) > 1)
-				return (err(ERRMSG_AMBIG), ERR_AMBIGUOUS_REDIR);
-			else
-			{
-				new_fn = ft_strdup(r->lst_glob->content);
-				if (!new_fn)
-					return (ERR_MEM);
-				free(r->filename);
-				r->filename = new_fn;
-			}
-		}
-	}
-	return (0);
-}
-
 /* DO GLOBBING
  *
  * Called within t_list reverse iterator
@@ -196,7 +160,7 @@ int	p_do_globbing_redirs(void *c)
  * Anything returned from globbing matches will 
  * NOT be processed further.
  */
-int	p_do_globbing(t_list **lst_node, void *lst_c)
+int	p_do_globbing_args(t_list **lst_node, void *lst_c)
 {
 	t_arg_data	*arg;
 	t_list		*lst;

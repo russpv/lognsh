@@ -4,6 +4,7 @@
 # include "parse.h"
 
 # define MAX_CMD_ARGS 10
+# define MAX_ENVVAR_LEN 1024  // length of variable names
 
 /*
 From Bash Manual:
@@ -102,6 +103,16 @@ typedef struct s_cmd
 	bool					do_redir_expansion;
 }							t_ast_node_cmd;
 
+
+// TODO, add heredoc flags for:
+// dquoted heredoc "EOF" (no globs, do expansions, escapes)
+// squoted heredoc 'EOF' (no globs, no expansions, no escapes)
+// ensure quotes removed from eof token prior to input
+// ensure eof token is never expanded itself, and $ is literal
+
+// normal flags for:
+// dquoted <"$fn" (no word splitting on expansion)
+// squoted <'$fn' (no expansion on fn)
 typedef struct s_redir
 {
 	char					*symbol;
@@ -183,8 +194,8 @@ typedef struct s_parser
 
 t_parser					*create_parser(t_state *s, t_list *tokens);
 void						destroy_parser(void *instance);
-t_ast_node	*init_log(void);
-t_redir_data	*init_redir(t_ast_node *target, enum e_tok_type type);
+t_ast_node					*init_log(void);
+t_redir_data				*init_redir(t_ast_node *target, enum e_tok_type type);
 
 /* Token list navigation */
 t_tok						*peek(t_parser *p);
@@ -203,15 +214,18 @@ t_ast_node					*parse_logical(t_state *s, t_parser *p);
 /* Parsing helpers */
 int							process_redir(t_parser *p, t_ast_node *cmd_node);
 void						*create_arg_data_node(void *content);
-void	*create_arg_data_node_deep(void *content);
+void						*create_arg_data_node_deep(void *content);
 t_pstack					*create_stack(void);
 void						destroy_stack(t_pstack *s);
 int							push(t_pstack *stack);
 int							pop(t_pstack *stack);
 
 /* Execution helpers */
-int							p_do_globbing(t_list **parent_lst, void *c);
+int							p_do_globbing_args(t_list **lst_node, void *lst_c);
 int							p_do_globbing_redirs(void *c);
+int							check_special_expansions(t_state *s, const char *buf,
+								char **value);
+t_list						*match_glob(const char *pattern);
 
 /* Tests */
 bool						is_option(t_tok *tok);
@@ -227,7 +241,7 @@ bool						is_arg_token(t_tok *tok);
 bool						is_expansion(t_tok *tok);
 bool						is_close_paren(t_tok *tok);
 bool						is_group_op_token(t_tok *tok);
-t_tok	*which_lower_priority(t_ast_node *ref, t_tok *cmp);
+t_tok						*which_lower_priority(t_ast_node *ref, t_tok *cmp);
 
 /* For traversing the AST */
 bool						node_has_redirects(t_ast_node *n);
@@ -242,7 +256,7 @@ int							handle_heredoc(const t_redir_data *node);
 
 /* Utils */
 char						**list_to_array(t_list *args, int argc);
-int	lstiter_state(t_state *s, t_list *lst, int (*f)(t_state *, void *));
+int							lstiter_state(t_state *s, t_list *lst, int (*f)(t_state *, void *));
 
 /* AST list frees */
 void						destroy_ast_node(void *node);

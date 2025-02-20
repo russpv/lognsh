@@ -45,8 +45,8 @@ void	print_ast(t_ast_node *ast, int depth)
 					for (t_list *redir_node = ast->data.cmd.redirs; redir_node != NULL; redir_node = redir_node->next)
 					{
 						redir = (t_redir_data *)redir_node->content;
-						colored_printf(CYAN, "%d|%s %s ", redir->type,
-							redir->symbol, redir->filename);
+						colored_printf(CYAN, "%d|%s %s g_%d exp_%d", redir->type,
+							redir->symbol, redir->filename, redir->do_globbing, redir->do_expansion);
 					}
 				}
 				colored_printf(CYAN, "\n");
