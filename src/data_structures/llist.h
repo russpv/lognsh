@@ -18,6 +18,10 @@ typedef struct s_list
 
 typedef struct s_list	t_list;
 
+
+
+extern	int ft_strcmplow(const char *a, const char *b);
+
 void					ft_lstadd_back(t_list **lst, t_list *new);
 void					ft_lstadd_front(t_list **lst, t_list *new);
 
@@ -46,7 +50,7 @@ void					ft_lstadd_insert(t_list **lst, t_list *new);
 void					ft_lstdelone_rwd(t_list **lst, t_list **node,
 							void (*del)(void *));
 
-t_list *ft_lstsort(t_list **lst, int (*cfunc)(const char *, const char *));
+t_list *ft_lstsort(t_list **lst);
 void	ft_lstprint(t_list *lst);
 void	ft_lstprint_betw(t_list *lst, t_list *end);
 int	ft_lstsize_betw(t_list *lst, t_list *last);

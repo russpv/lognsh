@@ -82,6 +82,9 @@ void							destroy_redir(void *in);
 
 bool							is_globbing(t_tok *tok);
 
+
+void debug_print_list(t_list *head);
+
 /*  Expansions */
 // tilde ~ ?
 // $VAR

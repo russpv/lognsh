@@ -103,13 +103,50 @@ static t_list	*_match_glob(const char *pattern)
 	closedir(dir);
 	ft_lstprint(lst);
 	debug_detect_cycle(lst);
-	t_list *got = ft_lstsort(&lst, ft_strcmplow);
+	t_list *got = ft_lstsort(&lst);
 	debug_detect_cycle(got);
 
 	return (got);
 }
 
-/* Operates on a single t_redir_data node. */
+/* 
+ * lst is incoming list of glob matches to be inserted 
+ * after the lst_node.
+ * content is the existing arg node.
+ * Deletes lst_node, deep copies glst and inserts 
+ * at lst_node position.
+ * glst destroyed in arg_destroy
+ */
+static int	_do_ops(t_list **lst_node, t_list **glst, t_arg_data *content)
+{
+	t_list		*new_arg_data_lst;
+	char		*new_arg;
+
+	new_arg_data_lst = NULL;
+	new_arg = NULL;
+	if (ft_lstsize(*glst) > 1)
+	{
+		ft_lstdelone_rwd(lst_node, lst_node, destroy_arg);
+		new_arg_data_lst = ft_lstmap(*glst, create_arg_data_node_deep,\
+			destroy_arg);
+		ft_lstadd_insert(lst_node, new_arg_data_lst);
+		ft_lstclear(glst, free);
+	}
+	else
+	{
+		new_arg = ft_strdup((*glst)->content);
+		if (!new_arg)
+			return (ERR_MEM);
+		free(content->raw);
+		content->raw = new_arg;
+		ft_lstclear(glst, free);
+	}
+	return (0);
+}
+
+/* The redir version of p_do_globbing. 
+ * Operates on a single t_redir_data node. 
+ */
 int	p_do_globbing_redirs(void *c)
 {
 	t_redir_data		*r;
@@ -139,37 +176,6 @@ int	p_do_globbing_redirs(void *c)
 	return (0);
 }
 
-/* 
- * lst is incoming list of glob matches to be inserted 
- * after the lst_node.
- * content is the existing arg node.
- */
-static int	_do_ops(t_list **lst_node, t_list **glst, t_arg_data	*content)
-{
-	t_list		*new_arg_data_lst;
-	char		*new_arg;
-
-	new_arg_data_lst = NULL;
-	new_arg = NULL;
-	if (ft_lstsize(*glst) > 1)
-	{
-		ft_lstdelone_rwd(lst_node, lst_node, destroy_arg);
-		new_arg_data_lst = ft_lstmap(*glst, create_arg_data_node,\
-			destroy_arg);
-		ft_lstadd_insert(lst_node, new_arg_data_lst);
-	}
-	else
-	{
-		new_arg = ft_strdup((*glst)->content);
-		if (!new_arg)
-			return (ERR_MEM);
-		free(content->raw);
-		content->raw = new_arg;
-		ft_lstclear(glst, free);
-	}
-	return (0);
-}
-
 /* DO GLOBBING
  *
  * Called within t_list reverse iterator
@@ -179,8 +185,8 @@ static int	_do_ops(t_list **lst_node, t_list **glst, t_arg_data	*content)
  * 
  * Returns early in case of ambiguous redirect.
  *
- * Arg c: t_redir_data *
- * Arg parent_lst:
+ * Arg lst_c: lst_node's t_redir_data *content
+ * Arg lst_node: node
  *
  * Error msg is "[filename]: no such file or directory\n"
  * 
@@ -192,21 +198,21 @@ static int	_do_ops(t_list **lst_node, t_list **glst, t_arg_data	*content)
  */
 int	p_do_globbing(t_list **lst_node, void *lst_c)
 {
+	t_arg_data	*arg;
 	t_list		*lst;
-	t_arg_data	*content;
 	int			res;
 
 	res = 0;
 	lst = NULL;
-	content = (t_arg_data *)lst_c;
-	debug_print(DBGMSG_GOTARGS, content->raw, (void *)lst_node);
-	if (true == content->do_globbing)
+	arg = (t_arg_data *)lst_c;
+	debug_print(DBGMSG_GOTARGS, arg->raw, (void *)lst_node);
+	if (true == arg->do_globbing)
 	{
-		lst = _match_glob(content->raw);
+		lst = _match_glob(arg->raw);
 		if (lst)
 		{
 			debug_print(DBGMSG_MATCHES, ft_lstsize(lst), lst->content);
-			res = _do_ops(lst_node, &lst, content);
+			res = _do_ops(lst_node, &lst, arg);
 			if (0 != res)
 				return (res);
 		}

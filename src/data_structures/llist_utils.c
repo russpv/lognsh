@@ -21,7 +21,8 @@ t_list	*ft_lstlast(t_list *lst)
 }
 
 /*LSTMAP
-** Returns modified (doubly) linked list head ptr using func f
+** Returns new (doubly) linked list head ptr using func f
+** on each node of an existing list.
 ** lst: ptr to node
 ** f: function applied to each node.content
 ** del: used if allocation fails
@@ -73,7 +74,7 @@ t_list	*ft_lstnew(void *content)
 	return (ll);
 }
 
-/* Returns new linked list node with new content. */
+/* Returns new linked list node with f(content). */
 t_list	*ft_lstnew_copystr(void *content, char *(*f)(const char *))
 {
 	t_list	*new_node;
@@ -133,7 +134,7 @@ void	ft_lstprint(t_list *lst)
 		while (lst)
 		{
 			count++;
-			fprintf(stderr, YELLOW"%s -> "RESET, lst->content);
+			fprintf(stderr, YELLOW"%s -> "RESET, (const char*)lst->content);
 			lst = lst->next;
 		}
 		fprintf(stderr, RED"printed %d nodes.\n"RESET, count);
@@ -157,7 +158,7 @@ void	ft_lstprint_betw(t_list *lst, t_list *end)
 		while (lst != end->next)
 		{
 			count++;
-			fprintf(stderr, YELLOW"%s -> "RESET, lst->content);
+			fprintf(stderr, YELLOW"%s -> "RESET, (const char *)lst->content);
 			lst = lst->next;
 		}
 		fprintf(stderr, RED"printed %d nodes.\n"RESET, count);
@@ -165,6 +166,7 @@ void	ft_lstprint_betw(t_list *lst, t_list *end)
 	return ;
 }
 
+/* Used in mergesort. */
 int	ft_lstsize_betw(t_list *lst, t_list *last)
 {
 	int	count;

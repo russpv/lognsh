@@ -1,4 +1,4 @@
-#include "llist.h"
+#include "llist_int.h"
 
 // Helper function: Deep copy a single node's content
 t_list	*ft_lstcopy_node(const t_list *orig, void *(*f)(const void *))

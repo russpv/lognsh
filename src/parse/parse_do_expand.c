@@ -124,6 +124,7 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 			debug_print(DEBUGMSG_ARGP_POST_G, argl, *argl); // TODO remove
 		}
 		a->data.cmd.argc = ft_lstsize(*argl);
+		debug_print_list(*argl);
 		*args = list_to_array(*argl, a->data.cmd.argc);
 		if (NULL == *args)
 			return (ERR_MEM);

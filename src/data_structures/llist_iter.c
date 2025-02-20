@@ -1,4 +1,4 @@
-#include "llist.h"
+#include "llist_int.h"
 
 #define DBGMSG_LSTINSRWD_ANNOUNCE "lstiter_ins_rwd: got lst: %p, head:%p.\n"
 #define DBGMSG_LSTINSRWD_NULLARG "lstiter_ins_rwd: NULL input.\n"

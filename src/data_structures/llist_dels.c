@@ -1,4 +1,4 @@
-#include "llist.h"
+#include "llist_int.h"
 
 #define DEBUGMSG_DRWD_ANNOUNCE "lstdelone_rwd: Deleting node: %p (content: %p) (head: %p)\n"
 #define DEBUGMSG_DRWD_SUCCESS "lstdelone_rwd: Node deleted successfully\n"

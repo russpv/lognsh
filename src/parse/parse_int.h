@@ -203,6 +203,7 @@ t_ast_node					*parse_logical(t_state *s, t_parser *p);
 /* Parsing helpers */
 int							process_redir(t_parser *p, t_ast_node *cmd_node);
 void						*create_arg_data_node(void *content);
+void	*create_arg_data_node_deep(void *content);
 t_pstack					*create_stack(void);
 void						destroy_stack(t_pstack *s);
 int							push(t_pstack *stack);

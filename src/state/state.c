@@ -72,8 +72,7 @@ void	s_free_cmd_lex_parse(t_state *state)
 	}
 }
 
-/* Destroys parser before lexer
- * as parser wraps some lexer token content
+/* Destroys current cmd
  */
 void	s_free_cmd(t_state *state)
 {

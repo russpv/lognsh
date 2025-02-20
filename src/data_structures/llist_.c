@@ -1,4 +1,4 @@
-#include "llist.h"
+#include "llist_int.h"
 
 #define DEBUGMSG_INSERT_GOT "ft_lstadd_insert got lst = %p, head = %p\n"
 #define DEBUGMSG_INSERT_NULL "NULL input detected: lst = %p, new = %p\n"
