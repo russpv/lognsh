@@ -133,7 +133,7 @@ void	ft_lstprint(t_list *lst)
 		while (lst)
 		{
 			count++;
-			fprintf(stderr, YELLOW"%s -> "RESET, lst->content);
+			fprintf(stderr, YELLOW"%s -> "RESET, (char *)lst->content);
 			lst = lst->next;
 		}
 		fprintf(stderr, RED"printed %d nodes.\n"RESET, count);
@@ -157,7 +157,7 @@ void	ft_lstprint_betw(t_list *lst, t_list *end)
 		while (lst != end->next)
 		{
 			count++;
-			fprintf(stderr, YELLOW"%s -> "RESET, lst->content);
+			fprintf(stderr, YELLOW"%s -> "RESET, (char *)lst->content);
 			lst = lst->next;
 		}
 		fprintf(stderr, RED"printed %d nodes.\n"RESET, count);
