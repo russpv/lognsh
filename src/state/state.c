@@ -4,28 +4,26 @@ t_state	*init_state(char **envp)
 {
 	t_state	*s;
 
+	if (!envp)
+		return (NULL);
 	s = malloc(sizeof(struct s_global_state));
-	if (s)
-	{
-		s->pwd = NULL;
-		s->current_exit_code = 0;
-		s->error_code = 0;
-		s->current_parser = NULL;
-		s->current_lexer = NULL;
-		s->current_cmd = NULL;
-		s->input = NULL;
-		s->destroy_command = NULL;
-		s->destroy_lexer = NULL;
-		s->destroy_parser = NULL;
-		s->envp = envp;
-		s->sh_env_list = copy_envp(envp);
-		if (!s->sh_env_list)
-		{
-			free(s);
-			return (NULL);
-		}
-		set_signal_handlers();
-	}
+	if (!s)
+		return (NULL);
+	s->pwd = NULL;
+	s->current_exit_code = 0;
+	s->error_code = 0;
+	s->current_parser = NULL;
+	s->current_lexer = NULL;
+	s->current_cmd = NULL;
+	s->input = NULL;
+	s->destroy_command = NULL;
+	s->destroy_lexer = NULL;
+	s->destroy_parser = NULL;
+	s->envp = envp;
+	s->sh_env_list = copy_envp(envp);
+	if (!s->sh_env_list)
+		return (free(s), NULL);
+	set_signal_handlers();
 	return (s);
 }
 
