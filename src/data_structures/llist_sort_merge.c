@@ -69,12 +69,14 @@ void	_terminate_ends(t_list **lst, struct s_merge *m)
 }
 
 /* MERGESORT
- *
+ * Google it.
  * Note: Critical that the comparator function does not return ties or the tail
  * advances to whichever node->next.
  * Watch for: 
  * - swapped node can be the head ptr with no prev!
  * - swapped node can be the end ptr with no next!
+ * Critical that list segment boundary ptrs are updated for subsequent
+ * recursive calls as stack unwinds, or segments may be skipped.
 */
 void merge(t_list **lst, t_list **beg, t_list *mid, t_list **end)
 {
@@ -84,7 +86,7 @@ void merge(t_list **lst, t_list **beg, t_list *mid, t_list **end)
 	print_diagnostics_input(lst, &m);
 
     if (ALESSTHANB == compare(mid, mid->next))
-        return (debug_print( "already sorted\n"));
+        return (debug_print( "already sorted.\n"));
     while ((NULL != m.l && NULL != m.r) && (mid->next != m.l && \
 		(*end)->next != m.r) && (++m.i <= m.nodec))
     {
@@ -96,9 +98,8 @@ void merge(t_list **lst, t_list **beg, t_list *mid, t_list **end)
 	}
 	_add_remainder(&m);
 	_adv_and_reconnect(&m);
-	// make sure end persists to subsequent calls. But this only matters for solve-latter to merge.
-	//if (*m.tail)
-	//	(*end) = (*m.tail); 
+	if (*m.tail)
+		(*end) = (*m.tail); 
 	_terminate_ends(lst, &m);
 	return ;
 }

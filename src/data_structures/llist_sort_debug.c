@@ -63,6 +63,7 @@ void	print_diagnostics_end(t_list **lst, struct s_merge *m)
 		debug_print( "|beg->next...tail->next : %s->%s...%s->%s|\n", (*m->beg)->content, (*m->beg)->next->content, (*m->tail)->content, (*m->tail)->next->content);
 	ft_lstprint_betw(*m->beg, *m->tail);
 	ft_lstprint_betw(*m->beg, *m->end);
+	ft_lstprint(*lst);
 	debug_print( "RETURNING head: (%p<-%s->%s). \n", (*lst)->prev, (*lst)->content, (*lst)->next->content);
 }
 
@@ -87,12 +88,12 @@ void	print_prev_pre(struct s_merge *m)
 void	print_swap_post(t_list **lst, struct s_merge *m)
 {
 	if ((*m->tail) == *lst){
-		debug_print( "%s (head) "GREEN"(prev: %p, next: %s), -> \n"RESET, (*m->tail)->content, (*m->tail)->prev, (*m->tail)->next->content);
+		debug_print( CYAN"%s (head) "GREEN"(prev: %p, next: %s), -> \n"RESET, (*m->tail)->content, (*m->tail)->prev, (*m->tail)->next->content);
 	}
 	else if ((*m->tail)->next)
-		debug_print( "%s "GREEN"(prev: %s, next: %s), -> \n"RESET, (*m->tail)->content, (*m->tail)->prev->content, (*m->tail)->next->content);
+		debug_print( CYAN"%s "GREEN"(prev: %s, next: %s), -> \n"RESET, (*m->tail)->content, (*m->tail)->prev->content, (*m->tail)->next->content);
 	else
-		debug_print( "%s "GREEN"(prev: %s, next: END), -> \n"RESET, (*m->tail)->content, (*m->tail)->prev->content);
+		debug_print( CYAN"%s "GREEN"(prev: %s, next: END), -> \n"RESET, (*m->tail)->content, (*m->tail)->prev->content);
 }
 
 void	print_tailnext_post(struct s_merge *m)

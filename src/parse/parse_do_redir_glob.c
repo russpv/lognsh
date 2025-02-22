@@ -18,7 +18,7 @@ int	p_do_globbing_redirs(void *c)
 		r->heredoc_body, r->do_globbing);
 	if (true == r->do_globbing)
 	{
-		r->lst_glob = _match_glob((const char *)r->filename);
+		r->lst_glob = match_glob((const char *)r->filename);
 		if (r->lst_glob)
 		{
 			debug_print(DBGMSG_REDIR_GLOB,(char *)r->lst_glob->content);
