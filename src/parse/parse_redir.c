@@ -76,6 +76,7 @@ static int	_process_heredoc_redir(t_redir_data *red, t_tok *tok)
 	debug_print("Parser: Got heredoc document\n");
 	red->symbol = NULL;
 	red->filename = NULL;
+	red->do_expansion = tok_get_expansion(tok);
 	red->heredoc_body = ft_strdup(tok_get_raw((t_tok *)tok));
 	if (!red->heredoc_body)
 	{

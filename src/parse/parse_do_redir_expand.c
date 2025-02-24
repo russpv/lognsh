@@ -36,7 +36,9 @@ static int	_do_redir_ops(t_state *s, const t_redir_data *r, char *buf, char **va
 	return (0);
 }
 
-/* Passed to t_ast_node.cmd's t_list*args iterator.
+// TODO consider how to process HEREDOCS
+/* Replaces $vars with expanded strings
+ * Passed to t_ast_node.cmd's t_list*args iterator.
  * If flag set, looks for expansion values in shell envp
  * by passing a buffer loaded with the key and replaces
  * t_arg_data.raw string, omitting any '$'.

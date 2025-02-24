@@ -12,6 +12,8 @@
 
 #include "bi_int.h"
 
+#define CMD_NAME "pwd"
+
 const char	*env_find_value(t_env *env_list, const char *key)
 {
 	while (env_list)
@@ -40,7 +42,7 @@ int	bi_pwd(t_state *s, char **args, int argc)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		perror("minishell: pwd");
+		print_perror(CMD_NAME);
 		return (1);
 	}
 	write(STDOUT_FILENO, cwd, ft_strlen(cwd));
