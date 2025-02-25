@@ -11,10 +11,12 @@
 #define DEBUGMSG_DOEXP_RES "Parser: p_do_expansion found: %s\n"
 
 /* Looks for env values of key loaded in buf */
-static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf, char **value)
+static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf,
+		char **value)
 {
 	char	*new_fn;
-	if (0 == check_special_expansions(s, buf, value))
+
+	if (check_special_expansions(s, buf, value) < 0)
 	{
 		if (*value)
 		{
@@ -37,80 +39,75 @@ static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf, char *
 	return (0);
 }
 
-// Checks envp for key buf, inserts value
-static int	_insert_expanded_var(t_state *s, char *buf, char **ptr, t_redir_data *r)
+// Checks envp for key buf, wipes key, inserts value
+static int	_insert_expanded_var(t_state *s, char *buf, char **ptr,
+		t_redir_data *r)
 {
-	char *new_val = NULL;
-	char new_body[MAX_RAW_INPUT_LEN + 1];
-	size_t offset;
-	int res;
+	char	*new_val;
+	char	new_body[MAX_RAW_INPUT_LEN + 1];
+	size_t	offset;
+	int		res;
 
+	new_val = NULL;
+	printf("got:_%s\n", buf);
 	res = check_special_expansions(s, buf, &new_val);
-	if (0 != res && 1 != res)
+	if (res > 0)
 		return (res);
-	if (1 == res)
+	if (res == 0)
 		new_val = get_sh_env(s, buf);
-	fprintf(stderr, "WHOOP buf: %s new:%s len:%ld body:%s\n", buf, new_val, ft_strlen(new_val), r->heredoc_body);
 	offset = *ptr - r->heredoc_body;
-	if (new_val)
-	{
-		if (ft_strlen(r->heredoc_body) + ft_strlen(new_val) > MAX_RAW_INPUT_LEN)
-			return (ERR_BUFFLOW);
-		ft_strlcpy(new_body, r->heredoc_body, offset);
-		ft_strlcat(new_body, new_val, MAX_RAW_INPUT_LEN - offset - ft_strlen(new_val));
-		ft_strlcat(new_body, *ptr + ft_strlen(buf), MAX_RAW_INPUT_LEN - offset - ft_strlen(new_val) - ft_strlen(*ptr + ft_strlen(buf)));
-		offset += ft_strlen(new_val) - 1;
-		debug_print("offset:%d, newbody:%s\n", offset, new_body);
-		new_val = ft_strdup(new_body);
-		if (NULL == new_val)
-			return (ERR_MEM);
-		free(r->heredoc_body);
-		r->heredoc_body = new_val;
-		*ptr = r->heredoc_body + offset;
-	}
+	if (ft_strlen(r->heredoc_body) + ft_strlen(new_val) > MAX_RAW_INPUT_LEN)
+		return (ERR_BUFFLOW);
+	ft_strlcpy(new_body, r->heredoc_body, offset);
+	offset += ft_strlen(new_val);
+	ft_strlcat(new_body, new_val, MAX_RAW_INPUT_LEN - offset);
+	ft_strlcat(new_body, *ptr + ft_strlen(buf), MAX_RAW_INPUT_LEN - offset
+		- ft_strlen(*ptr + ft_strlen(buf)));
+	free(r->heredoc_body);
+	r->heredoc_body = ft_strdup(new_body);
+	if (NULL == r->heredoc_body)
+		return (ERR_MEM);
+	*ptr = r->heredoc_body + offset - 1;
 	return (0);
 }
 
-// normal state means escape char works, and '$' forget backtick and whatever other one
-// so specials work S? too
 static int	_p_do_heredoc_expansion(t_state *s, t_redir_data *r)
 {
-	char *ptr;
-	char				buf[MAX_ENVVAR_LEN];
-	int len;
+	char	*ptr;
+	char	buf[MAX_ENVVAR_LEN];
+	int		len;
 
-	debug_print(__FUNCTION__, "\n");
 	ft_memset(buf, 0, sizeof(buf));
-	ptr = r->heredoc_body;
-	debug_print("Got body:_%s_\n", r->heredoc_body);
 	if (NULL == r)
 		return (ERR_ARGS);
 	if (NULL == r->heredoc_body)
 		return (ERR_ARGS);
 	if (false == r->do_expansion)
 		return (0);
+	ptr = r->heredoc_body;
 	while (*ptr)
 	{
-		debug_print("Pointer on:%c\n", *ptr);
 		if ((unsigned char)OP_ENV == *ptr)
 		{
-			debug_print("Checking varname...\n");
 			len = ft_varnamelen((const char *)(ptr + 1));
+			len |= (int)(check_special_expansions(s, ft_memcpy(buf, ptr + 1, 1), NULL) < 0);
 			if (len > 0)
 			{
 				++ptr;
 				ft_memcpy(buf, ptr, len);
-				debug_print("Made a buf of:%s len:%d\n", buf, ft_varnamelen((const char *)ptr));
 				if (0 != _insert_expanded_var(s, buf, &ptr, r))
 					return (ERR_MEM);
 				ft_memset(buf, 0, len);
+				continue;
 			}
-			debug_print("Did insert, Pointer on:%c\n", *ptr);
 		}
 		else if ((unsigned char)TK_ESC == *ptr)
+		{
+			ft_memmove(ptr, ptr + 1, ft_strlen(ptr));
 			ptr++;
-		else
-			ptr++;
+			continue;
+		}
+		ptr++;
 	}
 	return (0);
 }
@@ -133,7 +130,7 @@ static int	_p_do_red_expansion(t_state *s, void *r)
 	res = 0;
 	value = NULL;
 	if (NULL == r_data->filename)
-		return (_p_do_heredoc_expansion(s, (t_redir_data*)r));
+		return (_p_do_heredoc_expansion(s, (t_redir_data *)r));
 	fn_len = ft_strnlen(r_data->filename, MAX_ENVVAR_LEN);
 	ft_memset(buf, 0, sizeof(buf));
 	debug_print(DEBUGMSG_DOEXP_ANNOUNCE, r_data->filename);
@@ -161,13 +158,14 @@ int	p_do_redir_processing(t_state *s, t_ast_node *a)
 
 	if (a->type != AST_NODE_CMD)
 		return (ERR_ARGS);
+	res = 0;
 	orig_filen = NULL;
 	redirs = p_get_redirs(a);
-	res = 0;
 	if (redirs)
 	{
 		debug_print(DEBUGMSG_REDIRP_ANNOUNCE);
-		debug_print(DBGMSG_REDIRP_GOT, a->data.cmd.do_redir_globbing, a->data.cmd.do_redir_expansion);
+		debug_print(DBGMSG_REDIRP_GOT, a->data.cmd.do_redir_globbing,
+			a->data.cmd.do_redir_expansion);
 		if (true == a->data.cmd.do_redir_expansion)
 			res = lstiter_state(s, redirs, _p_do_red_expansion);
 		if (0 != res)

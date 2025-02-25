@@ -12,7 +12,7 @@ size_t	ft_strlen(const char *c)
 	size_t	i;
 
 	i = 0;
-	if (!c)
+	if (NULL == c)
 		return (0);
 	while (c[i])
 		i++;

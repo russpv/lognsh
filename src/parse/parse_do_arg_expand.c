@@ -13,7 +13,8 @@
 
 /* Add special $? codes here.
  * buf will start with char after any '$'.
- * Returns 0 if special expansion done or no last exit status.
+ * Returns the negated length of the expansion found (minus $).
+ * Or error codes.
  * Places the expanded heap string in *value
  */
 int	check_special_expansions(t_state *s, const char *buf,
@@ -21,20 +22,23 @@ int	check_special_expansions(t_state *s, const char *buf,
 {
 	const int	*status = get_status(s);
 
-	if (!buf || !value)
+	if (!buf)
 		return (ERR_ARGS);
-	if (ft_strcmp(buf, "?") == 0)
+	debug_print("%s got %s\n", __FUNCTION__, buf);
 	{
-		if (status == NULL)
-			*value = ft_itoa(0);
-		else
-			*value = ft_itoa(*status);
-		if (*value == NULL)
-			return (ERR_MEM);
-		debug_print(DEBUGMSG_CHKSPEC_ANNOUNCE, *value);
-		return (0);
+		if (value)
+		{
+			if (status == NULL)
+				*value = ft_itoa(0);
+			else
+				*value = ft_itoa(*status);
+			if (*value == NULL)
+				return (ERR_MEM);
+			debug_print(DEBUGMSG_CHKSPEC_ANNOUNCE, *value);
+		}
+		return (-1);
 	}
-	return (1);
+	return (0);
 }
 
 /* Looks for env values of key loaded in buf */
@@ -42,7 +46,7 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf, char **value)
 {
 	char	*new_raw;
 
-	if (0 == check_special_expansions(s, buf, value))
+	if (check_special_expansions(s, buf, value) < 0)
 	{
 		if (*value)
 		{

@@ -65,6 +65,10 @@ DEFINE_E2E_TEST(test_heredoc_no_delim, "echo hello <<");
 DEFINE_E2E_TEST(test_redirection_error, "echo hello >");
 DEFINE_E2E_TEST(test_redirection_glob, "echo hello > *");
 DEFINE_E2E_TEST(test_redirection_expansion, "echo hello > $PATH"); //ambiguous redirect
+DEFINE_E2E_TEST(test_heredoc_redirection2, "cat << EOF\n$?$?$\nEOF"); // 00$
+DEFINE_E2E_TEST(test_heredoc_redirection3, "cat << 'EO'F\n$?$?$\nEOF"); // $?$?$
+DEFINE_E2E_TEST(test_heredoc_redirection4, "cat << EOF\n\\$?\\$?$\\\nEOF"); // $?$?$
+
 
 
 /* logicals */

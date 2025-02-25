@@ -11,7 +11,7 @@ t_tok	*create_token(const char *s, int type, size_t pos)
 	if (token)
 	{
 		token->type = type;
-		if (ft_strlen(token->raw) > MAX_RAW_INPUT_LEN)
+		if (ft_strlen(s) > MAX_RAW_INPUT_LEN)
 			return (err("Token: raw input buf overflow\n"), free(token), NULL);
 		token->raw = ft_strdup(s);
 		token->pos = pos;

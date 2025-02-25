@@ -40,6 +40,7 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 		lexer->token_list = NULL;
 		lexer->is_incomplete = false;
 		lexer->do_heredoc_expansion = true;
+		lexer->eof_word = NULL;
 		register_lexer_destroy(st, destroy_lexer);
 		if (false == _allocate_buf_and_hasht(lexer))
 		{
