@@ -31,8 +31,8 @@ t_tok	*lex_create_token(t_lex *lexer, int type)
 			tok_set_globbing(token);
 		if (true == lexer->do_expansion)
 			tok_set_expansion(token);
-		lexer->do_globbing = INIT;
-		lexer->do_expansion = INIT;
+		lexer->do_globbing = INITVAL;
+		lexer->do_expansion = INITVAL;
 	}
 	return (token);
 }

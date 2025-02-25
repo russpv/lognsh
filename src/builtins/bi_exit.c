@@ -56,7 +56,7 @@ static void	_exit_valid_arg(t_state *s, char *arg)
 int	bi_exit(t_state *s, char **args, int argc)
 {
 	(void)argc;
-	write(STDOUT_FILENO, "exit\n", sizeof("exit\n"));
+	write(STDOUT_FILENO, CMD_NAME"\n", sizeof(CMD_NAME"\n") - 1);
 	if (!args[1])
 		_exit_no_arg(s);
 	else if (!is_numeric(args[1]))

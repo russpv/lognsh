@@ -12,7 +12,8 @@
 // the '\0' isn't tested, keep at end,
 //	< for heredoc
 #define LEX_BUFSZ 1024
-#define INIT 0
+#define INITVAL 0 // Lexer default flag value
+#define MOD "Lexer"
 
 /* LEX
  * Does these rules:
@@ -126,6 +127,7 @@ typedef struct s_lex
 	int						do_expansion;
 	int						do_globbing;
 	int						do_heredoc;
+	int						do_heredoc_expansion;
 	char					*eof_word;
 	bool					is_incomplete;
 }							t_lex;

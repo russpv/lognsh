@@ -35,11 +35,11 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 		lexer->raw_string = s;
 		lexer->ptr = (char *)s;
 		lexer->escape_mode = false;
-		lexer->do_expansion = INIT;
-		lexer->do_globbing = INIT;
+		lexer->do_expansion = INITVAL;
+		lexer->do_globbing = INITVAL;
 		lexer->token_list = NULL;
-		lexer->eof_word = NULL;
 		lexer->is_incomplete = false;
+		lexer->do_heredoc_expansion = true;
 		register_lexer_destroy(st, destroy_lexer);
 		if (false == _allocate_buf_and_hasht(lexer))
 		{
