@@ -69,13 +69,17 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red, t_a
  * Returns ERR_MEM if malloc fails.
  * Freeing handled by caller.
  */
-static int	_process_heredoc_redir(t_redir_data *red, t_tok *tok)
+static int	_process_heredoc_redir(t_redir_data *red, t_tok *tok, t_ast_node *cmd)
 {
-	if (!red || !tok)
+	if (!red || !tok || !cmd)
+		return (ERR_ARGS);
+	if (p_get_type(cmd) != AST_NODE_CMD)
 		return (ERR_ARGS);
 	debug_print("Parser: Got heredoc document\n");
 	red->symbol = NULL;
 	red->filename = NULL;
+	red->do_expansion = tok_get_expansion(tok);
+	cmd->data.cmd.do_redir_expansion = red->do_expansion;
 	red->heredoc_body = ft_strdup(tok_get_raw((t_tok *)tok));
 	if (!red->heredoc_body)
 	{
@@ -107,7 +111,7 @@ static int	_parse_redir(t_parser *p, t_ast_node *node)
 		}
 		else
 		{
-			if (0 != _process_heredoc_redir(red, tok))
+			if (0 != _process_heredoc_redir(red, tok, node))
 				return (destroy_redir(red), ERR_GENERAL);
 		}
 		if (0 != _add_redir(node, red))

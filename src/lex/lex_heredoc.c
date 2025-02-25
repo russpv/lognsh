@@ -1,42 +1,19 @@
 #include "lex_int.h"
 
-static inline int	_get_eof_word(t_lex *l)
+#define DBGMSG_ANNOUNCE _MOD_": << tokenize_heredoc:\n"
+#define DBGMSG_FOUNDDEL _MOD_": Heredoc delimiter found, exiting heredoc mode.\n"
+#define DBGMSG_PTRAT _MOD_": ptr at:_%c_\n"
+#define ERRMSG_MEM _MOD_": ##### Error heredoc\n"
+#define LOGMSG_SIG _MOD_": "LOGMSG_SIGINT
+
+/* Puts readline line onto buf. Omits '\0' from readline. */
+static inline int	_load_line(t_lex *l, const char *line, size_t *buf_idx)
 {
-	size_t	buf_idx;
-
-	buf_idx = 0;
-	if (!l->ptr || true == is_too_long(l->ptr))
-		return (1);
-	while (ft_isspace(*l->ptr))
-		l->ptr++;
-	while (*l->ptr && *l->ptr != '\n' && !ft_isspace(*l->ptr))
-		l->buf[buf_idx++] = *l->ptr++;
-	if (0 == ft_strlen(l->buf))
-	{
-		debug_print("Lexer: ERROR: heredoc EOF not found.\n");
-		return (0);
-	}
-	l->eof_word = ft_strdup(l->buf);
-	if (!l->eof_word)
-	{
-		ft_memset(l->buf, 0, LEX_BUFSZ);
-		return (1);
-	}
-	debug_print("Lexer: Captured Heredoc Delimiter: %s\n", l->eof_word);
-	ft_memset(l->buf, 0, LEX_BUFSZ);
-	return (0);
-}
-
-/* Puts readline output onto buf */
-static inline int	_load_line(t_lex *l, const char *line)
-{
-	size_t	buf_idx;
-
-	buf_idx = 0;
 	if (true == is_too_long(line))
-		return (1);
+		return (ERR_BUFFLOW);
 	while (*line)
-		l->buf[buf_idx++] = *line++;
+		l->buf[(*buf_idx)++] = *line++;
+	l->buf[(*buf_idx)++] = '\n';
 	return (0);
 }
 
@@ -49,66 +26,66 @@ static inline bool	_line_is_eof(t_lex *l, const char *line)
 	return (false);
 }
 
-/* Creates token up until EOF or exits if NULL (Ctrl+D)
+/* Creates heredoc_body token up until EOF or exits if NULL (Ctrl+D)
  * Runs readline, loads buf until line return equals EOF
+ * 
  * Note: Bash/Zsh do not trim the line when testing EOF (" EOF" != EOF)
  * only when capturing the EOF value
  */
-static inline t_tok	*_match_heredoc(t_lex *l)
+static inline int	_match_heredoc(t_lex *l)
 {
 	char	*line;
-	t_tok	*token;
+	size_t	buf_idx;
 
-	line = NULL;
+	buf_idx = 0;
 	while (1)
 	{
 		line = readline("> ");
 		if (NULL == line)
 		{
-			debug_print("Lexer: Input interrupted.\n");
+			debug_print(LOGMSG_SIG);
 			free(l->eof_word);
 			l->eof_word = NULL;
-			return (NULL);
+			return (ERR_CMD_SIGINTD);
 		}
 		if (true == _line_is_eof(l, line))
 		{
-			debug_print("Lexer: Heredoc delimiter found,\
-				exiting heredoc mode.\n");
-			token = lex_create_token(l, TOK_HEREDOC_WORD);
+			debug_print(DBGMSG_FOUNDDEL);
 			free(l->eof_word);
 			l->eof_word = NULL;
-			return (token);
+			return (0);
 		}
-		_load_line(l, line);
+		_load_line(l, line, &buf_idx);
 		free(line);
 	}
 }
 
 /* Uses readline() and handles Ctrl+D
- * Entire content loads into one token
- *
- * Note: Forces state transition to DONE
- * (probably not req'd).
+ * Entire heredoc content loads into one token.
+ * Any trailing words are skipped until an OP 
  */
-
 int	tokenize_heredoc(t_lex *lexer)
 {
 	t_tok	*token;
+	int		res;
 
-	debug_print("Lexer: << tokenize_heredoc:\n");
-	if (1 == _get_eof_word(lexer))
-		return (1);
-	token = _match_heredoc(lexer);
-	debug_print("Lexer: ptr at:_%c_\n", *lexer->ptr);
+	debug_print(DBGMSG_ANNOUNCE);
+	res = get_eof_word(lexer);
+	if (0 != res)
+		return (res);
+	lexer->do_expansion = true;
+	res = _match_heredoc(lexer);
+	if (0 != res)
+		return (res);
+	debug_print(DBGMSG_PTRAT, *lexer->ptr);
+	token = lex_create_token(lexer, TOK_HEREDOC_WORD);
 	if (token)
 	{
+		assert(NULL != lexer && NULL != token);
 		if (0 != add_token(lexer, token))
-			return (1);
+			return (ERR_GENERAL);
 	}
 	else
-	{
-		debug_print("Lexer: ##### Error heredoc\n");
-		return (1);
-	}
+		return (err(ERRMSG_MEM), ERR_MEM);
 	return (0);
 }

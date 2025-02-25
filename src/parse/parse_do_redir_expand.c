@@ -1,4 +1,5 @@
 #include "parse_int.h"
+#include <stdio.h>
 
 #define ERRMSG_PATH_MALLOC "Allocation for path value failed.\n"
 #define ERRMSG_NULL_EXPAN "Null expansion variable.\n"
@@ -10,7 +11,7 @@
 #define DEBUGMSG_DOEXP_RES "Parser: p_do_expansion found: %s\n"
 
 /* Looks for env values of key loaded in buf */
-static int	_do_redir_ops(t_state *s, const t_redir_data *r, char *buf, char **value)
+static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf, char **value)
 {
 	char	*new_fn;
 	if (0 == check_special_expansions(s, buf, value))
@@ -36,31 +37,112 @@ static int	_do_redir_ops(t_state *s, const t_redir_data *r, char *buf, char **va
 	return (0);
 }
 
+// Checks envp for key buf, inserts value
+static int	_insert_expanded_var(t_state *s, char *buf, char **ptr, t_redir_data *r)
+{
+	char *new_val = NULL;
+	char new_body[MAX_RAW_INPUT_LEN + 1];
+	size_t offset;
+	int res;
+
+	res = check_special_expansions(s, buf, &new_val);
+	if (0 != res && 1 != res)
+		return (res);
+	if (1 == res)
+		new_val = get_sh_env(s, buf);
+	fprintf(stderr, "WHOOP buf: %s new:%s len:%ld body:%s\n", buf, new_val, ft_strlen(new_val), r->heredoc_body);
+	offset = *ptr - r->heredoc_body;
+	if (new_val)
+	{
+		if (ft_strlen(r->heredoc_body) + ft_strlen(new_val) > MAX_RAW_INPUT_LEN)
+			return (ERR_BUFFLOW);
+		ft_strlcpy(new_body, r->heredoc_body, offset);
+		ft_strlcat(new_body, new_val, MAX_RAW_INPUT_LEN - offset - ft_strlen(new_val));
+		ft_strlcat(new_body, *ptr + ft_strlen(buf), MAX_RAW_INPUT_LEN - offset - ft_strlen(new_val) - ft_strlen(*ptr + ft_strlen(buf)));
+		offset += ft_strlen(new_val) - 1;
+		debug_print("offset:%d, newbody:%s\n", offset, new_body);
+		new_val = ft_strdup(new_body);
+		if (NULL == new_val)
+			return (ERR_MEM);
+		free(r->heredoc_body);
+		r->heredoc_body = new_val;
+		*ptr = r->heredoc_body + offset;
+	}
+	return (0);
+}
+
+// normal state means escape char works, and '$' forget backtick and whatever other one
+// so specials work S? too
+static int	_p_do_heredoc_expansion(t_state *s, t_redir_data *r)
+{
+	char *ptr;
+	char				buf[MAX_ENVVAR_LEN];
+	int len;
+
+	debug_print(__FUNCTION__, "\n");
+	ft_memset(buf, 0, sizeof(buf));
+	ptr = r->heredoc_body;
+	debug_print("Got body:_%s_\n", r->heredoc_body);
+	if (NULL == r)
+		return (ERR_ARGS);
+	if (NULL == r->heredoc_body)
+		return (ERR_ARGS);
+	if (false == r->do_expansion)
+		return (0);
+	while (*ptr)
+	{
+		debug_print("Pointer on:%c\n", *ptr);
+		if ((unsigned char)OP_ENV == *ptr)
+		{
+			debug_print("Checking varname...\n");
+			len = ft_varnamelen((const char *)(ptr + 1));
+			if (len > 0)
+			{
+				++ptr;
+				ft_memcpy(buf, ptr, len);
+				debug_print("Made a buf of:%s len:%d\n", buf, ft_varnamelen((const char *)ptr));
+				if (0 != _insert_expanded_var(s, buf, &ptr, r))
+					return (ERR_MEM);
+				ft_memset(buf, 0, len);
+			}
+			debug_print("Did insert, Pointer on:%c\n", *ptr);
+		}
+		else if ((unsigned char)TK_ESC == *ptr)
+			ptr++;
+		else
+			ptr++;
+	}
+	return (0);
+}
+
 /* Passed to t_ast_node.cmd's t_list*args iterator.
  * If flag set, looks for expansion values in shell envp
  * by passing a buffer loaded with the key and replaces
  * t_arg_data.raw string, omitting any '$'.
  * The string to expand must be more than LEXERKEEP$ char (for '$').
+ * Handles heredocs.
  */
-static int	_p_do_red_expansion(t_state *s, void *c)
+static int	_p_do_red_expansion(t_state *s, void *r)
 {
 	char				*value;
-	const t_redir_data	*content = (t_redir_data *)c;
+	const t_redir_data	*r_data = (t_redir_data *)r;
 	int					res;
 	char				buf[MAX_ENVVAR_LEN];
 	size_t				fn_len;
 
 	res = 0;
 	value = NULL;
-	fn_len = ft_strnlen(content->filename, MAX_ENVVAR_LEN);
+	if (NULL == r_data->filename)
+		return (_p_do_heredoc_expansion(s, (t_redir_data*)r));
+	fn_len = ft_strnlen(r_data->filename, MAX_ENVVAR_LEN);
 	ft_memset(buf, 0, sizeof(buf));
-	debug_print(DEBUGMSG_DOEXP_ANNOUNCE, content->filename);
-	if (content->do_expansion)
+	debug_print(DEBUGMSG_DOEXP_ANNOUNCE, r_data->filename);
+	if (r_data->do_expansion)
 	{
 		if (fn_len <= LEXERKEEP$)
 			return (err(ERRMSG_NULL_EXPAN), ERR_ARGS);
-		ft_memcpy(buf, content->filename + LEXERKEEP$, fn_len - LEXERKEEP$);
-		res = _do_redir_ops(s, content, buf, &value);
+		ft_memcpy(buf, r_data->filename + LEXERKEEP$, fn_len - LEXERKEEP$);
+		res = _get_expanded_fn(s, r_data, buf, &value);
 		if (0 != res)
 			return (res);
 		debug_print(DEBUGMSG_DOEXP_RES, value);

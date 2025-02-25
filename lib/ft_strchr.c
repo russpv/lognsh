@@ -9,7 +9,6 @@
 ** Note: gcc runs it faster w/o longword checking or independent
 ** loop instrucs
 */
-
 char	*ft_strchr(const char *s, int c_in)
 {
 	const unsigned char	c = c_in;

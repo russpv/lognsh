@@ -13,7 +13,6 @@
 ** It is not idiomatic in MY code to use -1 for size; however, it is
 ** PROTECTED here.
 */
-
 size_t	ft_strlcat(char *dest, const char *src, size_t size)
 {
 	size_t	destlen;

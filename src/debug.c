@@ -70,6 +70,7 @@ void	debug_detect_cycle(t_list *head)
 	}
 }
 
+// TODO free memory pool and exit
 void	err(const char *s)
 {
 	if (LOGGING)

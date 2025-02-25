@@ -1,12 +1,12 @@
 #include "lex.h"
 
+#define _MOD_ "Lexer"
 #define FAIL_TOKEN 10 // TODO group somewhere else
 
 /* chars that need to be quoted if meant literally */
 #define NORMALDELIMS "^()|{}[]`<>~;&\n\t \'\""
-//$ should not break tokens,
-// backslash also,
-//	# is escape only
+// $, \ not included since should not break tokens,
+// and # is escape only
 // Removed '*' so that it is included in token raws
 #define NORMALTRANSITIONS "\'\"<\0"
 // the '\0' isn't tested, keep at end,
@@ -30,13 +30,6 @@
  * an arg cannot be followed by a cmd (unless the arg is complex)
  */
 
-// TODO add redirection types enum
-
-// Note: (&&, ||) are sublists
-// Note: (<, >) are redirs, followed by fd1
-// Note: (=) is assignment, followed by scalar (ignore array)
-// Note: (reserved words)
-
 /* States
  * inside single quotes
  * inside double quotes
@@ -44,7 +37,9 @@
  * operator parsing
  */
 
-// TODO use a stack to track open/close delimiters
+// Improvements:
+// Could use a stack to handle missing closing delimiter of a pair
+// Could lex multi-line commands
 
 /* On separators
  *
@@ -148,26 +143,34 @@ t_lex						*create_lexer(t_state *st, int start_state,
 								const char *s);
 void						destroy_lexer(void *instance);
 
+/* ht */
 void						build_hasht(t_lex *lexer);
 t_ht_data					lex_create_ht_node(int is_substring, int type);
 void						lex_destroy_ht_node(void *node);
 void						*lex_copy_ht_data(void *data);
+t_tok						*lex_ht_lookup(t_lex *lexer);
 
 int							tokenize_normal(t_lex *lexer);
 int							tokenize_single_quotes(t_lex *lexer);
 int							tokenize_double_quotes(t_lex *lexer);
 int							tokenize_null(t_lex *lexer);
 int							tokenize_heredoc(t_lex *lexer);
+
 t_tok						*lex_create_token(t_lex *lexer, int type);
 int							add_token(t_lex *lexer, t_tok *token);
+
 bool						is_normal_delim(unsigned char s);
 bool						is_transition_char(t_lex *l, unsigned char s);
 bool						is_dollar_question(t_lex *lexer);
 int							word_or_name(const char *s);
+bool						is_too_long(const char *input);
+
 void						process_escape_sequence(t_lex *l);
 int							process_special_operators(t_lex *lexer);
 struct s_ht_entry			*do_one_char_lookahead(t_lex *lexer,
 								struct s_ht_entry *res);
-t_tok						*lex_ht_lookup(t_lex *lexer);
 int							do_state_transition(t_lex *lexer);
-bool						is_too_long(const char *input);
+
+/* heredoc */
+int	get_eof_word(t_lex *l);
+bool	on_cmd_op(t_lex *l);

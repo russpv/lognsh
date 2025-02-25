@@ -1,6 +1,6 @@
 #include "lex_int.h"
 
-/* add to llist tail a new token, clear buf */
+/* Adds to llist tail a new token, clears buf */
 int	add_token(t_lex *lexer, t_tok *token)
 {
 	debug_print("Lexer: add_token\n");
@@ -10,7 +10,7 @@ int	add_token(t_lex *lexer, t_tok *token)
 		ft_lstadd_back(&lexer->token_list, ft_lstnew(token));
 		return (0);
 	}
-	return (1);
+	return (ERR_ARGS);
 }
 
 /* Creates token based on current buf and ptr, does not add to llist */
@@ -57,4 +57,24 @@ bool	lex_get_incomplete(t_lex *lexer)
 t_list	*lex_get_tokens(t_lex *lexer)
 {
 	return (lexer->token_list);
+}
+
+/* VARNAMELEN
+** This returns length of the string pointed to by 'c'
+** As long as it is a shell variable name
+** NOT including '\0' (e.g. 'size')
+** Will NOT SEGV if c is NULL (UNlike strlen())
+*/
+size_t	ft_varnamelen(const char *c)
+{
+	size_t	i;
+
+	i = 0;
+	if (!c)
+		return (0);
+	if (ft_isdigit(c[0]))
+		return (0);
+	while (c[i] && (ft_isalnum(c[i]) || '_' == c[i]))
+		i++;
+	return (i);
 }

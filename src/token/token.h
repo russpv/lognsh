@@ -37,7 +37,7 @@
 							//" requires \ inside ""
 # define OP_DLESSDASH "<<-" // heredoc with opt tab trimming (not implemented)
 # define OP_CLOBBER ">|"// force overwrite (not implemented)
-# define OP_BACKTICK '`'
+# define OP_BACKTICK '`' //(not implemented)
 
 /* Reserved words */
 # define WD_IF "if"

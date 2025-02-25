@@ -28,6 +28,7 @@
 # define ERR_REDIR 17
 # define ERR_EXECVE 18
 # define ERR_DUP2 19
+# define ERR_BUFFLOW 20
 
 # define ERR_CHILD_FAILED 127
 # define ERR_CMD_NOT_FOUND 127
@@ -55,6 +56,8 @@
 # define ERRMSG_IOCTL SHELL_NAME ": ioctl"
 # define ERRMSG_TCSETATTR SHELL_NAME ": tcsetattr"
 # define ERRMSG_TCGETATTR SHELL_NAME ": tcgetattr"
+
+# define LOGMSG_SIGINT "interrupted\n"
 
 // no includes, but redefs, due to circular dependency
 typedef struct s_global_state	t_state;

@@ -4,7 +4,7 @@
 /* STRLEN
 ** This returns length of the string pointed to by 'c'
 ** NOT including '\0' (e.g. 'size')
-** Will SEGV if c is NULL (like strlen())
+** Will NOT SEGV if c is NULL (UNlike strlen())
 */
 
 size_t	ft_strlen(const char *c)
@@ -12,6 +12,8 @@ size_t	ft_strlen(const char *c)
 	size_t	i;
 
 	i = 0;
+	if (!c)
+		return (0);
 	while (c[i])
 		i++;
 	return (i);

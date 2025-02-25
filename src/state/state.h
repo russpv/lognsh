@@ -10,6 +10,7 @@
 # include <stdbool.h>
 
 # define SHELL_NAME "minish"
+# define MAX_RAW_INPUT_LEN 2056
 
 # ifdef TESTMODE
 #  define TESTFLAG 1

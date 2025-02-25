@@ -25,5 +25,6 @@ bool					lex_get_incomplete(t_lex *lexer);
 t_list					*lex_get_tokens(t_lex *lexer);
 
 // t_lex	*tokenize_more_input(t_lex *lexer);
+size_t	ft_varnamelen(const char *c);
 
 #endif

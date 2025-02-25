@@ -13,28 +13,28 @@
 
 /* Add special $? codes here.
  * buf will start with char after any '$'.
- * Returns 0 if special expansion done. 
+ * Returns 0 if special expansion done or no last exit status.
  * Places the expanded heap string in *value
  */
 int	check_special_expansions(t_state *s, const char *buf,
 	char **value)
 {
-const int	*status = get_status(s);
+	const int	*status = get_status(s);
 
-if (!buf || !value)
-	return (ERR_ARGS);
-if (ft_strcmp(buf, "?") == 0)
-{
-	if (status == NULL)
-		*value = ft_itoa(0);
-	else
-		*value = ft_itoa(*status);
-	if (*value == NULL)
-		return (ERR_MEM);
-	debug_print(DEBUGMSG_CHKSPEC_ANNOUNCE, *value);
-	return (0);
-}
-return (1);
+	if (!buf || !value)
+		return (ERR_ARGS);
+	if (ft_strcmp(buf, "?") == 0)
+	{
+		if (status == NULL)
+			*value = ft_itoa(0);
+		else
+			*value = ft_itoa(*status);
+		if (*value == NULL)
+			return (ERR_MEM);
+		debug_print(DEBUGMSG_CHKSPEC_ANNOUNCE, *value);
+		return (0);
+	}
+	return (1);
 }
 
 /* Looks for env values of key loaded in buf */
