@@ -2,8 +2,7 @@
 # define STATE_INT_H
 
 # include "state.h"
-# include "../env/env.h"
-
+# include "../builtins/env/env.h"
 struct							s_global_state
 {
 	char						**envp;
