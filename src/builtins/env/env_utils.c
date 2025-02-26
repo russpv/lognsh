@@ -1,0 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/09 09:06:55 by dayeo             #+#    #+#             */
+/*   Updated: 2025/02/09 19:58:19 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "env_int.h"
+
+// free all env variables
+void	env_free_list(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env)
+	{
+		tmp = env;
+		env = env->next;
+		free(tmp->key);
+		if (tmp->value)
+			free(tmp->value);
+		free(tmp);
+	}
+}
+
+// print all env variables
+void	env_print(t_env *env)
+{
+	while (env)
+	{
+		printf("%s=", env->key);
+		if (env->value)
+			printf("%s\n", env->value);
+		else
+			printf("\n");
+		env = env->next;
+	}
+}
