@@ -41,7 +41,7 @@ void	destroy_state(t_state *s)
 	if (s->input)
 		free(s->input);
 	if (s->sh_env_list)
-		env_free(s->sh_env_list);
+		env_free_list(s->sh_env_list);
 	free(s);
 }
 
