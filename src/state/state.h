@@ -73,6 +73,9 @@ t_cmd							*get_cmd(t_state *s);
 char							**get_envp(t_state *s);
 char							*get_sh_env(t_state *s, const char *key);
 char							**get_sh_path(t_state *s);
+t_env							*get_sh_env_list(t_state *s);
+t_env							**get_sh_env_list_add(t_state *s);
+char							*get_pwd(t_state *s);
 // int	set_sh_env(t_state *s, const char *key, const char *value);
 		//For export()
 
@@ -85,7 +88,6 @@ void							register_lexer_destroy(t_state *s,
 void							s_free_cmd(t_state *s);
 void							s_free_cmd_lex_parse(t_state *state);
 
-void							s_env_print(t_state *s);
 bool							has_sh_envp(t_state *s);
 
 #endif
