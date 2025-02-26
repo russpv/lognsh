@@ -4,6 +4,7 @@
 # include "../debug.h"
 # include "../../include/libft.h"
 # include "../signal/signal.h"
+# include "../builtins/env/env.h"
 # include "error.h"
 # include <readline/history.h>
 # include <readline/readline.h>
