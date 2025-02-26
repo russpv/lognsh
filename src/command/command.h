@@ -2,7 +2,7 @@
 #ifndef COMMAND_H
 # define COMMAND_H
 
-# include "../env/env.h"
+# include "../builtins/env/env.h"
 # include "../execute/execute.h"
 # include "../parse/parse.h"
 # include "../state/state.h"
