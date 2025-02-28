@@ -47,6 +47,7 @@ static char	*_extract_key(const char *arg, char *equal_pos)
 	char	*key;
 	int		key_len;
 
+	key = NULL;
 	if (!equal_pos)
 		key = ft_strdup(arg);
 	else if (*equal_pos)
