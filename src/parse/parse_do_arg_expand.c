@@ -19,27 +19,9 @@ int	check_special_expansions(t_state *s, const char *buf, char **value)
 {
 	const int	*status = get_status(s);
 
-/*
-	if (!buf)
-		return (ERR_ARGS);
-	debug_print(DMSG_IN, __FUNCTION__, buf);
-	{
-		if (value)
-		{
-			if (status == NULL)
-				*value = ft_itoa(0);
-			else
-				*value = ft_itoa(*status);
-			if (*value == NULL)
-				return (ERR_MEM);
-			debug_print(DMSG_OUT, __FUNCTION__, *value);
-		}
-		return (-1);
-	}
-	return (0);*/
-	
 	if (!buf || !value)
 		return (ERR_ARGS);
+	debug_print(DMSG_IN, __FUNCTION__, buf);
 	if (ft_strcmp(buf, "?") == 0)
 	{
 		if (status == NULL)
@@ -48,10 +30,10 @@ int	check_special_expansions(t_state *s, const char *buf, char **value)
 			*value = ft_itoa(*status);
 		if (*value == NULL)
 			return (ERR_MEM);
-		debug_print(DEBUGMSG_CHKSPEC_ANNOUNCE, *value);
-		return (0);
+		debug_print(DMSG_OUT, __FUNCTION__, *value);
+		return (-1);
 	}
-	return (1);	
+	return (ERR_GENERAL);	
 }
 
 /* Looks for env values of key loaded in buf */
