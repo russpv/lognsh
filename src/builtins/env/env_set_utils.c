@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_get.c                                         :+:      :+:    :+:   */
+/*   env_set_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,36 +12,26 @@
 
 #include "env_int.h"
 
-// this returns a system-managed string. Do not modify!
-char	**env_getenv(void)
+void	env_set_next(t_env *node, t_env *next)
 {
-	char		**res;
-	const char	*path_env = getenv("PATH");
-
-	if (!path_env)
-	{
-		perror("getenv error\n");
-		return (NULL);
-	}
-	res = ft_split(path_env, ':');
-	if (!res)
-	{
-		perror("ft_split error\n");
-		return (NULL);
-	}
-	return (res);
+	if (!node)
+		return ;
+	node->next = next;
 }
 
-// looks for an environment variable in the linked list and returns its value
-char	*env_getenv_value(const char *key, t_env *env)
+void	env_set_node_value(t_env *node, const char *value)
 {
-	if (!key || !env)
-		return (NULL);
-	while (env)
-	{
-		if (ft_strcmp(env->key, key) == 0)
-			return (env->value);
-		env = env->next;
-	}
-	return (NULL);
+	char	*new_value;
+
+	if (!node)
+		return ;
+	if (node->value)
+		free(node->value);
+	if (value)
+		new_value = ft_strdup(value);
+	else
+		new_value = ft_strdup("");
+	if (!new_value)
+		return ;
+	node->value = new_value;
 }

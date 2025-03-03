@@ -11,11 +11,9 @@
 /* ************************************************************************** */
 
 #include "bi_int.h"
-#include "../env/env_int.h"
-#include "../state/state_int.h"
-
 #define CMD_NAME "export"
-#define ERRMSG_NOARGS "no arguments specified\n"
+#define ERRMSG_INVLD "invalid state or arguments\n"
+#define MSG_NOARGS "results are not specified with no arguments(refer to man)\n"
 
 /* EXPORT
  * export [name[=value]]
@@ -27,23 +25,25 @@ int	bi_export(t_state *s, char **argv, int argc)
 	int	i;
 
 	error_occurred = 0;
+	if (!s || !argv)
+		return (print_custom_err(CMD_NAME, ERRMSG_INVLD), 1);
 	if (argc == 1)
-	{
-		print_custom_err(CMD_NAME, ERRMSG_NOARGS);
-		return (ERR_GENERAL);
-	}
+		return (print_custom_err(CMD_NAME, MSG_NOARGS), 0);
 	i = 1;
-	while (argv[i])
+	while (i < argc)
 	{
-		if (!process_arg(s, argv[i], &error_occurred))
+		if (!argv[i])
 		{
+			error_occurred = 1;
 			i++;
 			continue ;
 		}
+		if (!process_arg(s, argv[i], &error_occurred))
+			error_occurred = 1;
 		i++;
 	}
 	if (error_occurred)
-		return (ERR_GENERAL);
+		return (1);
 	else
 		return (0);
 }

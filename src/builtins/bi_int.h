@@ -17,30 +17,24 @@
 
 int					bi_echo(t_state *s, char **args, int argc);
 int					bi_pwd(t_state *s, char **args, int argc);
-int					bi_cd(t_state *s, char **args, int argc);
-int					bi_exit(t_state *s, char **args, int argc);
 int					bi_env(t_state *s, char **argv, int argc);
 int					bi_export(t_state *s, char **argv, int argc);
 int					bi_unset(t_state *s, char **argv, int argc);
+int					bi_cd(t_state *s, char **args, int argc);
+int					bi_exit(t_state *s, char **args, int argc);
 int					bi_exec(t_state *s, char **args, int argc);
 
-// export helper functions
+//int	env_set_value(t_env **env_list, const char *key, const char *value);
 t_env				*env_find_key(t_env *env_list, const char *key);
-int					is_valid_key(const char *key);
-int					validate_key(const char *key);
-int					handle_underscore(const char *key);
-int					handle_no_equal(const char *arg, int *error_occurred);
+int					_update_existing_var(t_env *existing_key, \
+						const char *value);
+
+// export helper functions (bi_export_do 1 & 2)
+int					_process_arg_update_add(t_state *s, \
+						const char *arg, char *equal_pos, \
+						int *error_occurred);
 int					process_arg(t_state *s, const char *arg, \
 						int *error_occurred);
-
-// unset helper function
-void				env_remove_key(t_env **env_list, const char *key);
-
-// pwd helper function
-const char			*env_find_value(t_env *env_list, const char *key);
-
-// exit helper functions
-int					is_numeric(const char *str);
 
 /* This ensures block buffer is flushed during execution
  * as a background process

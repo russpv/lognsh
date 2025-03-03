@@ -65,9 +65,9 @@ void	remove_env_node(t_env **env, const char *key)
 		prev = tmp;
 		tmp = tmp->next;
 	}
-	if (tmp == NULL) //  key not found
+	if (tmp == NULL)
 		return ;
-	if (prev == NULL) // removing head
+	if (prev == NULL)
 		*env = tmp->next;
 	else
 		prev->next = tmp->next;
@@ -76,8 +76,9 @@ void	remove_env_node(t_env **env, const char *key)
 		free(tmp->value);
 	free(tmp);
 }
+
 // helper function for copy_envp() - extracts key and value from env var
-int	extract_key_value(const char *env_str, char **key, char **value)
+static int	extract_key_value(const char *env_str, char **key, char **value)
 {
 	char	*equal_pos;
 
@@ -113,12 +114,7 @@ t_env	*copy_envp(char **envp)
 		{
 			new_node = create_env_node(key, value);
 			if (!new_node)
-			{
-				free(key);
-				free(value);
-				env_free(env_list);
-				return (NULL);
-			}
+				return (free(key), free(value), env_free_list(env_list), NULL);
 			add_env_node(&env_list, new_node);
 			free(key);
 			free(value);

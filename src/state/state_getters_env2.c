@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bi.h                                               :+:      :+:    :+:   */
+/*   state_getters_env2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,29 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BI_H
-# define BI_H
+#include "state_int.h"
 
-# include "../../include/libft.h"
-# include "../debug.h"
-# include "../state/state.h"
-# include "env/env.h"
-# include <unistd.h>
-# include <stdio.h>
+t_env	*get_sh_env_list(t_state *s)
+{
+	if (!s)
+		return (NULL);
+	return (s->sh_env_list);
+}
 
-/* These are indexed in the lexer */
-# define BI_ECHO "echo"
-# define BI_CD "cd"
-# define BI_PWD "pwd"
-# define BI_EXPORT "export"
-# define BI_UNSET "unset"
-# define BI_ENV "env"
-# define BI_EXIT "exit"
-# define BI_EXEC "exec"
-# define BI_COUNT 8
+t_env	**get_sh_env_list_add(t_state *s)
+{
+	if (!s)
+		return (NULL);
+	return (&s->sh_env_list);
+}
 
-typedef int	(*t_builtin_fn)(t_state *s, char **args, int argc);
-
-t_builtin_fn	get_builtin(char *command);
-
-#endif
+char	*get_pwd(t_state *s)
+{
+	if (!s)
+		return (NULL);
+	return (s->pwd);
+}

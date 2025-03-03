@@ -11,42 +11,28 @@
 /* ************************************************************************** */
 
 #include "bi_int.h"
-
-#define CMD_NAME "pwd"
-
-const char	*env_find_value(t_env *env_list, const char *key)
-{
-	while (env_list)
-	{
-		if (ft_strcmp(env_list->key, key) == 0)
-			return (env_list->value);
-		env_list = env_list->next;
-	}
-	return (NULL);
-}
+#define ERRMSG_INVLD "invalid state or arguments\n"
+#define ERRMSG_PWDNOTSET "PWD cannot get current directory environment.\n"
 
 int	bi_pwd(t_state *s, char **args, int argc)
 {
-	const char	*pwd_value;
-	char		*cwd;
+	char	*pwd;
 
 	(void)args;
 	(void)argc;
-	pwd_value = env_find_value(s->sh_env_list, "PWD");
-	if (pwd_value)
+	if (!s)
 	{
-		write(STDOUT_FILENO, pwd_value, ft_strlen(pwd_value));
-		write(STDOUT_FILENO, "\n", 1);
-		return (0);
-	}
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-	{
-		print_perror(CMD_NAME);
+		print_custom_err("pwd", ERRMSG_INVLD);
 		return (1);
 	}
-	write(STDOUT_FILENO, cwd, ft_strlen(cwd));
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+	{
+		print_custom_err("pwd", ERRMSG_PWDNOTSET);
+		return (1);
+	}
+	write(STDOUT_FILENO, pwd, ft_strlen(pwd));
 	write(STDOUT_FILENO, "\n", 1);
-	free(cwd);
+	free(pwd);
 	return (0);
 }

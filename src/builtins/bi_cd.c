@@ -12,50 +12,86 @@
 
 #include "bi_int.h"
 
-int	bi_cd(t_state *s, char **argv, int argc)
-{
-	char	*target_dir;
-	char	*old_pwd;
-	char	*new_pwd;
+#define ERRMSG_OLDPWDNOTSET "OLDPWD not set.\n"
+#define ERRMSG_ARGC "No such file or directory.\n"
+#define ERRMSG_INVLD "invalid state or arguments\n"
+#define ERRMSG_TOOMANYARGS "too many arguments.\n"
+#define ERRMSG_NOHOME "HOME not set.\n"
+#define ERRMSG_BADMALLOC "memory allocation failed.\n"
 
-	(void)argc;
-	(void)s;
-	if (argv[2])
+static int	env_set_value(t_env **env_list, const char *key, const char *value)
+{
+	t_env	*node;
+
+	if (!env_list || !key)
+		return (1);
+	node = env_find_key(*env_list, key);
+	if (node)
 	{
-		write(STDERR_FILENO,
-				SHELL_NAME ": cd: too many arguments\n",
-				sizeof(SHELL_NAME ": cd: too manyarguments\n"));
-		return (ERR_GENERAL);
+		if (!_update_existing_var(node, value))
+			return (1);
 	}
-	// if no args > do nothing
-	if (!argv[1])
-		return (0);
-	// Assign directory path to target_dir
-	target_dir = argv[1];
-	// save old pwd before changing
-	old_pwd = getenv("PWD");
-	// if directory does not exist > error msg
-	if (chdir(target_dir) == -1)
+	else
 	{
-		write(STDERR_FILENO, SHELL_NAME ": cd: ", sizeof(SHELL_NAME ": cd: "));
-		write(STDERR_FILENO, target_dir, ft_strlen(target_dir));
-		write(STDERR_FILENO, ": ", 2);
-		write(STDERR_FILENO, strerror(errno), ft_strlen(strerror(errno)));
-		write(STDERR_FILENO, "\n", 1);
-		return (ERR_CHDIR);
+		node = create_env_node(key, value);
+		if (!node)
+			return (1);
+		add_env_node(env_list, node);
 	}
-	// new working directory with dynamic allocation
-	new_pwd = getcwd(NULL, 0);
-	if (!new_pwd)
-	{
-		write(STDERR_FILENO,
-			SHELL_NAME ": cd: error retrieving current directory\n",
-			sizeof(SHELL_NAME ": cd: error retrieving current directory\n"));
-		return (ERR_GETCWD);
-	}
-	if (old_pwd)
-		setenv("OLDPWD", old_pwd, 1); // RKP: Can't use this func
-	setenv("PWD", new_pwd, 1);        // RKP: Can't use this func
-	free(new_pwd);                    // must free getcwd(NULL, 0)
 	return (0);
+}
+
+static int	change_dir(t_state *s, const char *target)
+{
+	char	*new_dir;
+	char	*old_pwd;
+
+	if (ft_strcmp(target, "-") == 0)
+	{
+		new_dir = env_getenv_value("OLDPWD", get_sh_env_list(s));
+		if (!new_dir || ft_strcmp(new_dir, "") == 0)
+			return (print_custom_err("cd", ERRMSG_OLDPWDNOTSET), 1);
+	}
+	else
+		new_dir = (char *)target;
+	if (chdir(new_dir) != 0)
+	{
+		print_custom_err("cd", ERRMSG_ARGC);
+		return (1);
+	}
+	old_pwd = get_pwd(s);
+	if (old_pwd && env_set_value(get_sh_env_list_add(s), \
+		"OLDPWD", old_pwd) != 0)
+	{
+		print_custom_err("cd", ERRMSG_BADMALLOC);
+		return (1);
+	}
+	free(old_pwd);
+	return (0);
+}
+
+int	bi_cd(t_state *s, char **args, int argc)
+{
+	char	*target;
+
+	if (!s || !args)
+	{
+		print_custom_err("cd", ERRMSG_INVLD);
+		return (1);
+	}
+	if (argc == 1)
+		target = env_getenv_value("HOME", get_sh_env_list(s));
+	else if (argc == 2)
+		target = args[1];
+	else
+	{
+		print_custom_err("cd", ERRMSG_TOOMANYARGS);
+		return (1);
+	}
+	if (!target || ft_strcmp(target, "") == 0)
+	{
+		print_custom_err("cd", ERRMSG_NOHOME);
+		return (1);
+	}
+	return (change_dir(s, target));
 }

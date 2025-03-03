@@ -47,6 +47,7 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 	const t_cmd	*c = (const t_cmd *)get_cmd(s);
 	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
 	const int	argc = (const int)c_get_argc((t_cmd *)c);
+	int		exit_code;
 
 	debug_print(DBGMSG_ECMD_ANNOUNCE);
 	if (!argv || !bi || !c)
@@ -55,7 +56,8 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 	if (0 != p_do_redirections(c_get_node((t_cmd *)c)))
 		return (ERR_REDIR);
 	debug_print(DBGMSG_ECMD_DOBLTIN);
-	if (0 != bi(s, (char **)argv, argc))
+	exit_code = bi(s, (char **)argv, argc);
+	if (0 != exit_code)
 		debug_print(DBGMSG_ECMD_ERRBLTIN);
 	restore_redirs((t_cmd *)c);
 	s_free_cmd(s);

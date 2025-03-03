@@ -11,10 +11,9 @@
 /* ************************************************************************** */
 
 #include "bi_int.h"
-#include "../state/state.h"
 
 #define CMD_NAME "env"
-#define ERRMSG_ARGC "too many arguments\n"
+#define ERRMSG_ARGC "No such file or directory.\n"
 #define ERRMSG_ENV "failed to retrieve environment\n"
 
 int	bi_env(t_state *s, char **argv, int argc)
@@ -25,13 +24,13 @@ int	bi_env(t_state *s, char **argv, int argc)
 	if (argv[1])
 	{
 		print_custom_err(CMD_NAME, ERRMSG_ARGC);
-		return (ERR_GENERAL);
+		return (127);
 	}
 	if (!s || !has_sh_envp(s))
 	{
 		print_custom_err(CMD_NAME, ERRMSG_ENV);
 		return (ERR_GENERAL);
 	}
-	s_env_print(s);
+	env_print(get_sh_env_list(s));
 	return (0);
 }

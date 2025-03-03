@@ -12,33 +12,8 @@
 
 #include "env_int.h"
 
-// helper function for copy_envp() to get env size
-int	get_env_size(char **envp)
-{
-	int	size;
-
-	size = 0;
-	while (envp[size])
-		size++;
-	return (size);
-}
-
-// get list size of env in linked list
-int	get_env_list_size(t_env *env_list)
-{
-	int	count;
-
-	count = 0;
-	while (env_list)
-	{
-		count++;
-		env_list = env_list->next;
-	}
-	return (count);
-}
-
 // free all env variables
-void	env_free(t_env *env)
+void	env_free_list(t_env *env)
 {
 	t_env	*tmp;
 
