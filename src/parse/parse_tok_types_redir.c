@@ -22,7 +22,8 @@ bool	is_filename_token(t_tok *tok)
 {
 	const enum e_tok_type	type = tok_get_type(tok);
 
-	return (type == TOK_NAME || type == TOK_WORD || type == TOK_HEREDOC_WORD);
+	return (type == TOK_GROUP_WORD || type == TOK_NAME || type == TOK_WORD
+		|| type == TOK_HEREDOC_WORD);
 }
 
 /* Returns tree if is a command node with redc > 0 */

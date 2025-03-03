@@ -21,72 +21,30 @@ bool	on_cmd_op(t_lex *l)
 	return (false);
 }
 
+// Returns true if buf[0] is '$' and ptr on '?'
 bool	is_dollar_question(t_lex *lexer)
 {
 	return (lexer->buf[0] == '$' && *(lexer->ptr) == '?');
 }
 
-// If char s matches any NORMALDELIMS
-bool	is_normal_delim(unsigned char s)
-{
-	debug_print("Lexer: --------_is_normal_delim:_%c_", s);
-	if (ft_strchr(NORMALDELIMS, s))
-	{
-		debug_print("Lexer: YES\n");
-		return (true);
-	}
-	debug_print("Lexer: NO\n");
-	return (false);
-}
-
-/* A subset of normal delimiters to trigger state
- * transition. If "<<" , must change state
- */
-bool	is_transition_char(t_lex *l, unsigned char s)
-{
-	debug_print("Lexer: --------_is_transition_char:_%c_", s);
-	if (s == 0)
-	{
-		debug_print("Lexer: YES-NULL\n");
-		return (true);
-	}
-	if (ft_strchr(NORMALTRANSITIONS, s))
-	{
-		if (s == '<')
-		{
-			if ('<' == *(l->ptr + 1))
-			{
-				debug_print("Lexer: YES\n");
-				return (true);
-			}
-		}
-		else
-		{
-			debug_print("Lexer: YES\n");
-			return (true);
-		}
-	}
-	debug_print("Lexer: NO\n");
-	return (false);
-}
-
+// returns TOK_WORD if alphanumeric or underscore, else TOK_NAME
 int	word_or_name(const char *s)
 {
-	debug_print("Lexer: --------_word_or_name:_%s_", s);
+	debug_print(_MOD_": -------- %s:_%s_", __FUNCTION__, s);
 	if (!*s)
 	{
-		debug_print("Lexer: ERR\n");
+		debug_print(" ERR\n");
 		return (TOK_ERR);
 	}
 	while (*s)
 	{
 		if (!(ft_isalnum(*s) || '_' == *s))
 		{
-			debug_print("Lexer: WORD\n");
+			debug_print(" WORD\n");
 			return (TOK_WORD);
 		}
 		s++;
 	}
-	debug_print("Lexer: NAME\n");
+	debug_print(" NAME\n");
 	return (TOK_NAME);
 }

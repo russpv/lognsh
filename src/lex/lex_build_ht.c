@@ -64,6 +64,7 @@ void	build_hasht(t_lex *lexer)
 {
 	const t_ht	ht = lexer->hasht;
 
+	assert(NULL != ht);
 	ht_install(ht, "\0", lex_create_ht_node(false, TOK_EOF), NULL);
 	ht_install(ht, "$?", lex_create_ht_node(false, TOK_EXIT_STATUS), NULL);
 	ht_install(ht, "'\n'", lex_create_ht_node(false, TOK_NEWLINE), NULL);

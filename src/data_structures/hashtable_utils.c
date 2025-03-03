@@ -52,6 +52,8 @@ struct s_ht_entry	*ht_install(t_ht ht, char *name, void *data,\
 
 	if (NULL == name)
 		return (NULL);
+	assert(NULL != ht);
+	assert(NULL != name);
 	np = ht_lookup(ht, name);
 	if (NULL == np)
 	{

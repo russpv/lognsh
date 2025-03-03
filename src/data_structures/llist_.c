@@ -19,6 +19,8 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 
 	if (new == NULL)
 		return ;
+	if (lst == NULL)
+		write(2, "WTF", 3);
 	if (*lst == NULL)
 	{
 		*lst = new;

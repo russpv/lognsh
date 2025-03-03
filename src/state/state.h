@@ -11,6 +11,7 @@
 
 # define SHELL_NAME "minish"
 # define MAX_RAW_INPUT_LEN 2056
+# define MAX_ENVVAR_LEN 1024  // length of variable names
 
 # ifdef TESTMODE
 #  define TESTFLAG 1
@@ -65,6 +66,7 @@ void							set_parser(t_state *state, t_parser *p);
 void							set_lexer(t_state *state, t_lex *l);
 void							set_input(t_state *s, char *input);
 void							set_command(t_state *s, t_cmd *c);
+void	set_tmp(t_state *s, char *str);
 
 int								*get_status(t_state *s);
 char							*get_input(t_state *s);
@@ -73,6 +75,9 @@ t_cmd							*get_cmd(t_state *s);
 char							**get_envp(t_state *s);
 char							*get_sh_env(t_state *s, const char *key);
 char							**get_sh_path(t_state *s);
+char	*get_tmp(t_state *s);
+t_lex	*get_lexer(t_state *s);
+
 // int	set_sh_env(t_state *s, const char *key, const char *value);
 		//For export()
 

@@ -7,8 +7,8 @@
 # define ERRMSG_HEREDOC_MALLOC "Memory allocation failed for redirection heredoc\n"
 # define ERRMSG_REDIR_NODE_MALLOC "Failed to create execution node for redirection\n"
 # define ERRMSG_REDIR_FAIL "Failed to parse redirection\n"
-# define DBGMSG_REDIR_FN "Parser: _process_normal_redir filename:%s\n"
-# define DBGMSG_REDIR_GOT "Parser: Redirection: type=%d symbol=%s\n"
+# define DBGMSG_REDIR_FN _MOD_ ": _process_normal_redir filename:%s\n"
+# define DBGMSG_REDIR_GOT _MOD_ ": Redirection: type=%d symbol=%s\n"
 
 /* Creates new redir node and adds to t_list.
  * Freeing handled by caller.
@@ -25,7 +25,7 @@ static int	_add_redir(t_ast_node *node, t_redir_data *red)
 		err(ERRMSG_REDIR_NODE_MALLOC);
 		return (ERR_MEM);
 	}
-	debug_print("Parser: Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n",\
+	debug_print(_MOD_ ": Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n",\
 		red->symbol, red->filename, red->heredoc_body, red->do_globbing,\
 		red->do_expansion);
 	ft_lstadd_back(p_get_redirs_ptr(node), new);
@@ -75,7 +75,7 @@ static int	_process_heredoc_redir(t_redir_data *red, t_tok *tok, t_ast_node *cmd
 		return (ERR_ARGS);
 	if (p_get_type(cmd) != AST_NODE_CMD)
 		return (ERR_ARGS);
-	debug_print("Parser: Got heredoc document\n");
+	debug_print(_MOD_ ": Got heredoc document\n");
 	red->symbol = NULL;
 	red->filename = NULL;
 	red->do_expansion = tok_get_expansion(tok);
@@ -117,7 +117,7 @@ static int	_parse_redir(t_parser *p, t_ast_node *node)
 		if (0 != _add_redir(node, red))
 			return (destroy_redir(red), ERR_GENERAL);
 	}
-	debug_print("Parser: _parse_redir: curr peek tok: %s\n",
+	debug_print(_MOD_ ": _parse_redir: curr peek tok: %s\n",
 		tok_get_raw(peek(p)));
 	return (0);
 }
@@ -138,6 +138,6 @@ int	process_redir(t_parser *p, t_ast_node *ast_node)
 		}
 	}
 	else
-		debug_print("Parser: Not a redir:%s\n", tok_get_raw(peek(p)));
+		debug_print(_MOD_ ": Not a redir:%s\n", tok_get_raw(peek(p)));
 	return (0);
 }

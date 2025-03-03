@@ -1,10 +1,10 @@
 #include "parse_int.h"
 
 #define ERRMSG_OPENDIR "ERR opendir()\n"
-#define DBGMSG_GOTARGS "Parser: p_do_globbing_args - arg: %s, lst:%p\n"
-#define DBGMSG_MATCHES "Parser: p_do_globbing_args found %d matches, 1st: %s\n"
-#define DBGMSG_GOTPATTERN "Parser: match_glob got pattern: %s\n"
-#define DBGMSG_GLOBMATCH "Parser: match_glob matched: %s\n"
+#define DBGMSG_GOTARGS _MOD_": p_do_globbing_args - arg: %s, lst:%p\n"
+#define DBGMSG_MATCHES _MOD_": p_do_globbing_args found %d matches, 1st: %s\n"
+#define DBGMSG_GOTPATTERN _MOD_": match_glob got pattern: %s\n"
+#define DBGMSG_GLOBMATCH _MOD_": match_glob matched: %s\n"
 
 /* Matches char for char until '*', then until the 
  * char after, or returns true if nothing after.

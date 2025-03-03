@@ -1,12 +1,11 @@
 #include "parse_int.h"
 
-#define DBGMSG_P_ANNOUNCE "Parser: \t###### parse ####### \n"
-#define DBGMSG_PNODE_ANNOUNCE "Parser: ######## parse_full_cmd ########\n"
-#define DBGMSG_PNODE_GOT "Parser: parse_full_cmd: got tok of %s \n"
-#define DBGMSG_PNODE_STOP "Parser: reached end of tokens\n"
-#define DBGMSG_PNODE_NOTPROC "Parser: not a proc...\n"
-#define DBGMSG_PNODE_NOTCMD "Parser: not a cmd...\n"
-#define DBGMSG_PNODE_NOTPIPE "Parser: not a pipe...\n"
+#define LMSG_IN _MOD_": \t###### %s ####### \n"
+#define DMSG_GOT _MOD_": %s: got tok of %s \n"
+#define DBGMSG_PNODE_STOP _MOD_": reached end of tokens\n"
+#define DBGMSG_PNODE_NOTPROC _MOD_": not a proc...\n"
+#define DBGMSG_PNODE_NOTCMD _MOD_": not a cmd...\n"
+#define DBGMSG_PNODE_NOTPIPE _MOD_": not a pipe...\n"
 #define ERRMSG_PNODE_SYNTAX "Syntax error near: [TODO, empty cmd okay]\n"
 
 /* Returns AST node.
@@ -23,11 +22,11 @@
  */
 t_ast_node	*parse_full_cmd(t_state *s, t_parser *p)
 {
-	debug_print(DBGMSG_PNODE_ANNOUNCE);
-	debug_print(DBGMSG_PNODE_GOT, tok_get_raw(peek(p)));
+	log_print(LMSG_IN, __FUNCTION__);
+	debug_print(DMSG_GOT, __FUNCTION__, tok_get_raw(peek(p)));
 	if (is_at_end(p))
 	{
-		debug_print(DBGMSG_PNODE_STOP);
+		log_print(DBGMSG_PNODE_STOP);
 		return (NULL);
 	}
 	if (is_open_paren(peek(p)))
@@ -58,7 +57,6 @@ t_ast_node	*test_parse(t_state *s, t_parser *parser)
 	return (ast);
 }
 
-// 
 t_ast_node	*parse(t_state *s, char *input)
 {
 	t_lex		*lexer;
@@ -72,7 +70,7 @@ t_ast_node	*parse(t_state *s, char *input)
 		return (set_error(s, ERR_TOKEN), NULL);
 	tokens = lex_get_tokens(lexer);
 	parser = create_parser(s, tokens);
-	debug_print(DBGMSG_P_ANNOUNCE);
+	log_print(LMSG_IN, __FUNCTION__);
 	while (!is_at_end(parser) && !parser->parse_error)
 		ast = parse_full_cmd(s, parser);
 	parser->ast = ast;

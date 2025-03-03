@@ -11,9 +11,6 @@ static inline void	_skip_to_next_op(t_lex *l)
 // Determines type of EOF, quoted or not
 static inline void	_put_eof_in_buf(t_lex *l)
 {
-	size_t	buf_idx;
-
-	buf_idx = 0;
 	while (*l->ptr && *l->ptr != '\n' && !ft_isspace(*l->ptr))
 	{
 		if ('\'' == *l->ptr || '\"' == *l->ptr)
@@ -21,7 +18,7 @@ static inline void	_put_eof_in_buf(t_lex *l)
 			l->do_expansion = false;
 			l->ptr++;
 		}
-		l->buf[buf_idx++] = *l->ptr++;
+		l->buf[l->buf_idx++] = *l->ptr++;
 	}
 }
 

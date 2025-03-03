@@ -7,13 +7,13 @@
 #define LOGMSG_SIG _MOD_": "LOGMSG_SIGINT
 
 /* Puts readline line onto buf. Omits '\0' from readline. */
-static inline int	_load_line(t_lex *l, const char *line, size_t *buf_idx)
+static inline int	_load_line(t_lex *l, const char *line)
 {
 	if (true == is_too_long(line))
 		return (ERR_BUFFLOW);
 	while (*line)
-		l->buf[(*buf_idx)++] = *line++;
-	l->buf[(*buf_idx)++] = '\n';
+		l->buf[(l->buf_idx)++] = *line++;
+	l->buf[(l->buf_idx)++] = '\n';
 	return (0);
 }
 
@@ -35,9 +35,7 @@ static inline bool	_line_is_eof(t_lex *l, const char *line)
 static inline int	_match_heredoc(t_lex *l)
 {
 	char	*line;
-	size_t	buf_idx;
 
-	buf_idx = 0;
 	while (1)
 	{
 		line = readline("> ");
@@ -55,7 +53,7 @@ static inline int	_match_heredoc(t_lex *l)
 			l->eof_word = NULL;
 			return (0);
 		}
-		_load_line(l, line, &buf_idx);
+		_load_line(l, line);
 		free(line);
 	}
 }

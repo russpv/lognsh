@@ -4,11 +4,11 @@
 #define ERRMSG_PATH_MALLOC "Allocation for path value failed.\n"
 #define ERRMSG_NULL_EXPAN "Null expansion variable.\n"
 
-#define DEBUGMSG_REDIRP_ANNOUNCE "Parser: p_do_redir_processing...\n"
-#define DBGMSG_REDIRP_GOT "Parser: p_do_redir_processing got: glob_%d exp_%d\n"
+#define DEBUGMSG_REDIRP_ANNOUNCE _MOD_": p_do_redir_processing...\n"
+#define DBGMSG_REDIRP_GOT _MOD_": p_do_redir_processing got: glob_%d exp_%d\n"
 
-#define DEBUGMSG_DOEXP_ANNOUNCE "Parser: p_do_expansion got: %s\n"
-#define DEBUGMSG_DOEXP_RES "Parser: p_do_expansion found: %s\n"
+#define DEBUGMSG_DOEXP_ANNOUNCE _MOD_": p_do_expansion got: %s\n"
+#define DEBUGMSG_DOEXP_RES _MOD_": p_do_expansion found: %s\n"
 
 /* Looks for env values of key loaded in buf */
 static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf,
@@ -90,7 +90,8 @@ static int	_p_do_heredoc_expansion(t_state *s, t_redir_data *r)
 		if ((unsigned char)OP_ENV == *ptr)
 		{
 			len = ft_varnamelen((const char *)(ptr + 1));
-			len |= (int)(check_special_expansions(s, ft_memcpy(buf, ptr + 1, 1), NULL) < 0);
+			len |= (int)(check_special_expansions(s, ft_memcpy(buf, ptr + 1, 1),
+						NULL) < 0);
 			if (len > 0)
 			{
 				++ptr;
@@ -98,14 +99,14 @@ static int	_p_do_heredoc_expansion(t_state *s, t_redir_data *r)
 				if (0 != _insert_expanded_var(s, buf, &ptr, r))
 					return (ERR_MEM);
 				ft_memset(buf, 0, len);
-				continue;
+				continue ;
 			}
 		}
 		else if ((unsigned char)TK_ESC == *ptr)
 		{
 			ft_memmove(ptr, ptr + 1, ft_strlen(ptr));
 			ptr++;
-			continue;
+			continue ;
 		}
 		ptr++;
 	}

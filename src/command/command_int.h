@@ -2,6 +2,7 @@
 # define COMMAND_INT_H
 
 # include "command.h"
+# define _MOD_ "Command"
 
 /* Holds context for current command */
 struct					s_cmd

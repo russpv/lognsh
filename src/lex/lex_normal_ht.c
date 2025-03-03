@@ -12,7 +12,7 @@ static inline bool	_is_not_delimd(const char *s)
 	return (false);
 }
 
-/* Returns hashtable matches using current buf */
+/* Returns hashtable matches by tokenizing current buf */
 t_tok	*lex_ht_lookup(t_lex *lexer)
 {
 	struct s_ht_entry	*res;
@@ -24,7 +24,7 @@ t_tok	*lex_ht_lookup(t_lex *lexer)
 		debug_print("Lexer: Found hasht match. Ptr: %c\n", *lexer->ptr);
 		if (true == ((t_ht_data)(ht_get_payload(res)))->is_substring)
 			res = do_one_char_lookahead(lexer, res);
-		if (true == is_normal_delim((unsigned char) *lexer->ptr) \
+		if (true == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)) \
 			|| true == _is_not_delimd(lexer->buf))
 		{
 			debug_print("Lexer: Creating token...\n");
@@ -55,7 +55,7 @@ struct s_ht_entry	*do_one_char_lookahead(t_lex *lexer, struct s_ht_entry *res)
 	test = ht_lookup(lexer->hasht, lexer->buf);
 	if (test)
 	{
-		if (true == is_normal_delim((unsigned char) *(lexer->ptr + 1)))
+		if (true == is_normal_delim(*(lexer->ptr + 1), (lexer->ptr + 2)))
 		{
 			lexer->ptr++;
 			return (test);

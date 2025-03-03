@@ -29,6 +29,8 @@ void	destroy_arg(void *in)
 	debug_print("Parser: destroy_arg...\n");
 	if (NULL == arg)
 		return ;
+	if (arg->lst_tokens)
+		ft_lstclear(&arg->lst_tokens, destroy_token);
 	if (arg->raw)
 		free(arg->raw);
 	if (arg->tmp)

@@ -15,3 +15,13 @@ int	*get_status(t_state *s)
 {
 	return (&s->current_exit_code);
 }
+
+char	*get_tmp(t_state *s)
+{
+	return (s->tmp);
+}
+
+t_lex	*get_lexer(t_state *s)
+{
+	return (s->current_lexer);
+}

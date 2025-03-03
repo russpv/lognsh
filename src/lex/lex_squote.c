@@ -5,57 +5,46 @@
  * without incrementing ptr.
  * Stops buffer overflow.
  */
-static inline int	_load_buf(t_lex *lexer, int *buf_idx)
+static inline int	_load_buf(t_lex *lexer)
 {
-	debug_print("Lexer: _load_buf... ptr:_%c_\n", *lexer->ptr);
+	debug_print(_MOD_": %s, ptr:_%c_\n", __FUNCTION__, *lexer->ptr);
 	if ((unsigned char)OP_SQUOTE == *lexer->ptr)
-	{
-		debug_print("Lexer: ': found closing quote\n");
-		return (1);
-	}
+		return (debug_print(_MOD_": found closing quote\n"), 1);
 	else
 	{
-		if (*buf_idx < LEX_BUFSZ - 1)
+		if (lexer->buf_idx < LEX_BUFSZ - 1)
 		{
 			if ((unsigned char)OP_NULL == *lexer->ptr)
-			{
-				debug_print("Lexer: ': found null before closing quote\n");
-				return (1);
-			}
-			lexer->buf[(*buf_idx)] = *lexer->ptr;
-			(*buf_idx)++;
+				return (debug_print(_MOD_": found null before closing quote\n"), 1);
+			lexer->buf[(lexer->buf_idx)] = *lexer->ptr;
+			(lexer->buf_idx)++;
 		}
 		else
-		{
-			print_lex_buffer_overflow();
-			return (1);
-		}
+			return (print_lex_buffer_overflow(), 1);
 	}
 	return (0);
 }
 
-/* Expected to add only one token to the llist
+/* Expected to add only one token to the llist at most
  * Assumes ptr is on the first single quote
  * If '\'' not found, flags incomplete only
  * Ignores missing closing quote.
+ * Creates token only if normal delims found
  */
 int	tokenize_single_quotes(t_lex *lexer)
 {
-	int		buf_idx;
 	t_tok	*token;
 
-	debug_print("Lexer: tokenize_single_quotes... ptr:_%c_\n", *lexer->ptr);
-	buf_idx = 0;
+	debug_print(_MOD_": STATE: %s, ptr:_%c_\n", __FUNCTION__, *lexer->ptr);
 	while (++lexer->ptr)
-		if (1 == _load_buf(lexer, &buf_idx))
+		if (1 == _load_buf(lexer))
 			break ;
 	if ((unsigned char)OP_NULL == *lexer->ptr)
 	{
-		debug_print("Lexer: WARNING: FOUND NULL\n");
-		lexer->is_incomplete = true;
+		debug_print(_MOD_": WARNING: FOUND NULL\n");
+		lexer->input_incomplete = true;
 	}
 	token = lex_create_token(lexer, TOK_WORD);
-	debug_print("Lexer: tokenize_single_quotes: created token\n");
 	if (NULL == token)
 		return (1);
 	if (0 != add_token(lexer, token))
@@ -69,7 +58,7 @@ int	tokenize_null(t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print("Lexer: tokenize_null...\n");
+	debug_print(_MOD_": %s\n", __FUNCTION__);
 	if (lexer)
 	{
 		token = create_token("\0", TOK_EOF, (size_t)(lexer->ptr

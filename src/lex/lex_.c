@@ -17,17 +17,30 @@ static inline bool	_allocate_buf_and_hasht(t_lex *lexer)
 	if (!lexer->buf)
 		return (false);
 	ft_memset(lexer->buf, 0, LEX_BUFSZ);
+	lexer->buf_idx = 0;
 	lexer->hasht = ht_create();
 	if (!lexer->hasht)
 		free(lexer->buf);
 	return (lexer->hasht != NULL);
 }
 
+void	init_token_masks(t_lex *l)
+{
+	l->glob_mask = malloc(sizeof(l->buf));
+	if (NULL == l->glob_mask)
+		err("ERR DO SOMETHING ABOUT MEM!!!");
+	ft_memset(l->glob_mask, 0, sizeof(l->buf));
+	l->expd_mask = malloc(sizeof(l->buf));
+	if (NULL == l->expd_mask)
+		err("ERR DO SOMETHING ABOUT MEM!!!");
+	ft_memset(l->expd_mask, 0, sizeof(l->buf));
+}
+
 t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 {
 	t_lex	*lexer;
 
-	debug_print("Lexer: create_lexer\n");
+	debug_print(_MOD_": %s\n", __FUNCTION__);
 	lexer = malloc(sizeof(t_lex));
 	if (lexer)
 	{
@@ -38,9 +51,15 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 		lexer->do_expansion = INITVAL;
 		lexer->do_globbing = INITVAL;
 		lexer->token_list = NULL;
-		lexer->is_incomplete = false;
+		lexer->input_incomplete = false;
+		lexer->is_subtoken = false;
 		lexer->do_heredoc_expansion = true;
 		lexer->eof_word = NULL;
+		lexer->expd_mask = NULL;
+		lexer->glob_mask = NULL;
+		lexer->last_grp_tok = NULL;
+		lexer->tokc = 0;
+		lexer->keep_dollar = LEXERKEEP$;
 		register_lexer_destroy(st, destroy_lexer);
 		if (false == _allocate_buf_and_hasht(lexer))
 		{
@@ -58,7 +77,7 @@ void	destroy_lexer(void *instance)
 	t_lex	*lexer;
 
 	lexer = (t_lex *)instance;
-	debug_print("Lexer: destroy_lexer...\n");
+	debug_print(_MOD_": destroy_lexer...\n");
 	if (!lexer)
 		return ;
 	if (lexer->buf)
@@ -97,10 +116,10 @@ t_lex	*tokenize(t_state *s, const char *input)
 	{
 		while (DONE != lexer->state)
 		{
-			if (1 == lexer->tokenizer(lexer))
+			if (0 != lexer->tokenizer(lexer))
 			{
 				destroy_lexer(lexer);
-				return (debug_print("Lexer: tokenizer ERR\n"), NULL);
+				return (debug_print(_MOD_": tokenizer ERR\n"), NULL);
 			}
 			do_state_transition(lexer);
 		}

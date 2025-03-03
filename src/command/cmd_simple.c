@@ -1,8 +1,8 @@
 #include "command_int.h"
 
 #define NO_CMD -10
-#define LOGMSG_CEXEC_ANNOUNCE "Cmd: \t### cmd_exec_simple ###\n"
-#define LOGMSG_CEXEC_DONE "Cmd: \tFinished cmd_exec_simple.\n"
+#define LMSG_IN _MOD_ ": \t### %s ###\n"
+#define LMSG_OUT _MOD_ ": \tFinished %s.\n"
 
 /* Adds arg[0] as command name if no name string present
  * if node expansion flag is set. Removes arg[0] then.
@@ -31,9 +31,11 @@ static int	_do_ops(t_state *s, t_ast_node *a, t_cmd *c)
 	res = p_do_arg_processing(s, a, &args);
 	if (0 != res)
 		return (res);
+	fprintf(stderr, "haha\n");
 	exit_code = _handle_no_command(a, args);
 	if (NO_CMD == exit_code)
 		return (exit_code);
+	fprintf(stderr, "haha\n");
 	c->argv = c_argstoargv(args, p_get_cmd(a), p_get_argc(a));
 	c->argc = p_get_argc(a) + 1;
 	c->redc = p_get_redc(a); 
@@ -59,7 +61,7 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	const t_builtin_fn	bi = get_builtin(p_get_cmd(a));
 
 	c = get_cmd(s);
-	log_print(LOGMSG_CEXEC_ANNOUNCE);
+	log_print(LMSG_IN, __FUNCTION__);
 	if (!c || !a)
 		return (ERR_ARGS);
 	if (p_get_type(a) != AST_NODE_CMD)
@@ -74,6 +76,6 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 		log_command_info((t_cmd *)c, a);
 		exit_code = run_cmd(s, a);
 	}
-	log_print(LOGMSG_CEXEC_DONE);
+	log_print(LMSG_OUT, __FUNCTION__);
 	return (exit_code);
 }

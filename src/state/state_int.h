@@ -12,6 +12,7 @@ struct							s_global_state
 	int							current_exit_code;
 	int							error_code;
 	char						*input;
+	char						*tmp;
 
 	t_parser					*current_parser;
 	t_lex						*current_lexer;

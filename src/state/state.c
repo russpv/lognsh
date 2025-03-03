@@ -20,6 +20,7 @@ t_state	*init_state(char **envp)
 	s->destroy_lexer = NULL;
 	s->destroy_parser = NULL;
 	s->envp = envp;
+	s->tmp = NULL;
 	s->sh_env_list = copy_envp(envp);
 	if (!s->sh_env_list)
 		return (free(s), NULL);

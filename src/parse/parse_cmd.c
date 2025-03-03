@@ -17,6 +17,7 @@ static t_ast_node	*_init_cmd_node(void)
 		node->data.cmd.do_expansion = false;
 		node->data.cmd.do_globbing = false;
 		node->data.cmd.do_redir_globbing = false;
+		node->data.cmd.has_grouptoks = false;
 	}
 	return (node);
 }
@@ -34,17 +35,21 @@ static t_arg_data	*_init_arg(t_parser *p, t_ast_node *cmd_node, t_tok *tok)
 	{
 		arg->raw = ft_strdup(tok_get_raw(tok));
 		if (!arg->raw)
-			return (err("Allocation failed for arg\n"), free(arg), NULL);
+			return (err(ERRMSG_MALLOC), free(arg), NULL);
 		arg->option = is_option(tok);
 		arg->do_globbing = tok_get_globbing(tok);
 		arg->do_expansion = tok_get_expansion(tok);
 		arg->in_dquotes = tok_get_dquotes(tok);
+		arg->is_grouparg = tok_isgrouptoken(tok);
 		arg->tmp = NULL;
+		arg->lst_tokens = ft_lstcopy(tok_get_tlist(tok), copy_token, destroy_token);
 		arg->global_state = p->global_state;
 		if (true == arg->do_expansion)
 			cmd_node->data.cmd.do_expansion = true;
 		if (true == arg->do_globbing)
 			cmd_node->data.cmd.do_globbing = true;
+		if (true == arg->is_grouparg)
+			cmd_node->data.cmd.has_grouptoks = true;
 	}
 	return (arg);
 }
@@ -64,19 +69,18 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
 	{
 		arg = _init_arg(p, cmd_node, advance(p));
 		if (NULL == arg)
-			return (ERR_MEM);
+			return (err(ERRMSG_MALLOC), ERR_MEM);
 		new = ft_lstnew(arg);
-		if (!new)
+		if (NULL == new)
 		{
-			err("Memory allocation error adding arg node\n");
 			free(arg);
-			return (ERR_MEM);
+			return (err(ERRMSG_MALLOC), ERR_MEM);
 		}
-		debug_print("Parser: \t_parse_args adding arg:%s\n", arg->raw);
+		debug_print(_MOD_": %s: adding arg:%s\n", __FUNCTION__, arg->raw);
 		ft_lstadd_back(&cmd_node->data.cmd.args, new);
 		cmd_node->data.cmd.argc++;
 	}
-	debug_print("Parser: argparse done on %d args\n", cmd_node->data.cmd.argc);
+	debug_print(_MOD_": %s: done on %d arg(s)\n", __FUNCTION__, cmd_node->data.cmd.argc);
 	return (0);
 }
 
@@ -95,11 +99,11 @@ static int	_process_cmd(t_parser *p, t_ast_node *cmd_node)
 		return (ERR_GENERAL);
 	if (false == is_cmd_token(peek(p)))
 		return (err("Expected a command token, but none found\n"), ERR_SYNTAX);
-	if (false == is_expansion(peek(p)))
+	if (false == is_expansion(peek(p)) && false == is_group_token(peek(p))) //TODO handle group tokens
 	{
 		cmd_node->data.cmd.name = ft_strdup(tok_get_raw(advance(p)));
 		if (NULL == cmd_node->data.cmd.name)
-			return (err("Malloc\n"), ERR_MEM);
+			return (err(ERRMSG_MALLOC), ERR_MEM);
 	}
 	if (0 != _parse_args(p, cmd_node))
 		return (ERR_GENERAL);
@@ -118,10 +122,10 @@ t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 	int			res;
 
 	st_int_push(p->st, AST_NODE_CMD);
-	debug_print("Parser: parse_cmd tok: %s\n", tok_get_raw(peek(p)));
+	debug_print(_MOD_": %s: tok: %s\n", __FUNCTION__, tok_get_raw(peek(p)));
 	ast_node = _init_cmd_node();
 	if (NULL == ast_node)
-		return (err("Allocation failed for cmd node\n"), NULL);
+		return (err(ERRMSG_MALLOC), NULL);
 	res = _process_cmd(p, ast_node);
 	if (0 != res)
 	{
@@ -131,7 +135,7 @@ t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 	}
 	p->last_node = ast_node;
 	st_int_pop(p->st);
-	debug_print("Parser: parsed cmd args: %p\n", p_get_args(ast_node));
-	debug_print("Parser: parsed cmd: %s\n", ast_node->data.cmd.name);
+	debug_print(_MOD_": %s: node args @ %p\n", __FUNCTION__, p_get_args(ast_node));
+	debug_print(_MOD_": %s: %s done\n", __FUNCTION__, ast_node->data.cmd.name);
 	return (ast_node);
 }

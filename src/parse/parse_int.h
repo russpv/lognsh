@@ -3,8 +3,8 @@
 
 # include "parse.h"
 
+# define _MOD_ "Parser"
 # define MAX_CMD_ARGS 10
-# define MAX_ENVVAR_LEN 1024  // length of variable names
 
 /*
 From Bash Manual:
@@ -101,6 +101,7 @@ typedef struct s_cmd
 	bool					do_expansion;
 	bool					do_redir_globbing;
 	bool					do_redir_expansion;
+	bool					has_grouptoks;
 }							t_ast_node_cmd;
 
 
@@ -134,6 +135,8 @@ typedef struct s_arg
 	bool					do_globbing;
 	bool					do_expansion;
 	bool					in_dquotes;
+	bool					is_grouparg;
+	t_list					*lst_tokens;
 	t_state					*global_state;
 }							t_arg_data;
 
@@ -241,6 +244,8 @@ bool						is_arg_token(t_tok *tok);
 bool						is_expansion(t_tok *tok);
 bool						is_close_paren(t_tok *tok);
 bool						is_group_op_token(t_tok *tok);
+bool	is_group_token(t_tok *tok);
+
 t_tok						*which_lower_priority(t_ast_node *ref, t_tok *cmp);
 
 /* For traversing the AST */

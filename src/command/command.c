@@ -1,10 +1,10 @@
 #include "command_int.h"
 
-#define LOGMSG_CEXEC_ANNOUNCE "Cmd: ######## cmd_execute_full ########\n"
-#define DBGMSG_CEXEC_NOTPROC "Cmd: node not a proc...\n"
-#define DBGMSG_CEXEC_NOTCMD "Cmd: node not a cmd...\n"
-#define DBGMSG_CEXEC_NOTPIP "Cmd: node not a pipe...\n"
-#define ERRMSG_CEXEC_UNK "Cmd: ERR unknown node...\n"
+#define LMSG_IN _MOD_ ": ######## %s ########\n"
+#define DMSG_CEXEC_NOTPROC _MOD_ ": node not a proc...\n"
+#define DMSG_CEXEC_NOTCMD _MOD_ ": node not a cmd...\n"
+#define DMSG_CEXEC_NOTPIP _MOD_ ": node not a pipe...\n"
+#define ERRMSG_CEXEC_UNK _MOD_ ": ERR unknown node...\n"
 
 void	destroy_cmd(void *c)
 {
@@ -54,16 +54,16 @@ t_cmd	*init_cmd(t_state *s, t_ast_node *a)
  */
 int	cmd_execute_full(t_state *s, t_ast_node *a)
 {
-	log_print(LOGMSG_CEXEC_ANNOUNCE);
+	log_print(LMSG_IN, __FUNCTION__);
 	if (AST_NODE_PROC == p_get_type(a))
 		return (cmd_exec_proc(s, a));
-	debug_print(DBGMSG_CEXEC_NOTPROC);
+	debug_print(DMSG_CEXEC_NOTPROC);
 	if (AST_NODE_CMD == p_get_type(a))
 		return (cmd_exec_simple(s, a));
-	debug_print(DBGMSG_CEXEC_NOTCMD);
+	debug_print(DMSG_CEXEC_NOTCMD);
 	if (AST_NODE_PIPELINE == p_get_type(a))
 		return (cmd_exec_pipe(s, a));
-	debug_print(DBGMSG_CEXEC_NOTPIP);
+	debug_print(DMSG_CEXEC_NOTPIP);
 	if (AST_NODE_LOG == p_get_type(a))
 		return (cmd_exec_log(s, a));
 	err(ERRMSG_CEXEC_UNK);

@@ -1,28 +1,76 @@
 #include "lex.h"
 
 #define _MOD_ "Lexer"
+#define SKIPREST 1
+#define NOGLOB 1
+#define NOEXPD 1
 #define FAIL_TOKEN 10 // TODO group somewhere else
+#define LEX_MAX_TOKC 1000
+
+/* Space is not a reliable delimiter. Assume no space. */
+// Capture operators in NORMAL mode.
+// Capture subtokens in ENVVAR mode. Simplifies NORMAL.
+// Capture literal in SQUOTE.
+// Capture reduced processed tokens in DQUOTE. 
+// How do I know I'm done with a subtoken streak?
+/*
+
+These are the conditions for exiting DOLLAR mode
+... (end of valid name) +
+These are the conditions for tokenizing full tokens
+...&& not ...& 
+...|[|] is_normal_delim
+...<* ...>* is_normal_delim
+...( or )  is_normal_delim
+...\n or \t or ' ' is_normal_delim
+
+These are the conditions for tokenizing subtokens
+...\' ...\'
+...\" ...\"
+...$?
+...$[varname]
+
+Any of the states must stop on the tokenizing delimiters
+All state transitions otherwise signify subtokens unless tokenizing delimiter also follows.
+So we can end on quotation marks, and if we were part of a subtoken streak we would have to
+check if characters other than any of these delimiter patterns is present after the transition
+chars. That must be done each call to lex_create_token. Might as well encapsulate in that func.
+
+*/
 
 /* chars that need to be quoted if meant literally */
-#define NORMALDELIMS "^()|{}[]`<>~;&\n\t \'\""
-// $, \ not included since should not break tokens,
-// and # is escape only
+#define NORMALDELIMS "?()|<>\n\t &"
+//no space needed to split singles: "()|<> \n\t"
+//no space needed to split doubles: "<<,>>,&&,||"
+//space needed to split (hence addressed above) "[ \'],[ \"]"
+//doesn't split "\'\"{}[]=""
+//not implemented ~^`;&
+// $, \, # do not delimit tokens, and are skipped
 // Removed '*' so that it is included in token raws
-#define NORMALTRANSITIONS "\'\"<\0"
+#define NORMALTRANSITIONS "$\'\"<\0"
 // the '\0' isn't tested, keep at end,
 //	< for heredoc
+// # handled in NORMAL
+// $ must be followed by alphanum or _ to delim a (sub)token
 #define LEX_BUFSZ 1024
 #define INITVAL 0 // Lexer default flag value
 #define MOD "Lexer"
 
 /* LEX
+ * 
+ * Selectively loads input string into buf, marking 
+ * current section with processing properties 
+ * until a delimiter is found, then creates a token
+ * and resets buf.
+ * 
  * Does these rules:
  * white space skipped outside of quotes
  * single quotes are closed, and protect string literal
  * double quotes allow var expansion
  * escape sequences validated, even inside double quotes
  * looks ahead a few chars to identify multi-char operators
- *
+ * tokenizes group tokens if, in the course of normal state,
+ * single or double quote state is encountered.
  */
 
 /* Finite State Machine rules
@@ -105,8 +153,9 @@
 enum						e_lex_state
 {
 	NORMAL,
-	IN_SINGLE_QUOTES,
+	IN_DOLLAR,
 	IN_DOUBLE_QUOTES,
+	IN_SINGLE_QUOTES,
 	IN_HEREDOC,
 	ON_EOF,
 	DONE
@@ -122,14 +171,21 @@ typedef struct s_lex
 	bool					escape_mode;
 	t_tokenizer				tokenizer;
 	t_list					*token_list;
+	int						tokc;
+	t_tok					*last_grp_tok;
 	t_ht					hasht;
 	char					*buf;
+	size_t					buf_idx;
+	char					*expd_mask;
+	char					*glob_mask;
 	int						do_expansion;
 	int						do_globbing;
 	int						do_heredoc;
 	int						do_heredoc_expansion;
+	bool					is_subtoken;
 	char					*eof_word;
-	bool					is_incomplete;
+	bool					input_incomplete;
+	int						keep_dollar;
 }							t_lex;
 
 /* This gets inserted as s_ht_entry->data */
@@ -144,6 +200,7 @@ typedef struct s_ht_data	*t_ht_data;
 t_lex						*create_lexer(t_state *st, int start_state,
 								const char *s);
 void						destroy_lexer(void *instance);
+void						init_token_masks(t_lex *l);
 
 /* ht */
 void						build_hasht(t_lex *lexer);
@@ -157,13 +214,17 @@ int							tokenize_single_quotes(t_lex *lexer);
 int							tokenize_double_quotes(t_lex *lexer);
 int							tokenize_null(t_lex *lexer);
 int							tokenize_heredoc(t_lex *lexer);
+int							tokenize_dollar(t_lex *lexer);
 
 t_tok						*lex_create_token(t_lex *lexer, int type);
 int							add_token(t_lex *lexer, t_tok *token);
 
-bool						is_normal_delim(unsigned char s);
-bool						is_transition_char(t_lex *l, unsigned char s);
+bool	is_normal_delim(unsigned char s, char *next);
+bool	is_transition_delim(unsigned char s, char *next);
+bool	is_dollar_delim(unsigned char c, char *next);
+
 bool						is_dollar_question(t_lex *lexer);
+
 int							word_or_name(const char *s);
 bool						is_too_long(const char *input);
 
@@ -174,5 +235,8 @@ struct s_ht_entry			*do_one_char_lookahead(t_lex *lexer,
 int							do_state_transition(t_lex *lexer);
 
 /* heredoc */
-int	get_eof_word(t_lex *l);
+int							get_eof_word(t_lex *l);
 bool	on_cmd_op(t_lex *l);
+bool	is_varnamechar(unsigned char c);
+
+int	put_on_buf(t_lex *l);

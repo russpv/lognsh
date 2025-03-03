@@ -12,20 +12,51 @@ static void	_destroy_arr(char **arr)
 	free(arr);
 }
 
+
+static int	_update_combined_subtokens(char **old, const char *curr, const char *prev)
+{
+	char *new_s; 
+
+	if (old)
+	{
+		new_s = ft_strjoin(*old, curr);
+		if (NULL == new_s)
+			return (free(old), err(ERRMSG_MALLOC), ERR_MEM);
+		free(old);
+		*old = new_s;
+	}
+	else
+	{
+		*old = ft_strjoin(curr, prev);
+		if (NULL == *old)
+			return (err(ERRMSG_MALLOC), ERR_MEM);
+	}
+	return (0);
+}
+
 // Deep copies linked list of arguments to char **array
+// TODO: pass state here to handle bad mallocs
 char	**list_to_array(t_list *args, int argc)
 {
 	char	**array;
 	int		i;
+	char *new_s;
 
 	array = malloc(sizeof(char *) * (size_t)(argc + 1));
-	if (!array)
-		return (NULL);
+	if (NULL == array)
+		return (err(ERRMSG_MALLOC), NULL); // TODO handle bad mem
 	i = 0;
 	while (i < argc && args)
 	{
-		array[i] = ft_strdup(((t_arg_data *)args->content)->raw);
-		if (!array[i])
+		new_s = NULL;
+		if (((t_arg_data *)args->content)->is_grouparg)
+		{
+			//TODO use list iterator to strjoin the raws
+		}
+		array[i] = new_s;
+		if (NULL == array[i])
+			array[i] = ft_strdup(((t_arg_data *)args->content)->raw);
+		if (NULL == array[i])
 		{
 			_destroy_arr(array);
 			return (NULL);

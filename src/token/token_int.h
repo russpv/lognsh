@@ -3,14 +3,51 @@
 
 # include "token.h"
 
-struct				s_tok
+# define _MOD_ "Token"
+
+
+enum e_token_class
 {
-	enum e_tok_type	type;
-	char			*raw;
-	size_t			pos;
-	bool			do_globbing;
-	bool			do_expansion;
-	bool			in_dquotes;
+	NORMAL,
+	GROUP
 };
+
+typedef struct 			s_normal_tok
+{
+	enum e_tok_type		type;
+	char				*raw;
+	size_t pos; // TODO
+	bool				do_globbing;
+	bool				do_expansion;
+	bool				is_subtoken;
+	bool in_dquotes; // Does this do anything?
+}						t_normal_tok;
+
+typedef struct 			s_meta_tok
+{
+	t_list				*tokens;
+	bool				do_globbing;
+	bool				do_expansion;
+	size_t pos; // TODO
+	int					tokc;
+}						t_meta_tok;
+
+
+union					u_token_data
+{
+	t_normal_tok		tok;
+	t_meta_tok			meta;
+};
+
+typedef struct 			s_tok
+{
+	enum e_token_class 	class;
+	union u_token_data	t;
+}						t_tok;
+
+
+extern unsigned int	lex_get_keepd(t_lex *lexer);
+extern int	check_special_expansions(t_state *s, const char *buf, char **value);
+
 
 #endif
