@@ -28,5 +28,7 @@ int	set_exit_status(t_state *state, int value)
 
 void	set_tmp(t_state *s, char *str)
 {
-	s->tmp = str;
+	if (s->tmp)
+		free(s->tmp);
+	s->tmp = ft_strdup(str);
 }

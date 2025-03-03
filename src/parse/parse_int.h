@@ -199,6 +199,7 @@ t_parser					*create_parser(t_state *s, t_list *tokens);
 void						destroy_parser(void *instance);
 t_ast_node					*init_log(void);
 t_redir_data				*init_redir(t_ast_node *target, enum e_tok_type type);
+t_arg_data	*init_arg(t_parser *p, t_ast_node *cmd_node, t_tok *tok);
 
 /* Token list navigation */
 t_tok						*peek(t_parser *p);

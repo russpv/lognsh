@@ -69,6 +69,7 @@ void	s_free_cmd_lex_parse(t_state *state)
 		state->destroy_command(state->current_cmd);
 		state->current_cmd = NULL;
 	}
+	s_free_tmp(state);
 }
 
 /* Destroys current cmd
@@ -79,5 +80,16 @@ void	s_free_cmd(t_state *state)
 	{
 		state->destroy_command(state->current_cmd);
 		state->current_cmd = NULL;
+	}
+	s_free_tmp(state);
+}
+
+// Note: req'd to release dup'd subword aggregation
+void	s_free_tmp(t_state *s)
+{
+	if (s->tmp)
+	{
+		free(s->tmp);
+		s->tmp = NULL;
 	}
 }

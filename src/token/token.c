@@ -85,6 +85,7 @@ void	*copy_token(const void *tok)
 		return (err(ERRMSG_MALLOC), NULL);
 	if (GROUP == t->class)
 	{
+		new_t->class = t->class;
 		new_t->t.meta.pos = t->t.meta.pos;
 		new_t->t.meta.tokc = t->t.meta.tokc;
 		new_t->t.meta.do_expansion = t->t.meta.do_expansion;
@@ -93,6 +94,7 @@ void	*copy_token(const void *tok)
 	}
 	else 
 	{
+		new_t->class = t->class;
 		new_t->t.tok.raw = ft_strdup(t->t.tok.raw);
 		if (NULL == new_t->t.tok.raw)
 			return (free(new_t), err(ERRMSG_MALLOC), NULL);

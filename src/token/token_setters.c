@@ -53,6 +53,7 @@ int	tok_incr_tokc(t_tok *token)
 		exit(ERR_ARGS);
 	}
 	token->t.meta.tokc++;
+	fprintf(stderr, MAGENTA"Tokc now: %d\n"RESET, token->t.meta.tokc);
 	return (0);
 }
 

@@ -43,6 +43,7 @@ t_cmd	*init_cmd(t_state *s, t_ast_node *a)
 		c->saved_stdin = -1;
 		c->saved_stdout = -1;
 		c->curr_cmdc = -1;
+		s_free_tmp(s);
 		set_command(s, c);
 		register_command_destroy(s, destroy_cmd);
 	}

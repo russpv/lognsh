@@ -12,7 +12,6 @@ static void	_destroy_arr(char **arr)
 	free(arr);
 }
 
-
 static int	_update_combined_subtokens(char **old, const char *curr, const char *prev)
 {
 	char *new_s; 
@@ -21,8 +20,8 @@ static int	_update_combined_subtokens(char **old, const char *curr, const char *
 	{
 		new_s = ft_strjoin(*old, curr);
 		if (NULL == new_s)
-			return (free(old), err(ERRMSG_MALLOC), ERR_MEM);
-		free(old);
+			return (free(*old), err(ERRMSG_MALLOC), ERR_MEM);
+		free(*old);
 		*old = new_s;
 	}
 	else

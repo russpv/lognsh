@@ -39,7 +39,7 @@ chars. That must be done each call to lex_create_token. Might as well encapsulat
 */
 
 /* chars that need to be quoted if meant literally */
-#define NORMALDELIMS "?()|<>\n\t &"
+#define NORMALDELIMS "?()|<>\n\t &\0"
 //no space needed to split singles: "()|<> \n\t"
 //no space needed to split doubles: "<<,>>,&&,||"
 //space needed to split (hence addressed above) "[ \'],[ \"]"

@@ -91,6 +91,7 @@ void							register_parser_destroy(t_state *s,
 									t_destroy_fn fn);
 void							register_lexer_destroy(t_state *s,
 									t_destroy_fn fn);
+void	s_free_tmp(t_state *s);
 void							s_free_cmd(t_state *s);
 void							s_free_cmd_lex_parse(t_state *state);
 

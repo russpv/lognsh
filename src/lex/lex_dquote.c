@@ -7,9 +7,11 @@ static bool	_is_dquote_transition_delim(t_lex *l)
 		return (debug_print(" YES-NULL\n"), true);
 	if (ft_strchr(NORMALTRANSITIONS, *l->ptr))
 	{
-		if (l->ptr + 1)
+		if (l->ptr != NULL && '\0' != *l->ptr) 
+		{
 			if (is_dollar_delim(*l->ptr, (l->ptr + 1))) 
 				return (debug_print(" YES\n"), true);
+		}
 	}
 	debug_print(" NO\n");
 	return (false);

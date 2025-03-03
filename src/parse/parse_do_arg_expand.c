@@ -81,6 +81,8 @@ static int	_p_do_arg_expansion(t_state *s, void *c)
 
 	res = 0;
 	value = NULL;
+	if (NULL == c)
+		return (ERR_ARGS);
 	raw_len = ft_strnlen(content->raw, MAX_ENVVAR_LEN);
 	ft_memset(buf, 0, sizeof(buf));
 	debug_print(DMSG_IN, __FUNCTION__, content->raw);
@@ -106,6 +108,8 @@ static int	_p_do_grparg_processing(t_state *s, void *c)
 
 	res = 0;
 	content = (t_arg_data *)c;
+	if (NULL == c)
+		return (0);
 	if (false == content->is_grouparg)
 		return (0);
 	debug_print("%s: got list: %p exp:%d glob:%d\n", __FUNCTION__, content->lst_tokens, content->do_expansion, content->do_globbing);
@@ -122,7 +126,7 @@ static int	_p_do_grparg_processing(t_state *s, void *c)
 	}
 	res = lstiter_state(s, content->lst_tokens, tok_do_grp_combine);
 	if (0 == res)
-		content->raw = get_tmp(s);
+		content->raw = ft_strdup(get_tmp(s)); //TODO malloc
 	debug_print("%s: returning str: %s\n", __FUNCTION__, content->raw);
 	return (res);
 }

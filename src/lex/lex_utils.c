@@ -19,14 +19,20 @@ int	add_token(t_lex *lexer, t_tok *token)
 		if (lexer->tokc < LEX_MAX_TOKC)
 		{
 			if (lexer->last_grp_tok)
+			{
+				debug_print(_MOD_ ": %s adding subtoken to grp\n", __FUNCTION__);
 				_add_subtoken(lexer, token);
+			}
 			else
+			{
+				debug_print(_MOD_ ": %s adding token to list\n", __FUNCTION__);
 				ft_lstadd_back(&lexer->token_list, ft_lstnew(token));
-			lexer->tokc++;
+				lexer->tokc++;
+			}
 			debug_print(_MOD_": %s checking normal delimiter ptr:%c\n", __FUNCTION__, *lexer->ptr);
 			if (lexer->last_grp_tok && is_normal_delim(*lexer->ptr, lexer->ptr + 1))
 			{
-				debug_print(_MOD_": %s found normal delimiter\n", __FUNCTION__);
+				debug_print(_MOD_": %s adding grp token to list\n", __FUNCTION__);
 				ft_lstadd_back(&lexer->token_list, ft_lstnew(lexer->last_grp_tok));
 				lexer->is_subtoken = false;
 				lexer->last_grp_tok = NULL;
@@ -35,8 +41,10 @@ int	add_token(t_lex *lexer, t_tok *token)
 		}
 		else 
 			return (ERR_BUFFLOW);
+		ft_lstsize(lexer->token_list);
 		return (0);
 	}
+	debug_print(_MOD_ ": %s GOT FUCKED\n", __FUNCTION__);
 	return (ERR_ARGS);
 }
 
@@ -83,8 +91,6 @@ t_tok	*lex_create_token(t_lex *lexer, int type)
 		}
 		lexer->do_globbing = INITVAL;
 		lexer->do_expansion = INITVAL;
-		//lexer->buf_idx = 0;
-		//ft_memset(lexer->buf, 0, LEX_BUFSZ);
 		debug_print(_MOD_": %s: Created token\n", __FUNCTION__);
 	}
 	return (token);
@@ -175,7 +181,7 @@ bool	is_transition_delim(unsigned char s, char *next)
 // Looks ahead for any doubles, '&&'
 bool	is_normal_delim(unsigned char s, char *next)
 {
-	debug_print(_MOD_": -------- %s:_%c_", __FUNCTION__, s);
+	debug_print(_MOD_": -------- %s:_%c%c_", __FUNCTION__, s, next);
 	if (ft_strchr(NORMALDELIMS, s))
 	{
 		if ('&' == s)

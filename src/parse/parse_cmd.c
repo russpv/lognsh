@@ -1,7 +1,7 @@
 #include "parse_int.h"
 
 /* Returns new AST cmd_node */
-static t_ast_node	*_init_cmd_node(void)
+static t_ast_node	*init_cmd_node(void)
 {
 	t_ast_node	*node;
 
@@ -22,38 +22,6 @@ static t_ast_node	*_init_cmd_node(void)
 	return (node);
 }
 
-/* Must deep copy token strings to decouple token-list/ast.
- */
-static t_arg_data	*_init_arg(t_parser *p, t_ast_node *cmd_node, t_tok *tok)
-{
-	t_arg_data	*arg;
-
-	if (!p || !cmd_node || !tok)
-		return (NULL);
-	arg = malloc(sizeof(struct s_arg));
-	if (arg)
-	{
-		arg->raw = ft_strdup(tok_get_raw(tok));
-		if (!arg->raw)
-			return (err(ERRMSG_MALLOC), free(arg), NULL);
-		arg->option = is_option(tok);
-		arg->do_globbing = tok_get_globbing(tok);
-		arg->do_expansion = tok_get_expansion(tok);
-		arg->in_dquotes = tok_get_dquotes(tok);
-		arg->is_grouparg = tok_isgrouptoken(tok);
-		arg->tmp = NULL;
-		arg->lst_tokens = ft_lstcopy(tok_get_tlist(tok), copy_token, destroy_token);
-		arg->global_state = p->global_state;
-		if (true == arg->do_expansion)
-			cmd_node->data.cmd.do_expansion = true;
-		if (true == arg->do_globbing)
-			cmd_node->data.cmd.do_globbing = true;
-		if (true == arg->is_grouparg)
-			cmd_node->data.cmd.has_grouptoks = true;
-	}
-	return (arg);
-}
-
 /* This helper consumes argument tokens and adds them to ast node's
  * linked list.
  * Returns NULL if syntax error.
@@ -67,7 +35,7 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
 		return (ERR_ARGS);
 	while (!is_at_end(p) && is_arg_token(peek(p)))
 	{
-		arg = _init_arg(p, cmd_node, advance(p));
+		arg = init_arg(p, cmd_node, advance(p));
 		if (NULL == arg)
 			return (err(ERRMSG_MALLOC), ERR_MEM);
 		new = ft_lstnew(arg);
@@ -123,7 +91,7 @@ t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 
 	st_int_push(p->st, AST_NODE_CMD);
 	debug_print(_MOD_": %s: tok: %s\n", __FUNCTION__, tok_get_raw(peek(p)));
-	ast_node = _init_cmd_node();
+	ast_node = init_cmd_node();
 	if (NULL == ast_node)
 		return (err(ERRMSG_MALLOC), NULL);
 	res = _process_cmd(p, ast_node);

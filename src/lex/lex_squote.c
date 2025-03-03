@@ -1,7 +1,7 @@
 #include "lex_int.h"
 
 /* Loads a char into buf.
- * Checks for the closing single quote. Returns 1 if found
+ * Checks for the closing single quote. advances ptr and Returns 1 if found
  * without incrementing ptr.
  * Stops buffer overflow.
  */
@@ -9,7 +9,10 @@ static inline int	_load_buf(t_lex *lexer)
 {
 	debug_print(_MOD_": %s, ptr:_%c_\n", __FUNCTION__, *lexer->ptr);
 	if ((unsigned char)OP_SQUOTE == *lexer->ptr)
+	{
+		lexer->ptr++;
 		return (debug_print(_MOD_": found closing quote\n"), 1);
+	}
 	else
 	{
 		if (lexer->buf_idx < LEX_BUFSZ - 1)

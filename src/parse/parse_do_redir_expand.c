@@ -130,6 +130,8 @@ static int	_p_do_red_expansion(t_state *s, void *r)
 
 	res = 0;
 	value = NULL;
+	if (NULL == r || NULL == s)
+		return (ERR_ARGS);
 	if (NULL == r_data->filename)
 		return (_p_do_heredoc_expansion(s, (t_redir_data *)r));
 	fn_len = ft_strnlen(r_data->filename, MAX_ENVVAR_LEN);
