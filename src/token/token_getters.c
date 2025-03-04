@@ -2,6 +2,8 @@
 
 bool	tok_get_globbing(t_tok *token)
 {
+	if (!token)
+		return (NULL);
 	if (GROUP == token->class)
 		return (token->t.meta.do_globbing);
 	return (token->t.tok.do_globbing);
@@ -9,6 +11,8 @@ bool	tok_get_globbing(t_tok *token)
 
 bool	tok_get_expansion(t_tok *token)
 {
+	if (!token)
+		return (NULL);
 	if (GROUP == token->class)
 		return (token->t.meta.do_expansion);
 	return (token->t.tok.do_expansion);
@@ -16,23 +20,53 @@ bool	tok_get_expansion(t_tok *token)
 
 bool	tok_get_dquotes(t_tok *token)
 {
+	if (!token)
+		return (false);
 	return (token->t.tok.in_dquotes);
 }
 
 bool	tok_get_issubtoken(t_tok *token)
 {
-	return (GROUP != token->class);
+	if (!token)
+		return (false);
+	if (GROUP == token->class)
+		return (false);
+	return (true == token->t.tok.is_subtoken);
 }
 
 bool	tok_isgrouptoken(t_tok *token)
 {
+	if (!token)
+		return (false);
 	return (GROUP == token->class);
 }
 
 // Returns list of subtokens, if a group token
 t_list	*tok_get_tlist(t_tok *token)
 {
+	if (!token)
+		return (NULL);
 	if (GROUP != token->class)
 		return (NULL);
 	return (token->t.meta.tokens);
+}
+
+char	*tok_get_raw(t_tok *token)
+{
+	if (!token)
+		return (NULL);
+	if (GROUP == token->class)
+	{
+		return (NULL);
+	}
+	return (token->t.tok.raw);
+}
+
+enum e_tok_type	tok_get_type(t_tok *token)
+{
+	if (GROUP == token->class)
+	{
+		return (TOK_GROUP_WORD);
+	}
+	return (token->t.tok.type);
 }

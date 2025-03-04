@@ -1,6 +1,5 @@
 #include "token_int.h"
 
-
 static void	_init_group_token(t_tok *token, size_t pos)
 {
 	token->class = GROUP;
@@ -83,9 +82,9 @@ void	*copy_token(const void *tok)
 	new_t = malloc(sizeof(t_tok));
 	if (new_t == NULL)
 		return (err(ERRMSG_MALLOC), NULL);
+	new_t->class = t->class;
 	if (GROUP == t->class)
 	{
-		new_t->class = t->class;
 		new_t->t.meta.pos = t->t.meta.pos;
 		new_t->t.meta.tokc = t->t.meta.tokc;
 		new_t->t.meta.do_expansion = t->t.meta.do_expansion;
@@ -94,7 +93,6 @@ void	*copy_token(const void *tok)
 	}
 	else 
 	{
-		new_t->class = t->class;
 		new_t->t.tok.raw = ft_strdup(t->t.tok.raw);
 		if (NULL == new_t->t.tok.raw)
 			return (free(new_t), err(ERRMSG_MALLOC), NULL);

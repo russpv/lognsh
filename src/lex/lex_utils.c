@@ -44,7 +44,6 @@ int	add_token(t_lex *lexer, t_tok *token)
 		ft_lstsize(lexer->token_list);
 		return (0);
 	}
-	debug_print(_MOD_ ": %s GOT FUCKED\n", __FUNCTION__);
 	return (ERR_ARGS);
 }
 
@@ -181,7 +180,10 @@ bool	is_transition_delim(unsigned char s, char *next)
 // Looks ahead for any doubles, '&&'
 bool	is_normal_delim(unsigned char s, char *next)
 {
-	debug_print(_MOD_": -------- %s:_%c%c_", __FUNCTION__, s, next);
+	if (s && *next)
+		debug_print(_MOD_": -------- %s:_%c%c_", __FUNCTION__, s, *next);
+	else if (s)
+		debug_print(_MOD_": -------- %s:_%c__", __FUNCTION__, s);
 	if (ft_strchr(NORMALDELIMS, s))
 	{
 		if ('&' == s)

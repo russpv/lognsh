@@ -13,6 +13,7 @@ char	**c_argstoargv(char **args, char *cmd, int argc)
 	argv = malloc(sizeof(char *) * ((size_t)argc + 2));
 	if (argv)
 	{
+		debug_print(_MOD_ ": %s: got cmd %s\n",__FUNCTION__, cmd);
 		while (++i <= argc)
 		{
 			if (cmd && i == 0)

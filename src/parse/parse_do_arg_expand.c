@@ -42,6 +42,7 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
 {
 	char	*new_raw;
 
+	new_raw = NULL;
 	if (check_special_expansions(s, buf, value) < 0)
 	{
 		if (*value)
@@ -58,9 +59,9 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
 			new_raw = ft_strdup(*value);
 			if (!new_raw)
 				return (err(ERRMSG_PATH_MALLOC), ERR_MEM);
-			free(c->raw);
-			((t_arg_data *)c)->raw = new_raw;
 		}
+		free(c->raw);
+		((t_arg_data *)c)->raw = new_raw;
 	}
 	return (0);
 }
@@ -149,7 +150,7 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 	{
 		if (a->data.cmd.has_grouptoks)
 			res = lstiter_state(s, *argl, _p_do_grparg_processing);
-		else // delete
+		else
 		{
 			if (a->data.cmd.do_expansion)
 				res = lstiter_state(s, *argl, _p_do_arg_expansion);

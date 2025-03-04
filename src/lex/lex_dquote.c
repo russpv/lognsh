@@ -62,9 +62,12 @@ static inline t_tok	*_match_double(t_lex *lexer)
 				return (token);
 			debug_print(_MOD_":     Got:_%c_\n", *lexer->ptr);
 			put_on_buf(lexer);
-			lexer->buf[lexer->buf_idx++] = *lexer->ptr++;
 		}
 		lexer->input_incomplete = true;
+		if (0 == ft_strlen(lexer->buf))
+			return (NULL);
+		if (false == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)))
+			lexer->is_subtoken = true;
 		token = lex_create_token(lexer, TOK_WORD); // tokenize subtoken
 	}
 	return (token);
@@ -81,7 +84,7 @@ int	tokenize_double_quotes(t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print(_MOD_": %s\n", __FUNCTION__);
+	debug_print(_MOD_ YELLOW": STATE: %s, ptr:_%c_\n"RESET, __FUNCTION__, *lexer->ptr);
 	if (lexer)
 	{
 		token = _match_double(lexer);

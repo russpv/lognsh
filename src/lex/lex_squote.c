@@ -32,13 +32,13 @@ static inline int	_load_buf(t_lex *lexer)
  * Assumes ptr is on the first single quote
  * If '\'' not found, flags incomplete only
  * Ignores missing closing quote.
- * Creates token only if normal delims found
+ * Creates token only if normal delims found (really?)
  */
 int	tokenize_single_quotes(t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print(_MOD_": STATE: %s, ptr:_%c_\n", __FUNCTION__, *lexer->ptr);
+	debug_print(_MOD_ YELLOW": STATE: %s, ptr:_%c_\n"RESET, __FUNCTION__, *lexer->ptr);
 	while (++lexer->ptr)
 		if (1 == _load_buf(lexer))
 			break ;
@@ -47,12 +47,17 @@ int	tokenize_single_quotes(t_lex *lexer)
 		debug_print(_MOD_": WARNING: FOUND NULL\n");
 		lexer->input_incomplete = true;
 	}
+	if (0 == ft_strlen(lexer->buf))
+		return (0);
+	if (false == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)))
+		lexer->is_subtoken = true;
 	token = lex_create_token(lexer, TOK_WORD);
 	if (NULL == token)
-		return (1);
+		return (ERR_GENERAL);
 	if (0 != add_token(lexer, token))
-		return (1);
-	lexer->ptr++;
+		return (ERR_GENERAL);
+	
+	//lexer->ptr++;
 	return (0);
 }
 
@@ -61,9 +66,10 @@ int	tokenize_null(t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print(_MOD_": %s\n", __FUNCTION__);
+	debug_print(_MOD_ YELLOW": STATE: %s, ptr:_%c_\n"RESET, __FUNCTION__, *lexer->ptr);
 	if (lexer)
 	{
+		lexer->is_subtoken = false;
 		token = create_token("\0", TOK_EOF, (size_t)(lexer->ptr
 					- lexer->raw_string));
 		if (token)

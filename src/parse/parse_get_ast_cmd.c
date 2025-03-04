@@ -30,6 +30,13 @@ bool	p_get_expansion(t_ast_node *a)
 	return (a->data.cmd.do_expansion);
 }
 
+bool	p_get_grouptok(t_ast_node *a)
+{
+	if (p_get_type(a) != AST_NODE_CMD)
+		return (NULL);
+	return (a->data.cmd.has_grouptoks);
+}
+
 int	p_get_redc(t_ast_node *a)
 {
 	if (a->type != AST_NODE_CMD)

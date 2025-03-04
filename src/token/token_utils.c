@@ -23,44 +23,33 @@ int	tok_print(void *content)
 	return (0);
 }
 
-char	*tok_get_raw(t_tok *token)
-{
-	if (GROUP == token->class)
-	{
-		return (NULL);
-	}
-	return (token->t.tok.raw);
-}
-
-enum e_tok_type	tok_get_type(t_tok *token)
-{
-	if (GROUP == token->class)
-	{
-		return (TOK_GROUP_WORD);
-	}
-	return (token->t.tok.type);
-}
-
 // Passed to llist iterator to collect word parts
 // c must be a t_tok
 // Stores result in s->tmp, which is later 
 // assigned to grp token's raw string
 int	tok_do_grp_combine(t_state *s, void *c)
 {
-	const t_tok	*content = (t_tok *)c;
+	const t_tok			*content = (t_tok *)c;
 	static char			*str = NULL;
 	char				*tmp;
 
+	tmp = NULL;
 	if (NULL == c)
 	{
 		free(str);
 		str = NULL;
 		return (0);
 	}
-	if (str && content->t.tok.raw)
-		tmp = ft_strjoin(str, content->t.tok.raw);
-	else if (content->t.tok.raw)
-		tmp = ft_strdup(content->t.tok.raw);
+	debug_print(_MOD_ ": %s: got _%s_\n", __FUNCTION__, content->t.tok.raw);
+	if (NULL != content->t.tok.raw)
+	{
+		if (str)
+			tmp = ft_strjoin(str, content->t.tok.raw);
+		else
+			tmp = ft_strdup(content->t.tok.raw);
+		if (!tmp)
+			return (err(ERRMSG_MALLOC), set_error(s, ERR_MEM), ERR_MEM);
+	}
 	if (tmp)
 	{
 		if (NULL != str)
@@ -68,19 +57,17 @@ int	tok_do_grp_combine(t_state *s, void *c)
 		str = tmp;
 		set_tmp(s, str);
 		debug_print("%s: returning %s\n", __FUNCTION__, get_tmp(s));
-		return (0);
 	}
-	set_error(s, ERR_MEM);
-	return (ERR_MEM);
+	return (0);
 }
 
-
-/* Looks for env values of key loaded in buf */
+/* Looks for env values of key loaded in buf, replaces raw. */
 static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf,
 	char **value)
 {
 	char	*new_raw;
 
+	new_raw = NULL;
 	if (check_special_expansions(s, buf, value) < 0)
 	{
 		if (*value)
@@ -98,9 +85,9 @@ static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf,
 			new_raw = ft_strdup(*value);
 			if (!new_raw)
 				return (err("MALLOC\n"), ERR_MEM);
-			free(c->t.tok.raw);
-			((t_tok *)c)->t.tok.raw = new_raw;
 		}
+		free(c->t.tok.raw);
+		((t_tok *)c)->t.tok.raw = new_raw;
 	}
 	return (0);
 }

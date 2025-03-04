@@ -16,7 +16,7 @@ typedef struct 			s_normal_tok
 {
 	enum e_tok_type		type;
 	char				*raw;
-	size_t pos; // TODO
+	size_t pos;
 	bool				do_globbing;
 	bool				do_expansion;
 	bool				is_subtoken;
@@ -28,8 +28,8 @@ typedef struct 			s_meta_tok
 	t_list				*tokens;
 	bool				do_globbing;
 	bool				do_expansion;
-	size_t pos; // TODO
-	int					tokc;
+	size_t pos;
+	size_t				tokc;
 }						t_meta_tok;
 
 

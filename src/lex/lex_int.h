@@ -29,6 +29,7 @@ These are the conditions for tokenizing subtokens
 ...\" ...\"
 ...$?
 ...$[varname]
+Delimited by normal delims
 
 Any of the states must stop on the tokenizing delimiters
 All state transitions otherwise signify subtokens unless tokenizing delimiter also follows.
@@ -47,6 +48,7 @@ chars. That must be done each call to lex_create_token. Might as well encapsulat
 //not implemented ~^`;&
 // $, \, # do not delimit tokens, and are skipped
 // Removed '*' so that it is included in token raws
+// TODO, remove '?'
 #define NORMALTRANSITIONS "$\'\"<\0"
 // the '\0' isn't tested, keep at end,
 //	< for heredoc
