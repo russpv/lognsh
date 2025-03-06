@@ -74,7 +74,6 @@ int	tok_add_subtok(t_tok *grp, t_tok *sub)
 		err(__FUNCTION__);
 		exit(ERR_ARGS);
 	}
-	fprintf(stderr, MAGENTA"Tokc now: %ld\n"RESET, grp->t.meta.tokc);
 	ft_lstadd_back(&grp->t.meta.tokens, ft_lstnew(sub));
 	return (0);
 }

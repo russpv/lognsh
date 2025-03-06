@@ -2,14 +2,14 @@
 
 #define LOGMSG_CPIPE_ANNOUNCE "Cmd: \t### cmd_exec_pipe ###\n"
 #define DBGMSG_CPIPE_GOT "Cmd: \t got %d cmds\n"
-#define ERRMSG_CPIPE_PIPE "ERR pipe creation\n"
+#define EMSG_CPIPE_PIPE "ERR pipe creation\n"
 
 static int	_setup_pipes(t_cmd *c)
 {
 	int res;
 	res = exec_create_pipes(&c->fildes, c->curr_cmdc);
 	if (0 != res)
-		return (err(ERRMSG_CPIPE_PIPE), res);
+		return (err(EMSG_CPIPE_PIPE), res);
 	print_pipes(c);
 	return (0);
 }

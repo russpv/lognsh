@@ -90,7 +90,7 @@ int	tokenize_double_quotes(t_lex *lexer)
 		token = _match_double(lexer);
 		if (!token)
 			return (0); //empty dquote
-		lexer->ptr++;
+		//lexer->ptr++;
 		debug_print(_MOD_": ptr at _%c_\n", *lexer->ptr);
 		if (0 != add_token(lexer, token))
 			return (ERR_GENERAL);

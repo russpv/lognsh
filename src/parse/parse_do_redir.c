@@ -1,7 +1,7 @@
 #include "parse_int.h"
 
-# define ERRMSG_REDIR_HANDLER "Redirection handler issue\n"
-# define ERRMSG_REDIR_NULLNODE "ERR no node given\n"
+# define EMSG_REDIR_HANDLER "Redirection handler issue\n"
+# define EMSG_REDIR_NULLNODE "ERR no node given\n"
 # define DBGMSG_REDIR_ANNOUNCE2 "Parser: _p_do_redirection iterating...\n"
 # define DBGMSG_REDIR_GOTNULL "Parser: _p_do_redirection got NULL\n"
 # define DBGMSG_REDIR_GOT "Parser: _p_do_redirection got redir, executing...\n"
@@ -33,10 +33,10 @@ static int	_p_do_redirection(void *content)
 	if (handlers[redir->type])
 	{
 		if (0 != handlers[redir->type](redir))
-			return (err(ERRMSG_REDIR_HANDLER), ERR_GENERAL);
+			return (err(EMSG_REDIR_HANDLER), ERR_GENERAL);
 	}
 	else
-		return (err(ERRMSG_REDIR_HANDLER), ERR_GENERAL);
+		return (err(EMSG_REDIR_HANDLER), ERR_GENERAL);
 	return (0);
 }
 
@@ -51,7 +51,7 @@ static int	_p_do_redirection(void *content)
 int	p_do_redirections(t_ast_node *a)
 {
 	if (!a)
-		return (err(ERRMSG_REDIR_NULLNODE), ERR_ARGS);
+		return (err(EMSG_REDIR_NULLNODE), ERR_ARGS);
 	if (a->type != AST_NODE_CMD)
 		return (EINVAL);
 	if (false == node_has_redirects(a))

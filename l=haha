@@ -1,0 +1,1 @@
+export VAR1="value1" VAR2="" && env bash -c 'for var in $(export -p | cut -d " " -f3 | cut -d "=" -f1); do eval "echo \$var=\${!var}"; done'

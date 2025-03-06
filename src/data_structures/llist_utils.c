@@ -5,7 +5,7 @@
 #define DBGMSG_LSIZE_ONNODE "Visiting node %p (next: %p)\n"
 #define DBGMSG_LSIZE_DONE "Finished traversal. Node count: %d\n"
 #define DBGMSG_LMAP_NULLARG "ft_lstmap: NULL input.\n"
-#define ERRMSG_LMAP_MALLOC "ft_lstmap: Malloc err.\n"
+#define EMSG_LMAP_MALLOC "ft_lstmap: Malloc err.\n"
 #define DBGMSG_LMAP_DONE "ft_lstmap: Modded: %p\n"
 
 /* LSTLAST
@@ -49,7 +49,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 				ft_lstclear(&newlst, del);
 				newlst = NULL;
 			}
-			return (err(ERRMSG_LMAP_MALLOC), NULL);
+			return (err(EMSG_LMAP_MALLOC), NULL);
 		}
 		ft_lstadd_back(&newlst, new);
 		lst = lst->next;

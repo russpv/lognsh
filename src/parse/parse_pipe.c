@@ -1,10 +1,10 @@
 #include "parse_int.h"
 
-#define ERRMSG_PPIPE_MALLOC "Memory allocation error while creating pipe's command node\n"
-#define ERRMSG_PPIPE_SYNTAX "Failed to parse command after pipe operator\n"
+#define EMSG_PPIPE_MALLOC "Memory allocation error while creating pipe's command node\n"
+#define EMSG_PPIPE_SYNTAX "Failed to parse command after pipe operator\n"
 #define DBGMSG_PPIPE_NEXT "Parser: parsing pipeline: getting next cmd...\n"
 #define DBGMSG_PPIPE_GOT "Parser: parse_pipeline tok: %s\n"
-#define ERRMSG_PPIPE_GEN "Parser: pipeline parsing error\n"
+#define EMSG_PPIPE_GEN "Parser: pipeline parsing error\n"
 #define DBGMSG_PPIPE_DONE "Parser: parsed pipeline of %d cmds\n"
 
 static t_ast_node	*_init_pipe(void)
@@ -33,7 +33,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *pipe_node)
 	}
 	else
 	{
-		err(ERRMSG_PPIPE_MALLOC);
+		err(EMSG_PPIPE_MALLOC);
 		return (ERR_MEM);
 	}
 	return (0);
@@ -55,7 +55,7 @@ static int	_process_pipe(t_state *s, t_parser *p, t_ast_node *pipe_node)
 		advance(p);
 		debug_print(DBGMSG_PPIPE_NEXT);
 		if (NULL == parse_full_cmd(s, p))
-			return (err(ERRMSG_PPIPE_SYNTAX), ERR_GENERAL);
+			return (err(EMSG_PPIPE_SYNTAX), ERR_GENERAL);
 		if (0 != _process_cmd(p, pipe_node))
 			return (ERR_GENERAL);
 	}
@@ -74,13 +74,13 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 	debug_print(DBGMSG_PPIPE_GOT, tok_get_raw(peek(p)));
 	ast_node = _init_pipe();
 	if (NULL == ast_node)
-		return (err(ERRMSG_PPIPE_MALLOC), NULL);
+		return (err(EMSG_PPIPE_MALLOC), NULL);
 	res = _process_pipe(s, p, ast_node);
 	if (0 != res)
 	{
 		set_error(s, res);
 		destroy_ast_node(ast_node);
-		err(ERRMSG_PPIPE_GEN);
+		err(EMSG_PPIPE_GEN);
 		return (NULL);
 	}
 	debug_print(DBGMSG_PPIPE_DONE, ast_node->data.pipe.cmdc);

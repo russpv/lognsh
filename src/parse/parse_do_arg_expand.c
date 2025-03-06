@@ -1,7 +1,7 @@
 #include "parse_int.h"
 
-#define ERRMSG_PATH_MALLOC "Allocation for path value failed.\n"
-#define ERRMSG_NULL_EXPAN "Null expansion variable.\n"
+#define EMSG_PATH_MALLOC "Allocation for path value failed.\n"
+#define EMSG_NULL_EXPAN "Null expansion variable.\n"
 
 #define DEBUGMSG_ARGP_PRE_G _MOD_ ": Pre-glob headp: %p, 1st node: %p\n"
 #define DEBUGMSG_ARGP_POST_G _MOD_ ": Post-glob headp: %p, 1st node: %p\n"
@@ -58,7 +58,7 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
 		{
 			new_raw = ft_strdup(*value);
 			if (!new_raw)
-				return (err(ERRMSG_PATH_MALLOC), ERR_MEM);
+				return (err(EMSG_PATH_MALLOC), ERR_MEM);
 		}
 		free(c->raw);
 		((t_arg_data *)c)->raw = new_raw;
@@ -90,7 +90,7 @@ static int	_p_do_arg_expansion(t_state *s, void *c)
 	if (content->do_expansion)
 	{
 		if (raw_len <= LEXERKEEP$)
-			return (err(ERRMSG_NULL_EXPAN), ERR_ARGS);
+			return (err(EMSG_NULL_EXPAN), ERR_ARGS);
 		ft_memcpy(buf, content->raw + LEXERKEEP$, raw_len - LEXERKEEP$);
 		res = _do_arg_ops(s, content, buf, &value);
 		if (0 != res)

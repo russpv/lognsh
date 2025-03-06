@@ -3,7 +3,7 @@
 #define DBGMSG_ANNOUNCE _MOD_": << tokenize_heredoc:\n"
 #define DBGMSG_FOUNDDEL _MOD_": Heredoc delimiter found, exiting heredoc mode.\n"
 #define DBGMSG_PTRAT _MOD_": ptr at:_%c_\n"
-#define ERRMSG_MEM _MOD_": ##### Error heredoc\n"
+#define EMSG_MEM _MOD_": ##### Error heredoc\n"
 #define LOGMSG_SIG _MOD_": "LOGMSG_SIGINT
 
 /* Puts readline line onto buf. Omits '\0' from readline. */
@@ -84,6 +84,6 @@ int	tokenize_heredoc(t_lex *lexer)
 			return (ERR_GENERAL);
 	}
 	else
-		return (err(ERRMSG_MEM), ERR_MEM);
+		return (err(EMSG_MEM), ERR_MEM);
 	return (0);
 }

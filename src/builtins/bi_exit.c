@@ -6,14 +6,14 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:05:10 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/07 19:25:09 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/06 17:08:35 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bi_int.h"
 
 #define CMD_NAME "exit"
-#define ERRMSG_ARG_NONNUM "numeric argument required\n"
+#define EMSG_NONNUM "numeric argument required\n"
 
 static int	is_numeric(const char *str)
 {
@@ -45,16 +45,9 @@ static void	_exit_no_arg(t_state *s)
 static void	_exit_nonnumeric_arg(t_state *s)
 {
 	destroy_state(s);
-	print_custom_err(CMD_NAME, ERRMSG_ARG_NONNUM);
+	print_custom_err(CMD_NAME, EMSG_NONNUM);
 	exit(255);
 }
-/*
-static void	_exit_too_many_args(t_state *s)
-{
-	destroy_state(s);
-	print_too_many_args(CMD_NAME);
-	exit(ERR_GENERAL);
-}*/
 
 static void	_exit_valid_arg(t_state *s, char *arg)
 {
@@ -69,23 +62,22 @@ static void	_exit_valid_arg(t_state *s, char *arg)
 
 /* EXIT
  * Exits with the last exit status, or
- * the numeric argument given. 
+ * the numeric argument given (within one byte).
  */
-int	bi_exit(t_state *s, char **args, int argc)
+int	bi_exit(t_state *s, char **argv, int argc)
 {
-	(void)argc;
-	write(STDOUT_FILENO, "exit\n", sizeof("exit\n"));
-	if (!args[1])
+	write(STDOUT_FILENO, "exit\n", sizeof("exit\n") - 1);
+	if (argc < 2)
 		_exit_no_arg(s);
-	else if (!is_numeric(args[1]))
+	else if (!is_numeric(argv[1]))
 		_exit_nonnumeric_arg(s);
-	else if (args[2])
+	else if (argv[2])
 	{
 		destroy_state(s);
 		print_too_many_args(CMD_NAME);
 		exit(ERR_GENERAL);
 	}
 	else
-		_exit_valid_arg(s, args[1]);
+		_exit_valid_arg(s, argv[1]);
 	return (0);
 }

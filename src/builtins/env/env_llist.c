@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_llist.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 09:00:07 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/09 20:09:35 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/03/06 18:57:18 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_env	*create_env_node(const char *key, const char *value)
 	return (new_node);
 }
 
-void	add_env_node(t_env **env, t_env *new_node)
+void	env_add_node(t_env **env, t_env *new_node)
 {
 	t_env	*tmp;
 
@@ -51,7 +51,7 @@ void	add_env_node(t_env **env, t_env *new_node)
 	tmp->next = new_node;
 }
 
-void	remove_env_node(t_env **env, const char *key)
+void	env_remove_node(t_env **env, const char *key)
 {
 	t_env	*tmp;
 	t_env	*prev;

@@ -12,6 +12,7 @@ t_int_stack	*c_get_ctxtst(t_cmd *c)
 
 t_ast_node	*c_get_node(t_cmd *c)
 {
+	assert(NULL != c);
 	return (c->curr_node);
 }
 

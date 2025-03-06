@@ -1,7 +1,7 @@
 #include "command_int.h"
 
-#define ERRMSG_RUNC_STRJ "Path strjoin err\n"
-#define ERRMSG_RUNC_EXEC "run_cmd ERR execve()\n"
+#define EMSG_RUNC_STRJ "Path strjoin err\n"
+#define EMSG_RUNC_EXEC "run_cmd ERR execve()\n"
 #define LOGMSG_RUNC_GOT "Cmd: Found command! at %s\n"
 #define LOGMSG_RUNC_SIGINT "Cmd: Received SIGINT before fork\n"
 
@@ -32,12 +32,12 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		if (NULL == tmp)
-			return (ft_freearr((void **)paths, -1), err(ERRMSG_RUNC_STRJ),
+			return (ft_freearr((void **)paths, -1), err(EMSG_RUNC_STRJ),
 				ERR_GENERAL);
 		*fullpath = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!*fullpath)
-			return (ft_freearr((void **)paths, -1), err(ERRMSG_RUNC_STRJ),
+			return (ft_freearr((void **)paths, -1), err(EMSG_RUNC_STRJ),
 				ERR_GENERAL);
 		if (0 == _check_access(*fullpath))
 			return (ft_freearr((void **)paths, -1), 0);
@@ -94,7 +94,7 @@ int	run_cmd(t_state *s, t_ast_node *a)
 		|| CTXT_PROC == st_int_peek(get_cmd(s)->st))
 	{
 		if (-1 == execve(c->fullpath, c->argv, get_envp(s)))
-			perror(ERRMSG_EXECVE);
+			perror(EMSG_EXECVE);
 	}
 	else
 	{

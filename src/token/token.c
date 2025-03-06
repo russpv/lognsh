@@ -81,7 +81,7 @@ void	*copy_token(const void *tok)
 	t = (t_tok *)tok;
 	new_t = malloc(sizeof(t_tok));
 	if (new_t == NULL)
-		return (err(ERRMSG_MALLOC), NULL);
+		return (err(EMSG_MALLOC), NULL);
 	new_t->class = t->class;
 	if (GROUP == t->class)
 	{
@@ -95,7 +95,7 @@ void	*copy_token(const void *tok)
 	{
 		new_t->t.tok.raw = ft_strdup(t->t.tok.raw);
 		if (NULL == new_t->t.tok.raw)
-			return (free(new_t), err(ERRMSG_MALLOC), NULL);
+			return (free(new_t), err(EMSG_MALLOC), NULL);
 		new_t->t.tok.type = t->t.tok.type;
 		new_t->t.tok.pos = t->t.tok.pos;
 		new_t->t.tok.do_globbing = t->t.tok.do_globbing;

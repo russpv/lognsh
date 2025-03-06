@@ -1,6 +1,6 @@
 #include "parse_int.h"
 
-#define ERRMSG_REDIR_DATA_MALLOC "Memory allocation failed for redirection data\n"
+#define EMSG_REDIR_DATA_MALLOC "Memory allocation failed for redirection data\n"
 
 t_redir_data	*init_redir(t_ast_node *target, enum e_tok_type type)
 {
@@ -11,7 +11,7 @@ t_redir_data	*init_redir(t_ast_node *target, enum e_tok_type type)
 	red = malloc(sizeof(t_redir_data));
 	if (!red)
 	{
-		err(ERRMSG_REDIR_DATA_MALLOC);
+		err(EMSG_REDIR_DATA_MALLOC);
 		return (NULL);
 	}
 	red->type = type;
@@ -41,7 +41,7 @@ t_arg_data	*init_arg(t_parser *p, t_ast_node *cmd_node, t_tok *tok)
 		{
 			arg->raw = ft_strdup(tok_get_raw(tok));
 			if (!arg->raw)
-				return (err(ERRMSG_MALLOC), free(arg), NULL);
+				return (err(EMSG_MALLOC), free(arg), NULL);
 		}
 		else
 			arg->raw = NULL;

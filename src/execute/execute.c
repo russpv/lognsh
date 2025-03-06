@@ -25,7 +25,7 @@ int	waitchild(int *status, int childc)
 				debug_print(DBGMSG_EXEC_EXITSIG, child_pid,
 					WTERMSIG(*status));
 			else if (child_pid < 0)
-				return (perror(ERRMSG_WAITPID), ERR_WAITPID);
+				return (perror(EMSG_WAITPID), ERR_WAITPID);
 		}
 	}
 	debug_print(DBGMSG_EXEC_DONE);

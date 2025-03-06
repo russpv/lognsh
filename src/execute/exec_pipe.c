@@ -4,8 +4,8 @@
 #define DBGMSG_EPIPE_ANNOUNCE "Exec: exec_fork_run: got %dth\n"
 #define DBGMSG_EPIPE_ANNOUNCE2 "Exec: _close_other_pipe_ends on %dth cmd.\n"
 #define DBGMSG_EPIPE_CLOSED "Exec: Child %d: closed %d pipe ends (%d cmds)\n"
-#define ERRMSG_EPIPE_REDIR "ERR redirect middle cmd stdin\n"
-#define ERRMSG_EPIPE_REDIR2 "ERR redirect did nothing\n"
+#define EMSG_EPIPE_REDIR "ERR redirect middle cmd stdin\n"
+#define EMSG_EPIPE_REDIR2 "ERR redirect did nothing\n"
 
 // depending on cmd, closes
 // the right end of the pipe(s)
@@ -24,13 +24,13 @@ static int	_redirect_pipes(const t_cmd *c, int i)
 	{
 		r = redirect(&fildes[i - 1][0], NULL, STDIN_FILENO, NO_APND);
 		if (-1 == r)
-			return (err(ERRMSG_EPIPE_REDIR), -1);
+			return (err(EMSG_EPIPE_REDIR), -1);
 		r = redirect(&fildes[i][1], NULL, STDOUT_FILENO, NO_APND);
 	}
 	else if (i == c_get_cmdc(c) - 1)
 		r = redirect(&fildes[i - 1][0], NULL, STDIN_FILENO, NO_APND);
 	if (-1 == r)
-		return (err(ERRMSG_EPIPE_REDIR2), -1);
+		return (err(EMSG_EPIPE_REDIR2), -1);
 	return (0);
 }
 
@@ -57,13 +57,13 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
 		if (pipe != i)
 		{
 			if (0 != close(fildes[pipe][1]))
-				return (perror(ERRMSG_CLOSE), ERR_CLOSE);
+				return (perror(EMSG_CLOSE), ERR_CLOSE);
 			counter++;
 		}
 		if (pipe != i - 1)
 		{
 			if (0 != close(fildes[pipe][0]))
-				return (perror(ERRMSG_CLOSE), ERR_CLOSE);
+				return (perror(EMSG_CLOSE), ERR_CLOSE);
 			counter++;
 		}
 	}
@@ -90,7 +90,7 @@ int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,\
 	pid = fork();
 	if (pid < 0)
 	{
-		perror(ERRMSG_FORK);
+		perror(EMSG_FORK);
 		return (ERR_FORK);
 	}
 	else if (0 == pid)

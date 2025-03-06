@@ -10,6 +10,7 @@ struct					s_cmd
 	t_int_stack			*st;
 	char				*fullpath;
 	char				**argv;
+	int					argvc;
 	t_list				*redirs;
 	int					redc;
 	int					argc;
@@ -26,7 +27,7 @@ typedef struct s_cmd	t_cmd;
 void					destroy_cmd(void *c);
 t_cmd					*init_cmd(t_state *s, t_ast_node *a);
 
-char					**c_argstoargv(char **args, char *cmd, int argc);
+int	c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a, char **args);
 
 int						run_cmd(t_state *s, t_ast_node *a);
 

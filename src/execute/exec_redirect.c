@@ -27,7 +27,7 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 	else
 		fd = -1;
 	if (fd < 0)
-		return(perror(ERRMSG_OPEN), fd);
+		return(perror(EMSG_OPEN), fd);
 	debug_print(DBGMSG_EREDIR_FD, fd);
 	return (fd);
 }
@@ -64,6 +64,6 @@ int	redirect(int *to, char *topath, int from, bool ifappend)
 	if (dup2(fd, from) == -1)
 		return (ERR_DUP2);
 	if (0 != close(fd))
-		return (perror(ERRMSG_CLOSE), ERR_CLOSE);
+		return (perror(EMSG_CLOSE), ERR_CLOSE);
 	return (from);
 }

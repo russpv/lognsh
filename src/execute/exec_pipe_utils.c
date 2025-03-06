@@ -1,6 +1,6 @@
 #include "execute.h"
 
-#define ERRMSG_EPIPE_FORK "ERR exec_fork_run\n"
+#define EMSG_EPIPE_FORK "ERR exec_fork_run\n"
 
 /* Frees allocated pipes */
 void	free_pipes(int **fildes, int count)
@@ -24,7 +24,7 @@ int	exec_create_pipes(int ***fildes, int cmd_count)
 		return (ERR_INSUFFICIENT_CMDS);
 	*fildes = (int **)malloc((sizeof(int *)) * (size_t)(cmd_count));
 	if (!(*fildes))
-		return (err(ERRMSG_MALLOC), ERR_MEM);
+		return (err(EMSG_MALLOC), ERR_MEM);
 	(*fildes)[cmd_count - 1] = NULL;
 	while (i < cmd_count - 1)
 	{
@@ -32,12 +32,12 @@ int	exec_create_pipes(int ***fildes, int cmd_count)
 		if (!(*fildes)[i])
 		{
 			free_pipes((*fildes), i);
-			return (err(ERRMSG_MALLOC), ERR_MEM);
+			return (err(EMSG_MALLOC), ERR_MEM);
 		}
 		if (pipe((*fildes)[i]) < 0)
 		{
 			free_pipes((*fildes), i);
-			return (perror(ERRMSG_PIPE), ERR_PIPE);
+			return (perror(EMSG_PIPE), ERR_PIPE);
 		}
 		i++;
 	}
@@ -53,9 +53,9 @@ int	exec_close_pipes(int **fildes, int cmd_count)
 	while (++i < cmd_count - 1)
 	{
 		if (0 != close(fildes[i][0]))
-			return(perror(ERRMSG_CLOSE), ERR_CLOSE);
+			return(perror(EMSG_CLOSE), ERR_CLOSE);
 		if (0 != close(fildes[i][1]))
-			return(perror(ERRMSG_CLOSE), ERR_CLOSE); 
+			return(perror(EMSG_CLOSE), ERR_CLOSE); 
 	}
 	return (0);
 }

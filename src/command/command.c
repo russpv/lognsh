@@ -4,7 +4,7 @@
 #define DMSG_CEXEC_NOTPROC _MOD_ ": node not a proc...\n"
 #define DMSG_CEXEC_NOTCMD _MOD_ ": node not a cmd...\n"
 #define DMSG_CEXEC_NOTPIP _MOD_ ": node not a pipe...\n"
-#define ERRMSG_CEXEC_UNK _MOD_ ": ERR unknown node...\n"
+#define EMSG_CEXEC_UNK _MOD_ ": ERR unknown node...\n"
 
 void	destroy_cmd(void *c)
 {
@@ -43,6 +43,7 @@ t_cmd	*init_cmd(t_state *s, t_ast_node *a)
 		c->saved_stdin = -1;
 		c->saved_stdout = -1;
 		c->curr_cmdc = -1;
+		c->argvc = 0;
 		s_free_tmp(s);
 		set_command(s, c);
 		register_command_destroy(s, destroy_cmd);
@@ -67,7 +68,7 @@ int	cmd_execute_full(t_state *s, t_ast_node *a)
 	debug_print(DMSG_CEXEC_NOTPIP);
 	if (AST_NODE_LOG == p_get_type(a))
 		return (cmd_exec_log(s, a));
-	err(ERRMSG_CEXEC_UNK);
+	err(EMSG_CEXEC_UNK);
 	return (ERR_SYNTAX);
 }
 

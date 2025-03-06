@@ -6,18 +6,17 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 10:47:28 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/18 18:16:22 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/06 18:59:28 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bi_int.h"
 
-#define CMD_NAME "export"
-#define ERRMSG_BADMALLOC "memory allocation failed.\n"
+#define EMSG_BADMALLOC "memory allocation failed.\n"
 
 // Returns 0 if error.
 // updates an existing environment variable's value 
-int	_update_existing_var(t_env *existing_key, const char *value)
+int	update_existing_var(t_env *existing_key, const char *value)
 {
 	char	*new_value;
 
@@ -29,7 +28,7 @@ int	_update_existing_var(t_env *existing_key, const char *value)
 		new_value = ft_strdup("");
 	if (!new_value)
 	{
-		print_custom_err("export", ERRMSG_BADMALLOC);
+		print_custom_err("(various)", EMSG_BADMALLOC);
 		return (0);
 	}
 	env_set_node_value(existing_key, new_value);
@@ -37,7 +36,7 @@ int	_update_existing_var(t_env *existing_key, const char *value)
 	return (1);
 }
 
-t_env	*env_find_key(t_env *env_list, const char *key)
+t_env	*find_env_key(t_env *env_list, const char *key)
 {
 	t_env	*current;
 

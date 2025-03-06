@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 17:11:09 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/08 01:50:53 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/06 17:10:27 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ void	set_signal_handlers(void)
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = SA_RESTART;
 	if (0 != sigaction(SIGINT, &sa_int, NULL))
-		perror(ERRMSG_SIGACTION);
+		perror(EMSG_SIGACTION);
 	sa_quit.sa_handler = SIG_IGN;
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_flags = 0;
 	if (0 != sigaction(SIGQUIT, &sa_quit, NULL))
-		perror(ERRMSG_SIGACTION);
+		perror(EMSG_SIGACTION);
 }
 
 void	reset_signal_handlers(void)
@@ -65,10 +65,10 @@ void	reset_signal_handlers(void)
     sigemptyset(&sa_int.sa_mask);
     sa_int.sa_flags = 0;
     if (0 != sigaction(SIGINT, &sa_int, NULL))
-		perror(ERRMSG_SIGACTION);
+		perror(EMSG_SIGACTION);
     sa_quit.sa_handler = SIG_DFL;
     sigemptyset(&sa_quit.sa_mask);
     sa_quit.sa_flags = 0;
     if (0 != sigaction(SIGQUIT, &sa_quit, NULL))
-		perror(ERRMSG_SIGACTION);
+		perror(EMSG_SIGACTION);
 }

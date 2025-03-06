@@ -48,7 +48,7 @@ int	tok_do_grp_combine(t_state *s, void *c)
 		else
 			tmp = ft_strdup(content->t.tok.raw);
 		if (!tmp)
-			return (err(ERRMSG_MALLOC), set_error(s, ERR_MEM), ERR_MEM);
+			return (err(EMSG_MALLOC), set_error(s, ERR_MEM), ERR_MEM);
 	}
 	if (tmp)
 	{

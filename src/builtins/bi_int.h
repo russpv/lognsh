@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_int.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:57:34 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/16 15:16:06 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/03/06 18:59:41 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,13 @@ int					bi_exit(t_state *s, char **args, int argc);
 int					bi_exec(t_state *s, char **args, int argc);
 
 //int	env_set_value(t_env **env_list, const char *key, const char *value);
-t_env				*env_find_key(t_env *env_list, const char *key);
-int					_update_existing_var(t_env *existing_key, \
+t_env	*find_env_key(t_env *env_list, const char *key);
+int					update_existing_var(t_env *existing_key, \
 						const char *value);
 
 // export helper functions (bi_export_do 1 & 2)
-int					_process_arg_update_add(t_state *s, \
-						const char *arg, char *equal_pos, \
-						int *error_occurred);
+int	process_arg_update_add(t_state *s, const char *arg, \
+	char *equal_pos, int *error_occurred);
 int					process_arg(t_state *s, const char *arg, \
 						int *error_occurred);
 

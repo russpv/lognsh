@@ -1,7 +1,7 @@
 #include "execute_int.h"
 
 #define DBGMSG_ELOGI_ANNOUNCE "Exec: exec_fork_run: got %dth\n"
-#define ERRMSG_ELOGI_FORK "ERR exec_fork_run\n"
+#define EMSG_ELOGI_FORK "ERR exec_fork_run\n"
 
 /* Child processing for log command
  * Forks, recursively
@@ -17,7 +17,7 @@ int	exec_fork_run(t_state *s, t_ast_node *node, int i, t_execute_fn executor)
 	pid = fork();
 	if (pid < 0)
 	{
-		perror(ERRMSG_ELOGI_FORK);
+		perror(EMSG_ELOGI_FORK);
 		return (ERR_FORK);
 	}
 	else if (0 == pid)

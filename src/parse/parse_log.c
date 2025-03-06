@@ -1,9 +1,9 @@
 #include "parse_int.h"
 
-#define ERRMSG_LOGI_PARSE "Failed to parse command after logical op\n"
-#define ERRMSG_LOGI_NODE_MALLOC "Allocation failed for logical node\n"
-#define ERRMSG_LOGI_CMD_MALLOC "Memory allocation error while creating logical's command node\n"
-#define ERRMSG_LOGI_OP_MALLOC "Memory allocation error while creating operator node\n"
+#define EMSG_LOGI_PARSE "Failed to parse command after logical op\n"
+#define EMSG_LOGI_NODE_MALLOC "Allocation failed for logical node\n"
+#define EMSG_LOGI_CMD_MALLOC "Memory allocation error while creating logical's command node\n"
+#define EMSG_LOGI_OP_MALLOC "Memory allocation error while creating operator node\n"
 
 /* Stores command. Assumes parser is on
  * correct token.
@@ -22,7 +22,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *log_node)
 	}
 	else
 	{
-		err(ERRMSG_LOGI_CMD_MALLOC);
+		err(EMSG_LOGI_CMD_MALLOC);
 		return (ERR_MEM);
 	}
 	return (0);
@@ -42,7 +42,7 @@ static int	_process_op(t_parser *p, t_ast_node *log_node)
 		ft_lstadd_back(&log_node->data.log.operators, op);
 	else
 	{
-		err(ERRMSG_LOGI_OP_MALLOC);
+		err(EMSG_LOGI_OP_MALLOC);
 		return (ERR_MEM);
 	}
 	return (0);
@@ -51,7 +51,7 @@ static int	_process_op(t_parser *p, t_ast_node *log_node)
 static int	_do_ops(t_state *s, t_parser *p, t_ast_node *log_node)
 {
 	if (NULL == parse_full_cmd(s, p))
-		return (err(ERRMSG_LOGI_PARSE), ERR_GENERAL);
+		return (err(EMSG_LOGI_PARSE), ERR_GENERAL);
 	if (peek(p) == which_lower_priority(log_node, peek(p)))
 	{
 		if (0 != _process_cmd(p, log_node))
@@ -60,7 +60,7 @@ static int	_do_ops(t_state *s, t_parser *p, t_ast_node *log_node)
 	else
 	{
 		if (NULL == parse_full_cmd(s, p))
-			return (err(ERRMSG_LOGI_PARSE), ERR_GENERAL);
+			return (err(EMSG_LOGI_PARSE), ERR_GENERAL);
 		if (0 != _process_cmd(p, log_node))
 			return (ERR_GENERAL);
 	}
@@ -107,7 +107,7 @@ t_ast_node	*parse_logical(t_state *s, t_parser *p)
 	debug_print("Parser: parse_logical tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = init_log();
 	if (NULL == ast_node)
-		return (err(ERRMSG_LOGI_NODE_MALLOC), NULL);
+		return (err(EMSG_LOGI_NODE_MALLOC), NULL);
 	res = _process_log(s, p, ast_node);
 	if (0 != res)
 	{

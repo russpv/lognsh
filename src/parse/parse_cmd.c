@@ -37,12 +37,12 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
 	{
 		arg = init_arg(p, cmd_node, advance(p));
 		if (NULL == arg)
-			return (err(ERRMSG_MALLOC), ERR_MEM);
+			return (err(EMSG_MALLOC), ERR_MEM);
 		new = ft_lstnew(arg);
 		if (NULL == new)
 		{
 			free(arg);
-			return (err(ERRMSG_MALLOC), ERR_MEM);
+			return (err(EMSG_MALLOC), ERR_MEM);
 		}
 		debug_print(_MOD_": %s: adding arg:%s\n", __FUNCTION__, arg->raw);
 		ft_lstadd_back(&cmd_node->data.cmd.args, new);
@@ -71,7 +71,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *cmd_node)
 	{
 		cmd_node->data.cmd.name = ft_strdup(tok_get_raw(advance(p)));
 		if (NULL == cmd_node->data.cmd.name)
-			return (err(ERRMSG_MALLOC), ERR_MEM);
+			return (err(EMSG_MALLOC), ERR_MEM);
 	}
 	if (0 != _parse_args(p, cmd_node))
 		return (ERR_GENERAL);
@@ -93,7 +93,7 @@ t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 	debug_print(_MOD_": %s: tok: %s\n", __FUNCTION__, tok_get_raw(peek(p)));
 	ast_node = init_cmd_node();
 	if (NULL == ast_node)
-		return (err(ERRMSG_MALLOC), NULL);
+		return (err(EMSG_MALLOC), NULL);
 	res = _process_cmd(p, ast_node);
 	if (0 != res)
 	{

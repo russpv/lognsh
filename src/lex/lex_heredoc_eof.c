@@ -1,6 +1,6 @@
 #include "lex_int.h"
 
-#define ERRMSG_NOEOF _MOD_": ERROR: heredoc EOF not found.\n"
+#define EMSG_NOEOF _MOD_": ERROR: heredoc EOF not found.\n"
 
 static inline void	_skip_to_next_op(t_lex *l)
 {
@@ -36,12 +36,12 @@ int	get_eof_word(t_lex *l)
 	_put_eof_in_buf(l);
 	_skip_to_next_op(l);
 	if (0 == ft_strlen(l->buf))
-		return (err(ERRMSG_NOEOF), ERR_SYNTAX);
+		return (err(EMSG_NOEOF), ERR_SYNTAX);
 	l->eof_word = ft_strdup(l->buf);
 	if (!l->eof_word)
 	{
 		ft_memset(l->buf, 0, LEX_BUFSZ);
-		return (err(_MOD_": "ERRMSG_MALLOC), ERR_MEM);
+		return (err(_MOD_": "EMSG_MALLOC), ERR_MEM);
 	}
 	debug_print(_MOD_": captured heredoc delimiter: %s\n", l->eof_word);
 	ft_memset(l->buf, 0, LEX_BUFSZ);

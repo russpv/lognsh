@@ -4,45 +4,36 @@
 #define LMSG_IN _MOD_ ": \t### %s ###\n"
 #define LMSG_OUT _MOD_ ": \tFinished %s.\n"
 
-/* Adds arg[0] as command name if no name string present
- * if node expansion flag is set. Removes arg[0] then.
- * TODO: what circumstances result in no command?
- */
-static int	_handle_no_command(t_ast_node *a, char **args)
+static int	_handle_no_command(t_ast_node *a)
 {
 	if (NULL == p_get_cmd(a))
-	{
-		if (true == p_get_expansion(a) || true == p_get_grouptok(a))
-		{
-			p_set_cmd(a, args[0]);
-			p_update_argc(a, -1);
-		}
-		else
+		if (false == p_get_expansion(a) && false == p_get_grouptok(a))
 			return (NO_CMD);
-	}
 	return (0);
 }
 
-/* Processes args and redirs. Stores several command parameters. */
+/* Processes args and redirs. Stores several command parameters. 
+ * Puts node a into cmd c
+ */
 static int	_do_ops(t_state *s, t_ast_node *a, t_cmd *c)
 {
 	char	**args;
 	int		exit_code;
 	int		res;
 
-	c->curr_node = a;
+	c->curr_node = a;	
 	args = NULL;
 	res = p_do_arg_processing(s, a, &args);
 	if (0 != res)
 		return (res);
-	exit_code = _handle_no_command(a, args);
+	exit_code = _handle_no_command(a);
 	if (NO_CMD == exit_code)
 		return (exit_code);
-	c->argv = c_argstoargv(args, p_get_cmd(a), p_get_argc(a));
-	c->argc = p_get_argc(a) + 1;
+	c_argstoargv(s, c, a, args);
 	c->redc = p_get_redc(a); 
 	if (0 != p_do_redir_processing(s, a))
 		return (ERR_AMBIGUOUS_REDIR);
+	assert(c_get_node(c) == a);
 	return (exit_code);
 }
 
@@ -73,6 +64,7 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	if (ERR_AMBIGUOUS_REDIR == exit_code || NO_CMD == exit_code)
 		return (exit_code);
 	log_command_info((t_cmd *)c, a);
+	assert(c_get_node(c) == a);
 	bi = get_builtin(p_get_cmd(a));
 	if (bi)
 		exit_code = exec_bi_call(s, bi);

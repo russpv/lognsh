@@ -20,7 +20,7 @@ static int	_update_combined_subtokens(char **old, const char *curr, const char *
 	{
 		new_s = ft_strjoin(*old, curr);
 		if (NULL == new_s)
-			return (free(*old), err(ERRMSG_MALLOC), ERR_MEM);
+			return (free(*old), err(EMSG_MALLOC), ERR_MEM);
 		free(*old);
 		*old = new_s;
 	}
@@ -28,7 +28,7 @@ static int	_update_combined_subtokens(char **old, const char *curr, const char *
 	{
 		*old = ft_strjoin(curr, prev);
 		if (NULL == *old)
-			return (err(ERRMSG_MALLOC), ERR_MEM);
+			return (err(EMSG_MALLOC), ERR_MEM);
 	}
 	return (0);
 }
@@ -43,7 +43,7 @@ char	**list_to_array(t_list *args, int argc)
 
 	array = malloc(sizeof(char *) * (size_t)(argc + 1));
 	if (NULL == array)
-		return (err(ERRMSG_MALLOC), NULL); // TODO handle bad mem
+		return (err(EMSG_MALLOC), NULL); // TODO handle bad mem
 	i = 0;
 	while (i < argc && args)
 	{

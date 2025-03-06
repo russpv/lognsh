@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_get_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 08:59:52 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/09 08:59:52 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/03/06 19:07:05 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ char	**env_getenv(void)
 
 	if (!path_env)
 	{
-		perror("getenv error\n");
+		perror("getenv\n"); 
 		return (NULL);
 	}
 	res = ft_split(path_env, ':');
 	if (!res)
 	{
-		perror("ft_split error\n");
+		perror("ft_split error\n"); // ft_split doesn't set errno
 		return (NULL);
 	}
 	return (res);

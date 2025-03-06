@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:05:10 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/07 19:25:09 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/06 17:10:27 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	bi_exec(t_state *s, char **argv, int argc)
 		return (-1);
 	if (execve(fullpath, argv + 1, environ) == -1)
 	{
-		perror(ERRMSG_EXECVE);
+		perror(EMSG_EXECVE);
 		free(fullpath);
 		exit(ERR_GENERAL);
 	}

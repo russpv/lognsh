@@ -17,7 +17,7 @@ void log_command_info(t_cmd *c, t_ast_node *a)
 		colored_printf(YELLOW, "\tArguments:\n");
 		if (c_get_argv(c))
 		{
-            while (++i < c_get_argc(c))
+            while (++i < c_get_argvc(c))
 				colored_printf(YELLOW, "\t  argv[%d]: %s\n", i, c_get_argv(c)[i]);
 		}
 		if (p_get_argc(a) > 0 && c_get_argv(c) && c_get_argv(c)[p_get_argc(a)] == NULL)

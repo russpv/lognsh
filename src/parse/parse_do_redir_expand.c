@@ -1,8 +1,8 @@
 #include "parse_int.h"
 #include <stdio.h>
 
-#define ERRMSG_PATH_MALLOC "Allocation for path value failed.\n"
-#define ERRMSG_NULL_EXPAN "Null expansion variable.\n"
+#define EMSG_PATH_MALLOC "Allocation for path value failed.\n"
+#define EMSG_NULL_EXPAN "Null expansion variable.\n"
 
 #define DEBUGMSG_REDIRP_ANNOUNCE _MOD_": p_do_redir_processing...\n"
 #define DBGMSG_REDIRP_GOT _MOD_": p_do_redir_processing got: glob_%d exp_%d\n"
@@ -31,7 +31,7 @@ static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf,
 		{
 			new_fn = ft_strdup(*value);
 			if (!new_fn)
-				return (err(ERRMSG_PATH_MALLOC), ERR_MEM);
+				return (err(EMSG_PATH_MALLOC), ERR_MEM);
 			free(r->filename);
 			((t_redir_data *)r)->filename = new_fn;
 		}
@@ -140,7 +140,7 @@ static int	_p_do_red_expansion(t_state *s, void *r)
 	if (r_data->do_expansion)
 	{
 		if (fn_len <= LEXERKEEP$)
-			return (err(ERRMSG_NULL_EXPAN), ERR_ARGS);
+			return (err(EMSG_NULL_EXPAN), ERR_ARGS);
 		ft_memcpy(buf, r_data->filename + LEXERKEEP$, fn_len - LEXERKEEP$);
 		res = _get_expanded_fn(s, r_data, buf, &value);
 		if (0 != res)

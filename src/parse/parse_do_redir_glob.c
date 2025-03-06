@@ -1,6 +1,6 @@
 #include "parse_int.h"
 
-#define ERRMSG_AMBIG "ERR multiple redirect targets globbed\n"
+#define EMSG_AMBIG "ERR multiple redirect targets globbed\n"
 #define DBGMSG_REDIR_NODE "Parser: p_do_globbing_redirs got redir type: %d fn:%s doc:\
 		%s do_glob:%d\n"
 #define DBGMSG_REDIR_GLOB "Parser: p_do_globbing_redirs found:%s...\n"
@@ -23,7 +23,7 @@ int	p_do_globbing_redirs(void *c)
 		{
 			debug_print(DBGMSG_REDIR_GLOB,(char *)r->lst_glob->content);
 			if (ft_lstsize(r->lst_glob) > 1)
-				return (err(ERRMSG_AMBIG), ERR_AMBIGUOUS_REDIR);
+				return (err(EMSG_AMBIG), ERR_AMBIGUOUS_REDIR);
 			else
 			{
 				new_fn = ft_strdup(r->lst_glob->content);

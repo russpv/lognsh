@@ -1,37 +1,53 @@
 #include "command_int.h"
 
-/* Can accept null args and cmd
- * If no cmd, copies first arg as cmd, and removes it from args
- * Does not need to handle no-command situation
+/* Builds argv from args and stores in command
+ * If no cmd, copies first arg as cmd
+ * If no args, ...
  */
-char	**c_argstoargv(char **args, char *cmd, int argc)
+int	c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a, char **args)
 {
-	char	**argv;
-	int		i;
+	const char	*cmdname = p_get_cmd(a);
+	const int	argc = p_get_argc(a);
+	char		**argv;
+	int			i;
 
 	i = -1;
+	if (!s || !a || !cmd)
+		return (ERR_ARGS);
 	argv = malloc(sizeof(char *) * ((size_t)argc + 2));
 	if (argv)
 	{
-		debug_print(_MOD_ ": %s: got cmd %s\n",__FUNCTION__, cmd);
+		debug_print(_MOD_ ": %s: got cmd %s argc:%d args:%p \n",__FUNCTION__, cmdname, argc, args);
 		while (++i <= argc)
 		{
-			if (cmd && i == 0)
-				argv[i] = ft_strdup(cmd);
-			else if (!cmd && i == 0 && args && argc > 0)
-				argv[i] = ft_strdup(args[i]);
-			else if (cmd && i != 0 && args && argc > 0)
-				argv[i] = ft_strdup(args[i - 1]);
-			else if (!cmd && i != 0 && args && argc > 0)
-				argv[i] = ft_strdup(args[i]);
+			if (cmdname)
+			{
+				if (i == 0)
+					argv[0] = ft_strdup(cmdname);
+				else if (i != 0 && args && argc > 0)
+					argv[i] = ft_strdup(args[i - 1]);
+			}
+			else if (args && argc > 0)
+			{
+				if (i == 0)
+					argv[0] = ft_strdup(args[0]);
+				else
+					argv[i] = ft_strdup(args[i]);
+			}
+			else
+				return (ERR_ARGS);
 			if (!argv[i])
-				return (ft_freearr((void **)args, -1), \
-						ft_freearr((void **)argv, -1), NULL);
+				return (err(EMSG_MALLOC), ((void **)args, -1), \
+						ft_freearr((void **)argv, -1), ERR_MEM);
 		}
 		argv[i] = NULL;
+		cmd->argvc = i; 
+		cmd->argv = argv;
+		if (NULL == cmdname)
+			p_set_cmd(a, argv[0]);
 		ft_freearr((void **)args, -1);
 	}
-	return (argv);
+	return (0);
 }
 
 void print_pipes(t_cmd *c)

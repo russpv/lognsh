@@ -1,17 +1,17 @@
 #include "execute_int.h"
 
-#define ERRMSG_ECMD_NULLARGV "_do_child_ops: ERR null argv parameters\n"
-#define ERRMSG_ECMD_NULLPATH "_do_child_ops: ERR null fullpath parameters\n"
-#define ERRMSG_ECMD_NULLTCMD "_do_child_ops: ERR null t_cmd parameters\n"
-#define DBGMSG_ECMD_DOEXEC "Exec: Child exec'g %s\n"
-#define DBGMSG_ECMD_ANNOUNCE "Exec: exec_bi_call...\n"
-#define DBGMSG_ECMD_DOEXEC "Exec: Child exec'g %s\n"
-#define ERRMSG_ECMD_CHILD "ERR child ops\n"
-#define ERRMSG_ECMD_ARGS "exec_bi_run: ERR null command parameters\n"
-#define DBGMSG_ECMD_REDIRSV "Exec: exec_bi_call saving redir fns...\n"
-#define DBGMSG_ECMD_REDIRDO "Exec: exec_bi_call doing redirs ...\n"
-#define DBGMSG_ECMD_DOBLTIN "Exec: Shell exec'g builtin\n"
-#define DBGMSG_ECMD_ERRBLTIN "Exec: ERR bi()\n"
+#define EMSG_ECMD_NULLARGV "_do_child_ops: ERR null argv parameters\n"
+#define EMSG_ECMD_NULLPATH "_do_child_ops: ERR null fullpath parameters\n"
+#define EMSG_ECMD_NULLTCMD "_do_child_ops: ERR null t_cmd parameters\n"
+#define DBGMSG_ECMD_DOEXEC _MOD_ ": Child exec'g %s\n"
+#define DMSG_EC_GOT _MOD_ ": %s: Got %s, of %p\n"
+#define DBGMSG_ECMD_DOEXEC _MOD_ ": Child exec'g %s\n"
+#define EMSG_ECMD_CHILD "ERR child ops\n"
+#define EMSG_ECMD_ARGS "exec_bi_run: ERR null command parameters\n"
+#define DBGMSG_ECMD_REDIRSV _MOD_ ": exec_bi_call saving redir fns...\n"
+#define DBGMSG_ECMD_REDIRDO _MOD_ ": exec_bi_call doing redirs ...\n"
+#define DBGMSG_ECMD_DOBLTIN _MOD_ ": Shell exec'g builtin\n"
+#define DBGMSG_ECMD_ERRBLTIN _MOD_ ": ERR bi()\n"
 
 /* This execve's a simple cmd and
  * manages the various I/O redirections
@@ -25,18 +25,18 @@ static int	_do_child_ops(t_state *s)
 	const char	**envp = (const char **)get_envp(s);
 
 	if (!argv)
-		return (err(ERRMSG_ECMD_NULLARGV), -1);
+		return (err(EMSG_ECMD_NULLARGV), -1);
 	if (!fullpath)
-		return (err(ERRMSG_ECMD_NULLPATH), -1);
+		return (err(EMSG_ECMD_NULLPATH), -1);
 	if (!c)
-		return (err(ERRMSG_ECMD_NULLTCMD), -1);
+		return (err(EMSG_ECMD_NULLTCMD), -1);
 	if (0 != p_do_redirections(c_get_node((t_cmd *)c)))
 		return (ERR_REDIR);
 	debug_print(DBGMSG_ECMD_DOEXEC, fullpath);
 	if (NULL == fullpath)
 		return (-1);
 	else if (-1 == execve(fullpath, (char **)argv, (char **)envp))
-		return (perror(ERRMSG_EXECVE), ERR_EXECVE);
+		return (perror(EMSG_EXECVE), ERR_EXECVE);
 	destroy_state(s);
 	return (0);
 }
@@ -45,18 +45,19 @@ static int	_do_child_ops(t_state *s)
 int	exec_bi_call(t_state *s, t_builtin_fn bi)
 {
 	const t_cmd	*c = (const t_cmd *)get_cmd(s);
+	const t_ast_node *a = (const t_ast_node *)c_get_node((t_cmd *)c);
 	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
-	const int	argc = (const int)c_get_argc((t_cmd *)c);
+	const int	argvc = (const int)c_get_argvc((t_cmd *)c);
 	int		exit_code;
 
-	debug_print(DBGMSG_ECMD_ANNOUNCE);
-	if (!argv || !bi || !c)
-		return (err(ERRMSG_ECMD_ARGS), ERR_ARGS);
+	debug_print(DMSG_EC_GOT, __FUNCTION__, argv[0], a);
+	if (!argv || !bi || !c || !a)
+		return (err(EMSG_ECMD_ARGS), ERR_ARGS);
 	save_redirs((t_cmd *)c);
-	if (0 != p_do_redirections(c_get_node((t_cmd *)c)))
+	if (0 != p_do_redirections((t_ast_node *)a))
 		return (ERR_REDIR);
 	debug_print(DBGMSG_ECMD_DOBLTIN);
-	exit_code = bi(s, (char **)argv, argc);
+	exit_code = bi(s, (char **)argv, argvc);
 	if (0 != exit_code)
 		debug_print(DBGMSG_ECMD_ERRBLTIN);
 	restore_redirs((t_cmd *)c);
@@ -81,14 +82,14 @@ int	exec_fork_execve(t_state *s)
 		reset_signal_handlers();
 		if (0 != _do_child_ops(s))
 		{
-			err(ERRMSG_ECMD_CHILD);
+			err(EMSG_ECMD_CHILD);
 			destroy_state(s);
 			exit(ERR_CHILD_FAILED);
 		}
 	}
 	else if (p < 0)
 	{
-		perror(ERRMSG_FORK);
+		perror(EMSG_FORK);
 		return (ERR_FORK);
 	}
 	waitchild(&exit_code, 1);

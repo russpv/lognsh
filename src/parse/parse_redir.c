@@ -1,12 +1,12 @@
 #include "parse_int.h"
 
-# define ERRMSG_REDIR_FN "Allocation for redirection filename failed\n"
-# define ERRMSG_REDIR_FN_INVALID "Expected a valid filename after redirection operator\n"
-# define ERRMSG_REDIR_FN_EOF "Expected a filename after redirection operator,found EOF\n"
-# define ERRMSG_REDIR_SYM_MALLOC "Allocation for redirection symbol failed\n"
-# define ERRMSG_HEREDOC_MALLOC "Memory allocation failed for redirection heredoc\n"
-# define ERRMSG_REDIR_NODE_MALLOC "Failed to create execution node for redirection\n"
-# define ERRMSG_REDIR_FAIL "Failed to parse redirection\n"
+# define EMSG_REDIR_FN "Allocation for redirection filename failed\n"
+# define EMSG_REDIR_FN_INVALID "Expected a valid filename after redirection operator\n"
+# define EMSG_REDIR_FN_EOF "Expected a filename after redirection operator,found EOF\n"
+# define EMSG_REDIR_SYM_MALLOC "Allocation for redirection symbol failed\n"
+# define EMSG_HEREDOC_MALLOC "Memory allocation failed for redirection heredoc\n"
+# define EMSG_REDIR_NODE_MALLOC "Failed to create execution node for redirection\n"
+# define EMSG_REDIR_FAIL "Failed to parse redirection\n"
 # define DBGMSG_REDIR_FN _MOD_ ": _process_normal_redir filename:%s\n"
 # define DBGMSG_REDIR_GOT _MOD_ ": Redirection: type=%d symbol=%s\n"
 
@@ -22,7 +22,7 @@ static int	_add_redir(t_ast_node *node, t_redir_data *red)
 	new = ft_lstnew(red);
 	if (!new)
 	{
-		err(ERRMSG_REDIR_NODE_MALLOC);
+		err(EMSG_REDIR_NODE_MALLOC);
 		return (ERR_MEM);
 	}
 	debug_print(_MOD_ ": Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n",\
@@ -45,15 +45,15 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red, t_a
 		return (ERR_ARGS);
 	red->symbol = ft_strdup(tok_get_raw((t_tok *)tok));
 	if (!red->symbol)
-		return (err(ERRMSG_REDIR_SYM_MALLOC), ERR_MEM);
+		return (err(EMSG_REDIR_SYM_MALLOC), ERR_MEM);
 	debug_print(DBGMSG_REDIR_GOT, red->type, red->symbol);
 	if (is_at_end(p))
-		return (err(ERRMSG_REDIR_FN_EOF), ERR_SYNTAX);
+		return (err(EMSG_REDIR_FN_EOF), ERR_SYNTAX);
 	tok_fname = advance(p);
 	debug_print(DBGMSG_REDIR_FN, tok_get_raw(tok_fname));
 	if (!(is_filename_token((t_tok *)tok_fname)
 			|| is_expansion((t_tok *)tok_fname)))
-		return (err(ERRMSG_REDIR_FN_INVALID), ERR_SYNTAX);
+		return (err(EMSG_REDIR_FN_INVALID), ERR_SYNTAX);
 	red->do_globbing = tok_get_globbing((t_tok *)tok_fname);
 	red->do_expansion = tok_get_expansion((t_tok *)tok_fname);
 	red->filename = ft_strdup(tok_get_raw((t_tok *)tok_fname));
@@ -61,7 +61,7 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red, t_a
 	n->data.cmd.do_redir_expansion |= red->do_expansion;
 	n->data.cmd.do_redir_globbing |= red->do_globbing;
 	if (!red->filename)
-		return (err(ERRMSG_REDIR_FN), ERR_MEM);
+		return (err(EMSG_REDIR_FN), ERR_MEM);
 	return (0);
 }
 
@@ -83,7 +83,7 @@ static int	_process_heredoc_redir(t_redir_data *red, t_tok *tok, t_ast_node *cmd
 	red->heredoc_body = ft_strdup(tok_get_raw((t_tok *)tok));
 	if (!red->heredoc_body)
 	{
-		err(ERRMSG_HEREDOC_MALLOC);
+		err(EMSG_HEREDOC_MALLOC);
 		return (ERR_MEM);
 	}
 	return (0);
@@ -133,7 +133,7 @@ int	process_redir(t_parser *p, t_ast_node *ast_node)
 	{
 		if (0 != _parse_redir(p, ast_node))
 		{
-			err(ERRMSG_REDIR_FAIL);
+			err(EMSG_REDIR_FAIL);
 			return (ERR_GENERAL);
 		}
 	}
