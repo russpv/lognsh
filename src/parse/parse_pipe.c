@@ -2,10 +2,10 @@
 
 #define EMSG_PPIPE_MALLOC "Memory allocation error while creating pipe's command node\n"
 #define EMSG_PPIPE_SYNTAX "Failed to parse command after pipe operator\n"
-#define DBGMSG_PPIPE_NEXT "Parser: parsing pipeline: getting next cmd...\n"
-#define DBGMSG_PPIPE_GOT "Parser: parse_pipeline tok: %s\n"
-#define EMSG_PPIPE_GEN "Parser: pipeline parsing error\n"
-#define DBGMSG_PPIPE_DONE "Parser: parsed pipeline of %d cmds\n"
+#define DBGMSG_PPIPE_NEXT _MOD_ ": parsing pipeline: getting next cmd...\n"
+#define DBGMSG_PPIPE_GOT _MOD_ ": parse_pipeline tok: %s\n"
+#define EMSG_PPIPE_GEN _MOD_ ": pipeline parsing error\n"
+#define DBGMSG_PPIPE_DONE _MOD_ ": parsed pipeline of %d cmds\n"
 
 static t_ast_node	*_init_pipe(void)
 {

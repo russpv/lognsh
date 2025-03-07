@@ -76,10 +76,10 @@ t_list *ft_lstsort(t_list **lst)
     if (!*lst)
         return ((t_list *)-1);
     last = ft_lstlast(*lst);
-	debug_print( "ft_lstsort got: ");
+	debug_print( "%s: got: ", __FUNCTION__);
 	ft_lstprint(*lst);
     _solve(lst, lst, &last);
-	debug_print( "ft_lstsort returning: ");
+	debug_print( "%s: returning: ", __FUNCTION__);
 	ft_lstprint(*lst);
     return (*lst);
 }

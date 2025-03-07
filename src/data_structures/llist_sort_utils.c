@@ -4,7 +4,7 @@ int    compare(t_list *beg, t_list *end)
 {
 	int res;
 
-	res = ft_strcmp(beg->content, end->content);
+	res = ft_strcmplow(beg->content, end->content);
     if (res > 0)
         return (AMORETHANB);
     else if (res < 0)

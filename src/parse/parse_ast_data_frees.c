@@ -8,7 +8,7 @@ void	destroy_redir(void *in)
 	redir = (t_redir_data *)in;
 	if (NULL == redir)
 		return ;
-	debug_print("Parser: destroy_redir...\n");
+	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
 	if (redir->symbol)
 		free(redir->symbol);
 	if (redir->filename)
@@ -26,8 +26,8 @@ void	destroy_arg(void *in)
 	t_arg_data	*arg;
 
 	arg = (t_arg_data *)in;
-	debug_print("Parser: destroy_arg...\n");
-	if (NULL == arg)
+	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
+	if (NULL == in)
 		return ;
 	if (arg->lst_tokens)
 		ft_lstclear(&arg->lst_tokens, destroy_token);

@@ -1,9 +1,9 @@
 #include "parse_int.h"
 
 #define EMSG_AMBIG "ERR multiple redirect targets globbed\n"
-#define DBGMSG_REDIR_NODE "Parser: p_do_globbing_redirs got redir type: %d fn:%s doc:\
+#define DBGMSG_REDIR_NODE _MOD_ ": p_do_globbing_redirs got redir type: %d fn:%s doc:\
 		%s do_glob:%d\n"
-#define DBGMSG_REDIR_GLOB "Parser: p_do_globbing_redirs found:%s...\n"
+#define DBGMSG_REDIR_GLOB _MOD_ ": p_do_globbing_redirs found:%s...\n"
 
 /* The redir version of p_do_globbing_args. 
  * Operates on a single t_redir_data node. 

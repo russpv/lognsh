@@ -1,35 +1,112 @@
 #include "parse_int.h"
 
-/* Moves ptr and returns previous object */
-t_tok	*advance(t_parser *p)
+static void	_destroy_arr(char **arr)
 {
-	t_tok	*tmp;
+	int	i;
 
-	tmp = p->curr_tok->content;
-	if (false == is_at_end(p))
+	i = 0;
+	if (!arr[i])
+		return ;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
+}
+/*
+static int	_update_combined_subtokens(char **old, const char *curr, const char *prev)
+{
+	char *new_s; 
+
+	if (old)
 	{
-		p->curr_idx++;
-		p->curr_tok = p->curr_tok->next;
+		new_s = ft_strjoin(*old, curr);
+		if (NULL == new_s)
+			return (free(*old), err(EMSG_MALLOC), ERR_MEM);
+		free(*old);
+		*old = new_s;
 	}
-	return (tmp);
-}
-
-// Returns current token ptr token
-t_tok	*peek(t_parser *p)
-{
-	return (p->curr_tok->content);
-}
-
-// Returns p->curr_tok->next->content
-t_tok	*lookahead(t_parser *p)
-{
-	if (is_at_end(p))
-		return (NULL);
 	else
-		return (p->curr_tok->next->content);
+	{
+		*old = ft_strjoin(curr, prev);
+		if (NULL == *old)
+			return (err(EMSG_MALLOC), ERR_MEM);
+	}
+	return (0);
+}*/
+
+// Deep copies linked list of arguments to char **array
+// TODO: pass state here to handle bad mallocs
+char	**list_to_array(t_list *args, int argc)
+{
+	char	**array;
+	int		i;
+	char *new_s;
+
+	array = malloc(sizeof(char *) * (size_t)(argc + 1));
+	if (NULL == array)
+		return (err(EMSG_MALLOC), NULL); // TODO handle bad mem
+	i = 0;
+	while (i < argc && args)
+	{
+		new_s = NULL;
+		/*if (((t_arg_data *)args->content)->is_grouparg)
+		{
+			//TODO use list iterator to strjoin the raws
+		}*/
+		array[i] = new_s;
+		if (NULL == array[i])
+			array[i] = ft_strdup(((t_arg_data *)args->content)->raw);
+		if (NULL == array[i])
+		{
+			_destroy_arr(array);
+			return (NULL);
+		}
+		args = args->next;
+		i++;
+	}
+	array[argc] = NULL;
+	return (array);
 }
 
-t_tok	*previous(t_parser *p)
+
+static void _print_arg_data(t_arg_data *data) 
 {
-	return (p->curr_tok->prev->content);
+	if (DEBUG && isatty(STDOUT_FILENO))
+	{
+		if (!data) {
+			printf("  t_arg_data is NULL\n");
+			return;
+		}
+		printf("  raw: %s\n", data->raw ? data->raw : "(null)");
+		printf("  tmp: ");
+		if (data->tmp) {
+			for (int i = 0; data->tmp[i] != NULL; i++) {
+				printf("%s ", data->tmp[i]);
+			}
+			printf("\n");
+		} else {
+			printf("(null)\n");
+		}
+		printf("  lst: %p\n", data->lst_tokens ? data->lst_tokens : 0x0);
+		printf("  option: %s\n", data->option ? "true" : "false");
+		printf("  do_globbing: %s\n", data->do_globbing ? "true" : "false");
+		printf("  do_expansion: %s\n", data->do_expansion ? "true" : "false");
+		printf("  in_dquotes: %s\n", data->in_dquotes ? "true" : "false");
+	}
+}
+
+void debug_print_list(t_list *head) 
+{
+    t_list *current = head;
+    int i = 0;
+	
+	if (DEBUG && isatty(STDOUT_FILENO))
+	{
+		while (current) 
+		{
+			printf("Node %d:\n", i);
+			_print_arg_data((t_arg_data *)current->content);
+			current = current->next;
+			i++;
+		}
+	}
 }

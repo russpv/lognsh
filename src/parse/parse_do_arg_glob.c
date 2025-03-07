@@ -74,6 +74,7 @@ t_list	*match_glob(const char *pattern)
 {
 	t_list			*lst;
 	t_list			*new;
+	t_list 			*got;
 	struct dirent	*res;
 	DIR				*dir;
 
@@ -99,7 +100,7 @@ t_list	*match_glob(const char *pattern)
 	closedir(dir);
 	ft_lstprint(lst);
 	debug_detect_cycle(lst);
-	t_list *got = ft_lstsort(&lst);
+	got = ft_lstsort(&lst);
 	debug_detect_cycle(got);
 
 	return (got);
@@ -107,7 +108,7 @@ t_list	*match_glob(const char *pattern)
 
 /* 
  * lst is incoming list of glob matches to be inserted 
- * after the lst_node.
+ * at the lst_node position, overwriting it. 
  * content is the existing arg node.
  * Deletes lst_node, deep copies glst and inserts 
  * at lst_node position.

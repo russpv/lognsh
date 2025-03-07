@@ -2,10 +2,10 @@
 
 # define EMSG_REDIR_HANDLER "Redirection handler issue\n"
 # define EMSG_REDIR_NULLNODE "ERR no node given\n"
-# define DBGMSG_REDIR_ANNOUNCE2 "Parser: _p_do_redirection iterating...\n"
-# define DBGMSG_REDIR_GOTNULL "Parser: _p_do_redirection got NULL\n"
-# define DBGMSG_REDIR_GOT "Parser: _p_do_redirection got redir, executing...\n"
-# define DBGMSG_REDIR_ANNOUNCE "Parser: p_do_redirections, doing redirs...\n"
+# define DBGMSG_REDIR_ANNOUNCE2 _MOD_ ": _p_do_redirection iterating...\n"
+# define DBGMSG_REDIR_GOTNULL _MOD_ ": _p_do_redirection got NULL\n"
+# define DBGMSG_REDIR_GOT _MOD_ ": _p_do_redirection got redir, executing...\n"
+# define DBGMSG_REDIR_ANNOUNCE _MOD_ ": p_do_redirections, doing redirs...\n"
 
 /* Executes redirection of t_redir_data llist
  * Accepts a t_redir_data.

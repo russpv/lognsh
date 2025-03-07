@@ -4,7 +4,7 @@ void	debug_print(const char *format, ...)
 {
 	va_list	args;
 
-	if (DEBUG)
+	if (DEBUG && isatty(STDERR_FILENO))
 	{
 		va_start(args, format);
 		fprintf(stderr, BLUE "[PID %d] [DEBUG]", getpid());
@@ -19,7 +19,7 @@ void	colored_printf(const char *color, const char *format, ...)
 {
 	va_list	args;
 
-	if (LOGGING)
+	if (LOGGING && isatty(STDERR_FILENO))
 	{
 		va_start(args, format);
 		fprintf(stderr, "%s", color);
@@ -34,7 +34,7 @@ void	log_print(const char *s, ...)
 {
 	va_list	args;
 
-	if (LOGGING)
+	if (LOGGING && isatty(STDERR_FILENO))
 	{
 		va_start(args, s);
 		fprintf(stderr, CYAN"[LOG] ");

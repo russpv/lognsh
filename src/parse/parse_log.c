@@ -87,7 +87,7 @@ static int	_process_log(t_state *s, t_parser *p, t_ast_node *log_node)
 		if (0 != _process_op(p, log_node))
 			return (ERR_GENERAL);
 		advance(p);
-		debug_print("Parser: parsing logical: getting next cmd...\n");
+		debug_print(_MOD_ ": parsing logical: getting next cmd...\n");
 		res = _do_ops(s, p, log_node);
 		if (0 != res)
 			return (res);
@@ -104,7 +104,7 @@ t_ast_node	*parse_logical(t_state *s, t_parser *p)
 	int			res;
 
 	st_int_push(p->st, AST_NODE_LOG);
-	debug_print("Parser: parse_logical tok: %s\n", tok_get_raw(peek(p)));
+	debug_print(_MOD_ ": parse_logical tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = init_log();
 	if (NULL == ast_node)
 		return (err(EMSG_LOGI_NODE_MALLOC), NULL);
@@ -117,6 +117,6 @@ t_ast_node	*parse_logical(t_state *s, t_parser *p)
 	}
 	p->last_node = ast_node;
 	st_int_pop(p->st);
-	debug_print("Parser: parsed logical of %d cmds\n", ast_node->data.log.cmdc);
+	debug_print(_MOD_ ": parsed logical of %d cmds\n", ast_node->data.log.cmdc);
 	return (ast_node);
 }

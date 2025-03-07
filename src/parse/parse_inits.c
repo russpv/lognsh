@@ -47,7 +47,7 @@ void	destroy_parser(void *instance)
 	p = (t_parser *)instance;
 	if (!p)
 		return ;
-	debug_print("Parser: destroy_parser...\n");
+	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
 	if (p->ast)
 	{
 		destroy_ast_node(p->ast);
@@ -55,7 +55,7 @@ void	destroy_parser(void *instance)
 	}
 	if (p->tokens)
 	{
-		debug_print("Parser: destroy_parser destroying p->tokens...\n");
+		debug_print(_MOD_ ": %s: destroying p->tokens...\n", __FUNCTION__);
 		ft_lstclear(&p->tokens, destroy_token);
 		p->tokens = NULL;
 	}
