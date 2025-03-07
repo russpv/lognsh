@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:27:21 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/16 15:15:53 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/03/07 15:28:26 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	bi_unset(t_state *s, char **argv, int argc)
 	i = 1;
 	while (argv[i])
 	{
-		remove_env_node(get_sh_env_list_add(s), argv[i]);
+		env_remove_node(get_sh_env_list_add(s), argv[i]);
 		i++;
 	}
 	return (0);

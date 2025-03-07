@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 10:47:28 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/06 18:50:35 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/07 15:37:27 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	_add_new_var(t_env **sh_env_list, const char *key, \
 		free(new_value);
 		return (ERR_MEM);
 	}
-	add_env_node(sh_env_list, new_node);
+	env_add_node(sh_env_list, new_node);
 	free(new_value);
 	return (0);
 }
@@ -73,7 +73,7 @@ static int	_update_or_add_env(t_state *s, t_env *existing_key, \
 			const char *key, const char *value)
 {
 	if (existing_key)
-		return (_update_existing_var(existing_key, value));
+		return (update_existing_var(existing_key, value));
 	return (_add_new_var(get_sh_env_list_add(s), key, value));
 }
 
@@ -92,7 +92,7 @@ int	process_arg_update_add(t_state *s, const char *arg, \
 	if (!key)
 		return (ERR_MEM);
 	_set_value(equal_pos, &value);
-	existing_key = env_find_key(get_sh_env_list(s), key);
+	existing_key = find_env_key(get_sh_env_list(s), key);
 	exit_code = _update_or_add_env(s, existing_key, key, value);
 //	if (0 != exit_code && equal_pos)
 //		*equal_pos = '='; // Why modify when this is no longer used?

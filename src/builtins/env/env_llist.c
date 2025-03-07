@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 09:00:07 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/06 18:57:18 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/07 15:28:44 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ t_env	*copy_envp(char **envp)
 			new_node = create_env_node(key, value);
 			if (!new_node)
 				return (free(key), free(value), env_free_list(env_list), NULL);
-			add_env_node(&env_list, new_node);
+			env_add_node(&env_list, new_node);
 			free(key);
 			free(value);
 		}

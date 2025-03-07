@@ -3,23 +3,36 @@
 #include <string.h>
 #include "../include/test.h"
 
+#define MAX_BUF 4096
+
+void print_string_debug(const char *str) {
+    for (size_t i = 0; str[i] != '\0'; i++) {
+        printf("%c", (unsigned char)str[i]);
+    }
+    printf("\n");
+}
+
 /**
  * Run command in Bash and return output as a string.
  */
 char *run_bash(const char *cmd) {
     char buffer[1024];
-    char *result = malloc(4096);
+    char *result = malloc(MAX_BUF);
     result[0] = '\0';
 
+	memset(result, 0, MAX_BUF);
+	memset(buffer, 0, sizeof(buffer));
     FILE *pipe = popen(cmd, "r"); // Run command in bash
     if (!pipe) return NULL;
 
     while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
-        strcat(result, buffer);
+		strncat(result, buffer, MAX_BUF - strlen(result) - 1);  // Append the output
+		memset(buffer, 0, sizeof(buffer));
     }
     pclose(pipe);
+
     fprintf(stderr, "%s", CYN);
-    fprintf(stderr, "Got from bash:%s", buffer);
+    fprintf(stderr, "\tGot from bash:%s", result);
     fprintf(stderr, "%s", CRESET);
     return result;
 }
@@ -27,7 +40,6 @@ char *run_bash(const char *cmd) {
 /**
  * Run command in our shell and return output as a string.
  */
-#define MAX_BUF 4096
 
 char *run_my_shell(const char *cmd) 
 {
@@ -38,7 +50,6 @@ char *run_my_shell(const char *cmd)
     char buffer[1024];
     result[0] = '\0';
 
-    // Create a pipe
     if (pipe(outpipefds) == -1) {
         perror(EMSG_PIPE);
         return NULL;
@@ -53,8 +64,6 @@ char *run_my_shell(const char *cmd)
         return NULL;
     }
     if (pid == 0) {
-        // In the child process
-
         // Redirect stdout to the pipe
         close(outpipefds[0]);  // Close unused read end of the pipe
         dup2(outpipefds[1], STDOUT_FILENO);  // Redirect stdout to the pipe
@@ -64,37 +73,31 @@ char *run_my_shell(const char *cmd)
         dup2(inpipefds[0], STDIN_FILENO);
         close(inpipefds[0]);
 
-        // Execute the shell command
         execlp(SHELL_EXE, SHELL_EXE, cmd, (char *)NULL);
-        // If execlp fails
         perror("execlp");
         exit(1);
     } else {
-        // In the parent process
 
         // Close the write end of the pipe
         close(outpipefds[1]);
         close(inpipefds[0]);
 
         write(inpipefds[1], cmd, strlen(cmd));
-        //write(inpipefds[1], "\n", 1);  // Ensure newline is included
         close(inpipefds[1]);
 
         // Read the output from the pipe
         int bytesRead;
-        while ((bytesRead = (int)read(outpipefds[0], buffer, sizeof(buffer) - 1)) > 0) {
-            buffer[bytesRead] = '\0';
-            strcat(result, buffer);  // Append the output
-        }
-
-        // Wait for the child process to finish
+		memset(buffer, 0, sizeof(buffer));
+		memset(result, 0, MAX_BUF);	
         wait(NULL);
-
+        while ((bytesRead = (int)read(outpipefds[0], buffer, sizeof(buffer) - 1)) > 0) {
+            strncat(result, buffer, MAX_BUF - strlen(result) - 1);  // Append the output
+			memset(buffer, 0, sizeof(buffer));
+        }
         close(outpipefds[0]);
-
     }
     fprintf(stderr, "%s", BLU);
-    printf("Got from minish:%s", result);
+    fprintf(stderr, "\tGot from minish:%s", result);
     fprintf(stderr, "%s", CRESET);
     return result;
 }

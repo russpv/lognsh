@@ -20,18 +20,10 @@
 
 #define SHELL_EXE "./minish"
 
-#define DEFINE_E2E_TEST(test_name, input) \
-    void test_name(void) { \
-        char *my_shell_output = run_my_shell(input); \
-        char *bash_output = run_bash(input); \
-        printf("\n"); \
-        TEST_ASSERT_EQUAL_STRING(bash_output, my_shell_output); \
-        free(my_shell_output); \
-        free(bash_output); \
-    }
 
 char *run_bash(const char *cmd);
 char *run_my_shell(const char *cmd);
+void print_string_debug(const char *str);
 
 
 #endif

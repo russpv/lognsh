@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:05:10 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/06 17:08:35 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/07 16:57:22 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ static void	_exit_valid_arg(t_state *s, char *arg)
  */
 int	bi_exit(t_state *s, char **argv, int argc)
 {
-	write(STDOUT_FILENO, "exit\n", sizeof("exit\n") - 1);
+	if (isatty(STDOUT_FILENO))
+		write(STDOUT_FILENO, "exit\n", sizeof("exit\n") - 1);
 	if (argc < 2)
 		_exit_no_arg(s);
 	else if (!is_numeric(argv[1]))

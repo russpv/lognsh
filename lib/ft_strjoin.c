@@ -7,7 +7,6 @@
 ** concatenation.
 ** UNPROTECTED
 */
-
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	len1;

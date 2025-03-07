@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:07:02 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/06 19:00:31 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/07 15:27:17 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	_set_env_value(t_env **env_list, const char *key, const char *value)
 	node = find_env_key(*env_list, key);
 	if (node)
 	{
-		if (!_update_existing_var(node, value))
+		if (!update_existing_var(node, value))
 			return (1);
 	}
 	else
@@ -96,5 +96,5 @@ int	bi_cd(t_state *s, char **args, int argc)
 		print_custom_err(CMD_NAME, EMSG_NOHOME);
 		return (ERR_GENERAL);
 	}
-	return (change_dir(s, target));
+	return (_change_dir(s, target));
 }
