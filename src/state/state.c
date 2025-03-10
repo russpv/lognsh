@@ -21,6 +21,10 @@ t_state	*init_state(char **envp)
 	s->destroy_parser = NULL;
 	s->envp = envp;
 	s->tmp = NULL;
+	mem_init(&s->mem_list);
+	assert(s->mem_list.next != NULL);
+	mem_add_mem(&s->mem_list, s, sizeof(struct s_global_state));
+	mem_add_mem(&s->mem_list, &s->mem_list, sizeof(t_mem_node));
 	s->sh_env_list = copy_envp(envp);
 	if (!s->sh_env_list)
 		return (free(s), NULL);
@@ -34,16 +38,16 @@ t_state	*init_state(char **envp)
 void	destroy_state(t_state *s)
 {
 	if (s->current_parser)
-		s->destroy_parser(s->current_parser);
+		s->destroy_parser(s, s->current_parser);
 	if (s->current_lexer)
-		s->destroy_lexer(s->current_lexer);
+		s->destroy_lexer(s, s->current_lexer);
 	if (s->current_cmd)
-		s->destroy_command(s->current_cmd);
+		s->destroy_command(s, s->current_cmd);
 	if (s->input)
 		free(s->input);
 	if (s->sh_env_list)
 		env_free_list(s->sh_env_list);
-	free(s);
+	myfree(s, s);
 }
 
 /* Destroys parser before lexer
@@ -56,17 +60,17 @@ void	s_free_cmd_lex_parse(t_state *state)
 	state->input = NULL;
 	if (state->current_parser)
 	{
-		state->destroy_parser(state->current_parser);
+		state->destroy_parser(state, state->current_parser);
 		state->current_parser = NULL;
 	}
 	if (state->current_lexer)
 	{
-		state->destroy_lexer(state->current_lexer);
+		state->destroy_lexer(state, state->current_lexer);
 		state->current_lexer = NULL;
 	}
 	if (state->current_cmd)
 	{
-		state->destroy_command(state->current_cmd);
+		state->destroy_command(state, state->current_cmd);
 		state->current_cmd = NULL;
 	}
 	s_free_tmp(state);
@@ -78,7 +82,7 @@ void	s_free_cmd(t_state *state)
 {
 	if (state->current_cmd)
 	{
-		state->destroy_command(state->current_cmd);
+		state->destroy_command(state, state->current_cmd);
 		state->current_cmd = NULL;
 	}
 	s_free_tmp(state);

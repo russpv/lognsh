@@ -52,7 +52,7 @@ int	add_token(t_lex *lexer, t_tok *token)
  * Looks ahead for normal delim to reset subtoken flag.
  * Note: skip any terminator that is not to be part of token (\")
  */
-t_tok	*lex_create_token(t_lex *lexer, int type)
+t_tok	*lex_create_token(t_state *st, t_lex *lexer, int type)
 {
 	t_tok	*token;
 	t_tok	*grp_token;
@@ -62,14 +62,14 @@ t_tok	*lex_create_token(t_lex *lexer, int type)
 		return (NULL);
 	if (true == lexer->is_subtoken && NULL == lexer->last_grp_tok)
 	{
-		grp_token = create_token(lexer->buf, TOK_GROUP_WORD, (size_t)(lexer->ptr \
+		grp_token = create_token(st, lexer->buf, TOK_GROUP_WORD, (size_t)(lexer->ptr \
 			- lexer->raw_string));
 		if (!grp_token)
 			return (err(EMSG_MALLOC), NULL);
 		lexer->last_grp_tok = grp_token;
 		debug_print(_MOD_": %s: Created GROUP token\n", __FUNCTION__);
 	}
-	token = create_token(lexer->buf, type, (size_t)(lexer->ptr \
+	token = create_token(st, lexer->buf, type, (size_t)(lexer->ptr \
 				- lexer->raw_string));
 	if (token)
 	{

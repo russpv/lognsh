@@ -26,7 +26,7 @@ static t_ast_node	*init_cmd_node(void)
  * linked list.
  * Returns NULL if syntax error.
  */
-static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
+static int	_parse_args(t_state *s, t_parser *p, t_ast_node *cmd_node)
 {
 	t_arg_data	*arg;
 	t_list		*new;
@@ -35,7 +35,7 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
 		return (ERR_ARGS);
 	while (!is_at_end(p) && is_arg_token(peek(p)))
 	{
-		arg = init_arg(p, cmd_node, advance(p));
+		arg = init_arg(s, p, cmd_node, advance(p));
 		if (NULL == arg)
 			return (err(EMSG_MALLOC), ERR_MEM);
 		new = ft_lstnew(arg);
@@ -59,7 +59,7 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
  * In case of parsing failure, frees any downstream memory and returns.
  * Does nothing to args.
  */
-static int	_process_cmd(t_parser *p, t_ast_node *cmd_node)
+static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 {
 	if (!p || !cmd_node)
 		return (ERR_ARGS);
@@ -73,7 +73,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *cmd_node)
 		if (NULL == cmd_node->data.cmd.name)
 			return (err(EMSG_MALLOC), ERR_MEM);
 	}
-	if (0 != _parse_args(p, cmd_node))
+	if (0 != _parse_args(s, p, cmd_node))
 		return (ERR_GENERAL);
 	if (0 != process_redir(p, cmd_node))
 		return (ERR_GENERAL);
@@ -94,11 +94,11 @@ t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 	ast_node = init_cmd_node();
 	if (NULL == ast_node)
 		return (err(EMSG_MALLOC), NULL);
-	res = _process_cmd(p, ast_node);
+	res = _process_cmd(s, p, ast_node);
 	if (0 != res)
 	{
 		set_error(s, res);
-		destroy_ast_node(ast_node);
+		destroy_ast_node(s, ast_node);
 		return (NULL);
 	}
 	p->last_node = ast_node;

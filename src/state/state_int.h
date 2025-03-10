@@ -3,6 +3,7 @@
 
 # include "state.h"
 # include "../builtins/env/env.h"
+
 struct							s_global_state
 {
 	char						**envp;
@@ -20,14 +21,13 @@ struct							s_global_state
 	t_destroy_fn				destroy_parser;
 	t_destroy_fn				destroy_lexer;
 	t_destroy_fn				destroy_command;
+
+	t_mem_node					mem_list;
 };
 
 typedef struct s_global_state	t_state;
 
-// TODO track stdin, stdout, stderr fds to undo redirection
-// TODO add command history pointer
 // TODO
-// no signals, too mcuh indirection
 // t_ht *env_cache; TODO LATER, add hash table to env.h for faster lookups
 
 #endif

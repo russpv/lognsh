@@ -62,7 +62,7 @@ static inline int	_match_heredoc(t_lex *l)
  * Entire heredoc content loads into one token.
  * Any trailing words are skipped until an OP 
  */
-int	tokenize_heredoc(t_lex *lexer)
+int	tokenize_heredoc(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 	int		res;
@@ -76,7 +76,7 @@ int	tokenize_heredoc(t_lex *lexer)
 	if (0 != res)
 		return (res);
 	debug_print(DBGMSG_PTRAT, *lexer->ptr);
-	token = lex_create_token(lexer, TOK_HEREDOC_WORD);
+	token = lex_create_token(s, lexer, TOK_HEREDOC_WORD);
 	if (token)
 	{
 		assert(NULL != lexer && NULL != token);

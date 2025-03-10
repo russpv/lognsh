@@ -21,7 +21,7 @@ t_parser	*create_parser(t_state *s, t_list *tokens)
 	p = (t_parser *)malloc(sizeof(t_parser));
 	if (p)
 	{
-		p->tokens = ft_lstcopy(tokens, copy_token, destroy_token);
+		p->tokens = ft_lstcopy_tmp(s, tokens, copy_token, destroy_token);
 		if (!p->tokens)
 		{
 			free(p);
@@ -40,7 +40,7 @@ t_parser	*create_parser(t_state *s, t_list *tokens)
 	return (p);
 }
 
-void	destroy_parser(void *instance)
+void	destroy_parser(t_state *s, void *instance)
 {
 	t_parser	*p;
 
@@ -50,13 +50,13 @@ void	destroy_parser(void *instance)
 	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
 	if (p->ast)
 	{
-		destroy_ast_node(p->ast);
+		destroy_ast_node(s, p->ast);
 		p->ast = NULL;
 	}
 	if (p->tokens)
 	{
 		debug_print(_MOD_ ": %s: destroying p->tokens...\n", __FUNCTION__);
-		ft_lstclear(&p->tokens, destroy_token);
+		ft_lstclear_tmp(s, &p->tokens, destroy_token);
 		p->tokens = NULL;
 	}
 	if (p->st)

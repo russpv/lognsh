@@ -123,7 +123,7 @@ static int	_p_do_grparg_processing(t_state *s, void *c)
 	if (content->do_globbing)
 	{
 		lst = &content->lst_tokens;
-		ft_lstiter_ins_rwd(lst, p_do_globbing_args);
+		ft_lstiter_ins_rwd_tmp(s, lst, p_do_globbing_args);
 	}
 	res = lstiter_state(s, content->lst_tokens, tok_do_grp_combine);
 	if (0 == res)
@@ -157,7 +157,7 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 			if (a->data.cmd.do_globbing)
 			{
 				debug_print(DEBUGMSG_ARGP_PRE_G, argl, *argl); // TODO remove
-				ft_lstiter_ins_rwd(argl, p_do_globbing_args);
+				ft_lstiter_ins_rwd_tmp(s, argl, p_do_globbing_args);
 				debug_print(DEBUGMSG_ARGP_POST_G, argl, *argl); // TODO remove
 			}
 		}

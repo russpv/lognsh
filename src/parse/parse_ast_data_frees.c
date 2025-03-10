@@ -21,7 +21,7 @@ void	destroy_redir(void *in)
 }
 
 /* Fully frees a struct s_arg, for use in llist destroy */
-void	destroy_arg(void *in)
+void	destroy_arg(t_state *s, void *in)
 {
 	t_arg_data	*arg;
 
@@ -30,7 +30,7 @@ void	destroy_arg(void *in)
 	if (NULL == in)
 		return ;
 	if (arg->lst_tokens)
-		ft_lstclear(&arg->lst_tokens, destroy_token);
+		ft_lstclear_tmp(s, &arg->lst_tokens, destroy_token);
 	if (arg->raw)
 		free(arg->raw);
 	if (arg->tmp)

@@ -18,7 +18,7 @@ static bool	_is_dquote_transition_delim(t_lex *l)
 }
 
 //TODO process specials
-static inline t_tok	*_process_dquote_logic(t_lex *lexer)
+static inline t_tok	*_process_dquote_logic(t_state *s, t_lex *lexer)
 {
 	if ((unsigned char)TK_ESC == *lexer->ptr)
 	{
@@ -34,7 +34,7 @@ static inline t_tok	*_process_dquote_logic(t_lex *lexer)
 	if ((unsigned char)OP_DQUOTE == *lexer->ptr && false == lexer->escape_mode)
 	{
 		lexer->ptr++;
-		return (lex_create_token(lexer, TOK_WORD)); //creates final token
+		return (lex_create_token(s, lexer, TOK_WORD)); //creates final token
 	}
 	return (NULL);
 }
@@ -45,7 +45,7 @@ static inline t_tok	*_process_dquote_logic(t_lex *lexer)
  * if normal loop doesn't find closing ", flags incomplete
  * note: single quotes are literal, thus only \" or \0 trigger state change
  */
-static inline t_tok	*_match_double(t_lex *lexer)
+static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
@@ -56,7 +56,7 @@ static inline t_tok	*_match_double(t_lex *lexer)
 		lexer->ptr++;
 		while (*lexer->ptr && !_is_dquote_transition_delim(lexer))
 		{
-			token = _process_dquote_logic(lexer);
+			token = _process_dquote_logic(s, lexer);
 			lexer->escape_mode = false;
 			if (token)
 				return (token);
@@ -68,7 +68,7 @@ static inline t_tok	*_match_double(t_lex *lexer)
 			return (NULL);
 		if (false == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)))
 			lexer->is_subtoken = true;
-		token = lex_create_token(lexer, TOK_WORD); // tokenize subtoken
+		token = lex_create_token(s, lexer, TOK_WORD); // tokenize subtoken
 	}
 	return (token);
 }
@@ -80,14 +80,14 @@ static inline t_tok	*_match_double(t_lex *lexer)
  * a valid dollar expansion
  * else, flag incomplete
  */
-int	tokenize_double_quotes(t_lex *lexer)
+int	tokenize_double_quotes(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
 	debug_print(_MOD_ YELLOW": STATE: %s, ptr:_%c_\n"RESET, __FUNCTION__, *lexer->ptr);
 	if (lexer)
 	{
-		token = _match_double(lexer);
+		token = _match_double(s, lexer);
 		if (!token)
 			return (0); //empty dquote
 		//lexer->ptr++;

@@ -11,14 +11,14 @@
 // Capture operators in NORMAL mode.
 // Capture subtokens in ENVVAR mode. Simplifies NORMAL.
 // Capture literal in SQUOTE.
-// Capture reduced processed tokens in DQUOTE. 
+// Capture reduced processed tokens in DQUOTE.
 // How do I know I'm done with a subtoken streak?
 /*
 
 These are the conditions for exiting DOLLAR mode
 ... (end of valid name) +
 These are the conditions for tokenizing full tokens
-...&& not ...& 
+...&& not ...&
 ...|[|] is_normal_delim
 ...<* ...>* is_normal_delim
 ...( or )  is_normal_delim
@@ -33,7 +33,8 @@ Delimited by normal delims
 
 Any of the states must stop on the tokenizing delimiters
 All state transitions otherwise signify subtokens unless tokenizing delimiter also follows.
-So we can end on quotation marks, and if we were part of a subtoken streak we would have to
+So we can end on quotation marks,
+	and if we were part of a subtoken streak we would have to
 check if characters other than any of these delimiter patterns is present after the transition
 chars. That must be done each call to lex_create_token. Might as well encapsulate in that func.
 
@@ -41,11 +42,11 @@ chars. That must be done each call to lex_create_token. Might as well encapsulat
 
 /* chars that need to be quoted if meant literally */
 #define NORMALDELIMS "?()|<>\n\t &\0"
-//no space needed to split singles: "()|<> \n\t"
-//no space needed to split doubles: "<<,>>,&&,||"
-//space needed to split (hence addressed above) "[ \'],[ \"]"
-//doesn't split "\'\"{}[]=""
-//not implemented ~^`;&
+// no space needed to split singles: "()|<> \n\t"
+// no space needed to split doubles: "<<,>>,&&,||"
+// space needed to split (hence addressed above) "[ \'],[ \"]"
+// doesn't split "\'\"{}[]=""
+// not implemented ~^`;&
 // $, \, # do not delimit tokens, and are skipped
 // Removed '*' so that it is included in token raws
 // TODO, remove '?'
@@ -59,12 +60,12 @@ chars. That must be done each call to lex_create_token. Might as well encapsulat
 #define MOD "Lexer"
 
 /* LEX
- * 
- * Selectively loads input string into buf, marking 
- * current section with processing properties 
+ *
+ * Selectively loads input string into buf, marking
+ * current section with processing properties
  * until a delimiter is found, then creates a token
  * and resets buf.
- * 
+ *
  * Does these rules:
  * white space skipped outside of quotes
  * single quotes are closed, and protect string literal
@@ -163,7 +164,7 @@ enum						e_lex_state
 	DONE
 };
 
-typedef int					(*t_tokenizer)(t_lex *l);
+typedef int					(*t_tokenizer)(t_state *s, t_lex *l);
 
 typedef struct s_lex
 {
@@ -201,7 +202,7 @@ typedef struct s_ht_data	*t_ht_data;
 
 t_lex						*create_lexer(t_state *st, int start_state,
 								const char *s);
-void						destroy_lexer(void *instance);
+void	destroy_lexer(t_state *s, void *instance);
 void						init_token_masks(t_lex *l);
 
 /* ht */
@@ -209,21 +210,22 @@ void						build_hasht(t_lex *lexer);
 t_ht_data					lex_create_ht_node(int is_substring, int type);
 void						lex_destroy_ht_node(void *node);
 void						*lex_copy_ht_data(void *data);
-t_tok						*lex_ht_lookup(t_lex *lexer);
+t_tok						*lex_ht_lookup(t_state *s, t_lex *lexer);
 
-int							tokenize_normal(t_lex *lexer);
-int							tokenize_single_quotes(t_lex *lexer);
-int							tokenize_double_quotes(t_lex *lexer);
-int							tokenize_null(t_lex *lexer);
-int							tokenize_heredoc(t_lex *lexer);
-int							tokenize_dollar(t_lex *lexer);
+int							tokenize_normal(t_state *s, t_lex *lexer);
+int							tokenize_single_quotes(t_state *s, t_lex *lexer);
+int							tokenize_double_quotes(t_state *s, t_lex *lexer);
+int							tokenize_null(t_state *s, t_lex *lexer);
+int							tokenize_heredoc(t_state *s, t_lex *lexer);
+int							tokenize_dollar(t_state *s, t_lex *lexer);
 
-t_tok						*lex_create_token(t_lex *lexer, int type);
+t_tok						*lex_create_token(t_state *st, t_lex *lexer,
+								int type);
 int							add_token(t_lex *lexer, t_tok *token);
 
-bool	is_normal_delim(unsigned char s, char *next);
-bool	is_transition_delim(unsigned char s, char *next);
-bool	is_dollar_delim(unsigned char c, char *next);
+bool						is_normal_delim(unsigned char s, char *next);
+bool						is_transition_delim(unsigned char s, char *next);
+bool						is_dollar_delim(unsigned char c, char *next);
 
 bool						is_dollar_question(t_lex *lexer);
 
@@ -238,7 +240,7 @@ int							do_state_transition(t_lex *lexer);
 
 /* heredoc */
 int							get_eof_word(t_lex *l);
-bool	on_cmd_op(t_lex *l);
-bool	is_varnamechar(unsigned char c);
+bool						on_cmd_op(t_lex *l);
+bool						is_varnamechar(unsigned char c);
 
-int	put_on_buf(t_lex *l);
+int							put_on_buf(t_lex *l);

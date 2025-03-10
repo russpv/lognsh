@@ -83,7 +83,6 @@ expansion of word to be opened for writing on file descriptor n,
 Note: any split words on an expansion of a redirection fd results in an error
 */
 
-
 typedef struct
 {
 	int						depth;
@@ -103,7 +102,6 @@ typedef struct s_cmd
 	bool					do_redir_expansion;
 	bool					has_grouptoks;
 }							t_ast_node_cmd;
-
 
 // TODO, add heredoc flags for:
 // dquoted heredoc "EOF" (no globs, do expansions, escapes)
@@ -196,10 +194,12 @@ typedef struct s_parser
 }							t_parser;
 
 t_parser					*create_parser(t_state *s, t_list *tokens);
-void						destroy_parser(void *instance);
+void						destroy_parser(t_state *s, void *instance);
 t_ast_node					*init_log(void);
-t_redir_data				*init_redir(t_ast_node *target, enum e_tok_type type);
-t_arg_data	*init_arg(t_parser *p, t_ast_node *cmd_node, t_tok *tok);
+t_redir_data				*init_redir(t_ast_node *target,
+								enum e_tok_type type);
+t_arg_data					*init_arg(t_state *s, t_parser *p,
+								t_ast_node *cmd_node, t_tok *tok);
 
 /* Token list navigation */
 t_tok						*peek(t_parser *p);
@@ -225,10 +225,10 @@ int							push(t_pstack *stack);
 int							pop(t_pstack *stack);
 
 /* Execution helpers */
-int							p_do_globbing_args(t_list **lst_node, void *lst_c);
+int	p_do_globbing_args(t_state *s, t_list **lst_node, void *lst_c);
 int							p_do_globbing_redirs(void *c);
-int							check_special_expansions(t_state *s, const char *buf,
-								char **value);
+int							check_special_expansions(t_state *s,
+								const char *buf, char **value);
 t_list						*match_glob(const char *pattern);
 
 /* Tests */
@@ -245,7 +245,7 @@ bool						is_arg_token(t_tok *tok);
 bool						is_expansion(t_tok *tok);
 bool						is_close_paren(t_tok *tok);
 bool						is_group_op_token(t_tok *tok);
-bool	is_group_token(t_tok *tok);
+bool						is_group_token(t_tok *tok);
 
 t_tok						*which_lower_priority(t_ast_node *ref, t_tok *cmp);
 
@@ -262,15 +262,16 @@ int							handle_heredoc(const t_redir_data *node);
 
 /* Utils */
 char						**list_to_array(t_list *args, int argc);
-int							lstiter_state(t_state *s, t_list *lst, int (*f)(t_state *, void *));
+int							lstiter_state(t_state *s, t_list *lst,
+								int (*f)(t_state *, void *));
 
 /* AST list frees */
-void						destroy_ast_node(void *node);
-void						destroy_pipe_node(void *n);
-void						destroy_cmd_node(void *n);
-void						destroy_proc_node(void *n);
-void						destroy_log_node(void *n);
-void						destroy_arg(void *in);
+void						destroy_ast_node(t_state *s, void *node);
+void						destroy_pipe_node(t_state *s, void *n);
+void						destroy_cmd_node(t_state *s, void *n);
+void						destroy_proc_node(t_state *s, void *n);
+void						destroy_log_node(t_state *s, void *n);
+void						destroy_arg(t_state *s, void *in);
 
 /* Debugging */
 void						parse_print(t_ast_node *ast);

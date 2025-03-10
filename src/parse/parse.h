@@ -56,7 +56,7 @@ t_list							*p_get_redirs(t_ast_node *a);
 int								p_get_argc(t_ast_node *a);
 int								p_get_redc(t_ast_node *a);
 bool							p_get_expansion(t_ast_node *a);
-bool	p_get_grouptok(t_ast_node *a);
+bool							p_get_grouptok(t_ast_node *a);
 
 /* Command getters */
 t_list							*p_get_proc_cmds(t_ast_node *a);
@@ -68,9 +68,9 @@ int								p_get_log_cmdc(t_ast_node *a);
 t_list							*p_get_log_ops(t_ast_node *a);
 
 /* These methods are called by Command */
-int								p_do_arg_processing(t_state *s, \
-									t_ast_node *a, char ***args);
-int								p_do_redir_processing(t_state *s,\
+int								p_do_arg_processing(t_state *s, t_ast_node *a,
+									char ***args);
+int								p_do_redir_processing(t_state *s,
 									t_ast_node *a);
 
 int								p_do_redirections(t_ast_node *a);
@@ -83,8 +83,7 @@ void							destroy_redir(void *in);
 
 bool							is_globbing(t_tok *tok);
 
-
-void debug_print_list(t_list *head);
+void							debug_print_list(t_list *head);
 
 /*  Expansions */
 // tilde ~ ?

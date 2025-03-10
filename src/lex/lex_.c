@@ -72,7 +72,7 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 }
 
 /* Doesn't free raw_string */
-void	destroy_lexer(void *instance)
+void	destroy_lexer(t_state *s, void *instance)
 {
 	t_lex	*lexer;
 
@@ -94,7 +94,7 @@ void	destroy_lexer(void *instance)
 	}
 	if (lexer->token_list)
 	{
-		ft_lstclear(&lexer->token_list, destroy_token);
+		ft_lstclear_tmp(s, &lexer->token_list, destroy_token);
 	}
 	free(lexer);
 }
@@ -116,9 +116,9 @@ t_lex	*tokenize(t_state *s, const char *input)
 	{
 		while (DONE != lexer->state)
 		{
-			if (0 != lexer->tokenizer(lexer))
+			if (0 != lexer->tokenizer(s, lexer))
 			{
-				destroy_lexer(lexer);
+				destroy_lexer(s, lexer);
 				return (debug_print(_MOD_": tokenizer ERR\n"), NULL);
 			}
 			do_state_transition(lexer);

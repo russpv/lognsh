@@ -3,7 +3,7 @@
 // Assumes ptr is on '$', and we keep the '$'
 // Only delimited by end of valid varname.
 // If not normally delimited, is a subtoken.
-int	tokenize_dollar(t_lex *lexer)
+int	tokenize_dollar(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
@@ -17,7 +17,7 @@ int	tokenize_dollar(t_lex *lexer)
 	lexer->do_expansion = true;
 	if (false == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)))
 		lexer->is_subtoken = true;
-	token = lex_create_token(lexer, TOK_ENV_VAR);
+	token = lex_create_token(s, lexer, TOK_ENV_VAR);
 	if (NULL == token)
 		return (ERR_GENERAL);
 	if (0 != add_token(lexer, token))

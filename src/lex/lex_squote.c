@@ -34,7 +34,7 @@ static inline int	_load_buf(t_lex *lexer)
  * Ignores missing closing quote.
  * Creates token only if normal delims found (really?)
  */
-int	tokenize_single_quotes(t_lex *lexer)
+int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
@@ -51,7 +51,7 @@ int	tokenize_single_quotes(t_lex *lexer)
 		return (0);
 	if (false == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)))
 		lexer->is_subtoken = true;
-	token = lex_create_token(lexer, TOK_WORD);
+	token = lex_create_token(s, lexer, TOK_WORD);
 	if (NULL == token)
 		return (ERR_GENERAL);
 	if (0 != add_token(lexer, token))
@@ -62,7 +62,7 @@ int	tokenize_single_quotes(t_lex *lexer)
 }
 
 /* terminates a lexer run */
-int	tokenize_null(t_lex *lexer)
+int	tokenize_null(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
@@ -70,7 +70,7 @@ int	tokenize_null(t_lex *lexer)
 	if (lexer)
 	{
 		lexer->is_subtoken = false;
-		token = create_token("\0", TOK_EOF, (size_t)(lexer->ptr
+		token = create_token(s, "\0", TOK_EOF, (size_t)(lexer->ptr
 					- lexer->raw_string));
 		if (token)
 			add_token(lexer, token);

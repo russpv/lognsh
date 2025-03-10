@@ -13,7 +13,7 @@ static inline bool	_is_not_delimd(const char *s)
 }
 
 /* Returns hashtable matches by tokenizing current buf */
-t_tok	*lex_ht_lookup(t_lex *lexer)
+t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 {
 	struct s_ht_entry	*res;
 
@@ -28,7 +28,7 @@ t_tok	*lex_ht_lookup(t_lex *lexer)
 			|| true == _is_not_delimd(lexer->buf))
 		{
 			debug_print("Lexer: Creating token...\n");
-			return (lex_create_token(lexer,
+			return (lex_create_token(s, lexer,
 					((t_ht_data)ht_get_payload(res))->type));
 		}
 	}

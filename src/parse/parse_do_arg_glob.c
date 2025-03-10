@@ -114,7 +114,7 @@ t_list	*match_glob(const char *pattern)
  * at lst_node position.
  * glst destroyed in arg_destroy
  */
-static int	_do_ops(t_list **lst_node, t_list **glst, t_arg_data *content)
+static int	_do_ops(t_state *s, t_list **lst_node, t_list **glst, t_arg_data *content)
 {
 	t_list		*new_arg_data_lst;
 	char		*new_arg;
@@ -123,8 +123,8 @@ static int	_do_ops(t_list **lst_node, t_list **glst, t_arg_data *content)
 	new_arg = NULL;
 	if (ft_lstsize(*glst) > 1)
 	{
-		ft_lstdelone_rwd(lst_node, lst_node, destroy_arg);
-		new_arg_data_lst = ft_lstmap(*glst, create_arg_data_node_deep,\
+		ft_lstdelone_rwd_tmp(s, lst_node, lst_node, destroy_arg);
+		new_arg_data_lst = ft_lstmap_tmp(s, *glst, create_arg_data_node_deep,\
 			destroy_arg);
 		ft_lstadd_insert(lst_node, new_arg_data_lst);
 		ft_lstclear(glst, free);
@@ -161,7 +161,7 @@ static int	_do_ops(t_list **lst_node, t_list **glst, t_arg_data *content)
  * Anything returned from globbing matches will 
  * NOT be processed further.
  */
-int	p_do_globbing_args(t_list **lst_node, void *lst_c)
+int	p_do_globbing_args(t_state *s, t_list **lst_node, void *lst_c)
 {
 	t_arg_data	*arg;
 	t_list		*lst;
@@ -177,7 +177,7 @@ int	p_do_globbing_args(t_list **lst_node, void *lst_c)
 		if (lst)
 		{
 			debug_print(DBGMSG_MATCHES, ft_lstsize(lst), lst->content);
-			res = _do_ops(lst_node, &lst, arg);
+			res = _do_ops(s, lst_node, &lst, arg);
 			if (0 != res)
 				return (res);
 		}

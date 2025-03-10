@@ -24,7 +24,7 @@ struct					s_cmd
 
 typedef struct s_cmd	t_cmd;
 
-void					destroy_cmd(void *c);
+void					destroy_cmd(t_state *s, void *c);
 t_cmd					*init_cmd(t_state *s, t_ast_node *a);
 
 int	c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a, char **args);
