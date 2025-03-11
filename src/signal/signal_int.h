@@ -15,6 +15,8 @@
 
 # include "signal.h"
 
+# define _MOD_ "Signal"
+
 typedef struct s_signal_manager
 {
 	struct sigaction sa_int;  // SIGINT (Ctrl-C)

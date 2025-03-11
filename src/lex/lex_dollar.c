@@ -20,7 +20,7 @@ int	tokenize_dollar(t_state *s, t_lex *lexer)
 	token = lex_create_token(s, lexer, TOK_ENV_VAR);
 	if (NULL == token)
 		return (ERR_GENERAL);
-	if (0 != add_token(lexer, token))
+	if (0 != add_token(s, lexer, token))
 		return (ERR_GENERAL);
 	return (0);
 }

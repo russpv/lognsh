@@ -21,18 +21,21 @@ void	destroy_redir(void *in)
 }
 
 /* Fully frees a struct s_arg, for use in llist destroy */
-void	destroy_arg(t_state *s, void *in)
+void	destroy_arg(t_mem_mgr *mgr, void *in)
 {
 	t_arg_data	*arg;
 
+	if (!in || !mgr)
+		return ;
 	arg = (t_arg_data *)in;
 	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
-	if (NULL == in)
-		return ;
 	if (arg->lst_tokens)
-		ft_lstclear_tmp(s, &arg->lst_tokens, destroy_token);
+		ft_lstclear_tmp(mgr, &arg->lst_tokens, destroy_token);
 	if (arg->raw)
+	{
 		free(arg->raw);
+		arg->raw = NULL;
+	}
 	if (arg->tmp)
 		ft_freearr((void **)arg->tmp, -1);
 	free(arg);

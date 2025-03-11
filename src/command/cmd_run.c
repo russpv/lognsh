@@ -17,7 +17,9 @@ static int	_check_access(const char *path)
 	return (ERR_CMD_NOT_FOUND);
 }
 
-/* Returns 0 if absolute fullpath is found */
+/* Returns 0 if absolute fullpath is found 
+ * All heap allocs are temporary within this scope
+ */
 static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 {
 	char	**paths;
@@ -33,12 +35,12 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 		tmp = ft_strjoin(paths[i], "/");
 		if (NULL == tmp)
 			return (ft_freearr((void **)paths, -1), err(EMSG_RUNC_STRJ),
-				ERR_GENERAL);
+				ERR_MEM);
 		*fullpath = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!*fullpath)
 			return (ft_freearr((void **)paths, -1), err(EMSG_RUNC_STRJ),
-				ERR_GENERAL);
+				ERR_MEM);
 		if (0 == _check_access(*fullpath))
 			return (ft_freearr((void **)paths, -1), 0);
 		free(*fullpath);
@@ -57,13 +59,13 @@ extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 		{
 			if (0 == _check_access(name))
 			{
-				//*fullpath = (char *)name; 
-				//	return (0);
+				*fullpath = (char *)name; 
+					return (0);
 				//(causes a double free error because it makes c->fullpath to the same address as a->data.cmd.name)
-				*fullpath = ft_strdup(name);
-				if (!*fullpath)
-					return (ENOMEM);
-				return (0);
+				//*fullpath = ft_strdup(name);
+				//if (!*fullpath)
+				//	return (ENOMEM);
+				//return (0);
 			}
 		}
 		else

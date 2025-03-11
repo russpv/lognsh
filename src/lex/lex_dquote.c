@@ -92,7 +92,7 @@ int	tokenize_double_quotes(t_state *s, t_lex *lexer)
 			return (0); //empty dquote
 		//lexer->ptr++;
 		debug_print(_MOD_": ptr at _%c_\n", *lexer->ptr);
-		if (0 != add_token(lexer, token))
+		if (0 != add_token(s, lexer, token))
 			return (ERR_GENERAL);
 	}
 	return (0);

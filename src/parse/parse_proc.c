@@ -119,7 +119,7 @@ t_ast_node	*parse_proc(t_state *s, t_parser *p)
 	if (0 != res)
 	{
 		set_error(s, res);
-		destroy_ast_node(s, ast_node);
+		destroy_ast_node(get_mem(s), ast_node);
 		return (NULL);
 	}
 	debug_print(_MOD_ ": curr peek tok: %s\n", tok_get_raw(peek(p)));

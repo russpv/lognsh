@@ -94,7 +94,7 @@ void	destroy_lexer(t_state *s, void *instance)
 	}
 	if (lexer->token_list)
 	{
-		ft_lstclear_tmp(s, &lexer->token_list, destroy_token);
+		ft_lstclear_tmp(get_mem(s), &lexer->token_list, destroy_token);
 	}
 	free(lexer);
 }

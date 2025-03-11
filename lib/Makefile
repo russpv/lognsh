@@ -25,7 +25,7 @@ SOURCES = ft_memcpy.c \
 		  ft_strtrim.c \
 		  ft_substr.c \
 		  ft_strnlen.c \
-		  ft_itoa.c \
+		  ft_itoa_mem.c \
 		  ft_atoi.c \
 		  ft_putchar_fd.c \
 		  ft_putendl_fd.c \

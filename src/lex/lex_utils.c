@@ -1,15 +1,15 @@
 #include "lex_int.h"
 
-static int	_add_subtoken(t_lex *lexer, t_tok *subtok)
+static int	_add_subtoken(t_state *s, t_lex *lexer, t_tok *subtok)
 {
 	assert(NULL != lexer->last_grp_tok);
-	tok_add_subtok(lexer->last_grp_tok, subtok);
+	tok_add_subtok(s, lexer->last_grp_tok, subtok);
 	tok_incr_tokc(lexer->last_grp_tok);
 	return (0);
 }
 
 /* Adds to llist tail a new token, clears buf */
-int	add_token(t_lex *lexer, t_tok *token)
+int	add_token(t_state *s, t_lex *lexer, t_tok *token)
 {
 	debug_print(_MOD_ ": %s\n", __FUNCTION__);
 	if (token && lexer)
@@ -21,7 +21,7 @@ int	add_token(t_lex *lexer, t_tok *token)
 			if (lexer->last_grp_tok)
 			{
 				debug_print(_MOD_ ": %s adding subtoken to grp\n", __FUNCTION__);
-				_add_subtoken(lexer, token);
+				_add_subtoken(s, lexer, token);
 			}
 			else
 			{
@@ -62,14 +62,14 @@ t_tok	*lex_create_token(t_state *st, t_lex *lexer, int type)
 		return (NULL);
 	if (true == lexer->is_subtoken && NULL == lexer->last_grp_tok)
 	{
-		grp_token = create_token(st, lexer->buf, TOK_GROUP_WORD, (size_t)(lexer->ptr \
+		grp_token = create_token(get_mem(st), lexer->buf, TOK_GROUP_WORD, (size_t)(lexer->ptr \
 			- lexer->raw_string));
 		if (!grp_token)
 			return (err(EMSG_MALLOC), NULL);
 		lexer->last_grp_tok = grp_token;
 		debug_print(_MOD_": %s: Created GROUP token\n", __FUNCTION__);
 	}
-	token = create_token(st, lexer->buf, type, (size_t)(lexer->ptr \
+	token = create_token(get_mem(st), lexer->buf, type, (size_t)(lexer->ptr \
 				- lexer->raw_string));
 	if (token)
 	{

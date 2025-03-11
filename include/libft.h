@@ -4,6 +4,27 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <stdbool.h>
+# include <stdio.h>
+
+typedef struct s_mem_node
+{
+	struct s_mem_node	*next;
+	struct s_mem_node	*prev;
+}						t_mem_node;
+
+typedef struct s_mem_block
+{
+	t_mem_node			node;
+	size_t				size;
+	bool				is_freed;
+	void				*payload;
+}						t_mem_block;
+
+/* Memory allocator utils */
+typedef struct s_mem_node	t_mem_node;
+typedef	 void *(*t_alloc_fn)(t_mem_node *head, size_t s);
+typedef	void (*t_dealloc_fn)(t_mem_node *head, void *alloc);
 
 typedef enum e_bool
 {
@@ -115,7 +136,7 @@ t_bool					ft_isspace(int c);
 */
 
 int						ft_atoi(const char *str);
-char					*ft_itoa(int n);
+char					*ft_itoa_mem(t_mem_node *head, t_alloc_fn f, int num);
 int						ft_strcmplow(const char *s1, const char *s2);
 
 #endif

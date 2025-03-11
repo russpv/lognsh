@@ -27,6 +27,7 @@ int	tok_print(void *content)
 // c must be a t_tok
 // Stores result in s->tmp, which is later 
 // assigned to grp token's raw string
+// Memory allocations are local to this scope.
 int	tok_do_grp_combine(t_state *s, void *c)
 {
 	const t_tok			*content = (t_tok *)c;
@@ -48,7 +49,7 @@ int	tok_do_grp_combine(t_state *s, void *c)
 		else
 			tmp = ft_strdup(content->t.tok.raw);
 		if (!tmp)
-			return (err(EMSG_MALLOC), set_error(s, ERR_MEM), ERR_MEM);
+			exit_clean(s, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	if (tmp)
 	{
@@ -72,7 +73,7 @@ static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf,
 	{
 		if (*value)
 		{
-			free(c->t.tok.raw);
+			myfree(&get_mem(s)->list, c->t.tok.raw);
 			((t_tok *)c)->t.tok.raw = *value;
 		}
 	}
@@ -82,11 +83,11 @@ static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf,
 		*value = get_sh_env(s, buf);
 		if (*value)
 		{
-			new_raw = ft_strdup(*value);
+			new_raw = ft_strdup_tmp(get_mem(s), *value);
 			if (!new_raw)
-				return (err("MALLOC\n"), ERR_MEM);
+				exit_clean(s, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		}
-		free(c->t.tok.raw);
+		myfree(&get_mem(s)->list, c->t.tok.raw);
 		((t_tok *)c)->t.tok.raw = new_raw;
 	}
 	return (0);

@@ -27,7 +27,7 @@ static inline char	*load_str(char *s, long n)
 	return (s);
 }
 
-char	*ft_itoa(int num)
+char	*ft_itoa_mem(t_mem_node *head, t_alloc_fn f, int num)
 {
 	char	c[15];
 	char	*s;
@@ -35,7 +35,7 @@ char	*ft_itoa(int num)
 
 	ft_memset(&c, '\0', 15);
 	s = load_str(c + 13, num);
-	dest = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	dest = f(head, sizeof(char) * (ft_strlen(s) + 1));
 	if (!dest)
 		return (NULL);
 	dest[ft_strlen(s)] = 0;

@@ -60,7 +60,7 @@ void	reset_signal_handlers(void)
     struct sigaction sa_int;
     struct sigaction sa_quit;
 
-	debug_print("reset_signal_handlers\n");
+	debug_print(_MOD_ ": reset_signal_handlers\n");
     sa_int.sa_handler = SIG_DFL;
     sigemptyset(&sa_int.sa_mask);
     sa_int.sa_flags = 0;

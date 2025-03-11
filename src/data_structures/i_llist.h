@@ -1,31 +1,43 @@
-#ifndef MEM_MGR_H
-# define MEM_MGR_H
+#ifndef I_LLIST_H
+# define I_LLIST_H
 
-# include <errno.h>
-# include <stdbool.h>
-# include <stddef.h>
-# include <stdlib.h>
+// Adapter for LLIST to add memory management.
 
-typedef struct s_mem_node
+# include "../../include/libft.h"
+# include "llist.h"
+# include <assert.h>
+# include <stdio.h>
+
+typedef struct s_mem_mgr
 {
-	struct s_mem_node	*next;
-	struct s_mem_node	*prev;
-}						t_mem_node;
+	t_mem_node		list;
+	t_alloc_fn		f;
+	t_dealloc_fn	dealloc;
+}					t_mem_mgr;
 
-typedef struct s_mem_block
-{
-	t_mem_node			node;
-	size_t				size;
-	bool				is_freed;
-	void				*payload;
-}						t_mem_block;
+t_list				*ft_lstnew_tmp(t_mem_mgr *m, void *content);
+void				ft_lstdelone_tmp(t_mem_mgr *s, t_list **lst, t_list *node,
+						void (*del)(t_mem_mgr *m, void *));
+void				ft_lstclear_tmp(t_mem_mgr *mgr, t_list **lst,
+						void (*del)(t_mem_mgr *m, void *));
 
-t_mem_block				*mem_init_block(void);
-void					mem_init(t_mem_node *head);
+t_list				*ft_lstcopy_tmp(t_mem_mgr *mgr, t_list *orig,
+						void *(*f)(t_mem_mgr *s, const void *),
+						void (*del)(t_mem_mgr *, void *));
 
-void					mem_free(t_mem_block *m);
-int						mem_add_mem(t_mem_node *head, void *alloc, size_t size);
-void					mem_free_all(t_mem_node *head);
-t_mem_block				*mem_get_alloc(t_mem_node *head, void *alloc);
+t_list				*ft_lstcopy_node_tmp(t_mem_mgr *mgr, const t_list *orig,
+						void *(*f)(t_mem_mgr *s, const void *));
+
+void				ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
+						t_list **node, void (*del)(t_mem_mgr *, void *));
+
+t_list				*ft_lstmap_tmp(t_mem_mgr *mgr, t_list *lst,
+						void *(*f)(t_mem_mgr *s, void *),
+						void (*del)(t_mem_mgr *, void *));
+
+void				ft_lstiter_ins_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
+						int (*f)(t_mem_mgr *s, t_list **, void *));
+
+char				*ft_strdup_tmp(t_mem_mgr *st, const char *s);
 
 #endif

@@ -51,7 +51,7 @@ t_arg_data	*init_arg(t_state *s, t_parser *p, t_ast_node *cmd_node, t_tok *tok)
 		arg->in_dquotes = tok_get_dquotes(tok);
 		arg->is_grouparg = tok_isgrouptoken(tok);
 		arg->tmp = NULL;
-		arg->lst_tokens = ft_lstcopy_tmp(s, tok_get_tlist(tok), copy_token, destroy_token);
+		arg->lst_tokens = ft_lstcopy_tmp(get_mem(s), tok_get_tlist(tok), copy_token, destroy_token);
 		arg->global_state = p->global_state;
 		if (true == arg->do_expansion)
 			cmd_node->data.cmd.do_expansion = true;
@@ -91,7 +91,7 @@ void	*create_arg_data_node(void *content)
  * Returns new void *content for llist construction/duplication.
  * Copies content.
  */
-void	*create_arg_data_node_deep(void *content)
+void	*create_arg_data_node_deep(t_mem_mgr *mgr, void *content)
 {
 	t_arg_data	*arg_data;
 

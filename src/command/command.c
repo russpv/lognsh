@@ -13,8 +13,8 @@ void	destroy_cmd(t_state *s, void *c)
 	cmd = (t_cmd *)c;
 	if (cmd->st)
 		st_int_destroy(cmd->st);
-	if (cmd->fullpath)
-		free(cmd->fullpath);
+//	if (cmd->fullpath)
+//		free(cmd->fullpath);
 	if (cmd->redirs)
 		ft_lstclear(&cmd->redirs, destroy_redir);
 	if (cmd->fildes)

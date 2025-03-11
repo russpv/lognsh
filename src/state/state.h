@@ -98,28 +98,10 @@ void							s_free_cmd_lex_parse(t_state *state);
 
 bool							has_sh_envp(t_state *s);
 
-void							*myalloc(t_state *s, size_t size);
-void							myfree(t_state *s, void *alloc);
-
-t_list							*ft_lstnew_tmp(t_state *s, void *content);
-void							ft_lstdelone_tmp(t_state *s, t_list **lst,
-									t_list *node, void (*del)(t_state *s,
-										void *));
-void							ft_lstclear_tmp(t_state *s, t_list **lst,
-									void (*del)(t_state *s, void *));
-t_list							*ft_lstcopy_tmp(t_state *s, t_list *orig,
-									void *(*f)(t_state *s, const void *),
-									void (*d)(t_state *s, void *));
-void							ft_lstdelone_rwd_tmp(t_state *s, t_list **lst,
-									t_list **node, void (*del)(t_state *s,
-										void *));
-t_list							*ft_lstmap_tmp(t_state *s, t_list *lst,
-									void *(*f)(void *), void (*del)(t_state *s,
-										void *));
-t_list							*ft_lstcopy_node_tmp(t_state *s,
-									const t_list *orig, void *(*f)(t_state *s,
-										const void *));
-void							ft_lstiter_ins_rwd_tmp(t_state *s, t_list **lst,
-									int (*f)(t_state *s, t_list **, void *));
+extern void		*myalloc(t_mem_node *head, size_t size);
+extern void		myfree(t_mem_node *head, void *alloc);
+void							exit_clean(t_state *s, int exit_status,
+									const char *caller, const char *errmsg);
+t_mem_mgr 						*get_mem(t_state *s);
 
 #endif

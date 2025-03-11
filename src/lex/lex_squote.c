@@ -54,7 +54,7 @@ int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 	token = lex_create_token(s, lexer, TOK_WORD);
 	if (NULL == token)
 		return (ERR_GENERAL);
-	if (0 != add_token(lexer, token))
+	if (0 != add_token(s, lexer, token))
 		return (ERR_GENERAL);
 	
 	//lexer->ptr++;
@@ -70,10 +70,10 @@ int	tokenize_null(t_state *s, t_lex *lexer)
 	if (lexer)
 	{
 		lexer->is_subtoken = false;
-		token = create_token(s, "\0", TOK_EOF, (size_t)(lexer->ptr
+		token = create_token(get_mem(s), "\0", TOK_EOF, (size_t)(lexer->ptr
 					- lexer->raw_string));
 		if (token)
-			add_token(lexer, token);
+			add_token(s, lexer, token);
 		else
 			return (1);
 	}

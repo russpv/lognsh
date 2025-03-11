@@ -127,7 +127,7 @@ int	tokenize_normal(t_state *s, t_lex *lexer)
 		token = _match_normal(s, lexer);
 		debug_print(_MOD_": ptr at:_%c_\n", *lexer->ptr);
 		if (token)
-			if (0 != add_token(lexer, token))
+			if (0 != add_token(s, lexer, token))
 				return (ERR_GENERAL);
 		if (OP_NULL == *lexer->ptr)
 		{

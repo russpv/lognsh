@@ -3,6 +3,7 @@
 
 # include "state.h"
 # include "../builtins/env/env.h"
+# include "mem/mem.h"
 
 struct							s_global_state
 {
@@ -22,7 +23,7 @@ struct							s_global_state
 	t_destroy_fn				destroy_lexer;
 	t_destroy_fn				destroy_command;
 
-	t_mem_node					mem_list;
+	t_mem_mgr					mem_mgr;
 };
 
 typedef struct s_global_state	t_state;

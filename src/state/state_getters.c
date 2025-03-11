@@ -25,3 +25,11 @@ t_lex	*get_lexer(t_state *s)
 {
 	return (s->current_lexer);
 }
+
+// Returns memory manager struct
+t_mem_mgr *get_mem(t_state *s)
+{
+	if (!s)
+		return (NULL);
+	return (&s->mem_mgr);
+}

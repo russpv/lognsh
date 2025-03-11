@@ -21,10 +21,9 @@ t_state	*init_state(char **envp)
 	s->destroy_parser = NULL;
 	s->envp = envp;
 	s->tmp = NULL;
-	mem_init(&s->mem_list);
-	assert(s->mem_list.next != NULL);
-	mem_add_mem(&s->mem_list, s, sizeof(struct s_global_state));
-	mem_add_mem(&s->mem_list, &s->mem_list, sizeof(t_mem_node));
+	mem_mgr_init(&s->mem_mgr);
+	mem_add_mem(&s->mem_mgr.list, s, sizeof(struct s_global_state));
+	mem_add_mem(&s->mem_mgr.list, &s->mem_mgr.list, sizeof(t_mem_node));
 	s->sh_env_list = copy_envp(envp);
 	if (!s->sh_env_list)
 		return (free(s), NULL);
@@ -47,7 +46,7 @@ void	destroy_state(t_state *s)
 		free(s->input);
 	if (s->sh_env_list)
 		env_free_list(s->sh_env_list);
-	myfree(s, s);
+	myfree(&get_mem(s)->list, s);
 }
 
 /* Destroys parser before lexer

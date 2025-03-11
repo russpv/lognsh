@@ -108,18 +108,18 @@ enum					e_tok_type
 struct s_tok;
 typedef struct s_tok	t_tok;
 
-t_tok					*create_token(t_state *st, const char *s, int type,
+t_tok					*create_token(t_mem_mgr *st, const char *s, int type,
 							size_t pos);
 // t_tok					*create_ht_token(void);
-void					*copy_token(t_state *st, const void *tok);
-void					destroy_token(t_state *s, void *token);
+void					*copy_token(t_mem_mgr *st, const void *tok);
+void	destroy_token(t_mem_mgr *mgr, void *token);
 
 int						tok_set_globbing(t_tok *token);
 int						tok_set_expansion(t_tok *token);
 int						tok_set_dquotes(t_tok *token);
 int						tok_set_subtoken(t_tok *token);
 int						tok_incr_tokc(t_tok *token);
-int						tok_add_subtok(t_tok *grp, t_tok *sub);
+int						tok_add_subtok(t_state *s, t_tok *grp, t_tok *sub);
 
 char					*tok_get_raw(t_tok *token);
 enum e_tok_type			tok_get_type(t_tok *token);

@@ -80,7 +80,7 @@ int	tokenize_heredoc(t_state *s, t_lex *lexer)
 	if (token)
 	{
 		assert(NULL != lexer && NULL != token);
-		if (0 != add_token(lexer, token))
+		if (0 != add_token(s, lexer, token))
 			return (ERR_GENERAL);
 	}
 	else

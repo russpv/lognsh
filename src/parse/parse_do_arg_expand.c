@@ -25,9 +25,9 @@ int	check_special_expansions(t_state *s, const char *buf, char **value)
 	if (ft_strcmp(buf, "?") == 0)
 	{
 		if (status == NULL)
-			*value = ft_itoa(0);
+			*value = ft_itoa_mem(&get_mem(s)->list, myalloc, 0);
 		else
-			*value = ft_itoa(*status);
+			*value = ft_itoa_mem(&get_mem(s)->list, myalloc, *status);
 		if (*value == NULL)
 			return (ERR_MEM);
 		debug_print(DMSG_OUT, __FUNCTION__, *value);
@@ -123,7 +123,7 @@ static int	_p_do_grparg_processing(t_state *s, void *c)
 	if (content->do_globbing)
 	{
 		lst = &content->lst_tokens;
-		ft_lstiter_ins_rwd_tmp(s, lst, p_do_globbing_args);
+		ft_lstiter_ins_rwd_tmp(get_mem(s), lst, p_do_globbing_args);
 	}
 	res = lstiter_state(s, content->lst_tokens, tok_do_grp_combine);
 	if (0 == res)
@@ -157,7 +157,7 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 			if (a->data.cmd.do_globbing)
 			{
 				debug_print(DEBUGMSG_ARGP_PRE_G, argl, *argl); // TODO remove
-				ft_lstiter_ins_rwd_tmp(s, argl, p_do_globbing_args);
+				ft_lstiter_ins_rwd_tmp(get_mem(s), argl, p_do_globbing_args);
 				debug_print(DEBUGMSG_ARGP_POST_G, argl, *argl); // TODO remove
 			}
 		}
