@@ -27,25 +27,6 @@ static int	get_env_list_size(t_env *env_list)
 	return (count);
 }
 
-static char	*malloc_pair_string(const char *key, const char *value)
-{
-	size_t	key_len;
-	size_t	value_len;
-	size_t	total_len;
-	char	*pair_space;
-
-	key_len = ft_strlen(key);
-	if (value)
-		value_len = ft_strlen(value);
-	else
-		value_len = 0;
-	total_len = key_len + 1 + value_len + 1;
-	pair_space = malloc(total_len);
-	if (!pair_space)
-		return (NULL);
-	return (pair_space);
-}
-
 static void	free_env_array(char **env_array)
 {
 	int	i;
@@ -61,57 +42,46 @@ static void	free_env_array(char **env_array)
 	free(env_array);
 }
 
-static char	**alloc_env_array(t_env *env_list)
+static char	*lst_join_env(char *key, char *val)
 {
-	t_env	*tmp;
-	int		count;
-	char	**env_array;
+	char	*tmp;
+	char	*res;
 
-	if (!env_list)
+	if (!key)
 		return (NULL);
-	count = get_env_list_size(env_list);
-	env_array = malloc(sizeof(char *) * (size_t)(count + 1));
-	if (!env_array)
+	tmp = ft_strjoin(key, "=");
+	if (!tmp)
 		return (NULL);
-	tmp = env_list;
-	count = 0;
-	while (tmp)
-	{
-		env_array[count] = malloc_pair_string(tmp->key, tmp->value);
-		if (!env_array[count])
-		{
-			free_env_array(env_array);
-			return (NULL);
-		}
-		count++;
-		tmp = tmp->next;
-	}
-	env_array[count] = NULL;
-	return (env_array);
+	if (!val)
+		return (tmp);
+	res = ft_strjoin_free(tmp, val);
+	if (!res)
+		return (NULL);
+	return (res);
 }
 
-/* Returns heap array */
 char	**lst_to_array(t_env *env_list)
 {
 	char	**env_array;
 	t_env	*tmp;
-	int		count;
+	int		i;
 
-	count = 0;
-	tmp = env_list;
 	if (!env_list)
 		return (NULL);
-	env_array = alloc_env_array(env_list);
+	i = get_env_list_size(env_list);
+	env_array = malloc(sizeof(char *) * (i + 1));
 	if (!env_array)
 		return (NULL);
+	tmp = env_list;
+	i = 0;
 	while (tmp)
 	{
-		ft_strcpy(env_array[count], env_get_key(tmp));
-		ft_strchr(env_array[count], '=');
-		if (env_get_value(tmp))
-			ft_strcat(env_array[count], env_get_value(tmp));
-		count++;
+		env_array[i] = lst_join_env(env_get_key(tmp), env_get_value(tmp));
+		if (!env_array[i])
+			return (free_env_array(env_array), NULL);
+		i++;
 		tmp = tmp->next;
 	}
+	env_array[i] = NULL;
 	return (env_array);
 }
