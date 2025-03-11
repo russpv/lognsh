@@ -34,7 +34,7 @@ static inline t_tok	*_process_dquote_logic(t_state *s, t_lex *lexer)
 	if ((unsigned char)OP_DQUOTE == *lexer->ptr && false == lexer->escape_mode)
 	{
 		lexer->ptr++;
-		return (lex_create_token(s, lexer, TOK_WORD)); //creates final token
+		return (lex_create_token(get_mem(s), lexer, TOK_WORD)); //creates final token
 	}
 	return (NULL);
 }
@@ -68,7 +68,7 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 			return (NULL);
 		if (false == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)))
 			lexer->is_subtoken = true;
-		token = lex_create_token(s, lexer, TOK_WORD); // tokenize subtoken
+		token = lex_create_token(get_mem(s), lexer, TOK_WORD); // tokenize subtoken
 	}
 	return (token);
 }
@@ -92,7 +92,7 @@ int	tokenize_double_quotes(t_state *s, t_lex *lexer)
 			return (0); //empty dquote
 		//lexer->ptr++;
 		debug_print(_MOD_": ptr at _%c_\n", *lexer->ptr);
-		if (0 != add_token(s, lexer, token))
+		if (0 != add_token(get_mem(s), lexer, token))
 			return (ERR_GENERAL);
 	}
 	return (0);

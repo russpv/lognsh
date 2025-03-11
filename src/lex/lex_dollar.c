@@ -17,10 +17,10 @@ int	tokenize_dollar(t_state *s, t_lex *lexer)
 	lexer->do_expansion = true;
 	if (false == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)))
 		lexer->is_subtoken = true;
-	token = lex_create_token(s, lexer, TOK_ENV_VAR);
+	token = lex_create_token(get_mem(s), lexer, TOK_ENV_VAR);
 	if (NULL == token)
 		return (ERR_GENERAL);
-	if (0 != add_token(s, lexer, token))
+	if (0 != add_token(get_mem(s), lexer, token))
 		return (ERR_GENERAL);
 	return (0);
 }

@@ -219,9 +219,9 @@ int							tokenize_null(t_state *s, t_lex *lexer);
 int							tokenize_heredoc(t_state *s, t_lex *lexer);
 int							tokenize_dollar(t_state *s, t_lex *lexer);
 
-t_tok						*lex_create_token(t_state *st, t_lex *lexer,
+t_tok						*lex_create_token(t_mem_mgr *st, t_lex *lexer,\
 								int type);
-int							add_token(t_state *s, t_lex *lexer, t_tok *token);
+int							add_token(t_mem_mgr *s, t_lex *lexer, t_tok *token);
 
 bool						is_normal_delim(unsigned char s, char *next);
 bool						is_transition_delim(unsigned char s, char *next);

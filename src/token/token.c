@@ -15,7 +15,7 @@ static int	_init_normal_token(t_mem_mgr *mgr, t_tok *token, const char *s, int t
 	if (ft_strlen(s) > MAX_RAW_INPUT_LEN)
 		return (err(_MOD_": raw input buf overflow\n"), free(token), ERR_BUFFLOW);
 	token->class = NORMAL;
-	token->t.tok.raw = ft_strdup_tmp(mgr, s); //TODO, wrap this
+	token->t.tok.raw = ft_strdup_tmp(mgr, s);
 	token->t.tok.type = type;
 	token->t.tok.pos = pos;
 	token->t.tok.is_subtoken = false;

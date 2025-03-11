@@ -119,7 +119,7 @@ int						tok_set_expansion(t_tok *token);
 int						tok_set_dquotes(t_tok *token);
 int						tok_set_subtoken(t_tok *token);
 int						tok_incr_tokc(t_tok *token);
-int						tok_add_subtok(t_state *s, t_tok *grp, t_tok *sub);
+int						tok_add_subtok(t_mem_mgr *m, t_tok *grp, t_tok *sub);
 
 char					*tok_get_raw(t_tok *token);
 enum e_tok_type			tok_get_type(t_tok *token);

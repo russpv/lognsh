@@ -28,7 +28,7 @@ t_list	*ft_lstnew_tmp(t_mem_mgr *mgr, void *content)
 ** del: ptr to func that deletes node.content
 */
 void	ft_lstdelone_tmp(t_mem_mgr *m, t_list **lst, t_list *node,
-		void (*del)(t_mem_mgr *m, void *))
+		void (*del)(t_mem_mgr *, void *))
 {
 	if (!m || !lst || !node)
 		return ;
@@ -41,7 +41,7 @@ void	ft_lstdelone_tmp(t_mem_mgr *m, t_list **lst, t_list *node,
 	if (node == *lst)
 		*lst = node->next;
 	del(m, node->content);
-	del(m, node);
+	m->dealloc(&m->list, node);
 }
 
 /* LSTCLEAR

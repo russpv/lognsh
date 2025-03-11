@@ -36,7 +36,7 @@ SOURCES = ft_memcpy.c \
 		  ft_striteri.c \
 		  ft_strdup.c \
 		  ft_strndup.c \
-		  ft_freearr.c \
+		  ft_freearr_mem.c \
 		  ft_strcmp.c \
 		  ft_strncat.c \
 		  ft_strcpy.c \

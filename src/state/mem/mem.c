@@ -138,7 +138,7 @@ void	*myalloc(t_mem_node *head, size_t size)
 }
 
 // TODO add mem_rm_block(...);
-// TODO memset(0) before free()
+
 void	myfree(t_mem_node *head, void *alloc)
 {
 	t_mem_block	*block;

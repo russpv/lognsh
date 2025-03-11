@@ -35,7 +35,7 @@ static int	_parse_args(t_state *s, t_parser *p, t_ast_node *cmd_node)
 		return (ERR_ARGS);
 	while (!is_at_end(p) && is_arg_token(peek(p)))
 	{
-		arg = init_arg(s, p, cmd_node, advance(p));
+		arg = init_arg(get_mem(s), p, cmd_node, advance(p));
 		if (NULL == arg)
 			return (err(EMSG_MALLOC), ERR_MEM);
 		new = ft_lstnew(arg);

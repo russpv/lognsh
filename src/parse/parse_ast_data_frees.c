@@ -33,10 +33,10 @@ void	destroy_arg(t_mem_mgr *mgr, void *in)
 		ft_lstclear_tmp(mgr, &arg->lst_tokens, destroy_token);
 	if (arg->raw)
 	{
-		free(arg->raw);
+		mgr->dealloc(&mgr->list, arg->raw);
 		arg->raw = NULL;
 	}
 	if (arg->tmp)
-		ft_freearr((void **)arg->tmp, -1);
-	free(arg);
+		ft_freearr_mem(&mgr->list, mgr->dealloc, (void **)arg->tmp, -1);
+	mgr->dealloc(&mgr->list, arg);
 }

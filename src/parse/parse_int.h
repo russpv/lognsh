@@ -194,11 +194,11 @@ typedef struct s_parser
 }							t_parser;
 
 t_parser					*create_parser(t_state *s, t_list *tokens);
-void						destroy_parser(t_state *mgr, void *instance);
+void						destroy_parser(t_state *s, void *instance);
 t_ast_node					*init_log(void);
 t_redir_data				*init_redir(t_ast_node *target,
 								enum e_tok_type type);
-t_arg_data					*init_arg(t_state *s, t_parser *p,
+t_arg_data					*init_arg(t_mem_mgr *m, t_parser *p,
 								t_ast_node *cmd_node, t_tok *tok);
 
 /* Token list navigation */

@@ -39,19 +39,19 @@ static t_tok	*_match_word_or_name_or_exception(t_state *s, t_lex *lexer)
 	if (true == is_dollar_question(lexer)) // move to ENVVAR?
 	{
 		lexer->buf[(lexer->buf_idx)++] = *lexer->ptr++;
-		return (lex_create_token(s, lexer, TOK_EXIT_STATUS));
+		return (lex_create_token(get_mem(s), lexer, TOK_EXIT_STATUS));
 	}
 	else if (true == is_normal_delim(*lexer->ptr, (lexer->ptr + 1))
 		&& ft_strlen(lexer->buf) > 0)
 	{
-		return (lex_create_token(s, lexer, word_or_name(lexer->buf)));
+		return (lex_create_token(get_mem(s), lexer, word_or_name(lexer->buf)));
 	}
 
 	if (true == is_transition_delim(*lexer->ptr, (lexer->ptr + 1))
 		&& ft_strlen(lexer->buf) > 0)
 	{ 
 		lexer->is_subtoken = true;
-		return (lex_create_token(s, lexer, word_or_name(lexer->buf)));
+		return (lex_create_token(get_mem(s), lexer, word_or_name(lexer->buf)));
 	}
 	return (NULL);
 }
@@ -127,7 +127,7 @@ int	tokenize_normal(t_state *s, t_lex *lexer)
 		token = _match_normal(s, lexer);
 		debug_print(_MOD_": ptr at:_%c_\n", *lexer->ptr);
 		if (token)
-			if (0 != add_token(s, lexer, token))
+			if (0 != add_token(get_mem(s), lexer, token))
 				return (ERR_GENERAL);
 		if (OP_NULL == *lexer->ptr)
 		{

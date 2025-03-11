@@ -28,7 +28,7 @@ t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 			|| true == _is_not_delimd(lexer->buf))
 		{
 			debug_print("Lexer: Creating token...\n");
-			return (lex_create_token(s, lexer,
+			return (lex_create_token(get_mem(s), lexer,
 					((t_ht_data)ht_get_payload(res))->type));
 		}
 	}

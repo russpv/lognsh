@@ -28,20 +28,20 @@ t_redir_data	*init_redir(t_ast_node *target, enum e_tok_type type)
 
 /* Must deep copy token strings to decouple token-list/ast.
  */
-t_arg_data	*init_arg(t_state *s, t_parser *p, t_ast_node *cmd_node, t_tok *tok)
+t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node, t_tok *tok)
 {
 	t_arg_data	*arg;
 
 	if (!p || !cmd_node || !tok)
 		return (NULL);
-	arg = malloc(sizeof(struct s_arg));
+	arg = m->f(&m->list, sizeof(struct s_arg));
 	if (arg)
 	{
 		if (tok_get_raw(tok))
 		{
-			arg->raw = ft_strdup(tok_get_raw(tok));
+			arg->raw = ft_strdup_tmp(m, tok_get_raw(tok));
 			if (!arg->raw)
-				return (err(EMSG_MALLOC), free(arg), NULL);
+				return (exit_clean(m, ENOMEM, __FUNCTION__, EMSG_MALLOC), NULL);
 		}
 		else
 			arg->raw = NULL;
@@ -51,7 +51,7 @@ t_arg_data	*init_arg(t_state *s, t_parser *p, t_ast_node *cmd_node, t_tok *tok)
 		arg->in_dquotes = tok_get_dquotes(tok);
 		arg->is_grouparg = tok_isgrouptoken(tok);
 		arg->tmp = NULL;
-		arg->lst_tokens = ft_lstcopy_tmp(get_mem(s), tok_get_tlist(tok), copy_token, destroy_token);
+		arg->lst_tokens = ft_lstcopy_tmp(m, tok_get_tlist(tok), copy_token, destroy_token);
 		arg->global_state = p->global_state;
 		if (true == arg->do_expansion)
 			cmd_node->data.cmd.do_expansion = true;
@@ -96,10 +96,10 @@ void	*create_arg_data_node_deep(t_mem_mgr *mgr, void *content)
 	t_arg_data	*arg_data;
 
 	content = (char *)content;
-	arg_data = malloc(sizeof(t_arg_data));
+	arg_data = mgr->f(&mgr->list, sizeof(t_arg_data));
 	if (arg_data)
 	{
-		arg_data->raw = ft_strdup(content);
+		arg_data->raw = ft_strdup_tmp(mgr, content);
 		if (arg_data->raw)
 		{
 			arg_data->do_expansion = false;
@@ -112,10 +112,7 @@ void	*create_arg_data_node_deep(t_mem_mgr *mgr, void *content)
 			arg_data->lst_tokens = NULL;
 		}
 		else
-		{
-			free(arg_data);
-			return (NULL);
-		}
+			exit_clean(mgr, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	return ((void *)arg_data);
 }
