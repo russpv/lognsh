@@ -20,7 +20,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	*(s3 + len1 + len2) = 0;
 	ft_memcpy(s3, s1, len1);
-	printf("len1: %zu\n", len1);
+	//printf("len1: %zu\n", len1);
 	ft_memcpy(s3 + len1, s2, len2);
 	return (s3);
 }
