@@ -57,7 +57,12 @@ extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 		{
 			if (0 == _check_access(name))
 			{
-				*fullpath = (char *)name;
+				//*fullpath = (char *)name; 
+				//	return (0);
+				//(causes a double free error because it makes c->fullpath to the same address as a->data.cmd.name)
+				*fullpath = ft_strdup(name);
+				if (!*fullpath)
+					return (ENOMEM);
 				return (0);
 			}
 		}
