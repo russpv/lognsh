@@ -22,6 +22,7 @@ SOURCES = ft_memcpy.c \
 		  ft_strnstr.c \
 		  ft_isprint.c \
 		  ft_strjoin.c \
+		  ft_strjoin_free.c \
 		  ft_strtrim.c \
 		  ft_substr.c \
 		  ft_strnlen.c \
