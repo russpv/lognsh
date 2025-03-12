@@ -23,10 +23,10 @@ t_state	*init_state(char **envp)
 	s->tmp = NULL;
 	mem_mgr_init(&s->mem_mgr);
 	mem_add_mem(&s->mem_mgr.list, s, sizeof(struct s_global_state));
-	s->sh_env_list = copy_envp(envp);
+	s->sh_env_list = copy_envp(&s->mem_mgr, envp);
 	if (!s->sh_env_list)
-		return (free(s), NULL);
-	set_signal_handlers();
+		return (free(s), exit(ENOMEM), NULL);
+	sig_set_handlers();
 	return (s);
 }
 
@@ -44,7 +44,7 @@ void	destroy_state(t_state *s)
 	if (s->input)
 		free(s->input);
 	if (s->sh_env_list)
-		env_free_list(s->sh_env_list);
+		env_free_list(get_mem(s), s->sh_env_list);
 	mem_free_all(&s->mem_mgr.list);
 }
 

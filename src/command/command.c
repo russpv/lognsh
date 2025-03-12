@@ -9,30 +9,32 @@
 void	destroy_cmd(t_state *s, void *c)
 {
 	t_cmd	*cmd;
+	t_mem_mgr *m;
 
+	m = get_mem(s);
 	cmd = (t_cmd *)c;
 	if (cmd->st)
-		st_int_destroy(cmd->st);
+		st_int_destroy(m, cmd->st);
 //	if (cmd->fullpath)
 //		free(cmd->fullpath);
 	if (cmd->redirs)
-		ft_lstclear(&cmd->redirs, destroy_redir);
+		ft_lstclear_tmp(m, &cmd->redirs, destroy_redir);
 	if (cmd->fildes)
-		ft_freearr((void **)cmd->fildes, -1);
+		ft_freearr_mem(&m->list, m->dealloc, (void **)cmd->fildes, -1);
 	if (cmd->argv)
-		ft_freearr((void **)cmd->argv, -1);
-	free(cmd);
+		ft_freearr_mem(&m->list, m->dealloc, (void **)cmd->argv, -1);
+	m->dealloc(&m->list,cmd);
 }
 
 t_cmd	*init_cmd(t_state *s, t_ast_node *a)
 {
 	t_cmd	*c;
 
-	c = malloc(sizeof(struct s_cmd));
+	c = get_mem(s)->f(&get_mem(s)->list, sizeof(struct s_cmd));
 	if (c)
 	{
 		c->fildes = NULL;
-		c->st = st_int_create();
+		c->st = st_int_create(get_mem(s));
 		c->argv = NULL;
 		c->argc = 0;
 		c->redirs = NULL;

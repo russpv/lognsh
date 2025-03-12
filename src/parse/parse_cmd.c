@@ -1,11 +1,11 @@
 #include "parse_int.h"
 
 /* Returns new AST cmd_node */
-static t_ast_node	*init_cmd_node(void)
+static t_ast_node	*_init_cmd_node(t_mem_mgr *m)
 {
 	t_ast_node	*node;
 
-	node = malloc(sizeof(struct s_node));
+	node = m->f(&m->list, sizeof(struct s_node));
 	if (node)
 	{
 		node->type = AST_NODE_CMD;
@@ -35,15 +35,12 @@ static int	_parse_args(t_state *s, t_parser *p, t_ast_node *cmd_node)
 		return (ERR_ARGS);
 	while (!is_at_end(p) && is_arg_token(peek(p)))
 	{
-		arg = init_arg(get_mem(s), p, cmd_node, advance(p));
+		arg = init_arg(p->mmgr, p, cmd_node, advance(p));
 		if (NULL == arg)
-			return (err(EMSG_MALLOC), ERR_MEM);
-		new = ft_lstnew(arg);
+			exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		new = ft_lstnew_tmp(p->mmgr, arg);
 		if (NULL == new)
-		{
-			free(arg);
-			return (err(EMSG_MALLOC), ERR_MEM);
-		}
+			exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		debug_print(_MOD_": %s: adding arg:%s\n", __FUNCTION__, arg->raw);
 		ft_lstadd_back(&cmd_node->data.cmd.args, new);
 		cmd_node->data.cmd.argc++;
@@ -69,7 +66,7 @@ static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 		return (err("Expected a command token, but none found\n"), ERR_SYNTAX);
 	if (false == is_expansion(peek(p)) && false == is_group_token(peek(p))) //TODO handle group tokens
 	{
-		cmd_node->data.cmd.name = ft_strdup(tok_get_raw(advance(p)));
+		cmd_node->data.cmd.name = ft_strdup_tmp(p->mmgr, tok_get_raw(advance(p)));
 		if (NULL == cmd_node->data.cmd.name)
 			return (err(EMSG_MALLOC), ERR_MEM);
 	}
@@ -91,7 +88,7 @@ t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 
 	st_int_push(p->st, AST_NODE_CMD);
 	debug_print(_MOD_": %s: tok: %s\n", __FUNCTION__, tok_get_raw(peek(p)));
-	ast_node = init_cmd_node();
+	ast_node = _init_cmd_node(p->mmgr);
 	if (NULL == ast_node)
 		return (err(EMSG_MALLOC), NULL);
 	res = _process_cmd(s, p, ast_node);

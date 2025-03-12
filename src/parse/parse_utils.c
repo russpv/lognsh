@@ -1,6 +1,6 @@
 #include "parse_int.h"
 
-static void	_destroy_arr(char **arr)
+static void	_destroy_arr(t_mem_mgr *m, char **arr)
 {
 	int	i;
 
@@ -8,8 +8,8 @@ static void	_destroy_arr(char **arr)
 	if (!arr[i])
 		return ;
 	while (arr[i])
-		free(arr[i++]);
-	free(arr);
+		m->dealloc(&m->list, arr[i++]);
+	m->dealloc(&m->list, arr);
 }
 /*
 static int	_update_combined_subtokens(char **old, const char *curr, const char *prev)
@@ -35,15 +35,15 @@ static int	_update_combined_subtokens(char **old, const char *curr, const char *
 
 // Deep copies linked list of arguments to char **array
 // TODO: pass state here to handle bad mallocs
-char	**list_to_array(t_list *args, int argc)
+char	**list_to_array(t_mem_mgr *m, t_list *args, int argc)
 {
 	char	**array;
 	int		i;
 	char *new_s;
 
-	array = malloc(sizeof(char *) * (size_t)(argc + 1));
+	array = m->f(&m->list, sizeof(char *) * (size_t)(argc + 1));
 	if (NULL == array)
-		return (err(EMSG_MALLOC), NULL); // TODO handle bad mem
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	i = 0;
 	while (i < argc && args)
 	{
@@ -54,10 +54,10 @@ char	**list_to_array(t_list *args, int argc)
 		}*/
 		array[i] = new_s;
 		if (NULL == array[i])
-			array[i] = ft_strdup(((t_arg_data *)args->content)->raw);
+			array[i] = ft_strdup_tmp(m, ((t_arg_data *)args->content)->raw);
 		if (NULL == array[i])
 		{
-			_destroy_arr(array);
+			_destroy_arr(m, array);
 			return (NULL);
 		}
 		args = args->next;

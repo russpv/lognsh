@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_int.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:58:36 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/04 00:01:29 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/03/12 16:18:23 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,5 @@ typedef struct s_signal_manager
 
 void	sigint_handler(int signo);
 void	sigquit_handler(int signo);
+
 #endif

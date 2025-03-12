@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 08:59:52 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/06 19:07:05 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/12 18:49:28 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	**env_getenv(void)
 		perror("getenv\n"); 
 		return (NULL);
 	}
-	res = ft_split(path_env, ':');
+	res = ft_split(path_env, ':'); //TODO fork for mem
 	if (!res)
 	{
 		perror("ft_split error\n"); // ft_split doesn't set errno

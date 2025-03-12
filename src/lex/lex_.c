@@ -82,11 +82,11 @@ void	destroy_lexer(t_state *s, void *instance)
 	if (lexer->buf)
 		m->dealloc(&m->list, lexer->buf);
 	if (lexer->eof_word)
-		free(lexer->eof_word);
+		m->dealloc(&m->list, lexer->eof_word);
 	if (lexer->hasht)
-		ht_destroy(get_mem(s), lexer->hasht, lex_destroy_ht_node);
+		ht_destroy(m, lexer->hasht, lex_destroy_ht_node);
 	if (lexer->token_list)
-		ft_lstclear_tmp(get_mem(s), &lexer->token_list, destroy_token);
+		ft_lstclear_tmp(m, &lexer->token_list, destroy_token);
 	m->dealloc(&m->list, lexer);
 }
 

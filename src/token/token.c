@@ -13,7 +13,7 @@ static void	_init_group_token(t_tok *token, size_t pos)
 static int	_init_normal_token(t_mem_mgr *mgr, t_tok *token, const char *s, int type, size_t pos)
 {
 	if (ft_strlen(s) > MAX_RAW_INPUT_LEN)
-		return (err(_MOD_": raw input buf overflow\n"), free(token), ERR_BUFFLOW);
+		return (err(_MOD_": raw input buf overflow\n"), mgr->dealloc(&mgr->list, token), ERR_BUFFLOW);
 	token->class = NORMAL;
 	token->t.tok.raw = ft_strdup_tmp(mgr, s);
 	token->t.tok.type = type;

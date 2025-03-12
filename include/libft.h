@@ -139,6 +139,7 @@ t_bool					ft_isspace(int c);
 int						ft_atoi(const char *str);
 char					*ft_itoa_mem(t_mem_node *head, t_alloc_fn f, int num);
 void	ft_freearr_mem(t_mem_node *head, t_dealloc_fn dealloc, void **arr, int size);
+char	*ft_strjoin_mem(t_mem_node *head, t_alloc_fn f, char const *s1, char const *s2);
 
 int						ft_strcmplow(const char *s1, const char *s2);
 

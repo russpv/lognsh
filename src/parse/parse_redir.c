@@ -13,18 +13,15 @@
 /* Creates new redir node and adds to t_list.
  * Freeing handled by caller.
  */
-static int	_add_redir(t_ast_node *node, t_redir_data *red)
+static int	_add_redir(t_mem_mgr *m, t_ast_node *node, t_redir_data *red)
 {
 	t_list	*new;
 
 	if (!red || !node)
 		return (ERR_ARGS);
-	new = ft_lstnew(red);
+	new = ft_lstnew_tmp(m, red);
 	if (!new)
-	{
-		err(EMSG_REDIR_NODE_MALLOC);
-		return (ERR_MEM);
-	}
+		exit_clean(&m->list,ENOMEM, __FUNCTION__, EMSG_REDIR_NODE_MALLOC);
 	debug_print(_MOD_ ": Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n",\
 		red->symbol, red->filename, red->heredoc_body, red->do_globbing,\
 		red->do_expansion);
@@ -43,9 +40,9 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red, t_a
 
 	if (!p || !red || !tok)
 		return (ERR_ARGS);
-	red->symbol = ft_strdup(tok_get_raw((t_tok *)tok));
+	red->symbol = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok));
 	if (!red->symbol)
-		return (err(EMSG_REDIR_SYM_MALLOC), ERR_MEM);
+		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_REDIR_SYM_MALLOC);
 	debug_print(DBGMSG_REDIR_GOT, red->type, red->symbol);
 	if (is_at_end(p))
 		return (err(EMSG_REDIR_FN_EOF), ERR_SYNTAX);
@@ -56,12 +53,12 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red, t_a
 		return (err(EMSG_REDIR_FN_INVALID), ERR_SYNTAX);
 	red->do_globbing = tok_get_globbing((t_tok *)tok_fname);
 	red->do_expansion = tok_get_expansion((t_tok *)tok_fname);
-	red->filename = ft_strdup(tok_get_raw((t_tok *)tok_fname));
+	red->filename = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok_fname));
 	red->target_ptr = n;
 	n->data.cmd.do_redir_expansion |= red->do_expansion;
 	n->data.cmd.do_redir_globbing |= red->do_globbing;
 	if (!red->filename)
-		return (err(EMSG_REDIR_FN), ERR_MEM);
+		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_REDIR_FN);
 	return (0);
 }
 
@@ -69,7 +66,7 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red, t_a
  * Returns ERR_MEM if malloc fails.
  * Freeing handled by caller.
  */
-static int	_process_heredoc_redir(t_redir_data *red, t_tok *tok, t_ast_node *cmd)
+static int	_process_heredoc_redir(t_parser *p, t_redir_data *red, t_tok *tok, t_ast_node *cmd)
 {
 	if (!red || !tok || !cmd)
 		return (ERR_ARGS);
@@ -80,12 +77,9 @@ static int	_process_heredoc_redir(t_redir_data *red, t_tok *tok, t_ast_node *cmd
 	red->filename = NULL;
 	red->do_expansion = tok_get_expansion(tok);
 	cmd->data.cmd.do_redir_expansion = red->do_expansion;
-	red->heredoc_body = ft_strdup(tok_get_raw((t_tok *)tok));
+	red->heredoc_body = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok));
 	if (!red->heredoc_body)
-	{
-		err(EMSG_HEREDOC_MALLOC);
-		return (ERR_MEM);
-	}
+		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_HEREDOC_MALLOC);
 	return (0);
 }
 
@@ -103,19 +97,19 @@ static int	_parse_redir(t_parser *p, t_ast_node *node)
 	while (!is_at_end(p) && is_redir_token(peek(p)))
 	{
 		tok = advance(p);
-		red = init_redir(node, tok_get_type((t_tok *)tok));
+		red = init_redir(p->mmgr, node, tok_get_type((t_tok *)tok));
 		if (false == is_heredoc_token((t_tok *)tok))
 		{
 			if (0 != _process_normal_redir(p, tok, red, node))
-				return (destroy_redir(red), ERR_GENERAL);
+				return (destroy_redir(p->mmgr, red), ERR_GENERAL);
 		}
 		else
 		{
-			if (0 != _process_heredoc_redir(red, tok, node))
-				return (destroy_redir(red), ERR_GENERAL);
+			if (0 != _process_heredoc_redir(p, red, tok, node))
+				return (destroy_redir(p->mmgr, red), ERR_GENERAL);
 		}
-		if (0 != _add_redir(node, red))
-			return (destroy_redir(red), ERR_GENERAL);
+		if (0 != _add_redir(p->mmgr, node, red))
+			return (destroy_redir(p->mmgr, red), ERR_GENERAL);
 	}
 	debug_print(_MOD_ ": _parse_redir: curr peek tok: %s\n",
 		tok_get_raw(peek(p)));

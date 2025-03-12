@@ -68,6 +68,55 @@ void	ft_lstclear_tmp(t_mem_mgr *mgr, t_list **lst, void (*del)(t_mem_mgr *m,
 	}
 	*lst = NULL;
 }
+
+/* LSTDELONE
+** Removes passed node in doubly linked list
+** Assuming list to rear iteration direction
+** lst: parent list
+** node: node to free
+** del: ptr to func that deletes node.content
+*/
+void	ft_lstdelone_str_tmp(t_mem_mgr *m, t_list **lst, t_list *node)
+{
+	if (!m || !lst || !node)
+		return ;
+	if (!*lst)
+		return ;
+	if (node->prev)
+		node->prev->next = node->next;
+	if (node->next)
+		node->next->prev = node->prev;
+	if (node == *lst)
+		*lst = node->next;
+	m->dealloc(&m->list, node->content);
+	m->dealloc(&m->list, node);
+}
+
+/* LSTCLEAR
+** Deletes all subsequent nodes and current node
+** lst: ptr to ptr to node
+** del: ptr to free(content) function
+*/
+void	ft_lstclear_str_tmp(t_mem_mgr *mgr, t_list **lst)
+{
+	t_list	*tmp;
+	t_list	*next;
+
+	if (!mgr || !*lst || !lst)
+		return ;
+	debug_print(DMSG_GOT, __FUNCTION__, (void *)lst, (void *)*lst);
+	tmp = *lst;
+	while (tmp)
+	{
+		debug_print(DMSG_DEL, __FUNCTION__, (void *)tmp);
+		next = tmp->next;
+		ft_lstdelone_str_tmp(mgr, lst, tmp);
+		tmp = next;
+	}
+	*lst = NULL;
+}
+
+
 // Helper function: Deep copy a single node's content
 t_list	*ft_lstcopy_node_tmp(t_mem_mgr *mgr, const t_list *orig,
 		void *(*f)(t_mem_mgr *, const void *))
@@ -117,6 +166,24 @@ t_list	*ft_lstcopy_tmp(t_mem_mgr *mgr, t_list *orig, void *(*f)(t_mem_mgr *,
 		orig = orig->next;
 	}
 	return (new_list);
+}
+/* Returns new linked list node with f(content). */
+t_list	*ft_lstnew_copystr_mem(t_mem_mgr *m, void *content, char *(*f)(t_mem_mgr *, const char *))
+{
+	t_list	*new_node;
+
+	new_node = m->f(&m->list, sizeof(t_list));
+	if (!new_node)
+		return (NULL);
+	new_node->content = f(m, content);
+	if (!new_node->content)
+	{
+		m->dealloc(&m->list, new_node);
+		return (NULL);
+	}
+	new_node->next = NULL;
+	new_node->prev = NULL;
+	return (new_node);
 }
 
 #define DMSG_IN "%s: Deleting node: %p (content: %p) (list: %p)\n"
@@ -239,4 +306,25 @@ char	*ft_strdup_tmp(t_mem_mgr *mgr, const char *s)
 		return (NULL);
 	newstr[len] = 0;
 	return (ft_memcpy(newstr, s, len));
+}
+
+
+/* LSTITERSTR
+** Iterates linked list and applies func f to node.content
+** Returns the node content if the func f returns error code
+** lst: ptr to node
+** f: ptr to function
+** UNPROTECTED
+*/
+char	*ft_lstiterstr_mem(t_mem_mgr *m, t_list *lst, int (*f)(t_mem_mgr *m, void *))
+{
+	if (lst == NULL)
+		return (NULL);
+	while (lst)
+	{
+		if (0 != f(m, lst->content))
+			return (lst->content);
+		lst = lst->next;
+	}
+	return (NULL);
 }

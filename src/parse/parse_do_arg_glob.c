@@ -70,7 +70,7 @@ static struct dirent	*_glob_readdir(DIR *dir)
  * since this will always
  * run from interactive mode and not in background
  */
-t_list	*match_glob(const char *pattern)
+t_list	*match_glob(t_mem_mgr *m, const char *pattern)
 {
 	t_list			*lst;
 	t_list			*new;
@@ -89,10 +89,10 @@ t_list	*match_glob(const char *pattern)
 		if (true == _matches_pattern(res->d_name, pattern))
 		{
 			debug_print(DBGMSG_GLOBMATCH, res->d_name);
-			char *name =ft_strdup(res->d_name);
-			new = ft_lstnew(name);
+			char *name =ft_strdup_tmp(m, res->d_name);
+			new = ft_lstnew_tmp(m, name);
 			if (NULL == new || NULL == name)
-				return (ft_lstclear(&lst, free), NULL);
+				exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 			ft_lstadd_back(&lst, new);
 		}
 		res = _glob_readdir(dir);
@@ -102,7 +102,6 @@ t_list	*match_glob(const char *pattern)
 	debug_detect_cycle(lst);
 	got = ft_lstsort(&lst);
 	debug_detect_cycle(got);
-
 	return (got);
 }
 
@@ -127,16 +126,16 @@ static int	_do_ops(t_mem_mgr *mgr, t_list **lst_node, t_list **glst, t_arg_data 
 		new_arg_data_lst = ft_lstmap_tmp(mgr, *glst, create_arg_data_node_deep,\
 			destroy_arg);
 		ft_lstadd_insert(lst_node, new_arg_data_lst);
-		ft_lstclear(glst, free);
+		ft_lstclear_str_tmp(mgr, glst);
 	}
 	else
 	{
-		new_arg = ft_strdup((*glst)->content);
+		new_arg = ft_strdup_tmp(mgr, (*glst)->content);
 		if (!new_arg)
-			return (ERR_MEM);
-		free(content->raw);
+			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		mgr->dealloc(&mgr->list, content->raw);
 		content->raw = new_arg;
-		ft_lstclear(glst, free);
+		ft_lstclear_str_tmp(mgr, glst);
 	}
 	return (0);
 }
@@ -173,7 +172,7 @@ int	p_do_globbing_args(t_mem_mgr *mgr, t_list **lst_node, void *lst_c)
 	debug_print(DBGMSG_GOTARGS, arg->raw, (void *)lst_node);
 	if (true == arg->do_globbing)
 	{
-		lst = match_glob(arg->raw);
+		lst = match_glob(mgr, arg->raw);
 		if (lst)
 		{
 			debug_print(DBGMSG_MATCHES, ft_lstsize(lst), lst->content);

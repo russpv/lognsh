@@ -2,8 +2,6 @@
 # define STATE_INT_H
 
 # include "state.h"
-# include "../builtins/env/env.h"
-# include "mem/mem.h"
 
 struct							s_global_state
 {

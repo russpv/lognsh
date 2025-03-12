@@ -1,7 +1,7 @@
 #ifndef MEM_H
 # define MEM_H
 
-# include "../../data_structures/i_llist.h"
+# include "../data_structures/i_llist.h"
 # include <errno.h>
 
 t_mem_block	*mem_init_block(void);

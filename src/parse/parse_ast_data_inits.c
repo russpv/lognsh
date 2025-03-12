@@ -2,18 +2,15 @@
 
 #define EMSG_REDIR_DATA_MALLOC "Memory allocation failed for redirection data\n"
 
-t_redir_data	*init_redir(t_ast_node *target, enum e_tok_type type)
+t_redir_data	*init_redir(t_mem_mgr *m, t_ast_node *target, enum e_tok_type type)
 {
 	t_redir_data	*red;
 
 	if (!target)
 		return (NULL);
-	red = malloc(sizeof(t_redir_data));
+	red = m->f(&m->list, sizeof(t_redir_data));
 	if (!red)
-	{
-		err(EMSG_REDIR_DATA_MALLOC);
-		return (NULL);
-	}
+		exit_clean(&m->list, ENOMEM,  __FUNCTION__, EMSG_REDIR_DATA_MALLOC);
 	red->type = type;
 	red->target_ptr = target;
 	red->do_globbing = false;
@@ -41,7 +38,7 @@ t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node, t_tok *tok
 		{
 			arg->raw = ft_strdup_tmp(m, tok_get_raw(tok));
 			if (!arg->raw)
-				return (exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC), NULL);
+				exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		}
 		else
 			arg->raw = NULL;

@@ -1,10 +1,10 @@
 #include "parse_int.h"
 
-t_ast_node	*init_log(void)
+t_ast_node	*init_log(t_mem_mgr *m)
 {
 	t_ast_node	*log_node;
 
-	log_node = malloc(sizeof(t_ast_node));
+	log_node = m->f(&m->list, sizeof(t_ast_node));
 	if (log_node)
 	{
 		log_node->type = AST_NODE_LOG;

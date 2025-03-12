@@ -24,7 +24,7 @@ static inline void	_put_eof_in_buf(t_lex *l)
 
 // Returns eof delimiter 
 // Skips any spaces. Also flushes buf to prepare body token
-int	get_eof_word(t_lex *l)
+int	get_eof_word(t_mem_mgr *m, t_lex *l)
 {
 
 	if (!l->ptr)
@@ -37,12 +37,9 @@ int	get_eof_word(t_lex *l)
 	_skip_to_next_op(l);
 	if (0 == ft_strlen(l->buf))
 		return (err(EMSG_NOEOF), ERR_SYNTAX);
-	l->eof_word = ft_strdup(l->buf);
+	l->eof_word = ft_strdup_tmp(m, l->buf);
 	if (!l->eof_word)
-	{
-		ft_memset(l->buf, 0, LEX_BUFSZ);
-		return (err(_MOD_": "EMSG_MALLOC), ERR_MEM);
-	}
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	debug_print(_MOD_": captured heredoc delimiter: %s\n", l->eof_word);
 	ft_memset(l->buf, 0, LEX_BUFSZ);
 	return (0);

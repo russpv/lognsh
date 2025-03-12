@@ -240,7 +240,7 @@ struct s_ht_entry			*do_one_char_lookahead(t_lex *lexer,
 int							do_state_transition(t_lex *lexer);
 
 /* heredoc */
-int							get_eof_word(t_lex *l);
+int	get_eof_word(t_mem_mgr *m, t_lex *l);
 bool						on_cmd_op(t_lex *l);
 bool						is_varnamechar(unsigned char c);
 

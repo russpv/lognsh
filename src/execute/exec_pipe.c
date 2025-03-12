@@ -95,7 +95,7 @@ int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,\
 	}
 	else if (0 == pid)
 	{
-		reset_signal_handlers();
+		sig_reset_handlers();
 		_close_other_pipe_ends(get_cmd(s), i);
 		_redirect_pipes(get_cmd(s), i);
 		exit_status = executor(s, node);

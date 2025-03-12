@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:07:02 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/07 15:27:17 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/12 19:08:11 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #define EMSG_NOHOME "HOME not set.\n"
 #define EMSG_BADMALLOC "memory allocation failed.\n"
 
-static int	_set_env_value(t_env **env_list, const char *key, const char *value)
+static int	_set_env_value(t_mem_mgr *m, t_env **env_list, const char *key, const char *value)
 {
 	t_env	*node;
 
@@ -34,7 +34,7 @@ static int	_set_env_value(t_env **env_list, const char *key, const char *value)
 	}
 	else
 	{
-		node = create_env_node(key, value);
+		node = create_env_node(m, key, value);
 		if (!node)
 			return (1);
 		env_add_node(env_list, node);

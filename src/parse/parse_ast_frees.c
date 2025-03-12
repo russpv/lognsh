@@ -11,12 +11,12 @@ void	destroy_cmd_node(t_mem_mgr *mgr, void *n)
 	if (node->type != AST_NODE_CMD)
 		return ;
 	if (node->data.cmd.name)
-		free(node->data.cmd.name);
+		mgr->dealloc(&mgr->list, node->data.cmd.name);
 	if (node->data.cmd.args)
 		ft_lstclear_tmp(mgr, &node->data.cmd.args, destroy_arg);
 	if (node->data.cmd.redirs)
-		ft_lstclear(&node->data.cmd.redirs, destroy_redir);
-	free(node);
+		ft_lstclear_tmp(mgr, &node->data.cmd.redirs, destroy_redir);
+	mgr->dealloc(&mgr->list, node);
 	debug_print(_MOD_ ":  destroy_cmd_node...DONE\n");
 }
 
@@ -31,10 +31,10 @@ void	destroy_proc_node(t_mem_mgr *mgr, void *n)
 	if (AST_NODE_PROC != node->type)
 		return ;
 	if (node->data.proc.redirs)
-		ft_lstclear(&node->data.proc.redirs, destroy_redir);
+		ft_lstclear_tmp(mgr, &node->data.proc.redirs, destroy_redir);
 	if (node->data.proc.cmds)
 		ft_lstclear_tmp(mgr, &node->data.proc.cmds, destroy_ast_node);
-	free(node);
+	mgr->dealloc(&mgr->list, node);
 	debug_print(_MOD_ ":  destroy_proc_node...DONE\n");
 }
 
@@ -50,10 +50,10 @@ void	destroy_log_node(t_mem_mgr *mgr, void *n)
 	if (AST_NODE_LOG != node->type)
 		return ;
 	if (node->data.log.operators)
-		ft_lstclear(&node->data.log.operators, free);
+		ft_lstclear_str_tmp(mgr, &node->data.log.operators);
 	if (node->data.log.cmds)
 		ft_lstclear_tmp(mgr, &node->data.log.cmds, destroy_ast_node);
-	free(node);
+	mgr->dealloc(&mgr->list, node);
 	debug_print(_MOD_ ":  destroy_log_node...DONE\n");
 }
 
@@ -69,7 +69,7 @@ void	destroy_pipe_node(t_mem_mgr *mgr, void *n)
 		return ;
 	if (node->data.pipe.cmds)
 		ft_lstclear_tmp(mgr, &node->data.pipe.cmds, destroy_ast_node);
-	free(node);
+	mgr->dealloc(&mgr->list, node);
 	debug_print(_MOD_ ":  destroy_pipe_node...DONE\n");
 }
 

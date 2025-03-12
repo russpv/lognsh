@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_set_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 08:59:52 by dayeo             #+#    #+#             */
-/*   Updated: 2025/02/09 08:59:52 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/03/12 18:47:05 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,18 @@ void	env_set_next(t_env *node, t_env *next)
 	node->next = next;
 }
 
-void	env_set_node_value(t_env *node, const char *value)
+void	env_set_node_value(t_mem_mgr *m, t_env *node, const char *value)
 {
 	char	*new_value;
 
 	if (!node)
 		return ;
 	if (node->value)
-		free(node->value);
+		m->dealloc(&m->list, node->value);
 	if (value)
-		new_value = ft_strdup(value);
+		new_value = ft_strdup_tmp(m, value);
 	else
-		new_value = ft_strdup("");
+		new_value = ft_strdup_tmp(m, "");
 	if (!new_value)
 		return ;
 	node->value = new_value;

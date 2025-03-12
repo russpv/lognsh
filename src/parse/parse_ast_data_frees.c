@@ -1,7 +1,7 @@
 #include "parse_int.h"
 
 /* Fully frees a struct s_redir, for use in llist destroy */
-void	destroy_redir(void *in)
+void	destroy_redir(t_mem_mgr *m, void *in)
 {
 	t_redir_data	*redir;
 
@@ -10,14 +10,14 @@ void	destroy_redir(void *in)
 		return ;
 	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
 	if (redir->symbol)
-		free(redir->symbol);
+		m->dealloc(&m->list, redir->symbol);
 	if (redir->filename)
-		free(redir->filename);
+		m->dealloc(&m->list, redir->filename);
 	if (redir->heredoc_body)
-		free(redir->heredoc_body);
+		m->dealloc(&m->list, redir->heredoc_body);
 	if (redir->lst_glob)
-		ft_lstclear(&redir->lst_glob, free);
-	free(redir);
+		ft_lstclear_str_tmp(m, &redir->lst_glob);
+	m->dealloc(&m->list, redir);
 }
 
 /* Fully frees a struct s_arg, for use in llist destroy */

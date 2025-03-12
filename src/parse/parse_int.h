@@ -191,12 +191,13 @@ typedef struct s_parser
 	t_ast_node				*ast;
 	bool					parse_error;
 	t_state					*global_state;
+	t_mem_mgr				*mmgr;
 }							t_parser;
 
 t_parser					*create_parser(t_state *s, t_list *tokens);
 void						destroy_parser(t_state *s, void *instance);
-t_ast_node					*init_log(void);
-t_redir_data				*init_redir(t_ast_node *target,
+t_ast_node					*init_log(t_mem_mgr *m);
+t_redir_data				*init_redir(t_mem_mgr *m, t_ast_node *target,
 								enum e_tok_type type);
 t_arg_data					*init_arg(t_mem_mgr *m, t_parser *p,
 								t_ast_node *cmd_node, t_tok *tok);
@@ -218,18 +219,18 @@ t_ast_node					*parse_logical(t_state *s, t_parser *p);
 /* Parsing helpers */
 int							process_redir(t_parser *p, t_ast_node *cmd_node);
 void						*create_arg_data_node(void *content);
-void	*create_arg_data_node_deep(t_mem_mgr *mgr, void *content);
-t_pstack					*create_stack(void);
-void						destroy_stack(t_pstack *s);
+void						*create_arg_data_node_deep(t_mem_mgr *mgr, void *content);
+t_pstack					*create_stack(t_mem_mgr *m);
+void						destroy_stack(t_mem_mgr *m, t_pstack *s);
 int							push(t_pstack *stack);
 int							pop(t_pstack *stack);
 
 /* Execution helpers */
 int	p_do_globbing_args(t_mem_mgr *mgr, t_list **lst_node, void *lst_c);
-int							p_do_globbing_redirs(void *c);
+int							p_do_globbing_redirs(t_mem_mgr *mgr, void *c);
 int							check_special_expansions(t_state *s,
 								const char *buf, char **value);
-t_list						*match_glob(const char *pattern);
+t_list						*match_glob(t_mem_mgr *mgr, const char *pattern);
 
 /* Tests */
 bool						is_option(t_tok *tok);
@@ -261,17 +262,17 @@ int							handle_redirect_append(const t_redir_data *node);
 int							handle_heredoc(const t_redir_data *node);
 
 /* Utils */
-char						**list_to_array(t_list *args, int argc);
+char						**list_to_array(t_mem_mgr *m, t_list *args, int argc);
 int							lstiter_state(t_state *s, t_list *lst,
 								int (*f)(t_state *, void *));
 
 /* AST list frees */
-void						destroy_ast_node(t_mem_mgr *s, void *node);
-void						destroy_pipe_node(t_mem_mgr *s, void *n);
-void						destroy_cmd_node(t_mem_mgr *s, void *n);
-void						destroy_proc_node(t_mem_mgr *s, void *n);
-void						destroy_log_node(t_mem_mgr *s, void *n);
-void						destroy_arg(t_mem_mgr *mgr, void *in);
+void						destroy_ast_node(t_mem_mgr *m, void *node);
+void						destroy_pipe_node(t_mem_mgr *m, void *n);
+void						destroy_cmd_node(t_mem_mgr *m, void *n);
+void						destroy_proc_node(t_mem_mgr *m, void *n);
+void						destroy_log_node(t_mem_mgr *m, void *n);
+void						destroy_arg(t_mem_mgr *m, void *in);
 
 /* Debugging */
 void						parse_print(t_ast_node *ast);

@@ -6,7 +6,7 @@
  * warning as fish does
  */
 #define LOGMSG_EREDIR_DONE "\tRedirect: dup2 from %d to %d\n"
-#define DBGMSG_EREDIR_FD "Exec: _redirect_logic fd:%d\n"
+#define DBGMSG_EREDIR_FD _MOD_ ": %s: fd:%d\n"
 
 static inline int	_redirect_logic(char *topath, int from, bool append)
 {
@@ -28,7 +28,7 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 		fd = -1;
 	if (fd < 0)
 		return(perror(EMSG_OPEN), fd);
-	debug_print(DBGMSG_EREDIR_FD, fd);
+	debug_print(DBGMSG_EREDIR_FD, __FUNCTION__, fd);
 	return (fd);
 }
 

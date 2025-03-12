@@ -3,40 +3,37 @@
 #define EMSG_EPIPE_FORK "ERR exec_fork_run\n"
 
 /* Frees allocated pipes */
-void	free_pipes(int **fildes, int count)
+static void	_free_pipes(t_mem_mgr *m, int **fildes, int count)
 {
 	int	i;
 
 	i = 0;
 	while (i < count)
-		free(fildes[i++]);
-	free(*fildes);
+		m->dealloc(&m->list, fildes[i++]);
+	m->dealloc(&m->list, *fildes);
 	*fildes = NULL;
 }
 
 /* Allocates pipe fd's to null terminated array */
-int	exec_create_pipes(int ***fildes, int cmd_count)
+int	exec_create_pipes(t_mem_mgr *m, int ***fildes, int cmd_count)
 {
 	int	i;
 
 	i = 0;
 	if (cmd_count < 2)
 		return (ERR_INSUFFICIENT_CMDS);
-	*fildes = (int **)malloc((sizeof(int *)) * (size_t)(cmd_count));
+	*fildes = (int **)m->f(&m->list, (sizeof(int *)) * (size_t)(cmd_count));
 	if (!(*fildes))
-		return (err(EMSG_MALLOC), ERR_MEM);
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	(*fildes)[cmd_count - 1] = NULL;
 	while (i < cmd_count - 1)
 	{
-		(*fildes)[i] = (int *)malloc(2 * sizeof(int));
+		(*fildes)[i] = (int *)m->f(&m->list, 2 * sizeof(int));
 		if (!(*fildes)[i])
-		{
-			free_pipes((*fildes), i);
-			return (err(EMSG_MALLOC), ERR_MEM);
-		}
+			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		if (pipe((*fildes)[i]) < 0)
 		{
-			free_pipes((*fildes), i);
+			_free_pipes(m, (*fildes), i);
 			return (perror(EMSG_PIPE), ERR_PIPE);
 		}
 		i++;

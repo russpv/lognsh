@@ -31,8 +31,9 @@ static inline bool	_line_is_eof(t_lex *l, const char *line)
  * 
  * Note: Bash/Zsh do not trim the line when testing EOF (" EOF" != EOF)
  * only when capturing the EOF value
+ * Memory allocations are local. 
  */
-static inline int	_match_heredoc(t_lex *l)
+static inline int	_match_heredoc(t_mem_mgr *m, t_lex *l)
 {
 	char	*line;
 
@@ -42,14 +43,14 @@ static inline int	_match_heredoc(t_lex *l)
 		if (NULL == line)
 		{
 			debug_print(LOGMSG_SIG);
-			free(l->eof_word);
+			m->dealloc(&m->list, l->eof_word);
 			l->eof_word = NULL;
 			return (ERR_CMD_SIGINTD);
 		}
 		if (true == _line_is_eof(l, line))
 		{
 			debug_print(DBGMSG_FOUNDDEL);
-			free(l->eof_word);
+			m->dealloc(&m->list, l->eof_word);
 			l->eof_word = NULL;
 			return (0);
 		}
@@ -68,11 +69,11 @@ int	tokenize_heredoc(t_state *s, t_lex *lexer)
 	int		res;
 
 	debug_print(DBGMSG_ANNOUNCE);
-	res = get_eof_word(lexer);
+	res = get_eof_word(get_mem(s), lexer);
 	if (0 != res)
 		return (res);
 	lexer->do_expansion = true;
-	res = _match_heredoc(lexer);
+	res = _match_heredoc(get_mem(s), lexer);
 	if (0 != res)
 		return (res);
 	debug_print(DBGMSG_PTRAT, *lexer->ptr);

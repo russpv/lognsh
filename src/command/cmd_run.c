@@ -34,19 +34,19 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		if (NULL == tmp)
-			return (ft_freearr((void **)paths, -1), err(EMSG_RUNC_STRJ),
+			return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc, (void **)paths, -1), err(EMSG_RUNC_STRJ),
 				ERR_MEM);
 		*fullpath = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!*fullpath)
-			return (ft_freearr((void **)paths, -1), err(EMSG_RUNC_STRJ),
+			return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc,  (void **)paths, -1), err(EMSG_RUNC_STRJ),
 				ERR_MEM);
 		if (0 == _check_access(*fullpath))
-			return (ft_freearr((void **)paths, -1), 0);
+			return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc,  (void **)paths, -1), 0);
 		free(*fullpath);
 		*fullpath = NULL;
 	}
-	return (ft_freearr((void **)paths, -1), ERR_CMD_NOT_FOUND);
+	return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc,  (void **)paths, -1), ERR_CMD_NOT_FOUND);
 }
 
 /* Stores command path in fullpath, if valid.
@@ -61,11 +61,6 @@ extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 			{
 				*fullpath = (char *)name; 
 					return (0);
-				//(causes a double free error because it makes c->fullpath to the same address as a->data.cmd.name)
-				//*fullpath = ft_strdup(name);
-				//if (!*fullpath)
-				//	return (ENOMEM);
-				//return (0);
 			}
 		}
 		else

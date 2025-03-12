@@ -1,8 +1,8 @@
 #include "execute_int.h"
 
-#define DBGMSG_EXEC_EXITCODE "Exec: Child %d exited w/ stat:%d\n"
-#define DBGMSG_EXEC_EXITSIG "Exec: Child %d exited by sig:%d\n"
-#define DBGMSG_EXEC_DONE "Exec: All child processes have terminated\n"
+#define DBGMSG_EXEC_EXITCODE _MOD_ ": Child %d exited w/ stat:%d\n"
+#define DBGMSG_EXEC_EXITSIG _MOD_ ": Child %d exited by sig:%d\n"
+#define DBGMSG_EXEC_DONE _MOD_ ": All child processes have terminated\n"
 
 /* This wait()'s for all child processes; called by parent
  * Note: assuming waitpid() behaves irrespective of actual

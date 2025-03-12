@@ -2,19 +2,20 @@
 
 #define MAX_STACK_DEPTH 100
 
-t_pstack	*create_stack(void)
+t_pstack	*create_stack(t_mem_mgr *m)
 {
 	t_pstack	*s;
 
-	s = malloc(sizeof(t_pstack));
-	if (s)
-		s->depth = 0;
+	s = m->f(&m->list, sizeof(t_pstack));
+	if (!s)
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	s->depth = 0;
 	return (s);
 }
 
-void	destroy_stack(t_pstack *s)
+void	destroy_stack(t_mem_mgr *m, t_pstack *s)
 {
-	free(s);
+	m->dealloc(&m->list, s);
 }
 
 int	push(t_pstack *stack)

@@ -14,17 +14,14 @@ static int	_process_cmd(t_parser *p, t_ast_node *log_node)
 
 	if (!p || !log_node)
 		return (ERR_ARGS);
-	cmd_node = ft_lstnew(p->last_node);
+	cmd_node = ft_lstnew_tmp(p->mmgr, p->last_node);
 	if (cmd_node)
 	{
 		ft_lstadd_back(&log_node->data.log.cmds, cmd_node);
 		log_node->data.log.cmdc++;
 	}
 	else
-	{
-		err(EMSG_LOGI_CMD_MALLOC);
-		return (ERR_MEM);
-	}
+		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_LOGI_CMD_MALLOC);
 	return (0);
 }
 
@@ -37,14 +34,11 @@ static int	_process_op(t_parser *p, t_ast_node *log_node)
 
 	if (!p || !log_node)
 		return (ERR_ARGS);
-	op = ft_lstnew_copystr(tok_get_raw(peek(p)), ft_strdup);
+	op = ft_lstnew_copystr_mem(p->mmgr, tok_get_raw(peek(p)), ft_strdup_tmp);
 	if (op)
 		ft_lstadd_back(&log_node->data.log.operators, op);
 	else
-	{
-		err(EMSG_LOGI_OP_MALLOC);
-		return (ERR_MEM);
-	}
+		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_LOGI_OP_MALLOC);
 	return (0);
 }
 
@@ -105,9 +99,9 @@ t_ast_node	*parse_logical(t_state *s, t_parser *p)
 
 	st_int_push(p->st, AST_NODE_LOG);
 	debug_print(_MOD_ ": parse_logical tok: %s\n", tok_get_raw(peek(p)));
-	ast_node = init_log();
+	ast_node = init_log(p->mmgr);
 	if (NULL == ast_node)
-		return (err(EMSG_LOGI_NODE_MALLOC), NULL);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LOGI_NODE_MALLOC);
 	res = _process_log(s, p, ast_node);
 	if (0 != res)
 	{

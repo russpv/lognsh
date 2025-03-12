@@ -16,7 +16,7 @@ typedef int				(*t_execute_fn)(t_state *s, t_ast_node *node);
 
 int						redirect(int *to, char *topath, int from,
 							bool ifappend);
-int						exec_create_pipes(int ***fildes, int cmd_count);
+int						exec_create_pipes(t_mem_mgr *m, int ***fildes, int cmd_count);
 
 /* Atomic commands */
 int						exec_fork_execve(t_state *s);
@@ -35,6 +35,5 @@ int						exec_close_pipes(int **fildes, int cmd_count);
 int						get_exit_status(int status);
 int						waitchild(int *status, int childc);
 
-void					free_pipes(int **fildes, int count);
 
 #endif

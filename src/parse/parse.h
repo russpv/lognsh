@@ -80,7 +80,7 @@ int								p_update_argc(t_ast_node *a, int amt);
 
 void							print_ast(t_ast_node *ast, int depth);
 
-void							destroy_redir(void *in);
+void							destroy_redir(t_mem_mgr *m, void *in);
 
 bool							is_globbing(t_tok *tok);
 

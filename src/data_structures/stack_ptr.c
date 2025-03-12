@@ -3,11 +3,11 @@
 #define DBGMSG_STPUSH_OVERFLOW "Stack overflow!\n"
 #define DBGMSG_STPOP_UNDERFL "Stack underflow!\n"
 
-t_ptr_stack	*st_ptr_create(void)
+t_ptr_stack	*st_ptr_create(t_mem_mgr *m)
 {
 	t_ptr_stack	*s;
 
-	s = malloc(sizeof(struct s_ptr_stack));
+	s = m->f(&m->list, sizeof(struct s_ptr_stack));
 	if (s)
 	{
 		ft_memset(&s->st, 0, MAX_ST_DEPTH * sizeof(void *));
@@ -16,9 +16,9 @@ t_ptr_stack	*st_ptr_create(void)
 	return (s);
 }
 
-void	st_ptr_destroy(t_ptr_stack *s)
+void	st_ptr_destroy(t_mem_mgr *m, t_ptr_stack *s)
 {
-	free(s);
+	m->dealloc(&m->list, s);
 }
 
 int	st_ptr_push(t_ptr_stack *s, void *thing)

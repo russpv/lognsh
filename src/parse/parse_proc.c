@@ -1,16 +1,13 @@
 #include "parse_int.h"
 
 // Allocates new ast node on the heap
-static t_ast_node	*_init_proc(void)
+static t_ast_node	*_init_proc(t_mem_mgr *m)
 {
 	t_ast_node	*proc_node;
 
-	proc_node = malloc(sizeof(struct s_node));
+	proc_node = m->f(&m->list, sizeof(struct s_node));
 	if (!proc_node)
-	{
-		err("Memory allocation error for process node\n");
-		return (NULL);
-	}
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Memory allocation error for process node\n");
 	proc_node->type = AST_NODE_PROC;
 	proc_node->data.proc.cmds = NULL;
 	proc_node->data.proc.cmdc = 0;
@@ -29,15 +26,15 @@ static int	_add_cmd(t_parser *p, t_ast_node *proc_node)
 	if (!p || !proc_node)
 		return (ERR_ARGS);
 	debug_print(_MOD_ ": Proc got a node of type %d\n", p->last_node->type);
-	cmd_node = ft_lstnew(p->last_node);
+	cmd_node = ft_lstnew_tmp(p->mmgr, p->last_node);
 	if (cmd_node)
 	{
 		ft_lstadd_back(&proc_node->data.proc.cmds, cmd_node);
 		proc_node->data.proc.cmdc++;
 	}
 	else
-		return (err("Memory allocation error while creating \
-			proc's command node\n"), ERR_MEM);
+		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, "Memory allocation error while creating \
+			proc's command node\n");
 	return (0);
 }
 
@@ -112,9 +109,9 @@ t_ast_node	*parse_proc(t_state *s, t_parser *p)
 
 	st_int_push(p->st, AST_NODE_PROC);
 	debug_print(_MOD_ ": parse_proc tok: %s\n", tok_get_raw(peek(p)));
-	ast_node = _init_proc();
+	ast_node = _init_proc(p->mmgr);
 	if (NULL == ast_node)
-		return (err("Allocation failed for proc node\n"), NULL);
+		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, "Allocation failed for proc node\n");
 	res = _process_proc(s, p, ast_node);
 	if (0 != res)
 	{

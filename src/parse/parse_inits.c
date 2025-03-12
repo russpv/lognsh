@@ -5,10 +5,11 @@ static inline void	_init_parser(t_state *s, t_parser *p)
 	p->ast = NULL;
 	p->curr_idx = -1;
 	p->curr_cmd = NULL;
-	p->last_node = NULL;
+	p->last_node = NULL;	
 	p->ref_node = NULL;
 	p->parse_error = false;
 	p->global_state = s;
+	p->mmgr = get_mem(s);
 	register_parser_destroy(s, destroy_parser);
 }
 
@@ -18,25 +19,19 @@ t_parser	*create_parser(t_state *s, t_list *tokens)
 
 	if (!tokens)
 		return (NULL);
-	p = (t_parser *)malloc(sizeof(t_parser));
+	p = (t_parser *)get_mem(s)->f(&get_mem(s)->list, sizeof(t_parser));
 	if (p)
 	{
 		p->tokens = ft_lstcopy_tmp(get_mem(s), tokens, copy_token, destroy_token);
 		if (!p->tokens)
-		{
-			free(p);
-			return (NULL);
-		}
+			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		p->curr_tok = tokens;
 		p->token_count = ft_lstsize(tokens);
 		debug_print("p->tokc=%d\n", p->token_count);
 		_init_parser(s, p);
-		p->st = st_int_create();
+		p->st = st_int_create(get_mem(s));
 		if (!p->st)
-		{
-			free(p);
-			return (NULL);
-		}
+			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	return (p);
 }
@@ -62,8 +57,8 @@ void	destroy_parser(t_state *s, void *instance)
 	}
 	if (p->st)
 	{
-		st_int_destroy(p->st);
+		st_int_destroy(get_mem(s), p->st);
 		p->st = NULL;
 	}
-	free(p);
+	get_mem(s)->dealloc(&get_mem(s)->list, p);
 }

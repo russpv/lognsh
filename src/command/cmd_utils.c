@@ -1,38 +1,39 @@
 #include "command_int.h"
 
 
-static void _fill_argv_nocmd(int i, char**args, char **argv)
+static void _fill_argv_nocmd(t_mem_mgr *m, int i, struct s_context *ctxt)
 {
 	if (i == 0)
-		argv[0] = ft_strdup(args[0]);
-	else if (args)
-		argv[i] = ft_strdup(args[i]);
+		ctxt->argv[0] = ft_strdup(ctxt->args[0]);
+	else if (ctxt->args)
+		ctxt->argv[i] = ft_strdup(ctxt->args[i]);
+	if (!ctxt->argv[i])
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 }
 
-static void	_fill_argv_cmdname(const char *cmdname, int i, char **args, char **argv)
+static void	_fill_argv_cmdname(t_mem_mgr *m, int i, struct s_context *ctxt)
 {
 	if (i == 0)
-		argv[0] = ft_strdup(cmdname);
-	else if (args)
-		argv[i] = ft_strdup(args[i - 1]);
+		ctxt->argv[0] = ft_strdup_tmp(m, ctxt->cmdname);
+	else if (ctxt->args)
+		ctxt->argv[i] = ft_strdup_tmp(m, ctxt->args[i - 1]);
+	if (!ctxt->argv[i])
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 }
 
-static int	_do_loop(char **args, char **argv, const char *cmdname, int argc)
+static int	_do_loop(t_state *s, struct s_context *ctxt)
 {
-	int			i;
+	int i;
 
 	i = -1;
-	while (++i <= argc)
+	while (++i <= ctxt->argc)
 	{
-		if (cmdname)
-			_fill_argv_cmdname(cmdname, i, args, argv);
-		else if (args && argc > 0)
-			_fill_argv_nocmd(i, args, argv);
+		if (ctxt->cmdname)
+			_fill_argv_cmdname(get_mem(s), i, ctxt);
+		else if (ctxt->args && ctxt->argc > 0)
+			_fill_argv_nocmd(get_mem(s), i, ctxt);
 		else
 			return (-1);
-		if (!argv[i])
-			return (err(EMSG_MALLOC), ft_freearr((void **)args, -1), \
-					ft_freearr((void **)argv, -1), ERR_MEM);
 	}
 	return (i);
 }
@@ -43,27 +44,29 @@ static int	_do_loop(char **args, char **argv, const char *cmdname, int argc)
  */
 int	c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a, char **args)
 {
-	const char	*cmdname = p_get_cmd(a);
-	const int	argc = p_get_argc(a);
-	char		**argv;
-	int 		i;
+	struct s_context 	ctxt;
+	int 				i;
+	t_mem_mgr 			*m;
 
 	if (!s || !a || !cmd)
 		return (ERR_ARGS);
-	argv = malloc(sizeof(char *) * ((size_t)argc + 2));
-	if (argv)
-	{
-		debug_print(_MOD_ ": %s: got cmd[%s] argc:%d args:%p \n",__FUNCTION__, cmdname, argc, args);
-		i = _do_loop(args, argv, cmdname, argc);
-		if (i < 0)
-			return (ERR_GENERAL);
-		argv[i] = NULL;
-		cmd->argvc = i; 
-		cmd->argv = argv;
-		if (NULL == cmdname)
-			p_set_cmd(a, argv[0]);
-		ft_freearr((void **)args, -1);
-	}
+	m = get_mem(s);
+	ctxt.args = args;
+	ctxt.argc = p_get_argc(a);
+	ctxt.cmdname = p_get_cmd(a);
+	ctxt.argv = m->f(&m->list, (sizeof(char *) * ((size_t)ctxt.argc + 2)));
+	if (!ctxt.argv)
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	debug_print(_MOD_ ": %s: got cmd[%s] argc:%d args:%p \n",__FUNCTION__, ctxt.cmdname, ctxt.argc, args);
+	i = _do_loop(s, &ctxt);
+	if (i < 0)
+		return (ERR_GENERAL);
+	ctxt.argv[i] = NULL;
+	cmd->argvc = i; 
+	cmd->argv = ctxt.argv;
+	if (NULL == ctxt.cmdname)
+		p_set_cmd(a, ctxt.argv[0]);
+	ft_freearr_mem(&m->list, m->dealloc,(void **)args, -1);
 	return (0);
 }
 

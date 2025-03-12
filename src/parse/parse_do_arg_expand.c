@@ -47,7 +47,7 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
 	{
 		if (*value)
 		{
-			free(c->raw);
+			get_mem(s)->dealloc(&get_mem(s)->list, c->raw);
 			((t_arg_data *)c)->raw = *value;
 		}
 	}
@@ -56,11 +56,11 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
 		*value = get_sh_env(s, buf);
 		if (*value)
 		{
-			new_raw = ft_strdup(*value);
+			new_raw = ft_strdup_tmp(get_mem(s), *value);
 			if (!new_raw)
-				return (err(EMSG_PATH_MALLOC), ERR_MEM);
+				exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_PATH_MALLOC);
 		}
-		free(c->raw);
+		get_mem(s)->dealloc(&get_mem(s)->list, c->raw);
 		((t_arg_data *)c)->raw = new_raw;
 	}
 	return (0);
@@ -163,7 +163,7 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 			return (res);
 		a->data.cmd.argc = ft_lstsize(*argl);
 		debug_print_list(*argl);
-		*args = list_to_array(*argl, a->data.cmd.argc);
+		*args = list_to_array(get_mem(s), *argl, a->data.cmd.argc);
 		if (NULL == *args)
 			return (ERR_MEM);
 	}

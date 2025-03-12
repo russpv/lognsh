@@ -4,10 +4,10 @@
 #define DBGMSG_CPIPE_GOT "Cmd: \t got %d cmds\n"
 #define EMSG_CPIPE_PIPE "ERR pipe creation\n"
 
-static int	_setup_pipes(t_cmd *c)
+static int	_setup_pipes(t_mem_mgr *m, t_cmd *c)
 {
 	int res;
-	res = exec_create_pipes(&c->fildes, c->curr_cmdc);
+	res = exec_create_pipes(m, &c->fildes, c->curr_cmdc);
 	if (0 != res)
 		return (err(EMSG_CPIPE_PIPE), res);
 	print_pipes(c);
@@ -64,7 +64,7 @@ int	cmd_exec_pipe(t_state *s, t_ast_node *pipe)
 	debug_print(DBGMSG_CPIPE_GOT, cmd->curr_cmdc);
 	if (cmd->curr_cmdc < 2)
 		return (ERR_INSUFFICIENT_CMDS);
-	res = _setup_pipes(cmd);
+	res = _setup_pipes(get_mem(s), cmd);
 	if (0 != res)
 		return (res);
 	res = _do_pipe_commands(s, p_get_pipe_cmds(pipe), cmd);
