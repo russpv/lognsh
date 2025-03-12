@@ -17,6 +17,7 @@ t_tok	*advance(t_parser *p)
 // Returns current token ptr token
 t_tok	*peek(t_parser *p)
 {
+	assert(p->curr_tok);
 	return (p->curr_tok->content);
 }
 

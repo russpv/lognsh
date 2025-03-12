@@ -100,7 +100,7 @@ bool							has_sh_envp(t_state *s);
 
 extern void		*myalloc(t_mem_node *head, size_t size);
 extern void		myfree(t_mem_node *head, void *alloc);
-void							exit_clean(t_mem_mgr *m, int exit_status,
+void							exit_clean(t_mem_node *n, int exit_status,
 									const char *caller, const char *errmsg);
 t_mem_mgr 						*get_mem(t_state *s);
 

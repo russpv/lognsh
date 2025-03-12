@@ -61,21 +61,3 @@ int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 	return (0);
 }
 
-/* terminates a lexer run */
-int	tokenize_null(t_state *s, t_lex *lexer)
-{
-	t_tok	*token;
-
-	debug_print(_MOD_ YELLOW": STATE: %s, ptr:_%c_\n"RESET, __FUNCTION__, *lexer->ptr);
-	if (lexer)
-	{
-		lexer->is_subtoken = false;
-		token = create_token(get_mem(s), "\0", TOK_EOF, (size_t)(lexer->ptr
-					- lexer->raw_string));
-		if (token)
-			add_token(get_mem(s), lexer, token);
-		else
-			return (1);
-	}
-	return (0);
-}

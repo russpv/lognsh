@@ -49,7 +49,7 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print(_MOD_": %s\n", __FUNCTION__);
+	debug_print(_MOD_": %s: %c\n", __FUNCTION__, *lexer->ptr);
 	token = NULL;
 	if (lexer->ptr)
 	{

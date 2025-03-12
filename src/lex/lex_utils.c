@@ -8,6 +8,16 @@ static int	_add_subtoken(t_mem_mgr *m, t_lex *lexer, t_tok *subtok)
 	return (0);
 }
 
+int	add_grptoken(t_mem_mgr *m, t_lex *lexer)
+{
+	debug_print(_MOD_": %s adding token (grp) to list\n", __FUNCTION__);
+	ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m, lexer->last_grp_tok));
+	lexer->is_subtoken = false;
+	lexer->last_grp_tok = NULL;
+	lexer->tokc++;
+	return (0);
+}
+
 /* Adds to llist tail a new token, clears buf */
 int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 {
@@ -20,8 +30,11 @@ int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 		{
 			if (lexer->last_grp_tok)
 			{
-				debug_print(_MOD_ ": %s adding subtoken to grp\n", __FUNCTION__);
+				debug_print(_MOD_ ": %s adding subtoken %s to grp\n", __FUNCTION__, tok_get_raw(token));
 				_add_subtoken(m, lexer, token);
+				debug_print(_MOD_": %s checking delimiter, ptr:%c\n", __FUNCTION__, *lexer->ptr);
+				if (is_normal_delim(*lexer->ptr, lexer->ptr + 1))
+					add_grptoken(m, lexer);
 			}
 			else
 			{
@@ -29,19 +42,9 @@ int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 				ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m, token));
 				lexer->tokc++;
 			}
-			debug_print(_MOD_": %s checking normal delimiter ptr:%c\n", __FUNCTION__, *lexer->ptr);
-			if (lexer->last_grp_tok && is_normal_delim(*lexer->ptr, lexer->ptr + 1))
-			{
-				debug_print(_MOD_": %s adding grp token to list\n", __FUNCTION__);
-				ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m, lexer->last_grp_tok));
-				lexer->is_subtoken = false;
-				lexer->last_grp_tok = NULL;
-				lexer->tokc++;
-			}
 		}
 		else 
 			return (ERR_BUFFLOW);
-		ft_lstsize(lexer->token_list);
 		return (0);
 	}
 	return (ERR_ARGS);

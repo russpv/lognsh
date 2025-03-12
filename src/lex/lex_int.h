@@ -200,16 +200,16 @@ struct						s_ht_data
 
 typedef struct s_ht_data	*t_ht_data;
 
-t_lex						*create_lexer(t_state *st, int start_state,
+t_lex						*create_lexer(t_state *state, int start_state,
 								const char *s);
 void	destroy_lexer(t_state *s, void *instance);
-void						init_token_masks(t_lex *l);
+void	init_token_masks(t_mem_mgr *m, t_lex *l);
 
 /* ht */
-void						build_hasht(t_lex *lexer);
-t_ht_data					lex_create_ht_node(int is_substring, int type);
-void						lex_destroy_ht_node(void *node);
-void						*lex_copy_ht_data(void *data);
+void						build_hasht(t_mem_mgr *m, t_lex *lexer);
+t_ht_data					lex_create_ht_node(t_mem_mgr *m, int is_substring, int type);
+void						lex_destroy_ht_node(t_mem_node *n, void *node);
+void						*lex_copy_ht_data(t_mem_node *n, void *data);
 t_tok						*lex_ht_lookup(t_state *s, t_lex *lexer);
 
 int							tokenize_normal(t_state *s, t_lex *lexer);
@@ -222,6 +222,7 @@ int							tokenize_dollar(t_state *s, t_lex *lexer);
 t_tok						*lex_create_token(t_mem_mgr *st, t_lex *lexer,\
 								int type);
 int							add_token(t_mem_mgr *s, t_lex *lexer, t_tok *token);
+int	add_grptoken(t_mem_mgr *m, t_lex *lexer);
 
 bool						is_normal_delim(unsigned char s, char *next);
 bool						is_transition_delim(unsigned char s, char *next);

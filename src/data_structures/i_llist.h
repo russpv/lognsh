@@ -32,12 +32,12 @@ void				ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
 						t_list **node, void (*del)(t_mem_mgr *, void *));
 
 t_list				*ft_lstmap_tmp(t_mem_mgr *mgr, t_list *lst,
-						void *(*f)(t_mem_mgr *s, void *),
+						void *(*f)(t_mem_mgr *, void *),
 						void (*del)(t_mem_mgr *, void *));
 
 void				ft_lstiter_ins_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
-						int (*f)(t_mem_mgr *s, t_list **, void *));
+						int (*f)(t_mem_mgr *, t_list **, void *));
 
-char				*ft_strdup_tmp(t_mem_mgr *st, const char *s);
+char				*ft_strdup_tmp(t_mem_mgr *mgr, const char *s);
 
 #endif

@@ -49,7 +49,7 @@ int	tok_do_grp_combine(t_state *s, void *c)
 		else
 			tmp = ft_strdup(content->t.tok.raw);
 		if (!tmp)
-			exit_clean(get_mem(s), ENOMEM, __FUNCTION__, EMSG_MALLOC);
+			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	if (tmp)
 	{
@@ -85,7 +85,7 @@ static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf,
 		{
 			new_raw = ft_strdup_tmp(get_mem(s), *value);
 			if (!new_raw)
-				exit_clean(get_mem(s), ENOMEM, __FUNCTION__, EMSG_MALLOC);
+				exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		}
 		myfree(&get_mem(s)->list, c->t.tok.raw);
 		((t_tok *)c)->t.tok.raw = new_raw;

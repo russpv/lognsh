@@ -108,13 +108,10 @@ t_mem_block	*mem_get_alloc(t_mem_node *head, void *alloc)
 		if (!block)
 			return (NULL);
 		if (alloc == block->payload)
-		{
-			fprintf(stderr, "%s: block found.\n", __FUNCTION__);
 			return (block);
-		}
 		node = node->next;
 	}
-	fprintf(stderr, "%s: block not found.\n", __FUNCTION__);
+	fprintf(stderr, "%s: block not found (%s) \n", __FUNCTION__, alloc);
 	return (NULL);
 }
 

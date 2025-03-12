@@ -29,6 +29,7 @@ t_parser	*create_parser(t_state *s, t_list *tokens)
 		}
 		p->curr_tok = tokens;
 		p->token_count = ft_lstsize(tokens);
+		debug_print("p->tokc=%d\n", p->token_count);
 		_init_parser(s, p);
 		p->st = st_int_create();
 		if (!p->st)

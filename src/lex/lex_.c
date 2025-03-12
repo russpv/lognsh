@@ -11,28 +11,28 @@ static inline void	_init_lexer_state(t_lex *lexer, int start_state)
 	lexer->state = start_state;
 }
 
-static inline bool	_allocate_buf_and_hasht(t_lex *lexer)
+static inline bool	_allocate_buf_and_hasht(t_mem_mgr *m, t_lex *lexer)
 {
-	lexer->buf = malloc(sizeof(char) * LEX_BUFSZ);
+	lexer->buf = myalloc(&m->list, sizeof(char) * LEX_BUFSZ);
 	if (!lexer->buf)
-		return (false);
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	ft_memset(lexer->buf, 0, LEX_BUFSZ);
 	lexer->buf_idx = 0;
-	lexer->hasht = ht_create();
+	lexer->hasht = ht_create(m);
 	if (!lexer->hasht)
-		free(lexer->buf);
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	return (lexer->hasht != NULL);
 }
 
-void	init_token_masks(t_lex *l)
+void	init_token_masks(t_mem_mgr *m, t_lex *l)
 {
-	l->glob_mask = malloc(sizeof(l->buf));
+	l->glob_mask = myalloc(&m->list, sizeof(l->buf));
 	if (NULL == l->glob_mask)
-		err("ERR DO SOMETHING ABOUT MEM!!!");
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	ft_memset(l->glob_mask, 0, sizeof(l->buf));
-	l->expd_mask = malloc(sizeof(l->buf));
+	l->expd_mask = myalloc(&m->list, sizeof(l->buf));
 	if (NULL == l->expd_mask)
-		err("ERR DO SOMETHING ABOUT MEM!!!");
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	ft_memset(l->expd_mask, 0, sizeof(l->buf));
 }
 
@@ -41,7 +41,7 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 	t_lex	*lexer;
 
 	debug_print(_MOD_": %s\n", __FUNCTION__);
-	lexer = malloc(sizeof(t_lex));
+	lexer = myalloc(&(get_mem(st)->list), sizeof(t_lex));
 	if (lexer)
 	{
 		_init_lexer_state(lexer, start_state);
@@ -61,12 +61,9 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 		lexer->tokc = 0;
 		lexer->keep_dollar = LEXERKEEP$;
 		register_lexer_destroy(st, destroy_lexer);
-		if (false == _allocate_buf_and_hasht(lexer))
-		{
-			free(lexer);
-			return (NULL);
-		}
-		build_hasht(lexer);
+		if (false == _allocate_buf_and_hasht(get_mem(st), lexer))
+			exit_clean(&get_mem(st)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		build_hasht(get_mem(st), lexer);
 	}
 	return (lexer);
 }
@@ -75,28 +72,22 @@ t_lex	*create_lexer(t_state *st, int start_state, const char *s)
 void	destroy_lexer(t_state *s, void *instance)
 {
 	t_lex	*lexer;
-
+	t_mem_mgr *m;
+	
+	m = get_mem(s);
 	lexer = (t_lex *)instance;
-	debug_print(_MOD_": destroy_lexer...\n");
+	debug_print(_MOD_": %s...\n", __FUNCTION__);
 	if (!lexer)
 		return ;
 	if (lexer->buf)
-	{
-		free(lexer->buf);
-	}
+		m->dealloc(&m->list, lexer->buf);
 	if (lexer->eof_word)
-	{
 		free(lexer->eof_word);
-	}
 	if (lexer->hasht)
-	{
-		ht_destroy(lexer->hasht, lex_destroy_ht_node);
-	}
+		ht_destroy(get_mem(s), lexer->hasht, lex_destroy_ht_node);
 	if (lexer->token_list)
-	{
 		ft_lstclear_tmp(get_mem(s), &lexer->token_list, destroy_token);
-	}
-	free(lexer);
+	m->dealloc(&m->list, lexer);
 }
 
 // assumes non-empty string
@@ -119,7 +110,7 @@ t_lex	*tokenize(t_state *s, const char *input)
 			if (0 != lexer->tokenizer(s, lexer))
 			{
 				destroy_lexer(s, lexer);
-				return (debug_print(_MOD_": tokenizer ERR\n"), NULL);
+				return (debug_print(_MOD_": ERR\n"), NULL);
 			}
 			do_state_transition(lexer);
 		}

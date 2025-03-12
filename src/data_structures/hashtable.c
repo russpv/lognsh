@@ -7,13 +7,13 @@
  * Inspired by K&R Ch 6.6
  */
 
-t_ht	ht_create(void)
+t_ht	ht_create(t_mem_mgr *m)
 {
 	int		i;
 	t_ht	hasht;
 
 	i = -1;
-	hasht = malloc(sizeof(struct s_ht));
+	hasht = m->f(&m->list, sizeof(struct s_ht));
 	if (hasht)
 	{
 		while (++i < HASHSIZE)
@@ -49,7 +49,7 @@ struct s_ht_entry	*ht_lookup(t_ht ht, char *s)
 	return (NULL);
 }
 
-int	ht_destroy(t_ht hasht, void (*del)(void *))
+int	ht_destroy(t_mem_mgr *m, t_ht hasht, void (*del)(t_mem_node *, void *))
 {
 	struct s_ht_entry	*np;
 	struct s_ht_entry	*tmp;
@@ -65,13 +65,13 @@ int	ht_destroy(t_ht hasht, void (*del)(void *))
 		{
 			tmp = np->next;
 			if (np->name)
-				free(np->name);
+				m->dealloc(&m->list, np->name);
 			if (np->data)
-				del(np->data);
-			free(np);
+				del(&m->list, np->data);
+			m->dealloc(&m->list, np);
 			np = tmp;
 		}
 	}
-	free(hasht);
+	m->dealloc(&m->list, hasht);
 	return (0);
 }

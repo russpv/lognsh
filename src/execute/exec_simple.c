@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_simple.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <marvin@42.fr>                       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 20:28:07 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/11 20:28:12 by dayeo            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "execute_int.h"
 
 #define EMSG_ECMD_NULLARGV "_do_child_ops: ERR null argv parameters\n"
@@ -111,7 +99,7 @@ int	exec_fork_execve(t_state *s)
 	return (exit_code);
 }*/
 
-static void	ignore_or_restore_sigint(struct sigaction *sa_restore, int ignore)
+static void	_ignore_or_restore_sigint(struct sigaction *sa_restore, int ignore)
 {
 	struct sigaction	sa;
 
@@ -130,14 +118,14 @@ static void	ignore_or_restore_sigint(struct sigaction *sa_restore, int ignore)
 	}
 }
 
-static void	exec_child_process(t_state *s)
+static void	_exec_child_process(t_state *s)
 {
 	reset_signal_handlers();
 	if (_do_child_ops(s) != 0)
 		exit(ERR_CHILD_FAILED);
 }
 
-static void	reset_prompt(void)
+static void	_reset_prompt(void)
 {
 	if (g_last_signal == SIGINT)
 	{
@@ -159,20 +147,24 @@ int	exec_fork_execve(t_state *s)
 		g_last_signal = 0;
 		return (SIGINT_BEFORE_FORK);
 	}
-	ignore_or_restore_sigint(&sa_restore, 1);
+	_ignore_or_restore_sigint(&sa_restore, 1);
 	p = fork();
 	if (p == 0)
-		exec_child_process(s);
+		_exec_child_process(s);
 	else if (p < 0)
 	{
 		perror(EMSG_FORK);
-		ignore_or_restore_sigint(&sa_restore, 0);
+		_ignore_or_restore_sigint(&sa_restore, 0);
 		return (ERR_FORK);
 	}
 	waitchild(&exit_code, 1);
-	ignore_or_restore_sigint(&sa_restore, 0);
-	reset_prompt();
+	_ignore_or_restore_sigint(&sa_restore, 0);
+	_reset_prompt();
 	set_exit_status(s, exit_code);
 	s_free_cmd(s);
 	return (exit_code);
 }
+
+
+
+

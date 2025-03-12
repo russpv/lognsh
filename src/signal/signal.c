@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 17:11:09 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/06 17:10:27 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/12 12:01:31 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	set_signal_handlers(void)
 		perror(EMSG_SIGACTION);
 }
 
+// Restore default action for SIGINT (terminate) 
+// Flush any signal masks to prevent blocking
 void	reset_signal_handlers(void)
 {
     struct sigaction sa_int;

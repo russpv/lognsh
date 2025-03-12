@@ -41,7 +41,7 @@ t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node, t_tok *tok
 		{
 			arg->raw = ft_strdup_tmp(m, tok_get_raw(tok));
 			if (!arg->raw)
-				return (exit_clean(m, ENOMEM, __FUNCTION__, EMSG_MALLOC), NULL);
+				return (exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC), NULL);
 		}
 		else
 			arg->raw = NULL;
@@ -112,7 +112,7 @@ void	*create_arg_data_node_deep(t_mem_mgr *mgr, void *content)
 			arg_data->lst_tokens = NULL;
 		}
 		else
-			exit_clean(mgr, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	return ((void *)arg_data);
 }
