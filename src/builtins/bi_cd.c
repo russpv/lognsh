@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:07:02 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/12 19:08:11 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/13 13:55:30 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	_set_env_value(t_mem_mgr *m, t_env **env_list, const char *key, const
 	node = find_env_key(*env_list, key);
 	if (node)
 	{
-		if (!update_existing_var(node, value))
+		if (!update_existing_var(m, node, value))
 			return (1);
 	}
 	else
@@ -62,13 +62,13 @@ static int	_change_dir(t_state *s, const char *target)
 		return (ERR_GENERAL);
 	}
 	old_pwd = get_pwd(s);
-	if (old_pwd && 0 != _set_env_value(get_sh_env_list_add(s), \
+	if (old_pwd && 0 != _set_env_value(get_mem(s), get_sh_env_list_add(s), \
 		"OLDPWD", old_pwd))
 	{
 		print_custom_err(CMD_NAME, EMSG_BADMALLOC);
 		return (ERR_GENERAL);
 	}
-	free(old_pwd);
+	myfree(&get_mem(s)->list, old_pwd);
 	return (0);
 }
 

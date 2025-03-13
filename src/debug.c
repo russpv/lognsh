@@ -7,7 +7,7 @@ void	debug_print(const char *format, ...)
 	if (DEBUG && isatty(STDERR_FILENO))
 	{
 		va_start(args, format);
-		fprintf(stderr, BLUE "[PID %d] [DEBUG]", getpid());
+		fprintf(stderr, BLUE "[PID %d] [DEBUG] ", getpid());
 		vfprintf(stderr, format, args);
 		fprintf(stderr, RESET);
 		va_end(args);
@@ -77,4 +77,14 @@ void	err(const char *s)
 		fprintf(stderr, RED"%s"RESET, s);
 	else
 		(void)s;
+}
+
+
+void print_array(char *arr[]) {
+    int i = 0;
+    // Iterate through the array until we hit NULL
+    while (arr[i] != NULL) {
+        printf("%s\n", arr[i]);
+        i++;
+    }
 }

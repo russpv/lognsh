@@ -13,8 +13,7 @@
 ** returns C-string
 ** Must be able to access src and dest within count limit
 */
-
-size_t	strscpy(char *dest, const char *src, size_t count)
+size_t	ft_strscpy(char *dest, const char *src, size_t count)
 {
 	size_t	len;
 

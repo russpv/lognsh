@@ -29,29 +29,27 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 	i = -1;
 	paths = get_sh_path(s);
 	if (NULL == paths)
-		return (1);
+		return (ERR_GENERAL);
 	while (paths[++i])
 	{
-		tmp = ft_strjoin(paths[i], "/");
+		tmp = ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, paths[i], "/");
 		if (NULL == tmp)
-			return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc, (void **)paths, -1), err(EMSG_RUNC_STRJ),
-				ERR_MEM);
-		*fullpath = ft_strjoin(tmp, cmd);
-		free(tmp);
+			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		*fullpath = ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, tmp, cmd);
 		if (!*fullpath)
-			return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc,  (void **)paths, -1), err(EMSG_RUNC_STRJ),
-				ERR_MEM);
+			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		get_mem(s)->dealloc(&get_mem(s)->list, tmp);
 		if (0 == _check_access(*fullpath))
 			return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc,  (void **)paths, -1), 0);
-		free(*fullpath);
+		get_mem(s)->dealloc(&get_mem(s)->list, *fullpath);
 		*fullpath = NULL;
 	}
-	return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc,  (void **)paths, -1), ERR_CMD_NOT_FOUND);
+	return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc, (void **)paths, -1), ERR_CMD_NOT_FOUND);
 }
 
 /* Stores command path in fullpath, if valid.
  * Checks PATH, or absolute path if slash is in the name */
-extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
+int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 {
 	if (NULL != name && '\0' != name[0])
 	{

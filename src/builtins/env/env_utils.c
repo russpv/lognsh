@@ -6,13 +6,13 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 09:06:55 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/12 18:47:54 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/13 13:23:14 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env_int.h"
 
-// free all env variables
+// Destroys llist
 void	env_free_list(t_mem_mgr *m, t_env *env)
 {
 	t_env	*tmp;

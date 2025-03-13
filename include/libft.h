@@ -26,6 +26,12 @@ typedef struct s_mem_node	t_mem_node;
 typedef	 void *(*t_alloc_fn)(t_mem_node *head, size_t s);
 typedef	void (*t_dealloc_fn)(t_mem_node *head, void *alloc);
 
+struct s_mem_utils {
+	t_alloc_fn f;
+	t_dealloc_fn u;
+	t_mem_node *head;
+};
+
 typedef enum e_bool
 {
 	FALSE,
@@ -60,6 +66,7 @@ typedef unsigned long	long(t_uintptr_t); /* 64-bit ptr */
 size_t					ft_strnlen(const char *s, size_t maxlen);
 char					*ft_strcpy(char *dest, const char *src);
 char					*ft_strncpy(char *dest, const char *src, size_t n);
+size_t					ft_strscpy(char *dest, const char *src, size_t count);
 char					*ft_strcat(char *dest, const char *src);
 char					*ft_strncat(char *dest, const char *src, size_t n);
 void					*ft_memccpy(void *dest, const void *src, int c,
@@ -140,6 +147,7 @@ int						ft_atoi(const char *str);
 char					*ft_itoa_mem(t_mem_node *head, t_alloc_fn f, int num);
 void	ft_freearr_mem(t_mem_node *head, t_dealloc_fn dealloc, void **arr, int size);
 char	*ft_strjoin_mem(t_mem_node *head, t_alloc_fn f, char const *s1, char const *s2);
+char	**ft_split_mem(struct s_mem_utils *m, char const *s, char c);
 
 int						ft_strcmplow(const char *s1, const char *s2);
 

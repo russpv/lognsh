@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 10:47:28 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/06 18:59:28 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/13 13:10:56 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 // Returns 0 if error.
 // updates an existing environment variable's value 
-int	update_existing_var(t_env *existing_key, const char *value)
+int	update_existing_var(t_mem_mgr *m, t_env *existing_key, const char *value)
 {
 	char	*new_value;
 
@@ -31,7 +31,7 @@ int	update_existing_var(t_env *existing_key, const char *value)
 		print_custom_err("(various)", EMSG_BADMALLOC);
 		return (0);
 	}
-	env_set_node_value(existing_key, new_value);
+	env_set_node_value(m, existing_key, new_value);
 	free(new_value);
 	return (1);
 }

@@ -6,31 +6,13 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 09:00:07 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/12 18:49:03 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/13 13:48:14 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env_int.h"
 
-// Create new environment variable node
-t_env	*create_env_node(t_mem_mgr *m, const char *key, const char *value)
-{
-	t_env	*new_node;
-
-	new_node = m->f(&m->list, sizeof(t_env));
-	if (!new_node)
-		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Malloc");
-	new_node->key = ft_strdup_tmp(m, key);
-	if (!new_node->key)
-		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Malloc");
-	if (value)
-		new_node->value = ft_strdup_tmp(m, value);
-	if (NULL == new_node->value)
-		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Malloc");
-	new_node->next = NULL;
-	return (new_node);
-}
-
+// Adds node to back of llist
 void	env_add_node(t_env **env, t_env *new_node)
 {
 	t_env	*tmp;
@@ -48,6 +30,7 @@ void	env_add_node(t_env **env, t_env *new_node)
 	tmp->next = new_node;
 }
 
+// Removes llist node based on key
 void	env_remove_node(t_mem_mgr *m, t_env **env, const char *key)
 {
 	t_env	*tmp;
@@ -74,44 +57,67 @@ void	env_remove_node(t_mem_mgr *m, t_env **env, const char *key)
 	m->dealloc(&m->list, tmp);
 }
 
-// helper function for copy_envp() - extracts key and value from env var
-static int	_extract_key_value(t_mem_mgr *m, const char *env_str, char **key, char **value)
+// Create new environment k,v llist node
+t_env	*create_env_node(t_mem_mgr *m, const char *key, const char *value)
+{
+	t_env	*new_node;
+
+	new_node = m->f(&m->list, sizeof(t_env));
+	if (!new_node)
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Malloc");
+	new_node->key = ft_strdup_tmp(m, key);
+	if (!new_node->key)
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Malloc");
+	if (value)
+		new_node->value = ft_strdup_tmp(m, value);
+	if (NULL == new_node->value)
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Malloc");
+	new_node->next = NULL;
+	return (new_node);
+}
+
+// extracts key and value from raw env var string "key=value"
+// key must be non-empty
+static int	_extract_key_value(const char *env_str, char key[], char value[])
 {
 	char	*equal_pos;
+	size_t	len;
 
 	equal_pos = ft_strchr(env_str, '=');
 	if (!equal_pos)
 		return (-1);
-	*key = ft_strndup(env_str, (size_t)(equal_pos - env_str)); //TODO fork
-	if (!*key)
+	if (equal_pos == env_str)
 		return (-1);
-	*value = ft_strdup_tmp(m, equal_pos + 1);
-	if (!*value)
-		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Malloc");
+	if (0 == ft_strscpy(key, env_str, (size_t)(equal_pos - env_str)))
+		return (-1);
+	len = ft_strnlen(equal_pos + 1, MAX_RAW_INPUT_LEN);
+	if (len)
+		if (0 == ft_strscpy(value, equal_pos + 1, len))
+			return (-1);
 	return (0);
 }
 
-// copy env vars from envp array into a linked list
+// Returns deep copy of envp array as t_env* linked list
 t_env	*copy_envp(t_mem_mgr *m, char **envp)
 {
 	t_env	*env_list;
-	char	*key;
-	char	*value;
+	char	key[MAX_ENVVAR_LEN];
+	char	value[MAX_RAW_INPUT_LEN];
 	int		i;
 	t_env	*new_node;
 
+	ft_memset(key, 0, sizeof(key));
+	ft_memset(value, 0, sizeof(value));
 	env_list = NULL;
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		if (_extract_key_value(m, envp[i], &key, &value) == 0)
+		if (_extract_key_value(envp[i], key, value) == 0)
 		{
 			new_node = create_env_node(m, key, value);
 			if (!new_node)
 				return (NULL);
 			env_add_node(&env_list, new_node);
-			m->dealloc(&m->list, key);
-			m->dealloc(&m->list, value);
 		}
 		i++;
 	}

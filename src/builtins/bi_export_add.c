@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 10:47:28 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/07 15:37:27 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/13 14:10:35 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #define EMSG_KEY_NOTVALID "not a valid identifier\n"
 
 // adds a new environment variable to the list and syncs s->pwd if its PWD
-static int	_add_new_var(t_env **sh_env_list, const char *key, \
+static int	_add_new_var(t_mem_mgr *m, t_env **sh_env_list, const char *key, \
 			const char *value)
 {
 	t_env	*new_node;
@@ -31,7 +31,7 @@ static int	_add_new_var(t_env **sh_env_list, const char *key, \
 		new_value = ft_strdup("");
 	if (!new_value)
 		return (ERR_GENERAL);
-	new_node = create_env_node(key, new_value);
+	new_node = create_env_node(m, key, new_value);
 	if (!new_node)
 	{
 		free(new_value);
@@ -43,20 +43,28 @@ static int	_add_new_var(t_env **sh_env_list, const char *key, \
 }
 
 // Returns key string, or copy of arg if no equal sign found
-static char	*_extract_key(const char *arg, char *equal_pos)
+static int	_extract_key(char key[], const char *arg, char *equal_pos)
 {
-	char	*key;
-	int		key_len;
+	size_t		key_len;
 
-	key = NULL;
+	if (!arg)
+		return (ERR_ARGS);
+	if (!*arg)
+		return (ERR_ARGS);
 	if (!equal_pos)
-		key = ft_strdup(arg);
+	{
+		key_len = ft_strnlen(arg, MAX_RAW_INPUT_LEN);
+		ft_strscpy(key, arg, key_len);
+	}
 	else if (*equal_pos)
 	{
 		key_len = equal_pos - arg;
-		key = ft_strndup(arg, key_len);
+		if (key_len < MAX_ENVVAR_LEN)
+			ft_strscpy(key, arg, key_len);
+		else
+			return (E2BIG);
 	}
-	return (key);
+	return (0);
 }
 
 // Returns ptr to the start of value
@@ -73,31 +81,30 @@ static int	_update_or_add_env(t_state *s, t_env *existing_key, \
 			const char *key, const char *value)
 {
 	if (existing_key)
-		return (update_existing_var(existing_key, value));
-	return (_add_new_var(get_sh_env_list_add(s), key, value));
+		return (update_existing_var(get_mem(s), existing_key, value));
+	return (_add_new_var(get_mem(s), get_sh_env_list_add(s), key, value));
 }
 
 // updates or adds key-value pair in s->sh_env_list
+// assumes equal_pos is within arg
 int	process_arg_update_add(t_state *s, const char *arg, \
 		char *equal_pos, int *error_occurred)
 {
 	t_env		*existing_key;
 	const char	*value;
-	char		*key;
+	char		key[MAX_ENVVAR_LEN];
 	int			exit_code;
 
 	if (!s || !arg || !error_occurred || !equal_pos)
 		return (ERR_ARGS);
-	key = _extract_key(arg, equal_pos);
-	if (!key)
-		return (ERR_MEM);
+	ft_memset(key, 0, MAX_ENVVAR_LEN);
+	_extract_key(key, arg, equal_pos);
+	if (0 == ft_strnlen(key, MAX_ENVVAR_LEN))
+		return (ERR_ARGS);
 	_set_value(equal_pos, &value);
 	existing_key = find_env_key(get_sh_env_list(s), key);
 	exit_code = _update_or_add_env(s, existing_key, key, value);
-//	if (0 != exit_code && equal_pos)
-//		*equal_pos = '='; // Why modify when this is no longer used?
 	if (0 != exit_code)
-		*error_occurred = 1;
-	free(key);
+		*error_occurred = 1; //TODO, check what this flag does
 	return (exit_code);
 }

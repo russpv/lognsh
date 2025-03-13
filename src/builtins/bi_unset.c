@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:27:21 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/07 15:28:26 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/13 13:13:01 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	bi_unset(t_state *s, char **argv, int argc)
 	i = 1;
 	while (argv[i])
 	{
-		env_remove_node(get_sh_env_list_add(s), argv[i]);
+		env_remove_node(get_mem(s), get_sh_env_list_add(s), argv[i]);
 		i++;
 	}
 	return (0);

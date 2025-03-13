@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 17:11:09 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/12 16:10:05 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/13 13:07:37 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,14 @@ void	sig_reset_handlers(void)
 		perror(EMSG_SIGACTION);
 }
 
+// Blocks ONLY SIGINT.
 void	sig_ignore(void)
 {
 	struct sigaction sa_int;
 
 	sa_int.sa_handler = SIG_IGN;
 	sa_int.sa_flags = 0;
-	sigaction(SIGINT, &sa_int, NULL);
-	
+	sigemptyset(&sa_int.sa_mask);
+	if (0 != sigaction(SIGINT, &sa_int, NULL))
+		perror(EMSG_SIGACTION);
 }

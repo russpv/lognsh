@@ -30,4 +30,5 @@ void	err(const char *s);
 void	colored_printf(const char *color, const char *format, ...);
 void	debug_detect_cycle(t_list *head);
 
+void	print_array(char *arr[]);
 #endif

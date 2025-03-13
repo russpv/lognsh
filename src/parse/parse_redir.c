@@ -42,7 +42,7 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red, t_a
 		return (ERR_ARGS);
 	red->symbol = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok));
 	if (!red->symbol)
-		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_REDIR_SYM_MALLOC);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_REDIR_SYM_MALLOC);
 	debug_print(DBGMSG_REDIR_GOT, red->type, red->symbol);
 	if (is_at_end(p))
 		return (err(EMSG_REDIR_FN_EOF), ERR_SYNTAX);
@@ -58,7 +58,7 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red, t_a
 	n->data.cmd.do_redir_expansion |= red->do_expansion;
 	n->data.cmd.do_redir_globbing |= red->do_globbing;
 	if (!red->filename)
-		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_REDIR_FN);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_REDIR_FN);
 	return (0);
 }
 

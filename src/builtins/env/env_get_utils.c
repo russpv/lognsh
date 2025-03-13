@@ -6,29 +6,31 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 08:59:52 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/12 18:49:28 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/13 15:41:08 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env_int.h"
 
-// this returns a system-managed string. Do not modify!
-char	**env_getenv(void)
+// this returns a system-managed string array. Do not modify!
+char	**env_getpath(t_mem_mgr *m)
 {
 	char		**res;
+	char 	**tmp;
 	const char	*path_env = getenv("PATH");
+	struct s_mem_utils utils;
 
 	if (!path_env)
 	{
 		perror("getenv\n"); 
 		return (NULL);
 	}
-	res = ft_split(path_env, ':'); //TODO fork for mem
+	utils.head = &m->list;
+	utils.f = m->f;
+	utils.u = m->dealloc;
+	res = ft_split_mem(&utils, path_env, ':');
 	if (!res)
-	{
-		perror("ft_split error\n"); // ft_split doesn't set errno
-		return (NULL);
-	}
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	return (res);
 }
 
