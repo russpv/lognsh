@@ -2,7 +2,7 @@
 # define HASHTABLE_H
 
 # include "../../include/libft.h"
-# include "i_llist.h" //TODO reorg?
+# include "i_llist.h"
 # include <fcntl.h>
 # include <limits.h>
 # include <stdarg.h>

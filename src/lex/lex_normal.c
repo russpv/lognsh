@@ -12,7 +12,7 @@ static t_tok	*_match_normal_op(t_state *s, t_lex *lexer)
 
 	res = NULL;
 	debug_print(_MOD_": ---- %s\n",__FUNCTION__);
-	if (true == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)))
+	if (true == is_normal_delim(lexer, 0))
 	{
 		lexer->buf[0] = *lexer->ptr++;
 		debug_print(_MOD_": ---- %s: got _%s_\n", __FUNCTION__, lexer->buf);
@@ -41,14 +41,13 @@ static t_tok	*_match_word_or_name_or_exception(t_state *s, t_lex *lexer)
 		lexer->buf[(lexer->buf_idx)++] = *lexer->ptr++;
 		return (lex_create_token(get_mem(s), lexer, TOK_EXIT_STATUS));
 	}
-	else if (true == is_normal_delim(*lexer->ptr, (lexer->ptr + 1))
+	else if (true == is_normal_delim(lexer, 0)
 		&& ft_strlen(lexer->buf) > 0)
 	{
 		return (lex_create_token(get_mem(s), lexer, word_or_name(lexer->buf)));
 	}
 
-	if (true == is_transition_delim(*lexer->ptr, (lexer->ptr + 1))
-		&& ft_strlen(lexer->buf) > 0)
+	if (true == is_transition_delim(lexer) && ft_strlen(lexer->buf) > 0)
 	{ 
 		lexer->is_subtoken = true;
 		return (lex_create_token(get_mem(s), lexer, word_or_name(lexer->buf)));
@@ -66,9 +65,10 @@ static t_tok	*_match_reserved_token(t_state *s, t_lex *lexer)
 
 	res = NULL;
 	debug_print(_MOD_": ---- %s\n",__FUNCTION__);
+	debug_print(_MOD_": ------ Ptr: '%c'\n", *lexer->ptr);
 	while (*lexer->ptr \
-		&& false == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)) \
-		&& false == is_transition_delim(*lexer->ptr, (lexer->ptr + 1)))
+		&& false == is_normal_delim(lexer, 0) \
+		&& false == is_transition_delim(lexer))
 	{
 		process_escape_sequence(lexer);
 		if (SKIPREST == process_special_operators(lexer)) // remove env var stuff
@@ -96,7 +96,7 @@ static t_tok	*_match_normal(t_state *s, t_lex *lexer)
 	res = NULL;
 	while (' ' == *lexer->ptr || '\t' == *lexer->ptr) //skip discard delims
 		lexer->ptr++;
-	if (true == is_transition_delim(*lexer->ptr, (lexer->ptr + 1)))
+	if (true == is_transition_delim(lexer))
 		return (NULL);
 	res = _match_reserved_token(s, lexer);
 	if (res)
@@ -122,10 +122,11 @@ int	tokenize_normal(t_state *s, t_lex *lexer)
 	t_tok	*token;
 
 	debug_print(_MOD_ YELLOW": STATE: %s\n"RESET,__FUNCTION__);
-	while (lexer->ptr && !is_transition_delim(*lexer->ptr, (lexer->ptr + 1)))
+	while (lexer->ptr && !is_transition_delim(lexer))
 	{
 		token = _match_normal(s, lexer);
-		debug_print(_MOD_": ptr at:_%c_\n", *lexer->ptr);
+		if (lexer->ptr)
+			debug_print(_MOD_": ptr at:_%c_\n", *lexer->ptr);
 		if (token)
 			if (0 != add_token(get_mem(s), lexer, token))
 				return (ERR_GENERAL);

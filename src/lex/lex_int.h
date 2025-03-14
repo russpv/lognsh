@@ -4,7 +4,7 @@
 #define SKIPREST 1
 #define NOGLOB 1
 #define NOEXPD 1
-#define FAIL_TOKEN 10 // TODO group somewhere else
+#define FAIL_TOKEN 10
 #define LEX_MAX_TOKC 1000
 
 /* Space is not a reliable delimiter. Assume no space. */
@@ -49,7 +49,6 @@ chars. That must be done each call to lex_create_token. Might as well encapsulat
 // not implemented ~^`;&
 // $, \, # do not delimit tokens, and are skipped
 // Removed '*' so that it is included in token raws
-// TODO, remove '?'
 #define NORMALTRANSITIONS "$\'\"<\0"
 // the '\0' isn't tested, keep at end,
 //	< for heredoc
@@ -224,9 +223,9 @@ t_tok						*lex_create_token(t_mem_mgr *st, t_lex *lexer,\
 int							add_token(t_mem_mgr *s, t_lex *lexer, t_tok *token);
 int	add_grptoken(t_mem_mgr *m, t_lex *lexer);
 
-bool						is_normal_delim(unsigned char s, char *next);
-bool						is_transition_delim(unsigned char s, char *next);
-bool						is_dollar_delim(unsigned char c, char *next);
+bool	is_normal_delim(t_lex *lexer, int offset);
+bool	is_transition_delim(t_lex *lexer);
+bool	is_dollar_delim(t_lex *lexer);
 
 bool						is_dollar_question(t_lex *lexer);
 

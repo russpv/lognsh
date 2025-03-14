@@ -6,7 +6,6 @@
 #define DBGMSG_PNODE_NOTPROC _MOD_": not a proc...\n"
 #define DBGMSG_PNODE_NOTCMD _MOD_": not a cmd...\n"
 #define DBGMSG_PNODE_NOTPIPE _MOD_": not a pipe...\n"
-#define EMSG_PNODE_SYNTAX "Syntax error near: [TODO, empty cmd okay]\n"
 
 /* Returns AST node.
  * Validates token type, parses args into list
@@ -41,7 +40,7 @@ t_ast_node	*parse_full_cmd(t_state *s, t_parser *p)
 	debug_print(DBGMSG_PNODE_NOTPIPE);
 	if (p->last_node && is_log_token(peek(p)))
 		return (parse_logical(s, p));
-	err(EMSG_PNODE_SYNTAX);
+	print_parse_error(s, tok_get_raw(peek(p)), tok_get_pos(peek(p)));
 	p->parse_error = true;
 	return (NULL);
 }

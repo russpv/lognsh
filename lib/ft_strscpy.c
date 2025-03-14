@@ -22,7 +22,6 @@ size_t	ft_strscpy(char *dest, const char *src, size_t size)
 		return (-E2BIG);
 	len = ft_strnlen(src, size - 1);
 	ft_memcpy(dest, src, len);
-	fprintf(stdout, "Returning dest:%s src:%s\n", dest, src);
 	dest[len] = '\0';
 	return (len);
 }

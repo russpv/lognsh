@@ -25,6 +25,16 @@ bool	tok_get_dquotes(t_tok *token)
 	return (token->t.tok.in_dquotes);
 }
 
+size_t	tok_get_pos(t_tok *token)
+{
+	if (!token)
+		return (-1);
+	if (GROUP == token->class)
+		return (token->t.meta.pos);
+	else
+		return (token->t.tok.pos);
+}
+
 // Returns list of subtokens, if a group token
 t_list	*tok_get_tlist(t_tok *token)
 {

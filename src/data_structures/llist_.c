@@ -11,7 +11,6 @@
 /* LSTADD_BACK
 ** Returns single node for empty list, or adds new to end of
 ** linked list, keeps ptr to head ptr intact
-** TODO: error propagation
 */
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
@@ -20,7 +19,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	if (new == NULL)
 		return ;
 	if (lst == NULL)
-		write(2, "WTF", 3);
+		return ;
 	if (*lst == NULL)
 	{
 		*lst = new;

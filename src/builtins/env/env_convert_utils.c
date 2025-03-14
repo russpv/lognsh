@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 19:24:31 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/13 13:18:21 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/13 18:23:35 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,6 @@ static int	_get_env_list_size(t_env *env_list)
 		env_list = env_list->next;
 	}
 	return (count);
-}
-
-// Note: no longer needed.
-static void	_free_env_array(char **env_array)
-{
-	int	i;
-
-	i = 0;
-	if (!env_array)
-		return ;
-	while (env_array[i])
-	{
-		free(env_array[i]);
-		i++;
-	}
-	free(env_array);
 }
 
 // Returns "[key]=[val]" string

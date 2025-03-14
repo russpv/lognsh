@@ -34,6 +34,7 @@ static int	_parse_args(t_state *s, t_parser *p, t_ast_node *cmd_node)
 
 	if (!p || !cmd_node)
 		return (ERR_ARGS);
+	(void)s;
 	while (!is_at_end(p) && is_arg_token(peek(p)))
 	{
 		arg = init_arg(p->mmgr, p, cmd_node, advance(p));
@@ -65,11 +66,11 @@ static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 		return (ERR_GENERAL);
 	if (false == is_cmd_token(peek(p)))
 		return (err("Expected a command token, but none found\n"), ERR_SYNTAX);
-	if (false == is_expansion(peek(p)) && false == is_group_token(peek(p))) //TODO handle group tokens
+	if (false == is_expansion(peek(p)) && false == is_group_token(peek(p)))
 	{
 		cmd_node->data.cmd.name = ft_strdup_tmp(p->mmgr, tok_get_raw(advance(p)));
 		if (NULL == cmd_node->data.cmd.name)
-			return (err(EMSG_MALLOC), ERR_MEM);
+			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	if (0 != _parse_args(s, p, cmd_node))
 		return (ERR_GENERAL);

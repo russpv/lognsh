@@ -33,7 +33,7 @@ int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 				debug_print(_MOD_ ": %s adding subtoken %s to grp\n", __FUNCTION__, tok_get_raw(token));
 				_add_subtoken(m, lexer, token);
 				debug_print(_MOD_": %s checking delimiter, ptr:%c\n", __FUNCTION__, *lexer->ptr);
-				if (is_normal_delim(*lexer->ptr, lexer->ptr + 1))
+				if (is_normal_delim(lexer, 0))
 					add_grptoken(m, lexer);
 			}
 			else
@@ -143,62 +143,6 @@ size_t	ft_varnamelen(const char *c)
 	while (c[i] && is_varnamechar(c[i]))
 		i++;
 	return (i);
-}
-
-// Tests for '$' followed by correct char
-bool	is_dollar_delim(unsigned char c, char *next)
-{
-	if (!next)
-		return (false);
-	return ('$' == c && (is_varnamechar(*next) || '?' == *next));
-}
-
-/* A subset of normal delimiters to trigger state
- * transition. If "<<" , must change state
- */
-bool	is_transition_delim(unsigned char s, char *next)
-{
-	debug_print(_MOD_": -------- %s:_%c_", __FUNCTION__, s);
-	if (s == 0)
-		return (debug_print(" YES-NULL\n"), true);
-	if (ft_strchr(NORMALTRANSITIONS, s))
-	{
-		if (s == '<')
-		{
-			if (next)
-				if ('<' == *next)
-					return (debug_print(" YES\n"), true);
-		} 
-		else if (is_dollar_delim(s, next)) 
-			return (debug_print(" YES\n"), true);
-		else
-			return (debug_print(" YES\n"), true);
-	}
-	debug_print(" NO\n");
-	return (false);
-}
-
-// If char s-next sequence matches any NORMALDELIMS
-// Looks ahead for any doubles, '&&'
-bool	is_normal_delim(unsigned char s, char *next)
-{
-	if (s && *next)
-		debug_print(_MOD_": -------- %s:_%c%c_", __FUNCTION__, s, *next);
-	else if (s)
-		debug_print(_MOD_": -------- %s:_%c__", __FUNCTION__, s);
-	if (ft_strchr(NORMALDELIMS, s))
-	{
-		if ('&' == s)
-		{
-			if (next)
-				if ('&' == *next)
-					return (debug_print(" YES\n"), true);
-		} 
-		debug_print(" YES\n");
-		return (true);
-	}
-	debug_print(" NO\n");
-	return (false);
 }
 
 // Puts input char on buf, and increments idx and ptr

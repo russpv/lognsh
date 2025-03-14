@@ -34,7 +34,6 @@ static int	_update_combined_subtokens(char **old, const char *curr, const char *
 }*/
 
 // Deep copies linked list of arguments to char **array
-// TODO: pass state here to handle bad mallocs
 char	**list_to_array(t_mem_mgr *m, t_list *args, int argc)
 {
 	char	**array;
@@ -48,10 +47,6 @@ char	**list_to_array(t_mem_mgr *m, t_list *args, int argc)
 	while (i < argc && args)
 	{
 		new_s = NULL;
-		/*if (((t_arg_data *)args->content)->is_grouparg)
-		{
-			//TODO use list iterator to strjoin the raws
-		}*/
 		array[i] = new_s;
 		if (NULL == array[i])
 			array[i] = ft_strdup_tmp(m, ((t_arg_data *)args->content)->raw);

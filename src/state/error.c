@@ -1,5 +1,7 @@
 #include "error.h"
 
+extern	char	*get_input(t_state *s);
+
 /* Prints errno err for 'dingus' */
 void	print_perror(const char *dingus)
 {
@@ -46,3 +48,16 @@ void	print_lex_buffer_overflow(void)
 	write(STDERR_FILENO, ": Buffer overflow\n", 18);
 }
 
+void	print_parse_error(t_state *s, const char *word, size_t pos)
+{
+	const char *input = (const char *)get_input(s);
+	size_t i;
+
+	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+	printf(": parse error near `%s` in:\n", word);
+	printf("%s\n", input);
+	i = -1;
+	while (++i < pos)
+		write(STDERR_FILENO, "-", 1);
+	write(STDERR_FILENO, "^\n", 2);
+}

@@ -9,7 +9,7 @@ static bool	_is_dquote_transition_delim(t_lex *l)
 	{
 		if (l->ptr != NULL && '\0' != *l->ptr) 
 		{
-			if (is_dollar_delim(*l->ptr, (l->ptr + 1))) 
+			if (is_dollar_delim(l)) 
 				return (debug_print(" YES\n"), true);
 		}
 	}
@@ -66,7 +66,7 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 		lexer->input_incomplete = true;
 		if (0 == ft_strlen(lexer->buf))
 			return (NULL);
-		if (false == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)))
+		if (false == is_normal_delim(lexer, 0))
 			lexer->is_subtoken = true;
 		token = lex_create_token(get_mem(s), lexer, TOK_WORD); // tokenize subtoken
 	}

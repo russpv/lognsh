@@ -44,6 +44,8 @@ static inline bool	_handle_null_state(t_lex *lexer)
 
 static inline bool	_handle_heredoc_state(t_lex *lexer)
 {
+	if (!lexer->ptr)
+		return (false);
 	if ((unsigned char)*lexer->ptr == OP_REDIN && \
 		(unsigned char)*(lexer->ptr + 1) == OP_REDIN)
 	{
@@ -58,6 +60,8 @@ static inline bool	_handle_heredoc_state(t_lex *lexer)
 
 static inline bool	_handle_dollar_state(t_lex *lexer)
 {
+	if (!lexer->ptr)
+		return (false);
 	if ((unsigned char)*lexer->ptr == OP_ENV && \
 		is_varnamechar((const char)*(lexer->ptr + 1)))
 	{

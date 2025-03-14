@@ -118,19 +118,21 @@ int						tok_set_globbing(t_tok *token);
 int						tok_set_expansion(t_tok *token);
 int						tok_set_dquotes(t_tok *token);
 int						tok_set_subtoken(t_tok *token);
+int						tok_set_dquotes(t_tok *token);
 int						tok_incr_tokc(t_tok *token);
 int						tok_add_subtok(t_mem_mgr *m, t_tok *grp, t_tok *sub);
 
 char					*tok_get_raw(t_tok *token);
 enum e_tok_type			tok_get_type(t_tok *token);
-bool					tok_get_issubtoken(t_tok *token);
-bool					tok_isgrouptoken(t_tok *token);
 bool					tok_get_globbing(t_tok *token);
 bool					tok_get_expansion(t_tok *token);
 bool					tok_get_dquotes(t_tok *token);
 t_list					*tok_get_tlist(t_tok *token);
+size_t	tok_get_pos(t_tok *token);
 
-int						tok_set_dquotes(t_tok *token);
+bool					tok_get_issubtoken(t_tok *token);
+bool					tok_isgrouptoken(t_tok *token);
+
 int						tok_print(void *token);
 
 int						tok_do_grp_combine(t_state *s, void *c);

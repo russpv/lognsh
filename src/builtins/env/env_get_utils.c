@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 08:59:52 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/13 15:41:08 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/13 18:23:21 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 char	**env_getpath(t_mem_mgr *m)
 {
 	char		**res;
-	char 	**tmp;
 	const char	*path_env = getenv("PATH");
 	struct s_mem_utils utils;
 

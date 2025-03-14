@@ -95,7 +95,7 @@ void	*copy_token(t_mem_mgr *mgr, const void *tok)
 	{
 		new_t->t.tok.raw = ft_strdup_tmp(mgr, t->t.tok.raw);
 		if (NULL == new_t->t.tok.raw)
-			return (mgr->dealloc(&mgr->list, new_t), err(EMSG_MALLOC), NULL);
+			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		new_t->t.tok.type = t->t.tok.type;
 		new_t->t.tok.pos = t->t.tok.pos;
 		new_t->t.tok.do_globbing = t->t.tok.do_globbing;

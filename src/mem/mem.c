@@ -111,7 +111,7 @@ t_mem_block	*mem_get_alloc(t_mem_node *head, void *alloc)
 			return (block);
 		node = node->next;
 	}
-	fprintf(stderr, "%s: block not found (%s) \n", __FUNCTION__, alloc);
+	fprintf(stderr, "%s: block not found (%s) \n", __FUNCTION__, (char*)alloc);
 	return (NULL);
 }
 
@@ -146,7 +146,7 @@ void	myfree(t_mem_node *head, void *alloc)
 	if (!block)
 	{
 		err("Memory corruption or double free detected! (maybe, WIP)\n");
-		free(alloc); // TODO remove after migration
+		//free(alloc); // TODO remove after migration
 		return ;
 	}
 	if (true == block->is_freed)

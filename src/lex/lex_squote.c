@@ -49,7 +49,7 @@ int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 	}
 	if (0 == ft_strlen(lexer->buf))
 		return (0);
-	if (false == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)))
+	if (false == is_normal_delim(lexer, 0))
 		lexer->is_subtoken = true;
 	token = lex_create_token(get_mem(s), lexer, TOK_WORD);
 	if (NULL == token)

@@ -52,7 +52,7 @@ static int	_process_pipe(t_state *s, t_parser *p, t_ast_node *pipe_node)
 		advance(p);
 		debug_print(DBGMSG_PPIPE_NEXT);
 		if (NULL == parse_full_cmd(s, p))
-			return (err(EMSG_PPIPE_SYNTAX), ERR_GENERAL);
+			return (err(EMSG_PPIPE_SYNTAX), p->parse_error = true, ERR_SYNTAX);
 		if (0 != _process_cmd(p, pipe_node))
 			return (ERR_GENERAL);
 	}

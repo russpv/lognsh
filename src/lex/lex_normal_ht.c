@@ -17,17 +17,19 @@ t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 {
 	struct s_ht_entry	*res;
 
-	res = NULL;
+	if (ft_strnlen(lexer->buf, LEX_BUFSZ) == 0)
+		return (NULL);
 	res = ht_lookup(lexer->hasht, lexer->buf);
 	if (res)
 	{
-		debug_print("Lexer: Found hasht match. Ptr: %c\n", *lexer->ptr);
+		if (lexer->ptr)
+			debug_print(_MOD_ ": Found hasht match. Ptr: %c\n", *lexer->ptr);
 		if (true == ((t_ht_data)(ht_get_payload(res)))->is_substring)
 			res = do_one_char_lookahead(lexer, res);
-		if (true == is_normal_delim(*lexer->ptr, (lexer->ptr + 1)) \
+		if (true == is_normal_delim(lexer, 0) \
 			|| true == _is_not_delimd(lexer->buf))
 		{
-			debug_print("Lexer: Creating token...\n");
+			debug_print(_MOD_ ": Creating token...\n");
 			return (lex_create_token(get_mem(s), lexer,
 					((t_ht_data)ht_get_payload(res))->type));
 		}
@@ -51,11 +53,11 @@ struct s_ht_entry	*do_one_char_lookahead(t_lex *lexer, struct s_ht_entry *res)
 	if (!lexer->ptr || !*(s) || 0 == buflen)
 		return (NULL);
 	lexer->buf[buflen] = *(s);
-	debug_print("Lexer: ------_do_one_char_lookahead with:_%s_\n", lexer->buf);
+	debug_print(_MOD_ ": ------_do_one_char_lookahead with:_%s_\n", lexer->buf);
 	test = ht_lookup(lexer->hasht, lexer->buf);
 	if (test)
 	{
-		if (true == is_normal_delim(*(lexer->ptr + 1), (lexer->ptr + 2)))
+		if (true == is_normal_delim(lexer, 1))
 		{
 			lexer->ptr++;
 			return (test);

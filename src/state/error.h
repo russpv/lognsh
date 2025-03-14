@@ -71,9 +71,11 @@ void							print_too_many_args(const char *caller);
 void							print_redirect_error(char *topath);
 void							print_custom_err(const char *dingus, \
 									const char *msg);
+void							print_parse_error(t_state *s, const char *word, size_t pos);
 
 /* To avoid circular includes: */
 extern void						set_error(t_state *s, int e);
 extern size_t					ft_strlen(const char *s);
-void	perror(const char *);
+void							perror(const char *);
+
 #endif
