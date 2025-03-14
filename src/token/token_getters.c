@@ -25,22 +25,6 @@ bool	tok_get_dquotes(t_tok *token)
 	return (token->t.tok.in_dquotes);
 }
 
-bool	tok_get_issubtoken(t_tok *token)
-{
-	if (!token)
-		return (false);
-	if (GROUP == token->class)
-		return (false);
-	return (true == token->t.tok.is_subtoken);
-}
-
-bool	tok_isgrouptoken(t_tok *token)
-{
-	if (!token)
-		return (false);
-	return (GROUP == token->class);
-}
-
 // Returns list of subtokens, if a group token
 t_list	*tok_get_tlist(t_tok *token)
 {

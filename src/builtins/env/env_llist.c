@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 09:00:07 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/13 13:48:14 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/14 13:58:34 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,11 @@ static int	_extract_key_value(const char *env_str, char key[], char value[])
 		return (-1);
 	if (equal_pos == env_str)
 		return (-1);
-	if (0 == ft_strscpy(key, env_str, (size_t)(equal_pos - env_str)))
+	if (0 == ft_strscpy(key, env_str, (size_t)(equal_pos - env_str) + 1))
 		return (-1);
 	len = ft_strnlen(equal_pos + 1, MAX_RAW_INPUT_LEN);
 	if (len)
-		if (0 == ft_strscpy(value, equal_pos + 1, len))
+		if (0 == ft_strscpy(value, equal_pos + 1, len + 1))
 			return (-1);
 	return (0);
 }
@@ -106,12 +106,12 @@ t_env	*copy_envp(t_mem_mgr *m, char **envp)
 	int		i;
 	t_env	*new_node;
 
-	ft_memset(key, 0, sizeof(key));
-	ft_memset(value, 0, sizeof(value));
 	env_list = NULL;
 	i = 0;
 	while (envp[i] != NULL)
 	{
+		ft_memset(key, 0, sizeof(key));
+		ft_memset(value, 0, sizeof(value));
 		if (_extract_key_value(envp[i], key, value) == 0)
 		{
 			new_node = create_env_node(m, key, value);
