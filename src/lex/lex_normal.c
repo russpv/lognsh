@@ -1,9 +1,6 @@
 #include "lex_int.h"
 
 
-// What we need to do:
-// tokenize a subtoken when we have reached a transition char without a space before it.
-
 // At last, tokenizes any transition chars (operators) found in ht
 // Assumes buf is empty
 static t_tok	*_match_normal_op(t_state *s, t_lex *lexer)
@@ -27,26 +24,22 @@ static t_tok	*_match_normal_op(t_state *s, t_lex *lexer)
 }
 
 /* Tokenizes words and subwords. Called by iterator when delim reached.
- * Handles: '$?', $VARs, and whatever remains in buf.
  * If buf was empty, implies a transition char, does nothing. 
  * If transition char reached instead of delim, tokenizes subword.
- * Note: is_dollar_question() works because '?' is a delim
  */
 static t_tok	*_match_word_or_name_or_exception(t_state *s, t_lex *lexer)
 {
 	debug_print(_MOD_": ---- %s: got %s\n", __FUNCTION__, lexer->buf);
-
-	if (true == is_dollar_question(lexer)) // move to ENVVAR?
+/*
+	if (true == is_dollar_question(lexer))
 	{
 		lexer->buf[(lexer->buf_idx)++] = *lexer->ptr++;
 		return (lex_create_token(get_mem(s), lexer, TOK_EXIT_STATUS));
-	}
-	else if (true == is_normal_delim(lexer, 0)
-		&& ft_strlen(lexer->buf) > 0)
+	}*/
+	if (true == is_normal_delim(lexer, 0) && ft_strlen(lexer->buf) > 0)
 	{
 		return (lex_create_token(get_mem(s), lexer, word_or_name(lexer->buf)));
 	}
-
 	if (true == is_transition_delim(lexer) && ft_strlen(lexer->buf) > 0)
 	{ 
 		lexer->is_subtoken = true;

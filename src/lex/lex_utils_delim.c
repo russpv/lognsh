@@ -11,7 +11,6 @@ static unsigned char	_is_valid_next(t_lex *l, int offset)
     return l->ptr[offset + 1];
 }
 
-
 // Tests for beginning of $ commands
 // '$' followed by correct char (varname or ?)
 bool	is_dollar_delim(t_lex *l)
@@ -53,18 +52,6 @@ bool	is_transition_delim(t_lex *lexer)
 	return (false);
 }
 
-// Checks for '&&'
-static bool	_is_logicalop(unsigned char c, unsigned char next)
-{
-	if ('&' == c)
-	{
-		if (next)
-			if ('&' == next)
-				return (true);
-	}
-	return (false);
-}
-
 static bool	_is_valid_offset(t_lex *l, int offset)
 {
 	if (!l || !l->ptr)
@@ -94,7 +81,7 @@ bool	is_normal_delim(t_lex *lexer, int offset)
 		debug_print(_MOD_": -------- %s:_%c__", __FUNCTION__, c);
 	if (ft_strchr(NORMALDELIMS, c))
 	{
-		if (true == _is_logicalop(c, next))
+		if (true == is_logicalop(c, next))
 			return (debug_print(" YES\n"), true);
 		return (debug_print(" YES\n"), true);
 	}

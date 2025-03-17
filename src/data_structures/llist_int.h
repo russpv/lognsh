@@ -2,6 +2,7 @@
 # define LLIST_INT_H
 
 # include "llist.h"
+# include "../utils/debug.h"
 
 # define ALESSTHANB -1
 # define AMORETHANB 1

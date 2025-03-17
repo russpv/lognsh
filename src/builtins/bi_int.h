@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:57:34 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/13 14:13:57 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/17 18:53:57 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "bi.h"
 
 # define _MOD_ "Bi"
+# define EMSG_OPT "No options provided. Sorry!\n"
+# define EMSG_ARGC "No args for you! (Not implemented)\n"
 
 int					bi_echo(t_state *s, char **args, int argc);
 int					bi_pwd(t_state *s, char **args, int argc);

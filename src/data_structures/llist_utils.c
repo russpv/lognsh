@@ -1,4 +1,4 @@
-#include "llist.h"
+#include "llist_int.h"
 
 #define DBGMSG_LSIZE_NULL "ft_lstsize: List is NULL, returning 0\n"
 #define DBGMSG_LSIZE_START "Starting ft_lstsize traversal. Initial lst: %p\n"

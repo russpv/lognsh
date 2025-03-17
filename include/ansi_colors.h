@@ -1,3 +1,5 @@
+#ifndef ANSI_COLORS_H
+# define ANSI_COLORS_H
 /*
  * This is free and unencumbered software released into the public domain.
  *
@@ -78,3 +80,13 @@
 #define reset "\e[0m"
 #define CRESET "\e[0m"
 #define COLOR_RESET "\e[0m"
+
+# define RESET "\033[0m"
+# define GREEN "\033[32m"
+# define BLUE "\033[34m"
+# define RED "\033[1;31m"
+# define YELLOW "\033[1;33m"
+# define MAGENTA "\033[1;35m"
+# define CYAN "\033[1;36m"
+
+#endif

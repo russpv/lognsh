@@ -6,18 +6,16 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:57:34 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/13 14:53:10 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/14 15:38:14 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ENV_H
 # define ENV_H
 
-# include "../../../include/libft.h"
 # include "../../data_structures/hashtable.h"
-# include "../../data_structures/i_llist.h"
 # include "../../state/state.h"
-# include "../../mem/mem.h"
+
 # include <errno.h>
 
 struct					s_env;

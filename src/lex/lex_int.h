@@ -169,25 +169,30 @@ typedef struct s_lex
 {
 	const char				*raw_string;
 	char					*ptr;
+
 	enum e_lex_state		state;
-	bool					escape_mode;
 	t_tokenizer				tokenizer;
-	t_list					*token_list;
-	int						tokc;
-	t_tok					*last_grp_tok;
+
+
 	t_ht					hasht;
 	char					*buf;
 	size_t					buf_idx;
-	char					*expd_mask;
-	char					*glob_mask;
+	t_tok					*last_grp_tok;
+	t_int_stack				*stack;
+
+	bool					escape_mode;
 	int						do_expansion;
 	int						do_globbing;
 	int						do_heredoc;
 	int						do_heredoc_expansion;
 	bool					is_subtoken;
 	char					*eof_word;
+
 	bool					input_incomplete;
 	int						keep_dollar;
+
+	t_list					*token_list;
+	int						tokc;
 }							t_lex;
 
 /* This gets inserted as s_ht_entry->data */
@@ -202,7 +207,6 @@ typedef struct s_ht_data	*t_ht_data;
 t_lex						*create_lexer(t_state *state, int start_state,
 								const char *s);
 void	destroy_lexer(t_state *s, void *instance);
-void	init_token_masks(t_mem_mgr *m, t_lex *l);
 
 /* ht */
 void						build_hasht(t_mem_mgr *m, t_lex *lexer);
@@ -211,6 +215,8 @@ void						lex_destroy_ht_node(t_mem_node *n, void *node);
 void						*lex_copy_ht_data(t_mem_node *n, void *data);
 t_tok						*lex_ht_lookup(t_state *s, t_lex *lexer);
 
+/* Strategies */
+int							do_state_transition(t_lex *lexer);
 int							tokenize_normal(t_state *s, t_lex *lexer);
 int							tokenize_single_quotes(t_state *s, t_lex *lexer);
 int							tokenize_double_quotes(t_state *s, t_lex *lexer);
@@ -218,15 +224,17 @@ int							tokenize_null(t_state *s, t_lex *lexer);
 int							tokenize_heredoc(t_state *s, t_lex *lexer);
 int							tokenize_dollar(t_state *s, t_lex *lexer);
 
+/* Tokenize ops */
 t_tok						*lex_create_token(t_mem_mgr *st, t_lex *lexer,\
 								int type);
 int							add_token(t_mem_mgr *s, t_lex *lexer, t_tok *token);
 int	add_grptoken(t_mem_mgr *m, t_lex *lexer);
 
+/* Char sequence checks */
 bool	is_normal_delim(t_lex *lexer, int offset);
 bool	is_transition_delim(t_lex *lexer);
 bool	is_dollar_delim(t_lex *lexer);
-
+bool	is_logicalop(unsigned char c, unsigned char next);
 bool						is_dollar_question(t_lex *lexer);
 
 int							word_or_name(const char *s);
@@ -236,11 +244,15 @@ void						process_escape_sequence(t_lex *l);
 int							process_special_operators(t_lex *lexer);
 struct s_ht_entry			*do_one_char_lookahead(t_lex *lexer,
 								struct s_ht_entry *res);
-int							do_state_transition(t_lex *lexer);
 
 /* heredoc */
 int	get_eof_word(t_mem_mgr *m, t_lex *l);
 bool						on_cmd_op(t_lex *l);
+
+/* dollar subs */
+bool	is_specialchar(unsigned char c);
 bool						is_varnamechar(unsigned char c);
 
+
+/* utils */
 int							put_on_buf(t_lex *l);

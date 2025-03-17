@@ -5,8 +5,15 @@
 
 # include "../../include/libft.h"
 # include "llist.h"
+
 # include <assert.h>
 # include <stdio.h>
+
+/* Forwards */
+
+extern void	debug_print(const char *format, ...);
+extern void	err(const char *s);
+
 
 typedef struct s_mem_mgr
 {

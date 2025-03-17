@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 17:02:00 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/12 15:57:05 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/14 15:30:11 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 # define SIGNAL_H
 
 # include "../globals/globals.h"
-# include "../state/error.h"
 # include "../state/state.h"
-# include <signal.h>
 
 # define SIGINT_BEFORE_FORK -130
 # define SIGEOF_AT_INPUT 300

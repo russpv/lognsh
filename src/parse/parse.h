@@ -3,12 +3,15 @@
 
 # include "../../include/libft.h"
 # include "../data_structures/llist.h"
-# include "../data_structures/i_llist.h"
 # include "../data_structures/stack.h"
-# include "../execute/execute.h"
-# include "../lex/lex.h"
-# include "../log.h"
 # include "../state/state.h"
+
+# include "../token/token.h"
+# include "../lex/lex.h"
+# include "../execute/execute.h"
+
+//# include "../utils/log.h"
+
 # include <dirent.h>
 # include <sys/types.h>
 

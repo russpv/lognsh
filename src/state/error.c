@@ -20,6 +20,20 @@ void	print_custom_err(const char *dingus, const char *msg)
 	write(STDERR_FILENO, msg, ft_strlen(msg));
 }
 
+/* Prints msg for the 'dingus' (no \n added) */
+void	print_custom_err_err(const char *dingus, const char *gizmo, const char *msg)
+{
+	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+	write(STDERR_FILENO, ": ", ft_strlen(": "));
+	write(STDERR_FILENO, dingus, ft_strlen(dingus));
+	write(STDERR_FILENO, ": ", ft_strlen(": "));
+	write(STDERR_FILENO, "\'", ft_strlen("\'"));
+	write(STDERR_FILENO, gizmo, ft_strlen(gizmo));
+	write(STDERR_FILENO, "\'", ft_strlen("\'"));
+	write(STDERR_FILENO, ": ", ft_strlen(": "));
+	write(STDERR_FILENO, msg, ft_strlen(msg));
+}
+
 /* Prints ": ambiguous redirect\n"*/
 void	print_ambiguous_redirect(const char *orig_fn)
 {

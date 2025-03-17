@@ -6,14 +6,13 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:03:39 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/06 17:47:25 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/17 18:53:50 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bi_int.h"
 
 #define CMD_NAME "env"
-#define EMSG_ARGC "No such file or directory.\n"
 #define EMSG_ENV "Failed to retrieve environment.\n"
 
 int	bi_env(t_state *s, char **argv, int argc)
@@ -25,7 +24,10 @@ int	bi_env(t_state *s, char **argv, int argc)
 		return (ERR_ARGS);
 	if (argv[1])
 	{
-		print_custom_err(CMD_NAME, EMSG_ARGC);
+		if (argv[1][0] == '-')
+			print_custom_err_err(CMD_NAME, argv[1], EMSG_OPT);
+		else
+			print_custom_err_err(CMD_NAME, argv[1], EMSG_ARGC);
 		return (127);
 	}
 	if (!s || !has_sh_envp(s))

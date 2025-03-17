@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:07:02 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/13 13:55:30 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/17 19:03:41 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 #define CMD_NAME "cd"
 #define EMSG_OLDPWDNOTSET "OLDPWD not set.\n"
-#define EMSG_ARGC "No such file or directory.\n"
 #define EMSG_INVLD "invalid state or arguments\n"
 #define EMSG_TOOMANYARGS "too many arguments.\n"
 #define EMSG_NOHOME "HOME not set.\n"

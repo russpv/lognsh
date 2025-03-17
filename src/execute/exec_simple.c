@@ -87,7 +87,9 @@ int	exec_fork_execve(t_state *s)
 		return (perror(EMSG_FORK), ERR_FORK);
 	waitchild(&exit_code, 1);
 	set_exit_status(s, exit_code);
+	if (SIGINT == exit_code)
+		write(STDOUT_FILENO, "\n", 1);
 	s_free_cmd(s);
-	sig_reset_handlers();
+	sig_set_handlers();
 	return (exit_code);
 }

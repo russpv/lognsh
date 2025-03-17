@@ -2,12 +2,12 @@
 # define STATE_H
 
 # include "../../include/libft.h"
-# include "../builtins/env/env.h"
-# include "../data_structures/i_llist.h"
-# include "../debug.h"
-# include "../signal/signal.h"
-# include "../builtins/env/env.h"
+# include "../utils/debug.h"
+# include "../utils/log.h"
 # include "../mem/mem.h"
+# include "../builtins/env/env.h"
+# include "../signal/signal.h"
+
 # include "error.h"
 # include <readline/history.h>
 # include <readline/readline.h>

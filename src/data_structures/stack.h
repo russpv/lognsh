@@ -2,8 +2,8 @@
 # define STACK_H
 
 # include "../../include/libft.h"
-# include "i_llist.h" //TODO reorg?
-# include "../debug.h"
+# include "i_llist.h"
+
 # include <stdlib.h>
 
 struct						s_int_stack;

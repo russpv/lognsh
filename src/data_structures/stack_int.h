@@ -1,6 +1,8 @@
 #include "stack.h"
 
 #define MAX_ST_DEPTH 10
+# include "../utils/debug.h"
+
 
 struct						s_int_stack
 {
