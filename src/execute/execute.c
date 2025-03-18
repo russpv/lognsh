@@ -8,7 +8,7 @@
  * Note: assuming waitpid() behaves irrespective of actual
  * number of children.
  */
-int	waitchild(int *status, int childc)
+/*int	waitchild(int *status, int childc)
 {
 	int		i;
 	pid_t	child_pid;
@@ -27,6 +27,33 @@ int	waitchild(int *status, int childc)
 			else if (child_pid < 0)
 				return (perror(EMSG_WAITPID), ERR_WAITPID);
 		}
+	}
+	debug_print(DBGMSG_EXEC_DONE);
+	return (0);
+}*/
+
+int	waitchild(int *status, int childc)
+{
+	int	i;
+	pid_t	child_pid;
+	int	raw_status;
+
+	i = -1;
+	while (++i < childc)
+	{
+		child_pid = waitpid(-1, &raw_status, 0);
+		if (child_pid > 0 && WIFEXITED(raw_status))
+		{
+			*status = get_exit_status(raw_status);  // Sets to 1
+			debug_print(DBGMSG_EXEC_EXITCODE, child_pid, *status);
+		}
+		else if (child_pid > 0 && WIFSIGNALED(raw_status))
+		{
+			*status = 128 + WTERMSIG(raw_status);
+			debug_print(DBGMSG_EXEC_EXITSIG, child_pid, WTERMSIG(raw_status));
+		}
+		else if (child_pid < 0)
+			return (perror(EMSG_WAITPID), ERR_WAITPID);
 	}
 	debug_print(DBGMSG_EXEC_DONE);
 	return (0);
