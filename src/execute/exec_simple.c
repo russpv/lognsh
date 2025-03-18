@@ -60,8 +60,9 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 	if (0 != exit_code)
 		debug_print(DMSG_ERRBLTIN, __FUNCTION__);
 	restore_redirs((t_cmd *)c);
+	set_exit_status(s, exit_code); //update s->current_exit_code
 	s_free_cmd(s);
-	return (0);
+	return (exit_code); // return bi exit codes
 }
 
 /* Forks, resets signal handlers, execve's, sets exit status.
