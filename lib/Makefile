@@ -52,7 +52,8 @@ SOURCES = ft_memcpy.c \
 		  ft_strncpy.c \
 		  ft_strscpy.c \
 		  ft_strndup.c \
-		  ft_strcmplow.c
+		  ft_strcmplow.c \
+		  ft_strcmp_casefold.c
 
 OBJECTS = $(SOURCES:.c=.o)
 

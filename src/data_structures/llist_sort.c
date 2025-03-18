@@ -51,7 +51,6 @@ static void    _solve(t_list **lst, t_list **beg, t_list **end)
     }
 
     mid = _get_midptr(*beg, *end);
-
 	if (*beg != mid) 
 	{
 		debug_print(RED"Splitting first half: b:%s m:%s\n"RESET, (*beg)->content, mid->content);
@@ -66,7 +65,8 @@ static void    _solve(t_list **lst, t_list **beg, t_list **end)
     	merge(lst, beg, mid, end);
 }
 
-// Sorts a content->string llist in ascending lexicographic order. 
+// Sorts a content->string llist in CUSTOM ascending lexicographic order.
+// Operator chars are superior. Any '$' prefixed string is superior. 
 t_list *ft_lstsort(t_list **lst)
 {
     t_list *last;

@@ -149,6 +149,7 @@ void	ft_freearr_mem(t_mem_node *head, t_dealloc_fn dealloc, void **arr, int size
 char	*ft_strjoin_mem(t_mem_node *head, t_alloc_fn f, char const *s1, char const *s2);
 char	**ft_split_mem(struct s_mem_utils *m, char const *s, char c);
 
-int						ft_strcmplow(const char *s1, const char *s2);
+int						ft_strcmp_low(const char *s1, const char *s2);
+int	ft_strcmp_casefold(const char *s1, const char *s2);
 
 #endif

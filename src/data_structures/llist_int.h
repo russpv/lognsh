@@ -6,6 +6,7 @@
 
 # define ALESSTHANB -1
 # define AMORETHANB 1
+# define MAX_BUF 1024
 
 struct s_merge {
     t_list *l;
@@ -35,5 +36,9 @@ void	print_prev_post(struct s_merge *m);
 void	print_diagnostics_end(t_list **lst, struct s_merge *m);
 void	print_diagnostics_input(t_list **lst, struct s_merge *m);
 void	debug_print_tail_info(struct s_merge *m); 
+
+
+bool	str_hasalnum(const char *s);
+bool	str_isalnum(const char *s);
 
 #endif

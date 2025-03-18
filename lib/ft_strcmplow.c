@@ -1,7 +1,7 @@
 #include "../include/libft.h"
 #include <stdio.h>
 
-int	ft_strcmplow(const char *s1, const char *s2)
+int	ft_strcmp_low(const char *s1, const char *s2)
 {
 	size_t	i;
 

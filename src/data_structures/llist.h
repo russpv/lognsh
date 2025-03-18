@@ -5,6 +5,7 @@
 
 //# include "../utils/debug.h"
 
+# include "../include/libft.h"
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
