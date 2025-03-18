@@ -100,7 +100,11 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	{
 		exit_status = exec_fork_execve(s);
 		if (SIGINT_BEFORE_FORK == exit_status)
+		{
 			log_print(LOGMSG_RUNC_SIGINT);
+			s_free_cmd(s);
+			return (exit_status);
+		}
 	}
 	s_free_cmd(s);
 	return (0);
