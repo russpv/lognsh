@@ -13,7 +13,7 @@
 #include "bi_int.h"
 
 #define CMD_NAME "exit"
-#define EMSG_NONNUM "numeric argument required\n"
+#define EMSG_NONNUM "numeric argument required."
 
 static int	is_numeric(const char *str)
 {
@@ -44,9 +44,9 @@ static void	_exit_no_arg(t_state *s)
 
 static void	_exit_nonnumeric_arg(t_state *s)
 {
-	destroy_state(s);
 	print_custom_err(CMD_NAME, EMSG_NONNUM);
-	exit(255);
+	destroy_state(s);
+	exit(2);
 }
 
 static void	_exit_valid_arg(t_state *s, char *arg)
