@@ -2,6 +2,7 @@
 
 
 // At last, tokenizes any transition chars (operators) found in ht
+// Redirects found here
 // Assumes buf is empty
 static t_tok	*_match_normal_op(t_state *s, t_lex *lexer)
 {
@@ -16,7 +17,7 @@ static t_tok	*_match_normal_op(t_state *s, t_lex *lexer)
 		res = lex_ht_lookup(s, lexer);
 		if (res)
 		{
-			debug_print(_MOD_": ---- %s: match %s\n", __FUNCTION__, lexer->buf);
+			debug_print(_MOD_": ---- %s: ht-matched %s\n", __FUNCTION__, lexer->buf);
 			return (res);
 		}
 	}
@@ -93,16 +94,15 @@ static t_tok	*_match_normal(t_state *s, t_lex *lexer)
 		return (NULL);
 	res = _match_reserved_token(s, lexer);
 	if (res)
-		return (res);
+		return (debug_print(_MOD_": ---- Done, reserved tok. \n"), res);
 	res = _match_word_or_name_or_exception(s, lexer);
 	if (res)
-		return (res);
+		return (debug_print(_MOD_": ---- Done, word tok. \n"), res);
 	if ((unsigned char)OP_NULL == *lexer->ptr)
 		return (debug_print(_MOD_": ----FOUND NULL\n"), NULL);
 	res = _match_normal_op(s, lexer);
 	if (res)
-		return (res);
-	debug_print(_MOD_": ---- %s DONE\n", __FUNCTION__);
+		return (debug_print(_MOD_": ---- Done, op tok. \n"), res);
 	return (NULL);
 }
 

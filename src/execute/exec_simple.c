@@ -16,13 +16,14 @@
  * manages the various I/O redirections
  * And cleans up state (useless to child)
  */
- /*
+ 
 static int	_do_child_ops(t_state *s)
 {
 	const t_cmd	*c = (const t_cmd *)get_cmd(s);
 	const char	*fullpath = (const char *)c_get_fullpath((t_cmd *)c);
 	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
 	const char	**envp = (const char **)get_envp(s);
+    debug_print("Child: envp=%p", (void *)envp);
 
 	if (!argv)
 		return (err(EMSG_NULLARGV), -1);
@@ -39,34 +40,6 @@ static int	_do_child_ops(t_state *s)
 		return (perror(EMSG_EXECVE), ERR_EXECVE);
 	destroy_state(s);
 	return (0);
-}*/
-
-static int _do_child_ops(t_state *s)
-{
-    // Log the state pointer to ensure it’s valid
-    //debug_print("Child: s=%p", (void *)s);
-    const t_cmd *c = (const t_cmd *)get_cmd(s);
-    // Log c to check if get_cmd returns a valid pointer
-    //debug_print("Child: c=%p", (void *)c);
-    const char *fullpath = (const char *)c_get_fullpath((t_cmd *)c);
-    // Log fullpath to verify it’s accessible
-    //debug_print("Child: fullpath=%s", fullpath);
-    const char **argv = (const char **)c_get_argv((t_cmd *)c);
-    // Log argv to see if it’s valid; handle NULL case
-    //debug_print("Child: argv[0]=%s", argv ? argv[0] : "NULL");
-    const char **envp = (const char **)get_envp(s);
-    debug_print("Child: envp=%p", (void *)envp);
-
-    if (!argv) return (err(EMSG_NULLARGV), -1);
-    if (!fullpath) return (err(EMSG_NULLPATH), -1);
-    if (!c) return (err(EMSG_NULLTCMD), -1);
-    if (0 != p_do_redirections(c_get_node((t_cmd *)c))) return (ERR_REDIR);
-    debug_print(DMSG_DOEXEC, fullpath);
-    if (NULL == fullpath) return (-1);
-    else if (-1 == execve(fullpath, (char **)argv, (char **)envp))
-        return (perror(EMSG_EXECVE), ERR_EXECVE);
-    destroy_state(s);
-    return (0);
 }
 
 /* Executes redirects, if any, and calls built-in */
@@ -103,7 +76,6 @@ int	exec_fork_execve(t_state *s)
 	pid_t	p;
 	int		exit_code;
 
-	g_last_signal = 0;
 	if (SIGINT == g_last_signal)
 		return (SIGINT_BEFORE_FORK);
 	sig_ignore();

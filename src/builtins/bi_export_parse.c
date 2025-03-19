@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bi_export_do2.c                                    :+:      :+:    :+:   */
+/*   bi_export_parse.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 10:47:28 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/06 17:22:32 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/19 14:58:59 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	_process_arg_validation(const char *arg, \
 }
 
 // Processes a single export argument
-int	process_arg(t_state *s, const char *arg, int *error_occurred)
+int	parse_arg(t_state *s, const char *arg, int *error_occurred)
 {
 	char	*equal_pos;
 

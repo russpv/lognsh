@@ -1,7 +1,7 @@
 #ifndef DEBUG_H
 # define DEBUG_H
 
-# include "../include/ansi_colors.h"
+# include "../../include/ansi_colors.h"
 
 # include <assert.h>
 # include <stdarg.h>

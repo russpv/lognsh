@@ -14,23 +14,39 @@
 
 #define DEFINE_E2E_TEST(test_name, input) \
  void test_name(void) { \
+	printf("\n"); \
      char *my_shell_output = run_my_shell(input); \
      char *bash_output = run_bash(input); \
-     printf("\n"); \
      TEST_ASSERT_EQUAL_STRING(bash_output, my_shell_output); \
      free(my_shell_output); \
      free(bash_output); \
  }
 
-//TEST_GROUP(basic);
-//TEST_GROUP(expansions_advanced);
-//TEST_GROUP(compound_advanced);
 
 // Tests for basic parser functionality
-
 DEFINE_E2E_TEST(test_echo, "echo hello world");
 DEFINE_E2E_TEST(test_simple_pipe, "ls -l | grep file");
 DEFINE_E2E_TEST(test_simple_redirection, "echo test > output.txt");
+
+/* syntax, delimiters */
+DEFINE_E2E_TEST(test_space_handling_norm, "echo $Hello World"); //FAIL, giving ' World'?
+DEFINE_E2E_TEST(test_space_handling_dq, "echo \"$Hello World\"");
+DEFINE_E2E_TEST(test_space_handling_sq, "echo \'$Hello World\'");
+DEFINE_E2E_TEST(test_hash_no_space_norm, "echo Hello!@#$%^&*World"); //Expected FAIL; Bash event or job
+DEFINE_E2E_TEST(test_hash_no_space_sq, "echo \'Hello!@#$%^&*World\'");
+DEFINE_E2E_TEST(test_hash_no_space_dq, "echo \"Hello!@#$%^&*World\"");
+
+/* BUILTINS */
+DEFINE_E2E_TEST(test_echo_builtin, "echo -n 'Hello World'");
+DEFINE_E2E_TEST(test_echo_builtin2, "echo -nnnn 'Hello World'");
+DEFINE_E2E_TEST(test_cd_builtin, "cd /home");
+DEFINE_E2E_TEST(test_pwd_builtin, "pwd");
+DEFINE_E2E_TEST(test_export_builtin1, "export VAR=value");
+DEFINE_E2E_TEST(test_export_builtin2, "$VAR");
+DEFINE_E2E_TEST(test_unset_builtin1, "unset VAR"); 
+DEFINE_E2E_TEST(test_unset_builtin2, "$VAR"); 
+DEFINE_E2E_TEST(test_env_builtin, "env");
+DEFINE_E2E_TEST(test_exit_builtin, "exit");
 
 
 /* Parse errors */
@@ -41,11 +57,11 @@ DEFINE_E2E_TEST(test_unexpected_token, "echo hello | | echo world");
 
 /* quote functionality */
 DEFINE_E2E_TEST(test_single_quote_open, "echo 'unclosed quote"); // EXPECTED FAIL
-DEFINE_E2E_TEST(test_double_quote_open, "echo \"unclosed quote"); // EXPECTED FAIL
+DEFINE_E2E_TEST(test_double_quote_open, "echo \"unclosed quote"); // EXPECTED FAIL - 
 DEFINE_E2E_TEST(test_single_quote_metacharacters, "echo 'hello > world'");
 DEFINE_E2E_TEST(test_double_quote_metacharacters, "echo \"hello $USER\""); // FAIL
-DEFINE_E2E_TEST(test_single_quote_special_chars, "echo 'this should not escape \;'");
-DEFINE_E2E_TEST(test_double_quote_special_chars, "echo \"this should escape \$PATH\""); // FAIL
+DEFINE_E2E_TEST(test_single_quote_special_chars, "echo 'this should escape \$PATH'");
+DEFINE_E2E_TEST(test_double_quote_special_chars, "echo \"this should not escape \$PATH\""); // FAIL, path retrieval exceeds bounds
 
 
 /* expansion */
@@ -65,18 +81,6 @@ DEFINE_E2E_TEST(test_ctrl_c_behavior, "echo hello <ctrl-C> echo world");  // FAI
 DEFINE_E2E_TEST(test_ctrl_d_behavior, "echo hello <ctrl-D>");  // ctrl-D should exit // DOESNT WORK
 DEFINE_E2E_TEST(test_ctrl_backslash_behavior, "echo hello <ctrl-\\> echo world");  // ctrl-\ does nothing
 
-
-/* builtins */
-DEFINE_E2E_TEST(test_echo_builtin, "echo -n 'Hello World'");
-DEFINE_E2E_TEST(test_echo_builtin2, "echo -nnnn 'Hello World'");
-DEFINE_E2E_TEST(test_cd_builtin, "cd /home");
-DEFINE_E2E_TEST(test_pwd_builtin, "pwd");
-DEFINE_E2E_TEST(test_export_builtin1, "export VAR=value");
-DEFINE_E2E_TEST(test_export_builtin2, "$VAR");
-DEFINE_E2E_TEST(test_unset_builtin1, "unset VAR"); 
-DEFINE_E2E_TEST(test_unset_builtin2, "$VAR"); 
-DEFINE_E2E_TEST(test_env_builtin, "env");
-DEFINE_E2E_TEST(test_exit_builtin, "exit");
 
 // TODO :syntax error near unexpected token `...:
 // TODO : line 1: /home/rpeavey/.local/bin:/home/rpeavey/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin: No such file or directory
@@ -98,16 +102,16 @@ DEFINE_E2E_TEST(test_heredoc_redirection4, "cat << EOF\n\\$?\\$?$\\\nEOF"); // $
 
 
 /* logicals */
-DEFINE_E2E_TEST(test_andif_operator, "echo hello && echo world");
-DEFINE_E2E_TEST(test_andif_fail, "echo hello && nonexistent_command");
-DEFINE_E2E_TEST(test_orif_operator, "nonexistent_command || echo world");
-DEFINE_E2E_TEST(test_orif_fail, "echo hello || echo world");
+DEFINE_E2E_TEST(test_andif_operator, "echo hello && echo world"); //FAIL
+DEFINE_E2E_TEST(test_andif_fail, "echo hello && nonexistent_command"); //FAIL
+DEFINE_E2E_TEST(test_orif_operator, "nonexistent_command || echo world"); //FAIL
+DEFINE_E2E_TEST(test_orif_fail, "echo hello || echo world"); //FAIL
 
-DEFINE_E2E_TEST(test_andif_redirection, "echo hello && echo world > output.txt");
+DEFINE_E2E_TEST(test_andif_redirection, "echo hello && echo world > output.txt"); //FAIL
 DEFINE_E2E_TEST(test_orif_redirection, "nonexistent_command || echo world > output.txt");
 
-DEFINE_E2E_TEST(test_andif_priority, "echo hello && (echo world || echo foo)");
-DEFINE_E2E_TEST(test_orif_priority, "echo hello || (echo world && echo foo)");
+DEFINE_E2E_TEST(test_andif_priority, "echo hello && (echo world || echo foo)"); //FAIL
+DEFINE_E2E_TEST(test_orif_priority, "echo hello || (echo world && echo foo)"); //FAIL
 
 
 /* pipes */
@@ -117,14 +121,10 @@ DEFINE_E2E_TEST(test_pipe_invalid, "echo hello | | echo world");
 DEFINE_E2E_TEST(test_simple_pipe_invalid, "echo hello | nonexistent_command");
 DEFINE_E2E_TEST(test_pipe_with_redirection, "echo hello | grep he > result.txt");
 
-
-/* syntax */
-
-
 /* subshells */
 DEFINE_E2E_TEST(test_proc_redirection0, "echo /'will be empty/' > in");
-DEFINE_E2E_TEST(test_proc_redirection, "(echo haha | cat) >in >crap");
-DEFINE_E2E_TEST(test_proc_redirection2, "cat crap");
+DEFINE_E2E_TEST(test_proc_redirection, "(echo haha | cat) >in >me"); //FAIL
+DEFINE_E2E_TEST(test_proc_redirection2, "cat me");
 DEFINE_E2E_TEST(test_proc_redirection3, "cat in");
 
 
@@ -136,7 +136,7 @@ TEST_GROUP_RUNNER(basic) {
 
 TEST_GROUP_RUNNER(subshells) {
     RUN_TEST(test_proc_redirection0);
-    RUN_TEST(test_proc_redirection);
+    RUN_TEST(test_proc_redirection); 
     RUN_TEST(test_proc_redirection2);
     RUN_TEST(test_proc_redirection3);
 }
@@ -172,6 +172,15 @@ TEST_GROUP_RUNNER(variable_expansion) {
     RUN_TEST(test_variable_expansion);
     RUN_TEST(test_variable_expansion_multiple);
     RUN_TEST(test_exit_status_expansion);
+}
+
+TEST_GROUP_RUNNER(delimiters) {
+	RUN_TEST(test_space_handling_norm);
+	RUN_TEST(test_space_handling_dq);
+	RUN_TEST(test_space_handling_sq);
+	RUN_TEST(test_hash_no_space_norm);
+	RUN_TEST(test_hash_no_space_sq);
+	RUN_TEST(test_hash_no_space_dq); 
 }
 
 TEST_GROUP_RUNNER(builtins) {
@@ -231,10 +240,14 @@ TEST_GROUP_RUNNER(compound_basic) {
 int main(void) {
     UNITY_BEGIN();
 
-    printf(CYAN"\n### Running Basic Tests ###\n"RESET);
+    printf(UYEL"\n### Running Basic Tests ###\n"RESET);
     fflush(stdout);
     RUN_TEST_GROUP(basic);
     
+	printf(UYEL"\n### Running Delimiter Tests ###\n"RESET);
+    fflush(stdout);
+    RUN_TEST_GROUP(delimiters);
+	
     printf(UYEL"\n### Running Quoting Tests ###\n"RESET);
     fflush(stdout);
     RUN_TEST_GROUP(quoting);

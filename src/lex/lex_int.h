@@ -41,7 +41,7 @@ chars. That must be done each call to lex_create_token. Might as well encapsulat
 */
 
 /* chars that need to be quoted if meant literally */
-#define NORMALDELIMS "?()|<>\n\t &\0"
+#define NORMALDELIMS "()|<>\n\t &\0"
 // no space needed to split singles: "()|<> \n\t"
 // no space needed to split doubles: "<<,>>,&&,||"
 // space needed to split (hence addressed above) "[ \'],[ \"]"
@@ -49,6 +49,9 @@ chars. That must be done each call to lex_create_token. Might as well encapsulat
 // not implemented ~^`;&
 // $, \, # do not delimit tokens, and are skipped
 // Removed '*' so that it is included in token raws
+// and '?'?
+#define NOTDELIMITED "()<>"
+// ops that have no following delims
 #define NORMALTRANSITIONS "$\'\"<\0"
 // the '\0' isn't tested, keep at end,
 //	< for heredoc
@@ -256,3 +259,5 @@ bool						is_varnamechar(unsigned char c);
 
 /* utils */
 int							put_on_buf(t_lex *l);
+unsigned char	is_valid_next(t_lex *l, int offset);
+unsigned char	is_valid_prev(t_lex *l, int offset);

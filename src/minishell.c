@@ -24,9 +24,10 @@ static int	_do_loop(t_state *s)
 	set_input(s, readline(PROMPT));
 	if (NULL == get_input(s))
 	{
-		write(STDOUT_FILENO, "exit\n", sizeof("exit\n"));
+		write(STDOUT_FILENO, "exit\n", sizeof("exit\n") - 1);
 		return (SIGEOF_AT_INPUT);
 	}
+	g_last_signal = -1;
 	if (get_input(s)[0] != '\0')
 		add_history(get_input(s));
 	else

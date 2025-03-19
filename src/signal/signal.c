@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 17:11:09 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/17 19:05:37 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/19 16:53:40 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	sigint_handler(int signo)
 		debug_print(_MOD_ ": I got this SIGINT.");
 		write(STDOUT_FILENO, "\n", 1);
 #ifndef	MACOS //TODO remove in final
-       //	rl_replace_line("", 0);
+		rl_replace_line("", 1);
         rl_on_new_line();
         rl_redisplay();
 #endif

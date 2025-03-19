@@ -14,6 +14,8 @@ void	process_escape_sequence(t_lex *l)
 // Advance the lexer pointer past comments #
 int	process_special_operators(t_lex *lexer)
 {
+	unsigned char prev;
+
 	if ((unsigned char)OP_ENV == *lexer->ptr && ft_varnamelen((lexer->ptr + 1)) \
 		&& false == lexer->escape_mode)
 		lexer->do_expansion = true;
@@ -21,10 +23,15 @@ int	process_special_operators(t_lex *lexer)
 		lexer->do_globbing = true;
 	if ((unsigned char)OP_HASH == *lexer->ptr && false == lexer->escape_mode)
 	{
-		lexer->escape_mode = false;
-		while (*lexer->ptr && *lexer->ptr != TK_NEWL && *lexer->ptr != TK_EOF)
-			lexer->ptr++;
-		return (SKIPREST);
+		prev = is_valid_prev(lexer, 0);
+		if (' ' == prev)
+		{
+			debug_print(_MOD_": -------- %s got ' #', skipping...\n",__FUNCTION__);
+			lexer->escape_mode = false;
+			while (*lexer->ptr && *lexer->ptr != TK_NEWL && *lexer->ptr != TK_EOF)
+				lexer->ptr++;
+			return (SKIPREST);
+		}
 	}
 	lexer->escape_mode = false;
 	return (0);

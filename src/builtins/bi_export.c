@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:17:24 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/06 18:45:10 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/19 14:58:53 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	bi_export(t_state *s, char **argv, int argc)
 			i++;
 			continue ;
 		}
-		if (0 != process_arg(s, argv[i], &error_occurred))
+		if (0 != parse_arg(s, argv[i], &error_occurred))
 			error_occurred = 1;
 		i++;
 	}

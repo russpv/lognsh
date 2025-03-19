@@ -1,5 +1,6 @@
 #include "lex_int.h"
 
+// Note: this offers an override to terminate lexing
 static inline bool	_handle_eof_state(t_lex *lexer)
 {
 	if (ON_EOF == lexer->state )
@@ -15,8 +16,9 @@ static inline bool	_handle_quote_state(t_lex *lexer)
 {
 	if ((unsigned char)*lexer->ptr == OP_DQUOTE || IN_DOUBLE_QUOTES == st_int_peek(lexer->stack))
 	{
-		if ((unsigned char)*lexer->ptr == OP_DQUOTE || IN_DOUBLE_QUOTES == st_int_peek(lexer->stack))
+		if ((unsigned char)*lexer->ptr == OP_DQUOTE && IN_DOUBLE_QUOTES == st_int_peek(lexer->stack))
 		{
+			debug_print(_MOD_": %s: Popping stack\n", __FUNCTION__, *lexer->ptr);
 			st_int_pop(lexer->stack);
 			lexer->ptr++;
 			return (true);

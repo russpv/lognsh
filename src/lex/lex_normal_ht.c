@@ -1,7 +1,5 @@
 #include "lex_int.h"
 
-#define NOTDELIMITED "()<"
-
 /* Checks if s is in the set of tokens that do not need to be delimited */
 static inline bool	_is_not_delimd(const char *s)
 {
@@ -12,7 +10,7 @@ static inline bool	_is_not_delimd(const char *s)
 	return (false);
 }
 
-/* Returns hashtable matches by tokenizing current buf */
+/* Returns hashtable matches (buf) by tokenizing current buf */
 t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 {
 	struct s_ht_entry	*res;
@@ -23,7 +21,7 @@ t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 	if (res)
 	{
 		if (lexer->ptr)
-			debug_print(_MOD_ ": Found hasht match. Ptr: %c\n", *lexer->ptr);
+			debug_print(_MOD_ ": Found hasht match. buf: %c\n", *lexer->buf);
 		if (true == ((t_ht_data)(ht_get_payload(res)))->is_substring)
 			res = do_one_char_lookahead(lexer, res);
 		if (true == is_normal_delim(lexer, 0) \
@@ -42,6 +40,7 @@ t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
  * with a word boundary following next char
  * Updates lexer state if successful
  * Pointer is already on next char
+ * Returns res without modification
  */
 struct s_ht_entry	*do_one_char_lookahead(t_lex *lexer, struct s_ht_entry *res)
 {

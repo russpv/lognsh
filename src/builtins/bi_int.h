@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:57:34 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/17 18:53:57 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/19 14:59:07 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	update_existing_var(t_mem_mgr *m, t_env *existing_key, const char *value);
 // export helper functions (bi_export_do 1 & 2)
 int	process_arg_update_add(t_state *s, const char *arg, \
 	char *equal_pos, int *error_occurred);
-int					process_arg(t_state *s, const char *arg, \
+int					parse_arg(t_state *s, const char *arg, \
 						int *error_occurred);
 
 /* This ensures block buffer is flushed during execution

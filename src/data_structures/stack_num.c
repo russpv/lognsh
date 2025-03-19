@@ -1,7 +1,7 @@
 #include "stack_int.h"
 
-#define DBGMSG_STPUSH_OVERFLOW "Stack overflow!\n"
-#define DBGMSG_STPOP_UNDERFL "Stack underflow!\n"
+#define DBGMSG_STPUSH_OVERFLOW "ERROR Stack overflow!\n"
+#define DBGMSG_STPOP_UNDERFL "ERROR Stack underflow!\n"
 
 t_int_stack	*st_int_create(t_mem_mgr *m)
 {

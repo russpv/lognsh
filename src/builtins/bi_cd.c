@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:07:02 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/17 19:03:41 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/19 14:55:23 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #define CMD_NAME "cd"
 #define EMSG_OLDPWDNOTSET "OLDPWD not set.\n"
 #define EMSG_INVLD "invalid state or arguments\n"
+#define EMSG_NOFILE "No such file or directory\n"
 #define EMSG_TOOMANYARGS "too many arguments.\n"
 #define EMSG_NOHOME "HOME not set.\n"
 #define EMSG_BADMALLOC "memory allocation failed.\n"
@@ -57,7 +58,7 @@ static int	_change_dir(t_state *s, const char *target)
 		new_dir = (char *)target;
 	if (0 != chdir(new_dir))
 	{
-		print_custom_err(CMD_NAME, EMSG_ARGC);
+		print_custom_err_err(CMD_NAME, target, EMSG_NOFILE);
 		return (ERR_GENERAL);
 	}
 	old_pwd = get_pwd(s);

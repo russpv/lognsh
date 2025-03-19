@@ -62,8 +62,8 @@ int	redirect(int *to, char *topath, int from, bool ifappend)
 		fd = *to;
 	colored_printf(GREEN, LOGMSG_EREDIR_DONE, from, fd);
 	if (dup2(fd, from) == -1)
-		return (ERR_DUP2);
+		return (perror(EMSG_DUP2), ERR_DUP2);
 	if (0 != close(fd))
 		return (perror(EMSG_CLOSE), ERR_CLOSE);
-	return (from);
+	return (0);
 }

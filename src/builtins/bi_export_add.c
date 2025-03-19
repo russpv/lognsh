@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 10:47:28 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/13 14:10:35 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/19 15:00:37 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ static int	_extract_key(char key[], const char *arg, char *equal_pos)
 	if (!equal_pos)
 	{
 		key_len = ft_strnlen(arg, MAX_RAW_INPUT_LEN);
-		ft_strscpy(key, arg, key_len);
+		ft_strscpy(key, arg, key_len + 1);
 	}
 	else if (*equal_pos)
 	{
 		key_len = equal_pos - arg;
 		if (key_len < MAX_ENVVAR_LEN)
-			ft_strscpy(key, arg, key_len);
+			ft_strscpy(key, arg, key_len + 1);
 		else
 			return (E2BIG);
 	}
