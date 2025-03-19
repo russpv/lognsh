@@ -47,6 +47,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	(void)argc;
 	s = init_state(envp);
+	if (s) {
 	if (MYTEST)
 		_do_test(s);
 	else
@@ -59,5 +60,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 	}
 	destroy_state(s);
+	}
 	return (0);
 }
