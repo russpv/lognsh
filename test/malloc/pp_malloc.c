@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <dlfcn.h>  // For dlsym()
 
-
+/*
 // Override malloc
 void* my_malloc(size_t size) {
     static void* (*real_malloc)(size_t) = NULL;
@@ -34,3 +34,4 @@ void* my_malloc(size_t size) {
 
     return real_malloc(size);  // Use the original malloc
 }
+*/

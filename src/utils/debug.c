@@ -41,7 +41,6 @@ void	debug_detect_cycle(t_list *head)
 	}
 }
 
-
 void print_array(char *arr[]) 
 {
     int i = 0;
@@ -53,4 +52,43 @@ void print_array(char *arr[])
 			i++;
 		}
 	}
+}
+
+
+bool test_prev_integrity(t_list *lst) 
+{
+    t_list *current = lst;
+    
+    // If the list is empty, there's nothing to test
+    if (current == NULL) {
+        printf("List is empty.\n");
+        return true;
+    }
+    
+    t_list *previous = NULL;  // To track the previous node
+    while (current != NULL) {
+        // Check that the current node's prev points to the previous node
+        if (current->prev != previous) {
+            printf("Integrity check failed: Node at %p's prev pointer is incorrect.\n", current);
+            return false;
+        }
+        
+        // Check that the previous node's next points to the current node
+        if (previous != NULL && previous->next != current) {
+            printf("Integrity check failed: Node at %p's next pointer is incorrect.\n", previous);
+            return false;
+        }
+        
+        // Move to the next node
+        previous = current;
+        current = current->next;
+    }
+    
+    // Check that the head node's prev pointer is NULL (for non-circular list)
+    if (previous != NULL && previous->next == NULL && previous->prev != NULL) {
+        printf("Integrity check failed: Tail node's prev pointer is incorrect.\n");
+        return false;
+    }
+	printf("Integrity check passed.\n");
+	return true;
 }

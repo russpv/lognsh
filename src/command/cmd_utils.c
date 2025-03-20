@@ -65,7 +65,7 @@ int	c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a, char **args)
 	cmd->argvc = i; 
 	cmd->argv = ctxt.argv;
 	if (NULL == ctxt.cmdname)
-		p_set_cmd(a, ctxt.argv[0]);
+		p_set_cmd(get_mem(s), a, ctxt.argv[0]);
 	ft_freearr_mem(&m->list, m->dealloc,(void **)args, -1);
 	return (0);
 }

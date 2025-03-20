@@ -265,7 +265,11 @@ int							handle_heredoc(const t_redir_data *node);
 char						**list_to_array(t_mem_mgr *m, t_list *args, int argc);
 int							lstiter_state(t_state *s, t_list *lst,
 								int (*f)(t_state *, void *));
-
+int	lstiter_state_rwd_trim(t_state *s, t_list **lst, \
+									int (*f)(void *), \
+										void(*del)(t_mem_mgr *, void *));
+int	p_is_arg_null(void *c);
+	
 /* AST list frees */
 void						destroy_ast_node(t_mem_mgr *m, void *node);
 void						destroy_pipe_node(t_mem_mgr *m, void *n);

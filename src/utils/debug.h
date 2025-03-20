@@ -7,6 +7,8 @@
 # include <stdarg.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <stdbool.h>
+
 
 # ifdef DEBUGMODE
 #  define DEBUG 1
@@ -23,4 +25,6 @@ void	colored_printf(const char *color, const char *format, ...);
 void	debug_detect_cycle(t_list *head);
 
 void	print_array(char *arr[]);
+bool    test_prev_integrity(t_list *lst);
+
 #endif

@@ -93,7 +93,7 @@ static int	_p_do_arg_expansion(t_state *s, void *c)
 			return (err(EMSG_NULL_EXPAN), ERR_ARGS);
 		ft_memcpy(buf, content->raw + LEXERKEEP$, raw_len - LEXERKEEP$);
 		res = _do_arg_ops(s, content, buf, &value);
-		if (0 != res)
+		if (res != 0)
 			return (res);
 		debug_print(DMSG_OUT, __FUNCTION__, value);
 	}
@@ -130,6 +130,21 @@ static int	_p_do_grparg_processing(t_state *s, void *c)
 	return (res);
 }
 
+int	p_is_arg_null(void *c)
+{
+	t_arg_data	*content;
+
+	content = (t_arg_data *)c;
+	if (NULL == c)
+		return (-1);
+	if (true == content->is_grouparg)
+		return (0);
+	if (NULL == content->raw)
+		return (1);
+	return (0);
+}
+
+
 /* Replaces any expansions and inserts any globbing
  * results into args list, converts to array
  * and returns that array via args ptr.
@@ -144,6 +159,7 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 	if (a->type != AST_NODE_CMD)
 		return (ERR_INVALID_CMD_TYPE);
 	argl = p_get_args(a);
+	test_prev_integrity(*argl);
 	if (*argl)
 	{
 		if (a->data.cmd.has_grouptoks)
@@ -163,6 +179,7 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 			return (res);
 		a->data.cmd.argc = ft_lstsize(*argl);
 		debug_print_list(*argl);
+		lstiter_state_rwd_trim(s, argl, p_is_arg_null, destroy_arg);
 		*args = list_to_array(get_mem(s), *argl, a->data.cmd.argc);
 		if (NULL == *args)
 			return (ERR_MEM);

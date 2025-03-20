@@ -20,6 +20,7 @@
 /*
  * Run command in our shell and return output as a string.
  */
+/*
 char *run_my_shell(const char *cmd)
 {
     int outpipefds[2];
@@ -110,5 +111,5 @@ int main(void)
     free(my_shell_output);
 
     return 0;
-}
+}*/
 

@@ -71,7 +71,7 @@ static void _print_arg_data(t_arg_data *data)
 			printf("  t_arg_data is NULL\n");
 			return;
 		}
-		printf("  raw: %s\n", data->raw ? data->raw : "(null)");
+		printf("  raw: _%s_\n", data->raw ? data->raw : "(null)");
 		printf("  tmp: ");
 		if (data->tmp) {
 			for (int i = 0; data->tmp[i] != NULL; i++) {

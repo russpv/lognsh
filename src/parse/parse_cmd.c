@@ -45,8 +45,10 @@ static int	_parse_args(t_state *s, t_parser *p, t_ast_node *cmd_node)
 			exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		debug_print(_MOD_": %s: adding arg:%s\n", __FUNCTION__, arg->raw);
 		ft_lstadd_back(&cmd_node->data.cmd.args, new);
+		test_prev_integrity(cmd_node->data.cmd.args);
 		cmd_node->data.cmd.argc++;
 	}
+
 	debug_print(_MOD_": %s: done on %d arg(s)\n", __FUNCTION__, cmd_node->data.cmd.argc);
 	return (0);
 }
