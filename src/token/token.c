@@ -24,8 +24,7 @@ static int	_init_normal_token(t_mem_mgr *mgr, t_tok *token, const char *s, int t
 	token->t.tok.do_globbing = false;
 	if (!token->t.tok.raw)
 	{
-		mgr->dealloc(&mgr->list, token);
-		return (err("MALLOC\n"), ERR_MEM);
+		exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	return (0);
 }
