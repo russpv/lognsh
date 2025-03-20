@@ -19,6 +19,7 @@ void	env_set_next(t_env *node, t_env *next)
 	node->next = next;
 }
 
+// Copies value into env llist
 void	env_set_node_value(t_mem_mgr *m, t_env *node, const char *value)
 {
 	char	*new_value;

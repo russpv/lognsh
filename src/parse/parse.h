@@ -78,7 +78,7 @@ int								p_do_redir_processing(t_state *s,
 									t_ast_node *a);
 
 int								p_do_redirections(t_ast_node *a);
-int								p_set_cmd(t_ast_node *a, const char *cmd);
+int								p_set_cmd(t_mem_mgr *m, t_ast_node *a, const char *cmd);
 int								p_update_argc(t_ast_node *a, int amt);
 
 void							print_ast(t_ast_node *ast, int depth);

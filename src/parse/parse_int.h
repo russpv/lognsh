@@ -226,7 +226,7 @@ int							push(t_pstack *stack);
 int							pop(t_pstack *stack);
 
 /* Execution helpers */
-int	p_do_globbing_args(t_mem_mgr *mgr, t_list **lst_node, void *lst_c);
+int							p_do_globbing_args(t_mem_mgr *mgr, t_list **lst_node, void *lst_c);
 int							p_do_globbing_redirs(t_mem_mgr *mgr, void *c);
 int							check_special_expansions(t_state *s,
 								const char *buf, char **value);

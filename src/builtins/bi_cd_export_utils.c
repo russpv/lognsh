@@ -20,6 +20,7 @@ int	update_existing_var(t_mem_mgr *m, t_env *existing_key, const char *value)
 {
 	char	*new_value;
 
+	new_value = NULL;
 	if (!existing_key)
 		return (0);
 	if (value)
@@ -28,8 +29,7 @@ int	update_existing_var(t_mem_mgr *m, t_env *existing_key, const char *value)
 		new_value = ft_strdup("");
 	if (!new_value)
 	{
-		print_custom_err("(various)", EMSG_BADMALLOC);
-		return (0);
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	env_set_node_value(m, existing_key, new_value);
 	free(new_value);

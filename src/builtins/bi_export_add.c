@@ -23,6 +23,7 @@ static int	_add_new_var(t_mem_mgr *m, t_env **sh_env_list, const char *key, \
 	t_env	*new_node;
 	char	*new_value;
 
+	new_value = NULL;
 	if (!sh_env_list || !key)
 		return (ERR_ARGS);
 	if (value)
@@ -35,7 +36,7 @@ static int	_add_new_var(t_mem_mgr *m, t_env **sh_env_list, const char *key, \
 	if (!new_node)
 	{
 		free(new_value);
-		return (ERR_MEM);
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	env_add_node(sh_env_list, new_node);
 	free(new_value);

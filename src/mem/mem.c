@@ -146,11 +146,12 @@ void	myfree(t_mem_node *head, void *alloc)
 	if (!block)
 	{
 		err("Memory corruption or double free detected! (maybe, WIP)\n");
-		//free(alloc); // TODO remove after migration
 		return ;
 	}
 	if (true == block->is_freed)
+	{
 		return (err("Double free detected.\n"));
+	}
 	block->is_freed = true;
 	ft_memset(alloc, 0, block->size);
 	free(alloc);

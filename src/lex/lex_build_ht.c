@@ -23,6 +23,7 @@ static inline int	_insert_builtins(t_mem_mgr *m, t_ht ht)
 }
 
 /* Currently not used. */
+/*
 static inline void	_insert_reserved_words(t_mem_mgr *m, t_ht ht)
 {
 	ht_install(m, ht, WD_IF, lex_create_ht_node(m, false, TOK_IF), NULL);
@@ -37,7 +38,7 @@ static inline void	_insert_reserved_words(t_mem_mgr *m, t_ht ht)
 	ht_install(m, ht, WD_UNTL, lex_create_ht_node(m, false, TOK_UNTIL), NULL);
 	ht_install(m, ht, WD_FOR, lex_create_ht_node(m, false, TOK_FOR), NULL);
 	ht_install(m, ht, WD_IN, lex_create_ht_node(m, false, TOK_IN), NULL);
-}
+}*/
 
 static inline void	_insert_operators(t_mem_mgr *m, t_ht ht)
 {

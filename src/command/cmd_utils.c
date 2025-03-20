@@ -4,9 +4,9 @@
 static void _fill_argv_nocmd(t_mem_mgr *m, int i, struct s_context *ctxt)
 {
 	if (i == 0)
-		ctxt->argv[0] = ft_strdup(ctxt->args[0]);
+		ctxt->argv[0] = ft_strdup_tmp(m, ctxt->args[0]);
 	else if (ctxt->args)
-		ctxt->argv[i] = ft_strdup(ctxt->args[i]);
+		ctxt->argv[i] = ft_strdup_tmp(m, ctxt->args[i]);
 	if (!ctxt->argv[i])
 		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 }

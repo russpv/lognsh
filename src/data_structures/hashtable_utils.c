@@ -23,7 +23,7 @@ static int	_install_data(t_mem_mgr *m, struct s_ht_entry **np, void *data,\
 	return (0);
 }
 
-static int	_init_node(t_mem_mgr *m, t_ht ht, struct s_ht_entry **np, char *name)
+static int		_init_node(t_mem_mgr *m, t_ht ht, struct s_ht_entry **np, char *name)
 {
 	unsigned int	hashval;
 

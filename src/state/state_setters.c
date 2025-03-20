@@ -28,8 +28,11 @@ int	set_exit_status(t_state *state, int value)
 
 void	set_tmp(t_state *s, char *str)
 {
+	
 	if (s->tmp)
+	{
 		myfree(&get_mem(s)->list, s->tmp);
+	}
 	s->tmp = ft_strdup_tmp(get_mem(s), str);
 }
 
