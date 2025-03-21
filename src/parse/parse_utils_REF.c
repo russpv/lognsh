@@ -89,5 +89,6 @@ void	debug_print_list(t_list *head)
 			i++;
 		}
 	}
+	printf("List printed.\n");
 }
 

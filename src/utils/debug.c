@@ -91,12 +91,6 @@ bool	test_prev_integrity(t_list *lst)
 		current = current->next;
 	}
 
-	// Check that the head node's prev pointer is NULL (for non-circular list)
-	if (previous != NULL && previous->next == NULL && previous->prev != NULL)
-	{
-		printf("Integrity check failed: Tail node's prev pointer is incorrect.\n");
-		return (false);
-	}
 	printf("Integrity check passed.\n");
 	return (true);
 }

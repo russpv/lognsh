@@ -27,29 +27,30 @@ int	lstiter_state_rwd_trim(t_state *s, t_list **lst, int (*test)(void *),
 {
 	int			res;
 	t_mem_mgr	*m;
-	t_list		*lst_rear;
+	t_list		**lst_rear;
 	t_list		*tmp;
 
 	m = get_mem(s);
 	if (lst == NULL)
 		return (ERR_ARGS);
-	lst_rear = ft_lstlast(*lst);
-	while (lst_rear)
+	lst_rear = lst;
+	*lst_rear = ft_lstlast(*lst);
+	while (*lst_rear)
 	{
 		res = 0;
 		fprintf(stderr, "HAHA\n");
-		tmp = lst_rear->prev;
-		res = test((lst_rear)->content);
+		tmp = (*lst_rear)->prev;
+		res = test((*lst_rear)->content);
 		if (res > 0)
 		{
 			fprintf(stderr, "HOHO\n");
-			// ft_lstdelone_rwd_tmp(m, lst, lst_rear, del);
+			ft_lstdelone_rwd_tmp(m, lst, lst_rear, del);
 		}
 		if (res < 0)
 			return (ERR_GENERAL);
 		if (NULL == tmp)
-			*lst = lst_rear;
-		lst_rear = tmp;
+			*lst = *lst_rear;
+		*lst_rear = tmp;
 	}
 	return (0);
 }

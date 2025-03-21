@@ -181,6 +181,7 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 		a->data.cmd.argc = ft_lstsize(*argl);
 		debug_print_list(*argl);
 		lstiter_state_rwd_trim(s, argl, p_is_arg_null, destroy_arg);
+		debug_print_list(*argl);
 		*args = list_to_array(get_mem(s), *argl, a->data.cmd.argc);
 		if (NULL == *args)
 			return (ERR_MEM);

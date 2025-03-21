@@ -43,7 +43,7 @@ static inline int	_match_heredoc(t_mem_mgr *m, t_lex *l)
 		line = readline("> ");
 		if (NULL == line)
 		{
-			debug_print(LOGMSG_SIG);
+			debug_print(LOGMSG_SIG); //lexer interrupted
 			m->dealloc(&m->list, l->eof_word);
 			l->eof_word = NULL;
 			return (ERR_CMD_SIGINTD);
