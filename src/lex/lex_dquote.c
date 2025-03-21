@@ -1,11 +1,11 @@
 #include "lex_int.h"
 
-// returns true if 
+// returns true if
 // closing quote found at l->ptr (and pops stack, skips char)
 // $_ found
 static bool	_is_dquote_transition_delim(t_lex *l)
 {
-	debug_print(_MOD_": -------- %s:_%c_", __FUNCTION__, *l->ptr);
+	debug_print(_MOD_ ": -------- %s:_%c_", __FUNCTION__, *l->ptr);
 	if (*l->ptr == OP_NULL)
 	{
 		st_int_pop(l->stack);
@@ -21,9 +21,9 @@ static bool	_is_dquote_transition_delim(t_lex *l)
 			l->ptr++;
 			return (debug_print(" YES\n"), true);
 		}
-		if (l->ptr != NULL && OP_NULL != *l->ptr) 
+		if (l->ptr != NULL && OP_NULL != *l->ptr)
 		{
-			if (is_dollar_delim(l)) 
+			if (is_dollar_delim(l))
 				return (debug_print(" YES\n"), true);
 		}
 	}
@@ -31,7 +31,7 @@ static bool	_is_dquote_transition_delim(t_lex *l)
 	return (false);
 }
 
-//TODO process specials
+// TODO process specials
 static inline t_tok	*_process_dquote_logic(t_state *s, t_lex *lexer)
 {
 	if ((unsigned char)TK_ESC == *lexer->ptr)
@@ -51,7 +51,8 @@ static inline t_tok	*_process_dquote_logic(t_state *s, t_lex *lexer)
 		st_int_pop(lexer->stack);
 		lexer->state = ON_EOF;
 		getchar();
-		return (lex_create_token(get_mem(s), lexer, TOK_WORD)); //creates final token
+		return (lex_create_token(get_mem(s), lexer, TOK_WORD));
+			// creates final token
 	}
 	return (NULL);
 }
@@ -65,7 +66,7 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print(_MOD_": %s: %c\n", __FUNCTION__, *lexer->ptr);
+	debug_print(_MOD_ ": %s: %c\n", __FUNCTION__, *lexer->ptr);
 	token = NULL;
 	if (lexer->ptr)
 	{
@@ -76,7 +77,7 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 			lexer->escape_mode = false;
 			if (token)
 				return (token);
-			debug_print(_MOD_":     Got:_%c_\n", *lexer->ptr);
+			debug_print(_MOD_ ":     Got:_%c_\n", *lexer->ptr);
 			put_on_buf(lexer);
 		}
 		lexer->input_incomplete = true;
@@ -84,7 +85,8 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 			return (NULL);
 		if (false == is_normal_delim(lexer, 0))
 			lexer->is_subtoken = true;
-		token = lex_create_token(get_mem(s), lexer, TOK_WORD); // tokenize subtoken
+		token = lex_create_token(get_mem(s), lexer, TOK_WORD);
+			// tokenize subtoken
 	}
 	return (token);
 }
@@ -94,7 +96,7 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
  * state transition manages pop
  * Ptr starts on first double quote
  *
- * Searches rest of string until " found, or 
+ * Searches rest of string until " found, or
  * a valid dollar expansion
  * else, flag incomplete
  */
@@ -102,7 +104,8 @@ int	tokenize_double_quotes(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print(_MOD_ YELLOW": STATE: %s, ptr:_%c_\n"RESET, __FUNCTION__, *lexer->ptr);
+	debug_print(_MOD_ YELLOW ": STATE: %s, ptr:_%c_\n" RESET, __FUNCTION__,
+		*lexer->ptr);
 	if (lexer)
 	{
 		token = _match_double(s, lexer);
@@ -110,7 +113,7 @@ int	tokenize_double_quotes(t_state *s, t_lex *lexer)
 		{
 			return (0);
 		}
-		debug_print(_MOD_": ptr at _%c_\n", *lexer->ptr);
+		debug_print(_MOD_ ": ptr at _%c_\n", *lexer->ptr);
 		if (0 != add_token(get_mem(s), lexer, token))
 			return (ERR_GENERAL);
 	}

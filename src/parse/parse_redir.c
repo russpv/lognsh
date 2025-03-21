@@ -1,14 +1,14 @@
 #include "parse_int.h"
 
-# define EMSG_REDIR_FN "Allocation for redirection filename failed\n"
-# define EMSG_REDIR_FN_INVALID "Expected a valid filename after redirection operator\n"
-# define EMSG_REDIR_FN_EOF "Expected a filename after redirection operator,found EOF\n"
-# define EMSG_REDIR_SYM_MALLOC "Allocation for redirection symbol failed\n"
-# define EMSG_HEREDOC_MALLOC "Memory allocation failed for redirection heredoc\n"
-# define EMSG_REDIR_NODE_MALLOC "Failed to create execution node for redirection\n"
-# define EMSG_REDIR_FAIL "Failed to parse redirection\n"
-# define DBGMSG_REDIR_FN _MOD_ ": _process_normal_redir filename:%s\n"
-# define DBGMSG_REDIR_GOT _MOD_ ": Redirection: type=%d symbol=%s\n"
+#define EMSG_REDIR_FN "Allocation for redirection filename failed\n"
+#define EMSG_REDIR_FN_INVALID "Expected a valid filename after redirection operator\n"
+#define EMSG_REDIR_FN_EOF "Expected a filename after redirection operator,found EOF\n"
+#define EMSG_REDIR_SYM_MALLOC "Allocation for redirection symbol failed\n"
+#define EMSG_HEREDOC_MALLOC "Memory allocation failed for redirection heredoc\n"
+#define EMSG_REDIR_NODE_MALLOC "Failed to create execution node for redirection\n"
+#define EMSG_REDIR_FAIL "Failed to parse redirection\n"
+#define DBGMSG_REDIR_FN _MOD_ ": _process_normal_redir filename:%s\n"
+#define DBGMSG_REDIR_GOT _MOD_ ": Redirection: type=%d symbol=%s\n"
 
 /* Creates new redir node and adds to t_list.
  * Freeing handled by caller.
@@ -21,9 +21,9 @@ static int	_add_redir(t_mem_mgr *m, t_ast_node *node, t_redir_data *red)
 		return (ERR_ARGS);
 	new = ft_lstnew_tmp(m, red);
 	if (!new)
-		exit_clean(&m->list,ENOMEM, __FUNCTION__, EMSG_REDIR_NODE_MALLOC);
-	debug_print(_MOD_ ": Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n",\
-		red->symbol, red->filename, red->heredoc_body, red->do_globbing,\
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_REDIR_NODE_MALLOC);
+	debug_print(_MOD_ ": Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n",
+		red->symbol, red->filename, red->heredoc_body, red->do_globbing,
 		red->do_expansion);
 	ft_lstadd_back(p_get_redirs_ptr(node), new);
 	p_update_redc(node, 1);
@@ -34,7 +34,8 @@ static int	_add_redir(t_mem_mgr *m, t_ast_node *node, t_redir_data *red)
 /* tok: current redirect token returned from advance()
  * Freeing handled by caller in case of error
  */
-static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red, t_ast_node *n)
+static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
+		t_ast_node *n)
 {
 	t_tok	*tok_fname;
 
@@ -66,7 +67,8 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red, t_a
  * Returns ERR_MEM if malloc fails.
  * Freeing handled by caller.
  */
-static int	_process_heredoc_redir(t_parser *p, t_redir_data *red, t_tok *tok, t_ast_node *cmd)
+static int	_process_heredoc_redir(t_parser *p, t_redir_data *red, t_tok *tok,
+		t_ast_node *cmd)
 {
 	if (!red || !tok || !cmd)
 		return (ERR_ARGS);
@@ -79,7 +81,7 @@ static int	_process_heredoc_redir(t_parser *p, t_redir_data *red, t_tok *tok, t_
 	cmd->data.cmd.do_redir_expansion = red->do_expansion;
 	red->heredoc_body = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok));
 	if (!red->heredoc_body)
-		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_HEREDOC_MALLOC);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_HEREDOC_MALLOC);
 	return (0);
 }
 

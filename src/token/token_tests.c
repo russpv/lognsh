@@ -1,6 +1,5 @@
 #include "token_int.h"
 
-
 bool	tok_get_issubtoken(t_tok *token)
 {
 	if (!token)
@@ -16,4 +15,3 @@ bool	tok_isgrouptoken(t_tok *token)
 		return (false);
 	return (GROUP == token->class);
 }
-

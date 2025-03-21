@@ -8,22 +8,22 @@
 
 void	destroy_cmd(t_state *s, void *c)
 {
-	t_cmd	*cmd;
-	t_mem_mgr *m;
+	t_cmd		*cmd;
+	t_mem_mgr	*m;
 
 	m = get_mem(s);
 	cmd = (t_cmd *)c;
 	if (cmd->st)
 		st_int_destroy(m, cmd->st);
-//	if (cmd->fullpath)
-//		free(cmd->fullpath);
+	//	if (cmd->fullpath)
+	//		free(cmd->fullpath);
 	if (cmd->redirs)
 		ft_lstclear_tmp(m, &cmd->redirs, destroy_redir);
 	if (cmd->fildes)
 		ft_freearr_mem(&m->list, m->dealloc, (void **)cmd->fildes, -1);
 	if (cmd->argv)
 		ft_freearr_mem(&m->list, m->dealloc, (void **)cmd->argv, -1);
-	m->dealloc(&m->list,cmd);
+	m->dealloc(&m->list, cmd);
 }
 
 t_cmd	*init_cmd(t_state *s, t_ast_node *a)

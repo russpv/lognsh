@@ -116,7 +116,6 @@ void	ft_lstclear_str_tmp(t_mem_mgr *mgr, t_list **lst)
 	*lst = NULL;
 }
 
-
 // Helper function: Deep copy a single node's content
 t_list	*ft_lstcopy_node_tmp(t_mem_mgr *mgr, const t_list *orig,
 		void *(*f)(t_mem_mgr *, const void *))
@@ -168,7 +167,8 @@ t_list	*ft_lstcopy_tmp(t_mem_mgr *mgr, t_list *orig, void *(*f)(t_mem_mgr *,
 	return (new_list);
 }
 /* Returns new linked list node with f(content). */
-t_list	*ft_lstnew_copystr_mem(t_mem_mgr *m, void *content, char *(*f)(t_mem_mgr *, const char *))
+t_list	*ft_lstnew_copystr_mem(t_mem_mgr *m, void *content,
+		char *(*f)(t_mem_mgr *, const char *))
 {
 	t_list	*new_node;
 
@@ -259,9 +259,11 @@ t_list	*ft_lstmap_tmp(t_mem_mgr *mgr, t_list *lst, void *(*f)(t_mem_mgr *,
 #define DBGMSG_LSTINSRWD_ANNOUNCE "lstiter_ins_rwd: got lst: %p, list:%p.\n"
 #define DBGMSG_LSTINSRWD_NULLARG "lstiter_ins_rwd: NULL input.\n"
 #define DBGMSG_LSTINSRWD_ENDNODE "lstiter_ins_rwd: Starting from end: %p\n"
-#define DBGMSG_LSTINSRWD_PREF "lstiter_ins_rwd: Iterating node: %p, content: \
+#define DBGMSG_LSTINSRWD_PREF \
+	"lstiter_ins_rwd: Iterating node: %p, content: \
 	%p\n"
-#define DBGMSG_LSTINSRWD_POSTF "lstiter_ins_rwd: Function f applied to node: \
+#define DBGMSG_LSTINSRWD_POSTF \
+	"lstiter_ins_rwd: Function f applied to node: \
 	%p\n"
 #define DBGMSG_LSTINSRWD_SUCCESS "lstiter_ins_rwd: ft_lstiter_ins_rwd Iteration complete.\n"
 
@@ -308,7 +310,6 @@ char	*ft_strdup_tmp(t_mem_mgr *mgr, const char *s)
 	return (ft_memcpy(newstr, s, len));
 }
 
-
 /* LSTITERSTR
 ** Iterates linked list and applies func f to node.content
 ** Returns the node content if the func f returns error code
@@ -316,7 +317,8 @@ char	*ft_strdup_tmp(t_mem_mgr *mgr, const char *s)
 ** f: ptr to function
 ** UNPROTECTED
 */
-char	*ft_lstiterstr_mem(t_mem_mgr *m, t_list *lst, int (*f)(t_mem_mgr *m, void *))
+char	*ft_lstiterstr_mem(t_mem_mgr *m, t_list *lst, int (*f)(t_mem_mgr *m,
+			void *))
 {
 	if (lst == NULL)
 		return (NULL);

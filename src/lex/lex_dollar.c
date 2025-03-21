@@ -9,11 +9,12 @@ int	tokenize_dollar(t_state *s, t_lex *lexer)
 	t_tok	*token;
 
 	token = NULL;
-	debug_print(_MOD_ YELLOW": STATE: %s, ptr:_%c_\n"RESET, __FUNCTION__, *lexer->ptr);
+	debug_print(_MOD_ YELLOW ": STATE: %s, ptr:_%c_\n" RESET, __FUNCTION__,
+		*lexer->ptr);
 	put_on_buf(lexer);
 	if (is_specialchar(*lexer->ptr))
 		put_on_buf(lexer);
-	else 
+	else
 		while (lexer->ptr && is_varnamechar((unsigned char)(*lexer->ptr)))
 			put_on_buf(lexer);
 	if (0 == ft_strlen(lexer->buf))

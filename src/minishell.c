@@ -4,6 +4,7 @@ static void	_do_test(t_state *s)
 {
 	char		input[INPUT_BUF_SZ];
 	t_ast_node	*ast;
+
 	if (MYTEST)
 	{
 		if (NULL == fgets(input, sizeof(input), stdin))
@@ -47,19 +48,20 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	(void)argc;
 	s = init_state(envp);
-	if (s) {
-	if (MYTEST)
-		_do_test(s);
-	else
+	if (s)
 	{
-		while (1)
+		if (MYTEST)
+			_do_test(s);
+		else
 		{
-			res = _do_loop(s);
-			if (SIGEOF_AT_INPUT == res)
-				break ;
+			while (1)
+			{
+				res = _do_loop(s);
+				if (SIGEOF_AT_INPUT == res)
+					break ;
+			}
 		}
-	}
-	destroy_state(s);
+		destroy_state(s);
 	}
 	return (0);
 }

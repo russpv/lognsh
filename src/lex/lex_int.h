@@ -176,7 +176,6 @@ typedef struct s_lex
 	enum e_lex_state		state;
 	t_tokenizer				tokenizer;
 
-
 	t_ht					hasht;
 	char					*buf;
 	size_t					buf_idx;
@@ -209,11 +208,12 @@ typedef struct s_ht_data	*t_ht_data;
 
 t_lex						*create_lexer(t_state *state, int start_state,
 								const char *s);
-void	destroy_lexer(t_state *s, void *instance);
+void						destroy_lexer(t_state *s, void *instance);
 
 /* ht */
 void						build_hasht(t_mem_mgr *m, t_lex *lexer);
-t_ht_data					lex_create_ht_node(t_mem_mgr *m, int is_substring, int type);
+t_ht_data					lex_create_ht_node(t_mem_mgr *m, int is_substring,
+								int type);
 void						lex_destroy_ht_node(t_mem_node *n, void *node);
 void						*lex_copy_ht_data(t_mem_node *n, void *data);
 t_tok						*lex_ht_lookup(t_state *s, t_lex *lexer);
@@ -228,16 +228,16 @@ int							tokenize_heredoc(t_state *s, t_lex *lexer);
 int							tokenize_dollar(t_state *s, t_lex *lexer);
 
 /* Tokenize ops */
-t_tok						*lex_create_token(t_mem_mgr *st, t_lex *lexer,\
+t_tok						*lex_create_token(t_mem_mgr *st, t_lex *lexer,
 								int type);
 int							add_token(t_mem_mgr *s, t_lex *lexer, t_tok *token);
-int	add_grptoken(t_mem_mgr *m, t_lex *lexer);
+int							add_grptoken(t_mem_mgr *m, t_lex *lexer);
 
 /* Char sequence checks */
-bool	is_normal_delim(t_lex *lexer, int offset);
-bool	is_transition_delim(t_lex *lexer);
-bool	is_dollar_delim(t_lex *lexer);
-bool	is_logicalop(unsigned char c, unsigned char next);
+bool						is_normal_delim(t_lex *lexer, int offset);
+bool						is_transition_delim(t_lex *lexer);
+bool						is_dollar_delim(t_lex *lexer);
+bool						is_logicalop(unsigned char c, unsigned char next);
 bool						is_dollar_question(t_lex *lexer);
 
 int							word_or_name(const char *s);
@@ -249,15 +249,14 @@ struct s_ht_entry			*do_one_char_lookahead(t_lex *lexer,
 								struct s_ht_entry *res);
 
 /* heredoc */
-int	get_eof_word(t_mem_mgr *m, t_lex *l);
+int							get_eof_word(t_mem_mgr *m, t_lex *l);
 bool						on_cmd_op(t_lex *l);
 
 /* dollar subs */
-bool	is_specialchar(unsigned char c);
+bool						is_specialchar(unsigned char c);
 bool						is_varnamechar(unsigned char c);
-
 
 /* utils */
 int							put_on_buf(t_lex *l);
-unsigned char	is_valid_next(t_lex *l, int offset);
-unsigned char	is_valid_prev(t_lex *l, int offset);
+unsigned char				is_valid_next(t_lex *l, int offset);
+unsigned char				is_valid_prev(t_lex *l, int offset);

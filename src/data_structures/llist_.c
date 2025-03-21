@@ -2,8 +2,9 @@
 
 #define DEBUGMSG_INSERT_GOT "ft_lstadd_insert got lst = %p, head = %p\n"
 #define DEBUGMSG_INSERT_NULL "NULL input detected: lst = %p, new = %p\n"
-#define DEBUGMSG_INSERT_EMPTY "List is empty. Added new node as the first element:%p\n" 
-#define DEBUGMSG_INSERTED "Inserted new node after the first node. new->prev =%p, (*lst)->next = %p\n"
+#define DEBUGMSG_INSERT_EMPTY "List is empty. Added new node as the first element:%p\n"
+#define DEBUGMSG_INSERTED "Inserted new node after the first node. new->prev =%p,\
+	(*lst)->next = %p\n"
 #define DEBUGMSG_INSERT_0 "ft_lstadd_insert completed successfully.\n"
 #define DEBUGMSG_CLR_DEL "ft_lstclear deleting node = %p\n"
 #define DEBUGMSG_CLR_GOT "ft_lstclear got lst = %p, head = %p\n"
@@ -93,8 +94,7 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 
 	if (!*lst || !del || !lst)
 		return ;
-	debug_print(DEBUGMSG_CLR_GOT, (void *)lst,
-		(void *)*lst);
+	debug_print(DEBUGMSG_CLR_GOT, (void *)lst, (void *)*lst);
 	tmp = *lst;
 	while (tmp)
 	{

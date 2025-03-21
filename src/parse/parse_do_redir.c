@@ -1,11 +1,11 @@
 #include "parse_int.h"
 
-# define EMSG_REDIR_HANDLER "Redirection handler issue\n"
-# define EMSG_REDIR_NULLNODE "ERR no node given\n"
-# define DBGMSG_REDIR_ANNOUNCE2 _MOD_ ": _p_do_redirection iterating...\n"
-# define DBGMSG_REDIR_GOTNULL _MOD_ ": _p_do_redirection got NULL\n"
-# define DBGMSG_REDIR_GOT _MOD_ ": _p_do_redirection got redir, executing...\n"
-# define DBGMSG_REDIR_ANNOUNCE _MOD_ ": p_do_redirections, doing redirs...\n"
+#define EMSG_REDIR_HANDLER "Redirection handler issue\n"
+#define EMSG_REDIR_NULLNODE "ERR no node given\n"
+#define DBGMSG_REDIR_ANNOUNCE2 _MOD_ ": _p_do_redirection iterating...\n"
+#define DBGMSG_REDIR_GOTNULL _MOD_ ": _p_do_redirection got NULL\n"
+#define DBGMSG_REDIR_GOT _MOD_ ": _p_do_redirection got redir, executing...\n"
+#define DBGMSG_REDIR_ANNOUNCE _MOD_ ": p_do_redirections, doing redirs...\n"
 
 /* Executes redirection of t_redir_data llist
  * Accepts a t_redir_data.
@@ -16,12 +16,10 @@
 static int	_p_do_redirection(void *content)
 {
 	const t_redir_data	*redir = (t_redir_data *)content;
-	const t_redir_fn	handlers[] = {
-	[TOK_REDIRECT_IN] = handle_redirect_in,
-	[TOK_REDIRECT_OUT] = handle_redirect_out,
-	[TOK_REDIRECT_APPEND] = handle_redirect_append,
-	[TOK_HEREDOC_WORD] = handle_heredoc
-	};
+	const t_redir_fn	handlers[] = {[TOK_REDIRECT_IN] = handle_redirect_in,
+			[TOK_REDIRECT_OUT] = handle_redirect_out,
+			[TOK_REDIRECT_APPEND] = handle_redirect_append,
+			[TOK_HEREDOC_WORD] = handle_heredoc};
 
 	if (NULL == content)
 		return (ERR_ARGS);
@@ -29,7 +27,7 @@ static int	_p_do_redirection(void *content)
 	if (!redir->type)
 		return (debug_print(DBGMSG_REDIR_GOTNULL), ERR_ARGS);
 	debug_print(DBGMSG_REDIR_GOT);
-	//TODO do expansion
+	// TODO do expansion
 	if (handlers[redir->type])
 	{
 		if (0 != handlers[redir->type](redir))

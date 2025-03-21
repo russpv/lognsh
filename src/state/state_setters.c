@@ -20,19 +20,9 @@ void	set_command(t_state *s, t_cmd *c)
 	s->current_cmd = c;
 }
 
-int	set_exit_status(t_state *state, int value)
-{
-	state->current_exit_code = value;
-	return (0);
-}
-
 void	set_tmp(t_state *s, char *str)
 {
-	
 	if (s->tmp)
-	{
 		myfree(&get_mem(s)->list, s->tmp);
-	}
 	s->tmp = ft_strdup_tmp(get_mem(s), str);
 }
-

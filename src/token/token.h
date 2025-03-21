@@ -5,7 +5,6 @@
 
 # include "../../include/libft.h"
 # include "../state/state.h"
-
 # include <stdbool.h>
 # include <stddef.h>
 # include <stdlib.h>
@@ -55,15 +54,15 @@
 
 enum					e_tok_type
 {
-	TOK_WORD, // command names, built-ins
-				// In the shell command language, a token other than
-				// an operator. In some cases a word is also a portion
-				// of a word token: in the various forms of parameter
-				// expansion, such as ${name-word}, and variable
-				// assignment, such as name=word, the word is the
-				// portion of the token depicted by word. The concept
-				// of a word is no longer applicable following word
-				// expansions-only fields remain.
+	TOK_WORD,       // command names, built-ins
+					// In the shell command language, a token other than
+					// an operator. In some cases a word is also a portion
+					// of a word token: in the various forms of parameter
+					// expansion, such as ${name-word}, and variable
+					// assignment, such as name=word, the word is the
+					// portion of the token depicted by word. The concept
+					// of a word is no longer applicable following word
+					// expansions-only fields remain.
 	TOK_GROUP_WORD, // for metas
 	TOK_NAME,
 	// In the shell command language, a word consisting
@@ -112,7 +111,7 @@ t_tok					*create_token(t_mem_mgr *st, const char *s, int type,
 							size_t pos);
 // t_tok					*create_ht_token(void);
 void					*copy_token(t_mem_mgr *st, const void *tok);
-void	destroy_token(t_mem_mgr *mgr, void *token);
+void					destroy_token(t_mem_mgr *mgr, void *token);
 
 int						tok_set_globbing(t_tok *token);
 int						tok_set_expansion(t_tok *token);
@@ -128,7 +127,7 @@ bool					tok_get_globbing(t_tok *token);
 bool					tok_get_expansion(t_tok *token);
 bool					tok_get_dquotes(t_tok *token);
 t_list					*tok_get_tlist(t_tok *token);
-size_t	tok_get_pos(t_tok *token);
+size_t					tok_get_pos(t_tok *token);
 
 bool					tok_get_issubtoken(t_tok *token);
 bool					tok_isgrouptoken(t_tok *token);

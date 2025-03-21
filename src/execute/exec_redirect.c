@@ -27,7 +27,7 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 	else
 		fd = -1;
 	if (fd < 0)
-		return(perror(EMSG_OPEN), fd);
+		return (perror(EMSG_OPEN), fd);
 	debug_print(DBGMSG_EREDIR_FD, __FUNCTION__, fd);
 	return (fd);
 }

@@ -20,7 +20,8 @@
 #define EMSG_NOHOME "HOME not set.\n"
 #define EMSG_BADMALLOC "memory allocation failed.\n"
 
-static int	_set_env_value(t_mem_mgr *m, t_env **env_list, const char *key, const char *value)
+static int	_set_env_value(t_mem_mgr *m, t_env **env_list, const char *key,
+		const char *value)
 {
 	t_env	*node;
 
@@ -50,7 +51,7 @@ static int	_change_dir(t_state *s, const char *target)
 
 	if (0 == ft_strcmp(target, "-"))
 	{
-		new_dir = env_getenv_value("OLDPWD", get_sh_env_list(s));
+		new_dir = env_getenv_value("OLDPWD", get_env_list(s));
 		if (!new_dir || ft_strcmp(new_dir, "") == 0)
 			return (print_custom_err(CMD_NAME, EMSG_OLDPWDNOTSET), 1);
 	}
@@ -62,8 +63,8 @@ static int	_change_dir(t_state *s, const char *target)
 		return (ERR_GENERAL);
 	}
 	old_pwd = get_pwd(s);
-	if (old_pwd && 0 != _set_env_value(get_mem(s), get_sh_env_list_add(s), \
-		"OLDPWD", old_pwd))
+	if (old_pwd && 0 != _set_env_value(get_mem(s), get_env_list_add(s),
+			"OLDPWD", old_pwd))
 	{
 		print_custom_err(CMD_NAME, EMSG_BADMALLOC);
 		return (ERR_GENERAL);
@@ -83,7 +84,7 @@ int	bi_cd(t_state *s, char **args, int argc)
 		return (ERR_ARGS);
 	}
 	if (argc == 1)
-		target = env_getenv_value("HOME", get_sh_env_list(s));
+		target = env_getenv_value("HOME", get_env_list(s));
 	else if (argc == 2)
 		target = args[1];
 	else

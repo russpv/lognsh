@@ -120,36 +120,3 @@ void	print_addremainder_post(struct s_merge *m)
 		debug_print( BLUE"status:end->next %s, tail:%s tail->next: %s, tmp2:%s\n"RESET, (*m->end)->next->content, (*m->tail)->content,\
 		(*m->tail)->next->content, (m->tmp2)->content);
 }
-
-/*
-if (NULL != (*end)->next && NULL != r->next)
-				debug_print( BLUE"(tail now at: %s | l at: %s, l->next: %s, mid: %s, mid->next: %s "\
-				"| r at: %s, r->next: %s, end: %s, end->next: %s "\
-				"| beg: %s) \n"RESET,\
-				(*tail)->content, l->content, l->next->content, mid->content, mid->next->content, \
-				r->content, r->next->content, (*end)->content, (*end)->next->content, \
-				(*beg)->content);
-			else if (NULL == (*end)->next && NULL != r->next)
-				debug_print( BLUE"(tail now at: %s | l at: %s, l->next: %s, mid: %s, mid->next: %s "\
-				"| r at: %s, r->next: %s, end: %s, end->next: (END)) "\
-				"| beg: %s) \n"RESET,\
-				(*tail)->content, l->content, l->next->content, mid->content, mid->next->content, \
-				r->content, r->next->content, (*end)->content, \
-				(*beg)->content);
-			else if (NULL == (*end)->next)
-				debug_print( BLUE"(tail now at: %s | l at: %s, l->next: %s, mid: %s, mid->next: %s "\
-				"| r at: (END), r->next: (END), end: %s, end->next: (END)) "\
-				"| beg: %s) \n"RESET,\
-				(*tail)->content, l->content, l->next->content, mid->content, mid->next->content, \
-				(*end)->content, \
-				(*beg)->content);
-			else if (NULL == (*tail))
-				debug_print( BLUE"(tail now at: END | l at: %s, l->next: %s, mid: %s, mid->next: %s "\
-				"| r at: (END), r->next: (END), end: %s, end->next: (END)) "\
-				"| beg: %s) \n"RESET,\
-				l->content, l->next->content, mid->content, mid->next->content, \
-				(*end)->content, \
-				(*beg)->content);
-			else
-				debug_print( "WTF?!\n");
-*/

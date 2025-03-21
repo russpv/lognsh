@@ -20,10 +20,10 @@ void	sigint_handler(int signo)
 		g_last_signal = SIGINT;
 		debug_print(_MOD_ ": I got this SIGINT.");
 		write(STDOUT_FILENO, "\n", 1);
-#ifndef	MACOS //TODO remove in final
+#ifndef MACOS // TODO remove in final
 		rl_replace_line("", 1);
-        rl_on_new_line();
-        rl_redisplay();
+		rl_on_new_line();
+		rl_redisplay();
 #endif
 	}
 }
@@ -45,7 +45,7 @@ void	sig_set_handlers(void)
 	struct sigaction	sa_quit;
 
 	if (0 == isatty(STDIN_FILENO))
-		return;
+		return ;
 	debug_print(_MOD_ ": %s\n", __FUNCTION__);
 	sa_int.sa_handler = sigint_handler;
 	sigemptyset(&sa_int.sa_mask);
@@ -59,30 +59,30 @@ void	sig_set_handlers(void)
 		perror(EMSG_SIGACTION);
 }
 
-// Restore default action for SIGINT (terminate) 
+// Restore default action for SIGINT (terminate)
 // Flush any signal masks to prevent blocking
 void	sig_reset_handlers(void)
 {
-    struct sigaction sa_int;
-    struct sigaction sa_quit;
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 
 	debug_print(_MOD_ ": sig_reset_handlers\n");
-    sa_int.sa_handler = SIG_DFL;
-    sigemptyset(&sa_int.sa_mask);
-    sa_int.sa_flags = 0;
-    if (0 != sigaction(SIGINT, &sa_int, NULL))
+	sa_int.sa_handler = SIG_DFL;
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_flags = 0;
+	if (0 != sigaction(SIGINT, &sa_int, NULL))
 		perror(EMSG_SIGACTION);
-    sa_quit.sa_handler = SIG_DFL;
-    sigemptyset(&sa_quit.sa_mask);
-    sa_quit.sa_flags = 0;
-    if (0 != sigaction(SIGQUIT, &sa_quit, NULL))
+	sa_quit.sa_handler = SIG_DFL;
+	sigemptyset(&sa_quit.sa_mask);
+	sa_quit.sa_flags = 0;
+	if (0 != sigaction(SIGQUIT, &sa_quit, NULL))
 		perror(EMSG_SIGACTION);
 }
 
 // Blocks ONLY SIGINT.
 void	sig_ignore(void)
 {
-	struct sigaction sa_int;
+	struct sigaction	sa_int;
 
 	sa_int.sa_handler = SIG_IGN;
 	sa_int.sa_flags = 0;

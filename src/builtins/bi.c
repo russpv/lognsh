@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "bi_int.h"
+#include "bi_int.h"
 
 // Fn to map command names to corresponding built-ins
 t_builtin_fn	get_builtin(char *command)
 {
-	debug_print(_MOD_": %s...\n", __FUNCTION__);
+	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
 	if (NULL != command)
 	{
 		if (ft_strcmp(command, BI_ECHO) == 0)

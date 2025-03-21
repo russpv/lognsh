@@ -4,18 +4,16 @@
 // (e.g. all the sequences that delimit a redirection)
 bool	on_cmd_op(t_lex *l)
 {
-	const char *s = l->ptr;
+	const char	*s = l->ptr;
 
 	if (!s)
 		return (false);
-	if (*s == OP_HASH || 
-		*s == OP_PIPE || 
-		*s == OP_OPENP || *s == OP_CLOSEDP )
+	if (*s == OP_HASH || *s == OP_PIPE || *s == OP_OPENP || *s == OP_CLOSEDP)
 		return (true);
 	else if (*s == OP_REDOUT || *s == OP_REDIN)
 	{
-		if ((*s == OP_REDOUT && *(l->ptr + 1) == OP_REDOUT) ||
-			(*s == OP_REDIN && *(l->ptr + 1) == OP_REDIN))
+		if ((*s == OP_REDOUT && *(l->ptr + 1) == OP_REDOUT) || (*s == OP_REDIN
+				&& *(l->ptr + 1) == OP_REDIN))
 			return (true);
 	}
 	return (false);
@@ -31,7 +29,7 @@ bool	is_dollar_question(t_lex *lexer)
 // returns TOK_WORD if alphanumeric or underscore, else TOK_NAME
 int	word_or_name(const char *s)
 {
-	debug_print(_MOD_": -------- %s:_%s_", __FUNCTION__, s);
+	debug_print(_MOD_ ": -------- %s:_%s_", __FUNCTION__, s);
 	if (!*s)
 	{
 		debug_print(" ERR\n");

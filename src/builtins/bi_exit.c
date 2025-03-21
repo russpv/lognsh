@@ -64,22 +64,21 @@ static void	_exit_valid_arg(t_state *s, char *arg)
  * Exits with the last exit status, or
  * the numeric argument given (within one byte).
  */
- int	bi_exit(t_state *s, char **argv, int argc)
- {
- 	//int	exit_code;
- 	
- 	if (isatty(STDOUT_FILENO))
- 		write(STDOUT_FILENO, "exit\n", 5);
- 	if (argc < 2)
- 		_exit_no_arg(s);
- 	else if (!is_numeric(argv[1]))
- 		_exit_nonnumeric_arg(s);  //Return, don't exit (but bash DOES exit)
- 	else if (argv[2])
+int	bi_exit(t_state *s, char **argv, int argc)
+{
+	// int	exit_code;
+	if (isatty(STDOUT_FILENO))
+		write(STDOUT_FILENO, "exit\n", 5);
+	if (argc < 2)
+		_exit_no_arg(s);
+	else if (!is_numeric(argv[1]))
+		_exit_nonnumeric_arg(s); // Return, don't exit (but bash DOES exit)
+	else if (argv[2])
 	{
 		print_too_many_args(CMD_NAME);
- 		return (1);
- 	}
- 	else
- 		_exit_valid_arg(s, argv[1]);
- 	return (0);
+		return (1);
+	}
+	else
+		_exit_valid_arg(s, argv[1]);
+	return (0);
 }

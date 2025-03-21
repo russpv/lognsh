@@ -32,7 +32,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *pipe_node)
 		pipe_node->data.pipe.cmdc++;
 	}
 	else
-		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_PPIPE_MALLOC);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_PPIPE_MALLOC);
 	return (0);
 }
 
@@ -71,7 +71,7 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 	debug_print(DBGMSG_PPIPE_GOT, tok_get_raw(peek(p)));
 	ast_node = _init_pipe(p->mmgr);
 	if (NULL == ast_node)
-		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_PPIPE_MALLOC);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_PPIPE_MALLOC);
 	res = _process_pipe(s, p, ast_node);
 	if (0 != res)
 	{

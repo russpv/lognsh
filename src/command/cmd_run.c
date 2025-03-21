@@ -17,7 +17,7 @@ static int	_check_access(const char *path)
 	return (ERR_CMD_NOT_FOUND);
 }
 
-/* Returns 0 if absolute fullpath is found 
+/* Returns 0 if absolute fullpath is found
  * All heap allocs are temporary within this scope
  */
 static int	_search_path(t_state *s, const char *cmd, char **fullpath)
@@ -27,7 +27,7 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 	int		i;
 
 	i = -1;
-	paths = get_sh_path(s);
+	paths = get_env_path(s);
 	if (NULL == paths)
 		return (ERR_GENERAL);
 	while (paths[++i])
@@ -40,11 +40,13 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		get_mem(s)->dealloc(&get_mem(s)->list, tmp);
 		if (0 == _check_access(*fullpath))
-			return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc,  (void **)paths, -1), 0);
+			return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc,
+					(void **)paths, -1), 0);
 		get_mem(s)->dealloc(&get_mem(s)->list, *fullpath);
 		*fullpath = NULL;
 	}
-	return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc, (void **)paths, -1), ERR_CMD_NOT_FOUND);
+	return (ft_freearr_mem(&get_mem(s)->list, get_mem(s)->dealloc,
+			(void **)paths, -1), ERR_CMD_NOT_FOUND);
 }
 
 /* Stores command path in fullpath, if valid.
@@ -57,8 +59,8 @@ int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 		{
 			if (0 == _check_access(name))
 			{
-				*fullpath = (char *)name; 
-					return (0);
+				*fullpath = (char *)name;
+				return (0);
 			}
 		}
 		else

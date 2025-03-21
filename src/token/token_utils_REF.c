@@ -9,30 +9,33 @@ int	tok_print(void *content)
 	{
 		if (GROUP == tok->class)
 		{
-			log_print(_MOD_": Grp_tok: (grp) Exp: - Glb: - Sub: - tokc: %d \n", tok->t.meta.tokc);
+			log_print(_MOD_ ": Grp_tok: (grp) Exp: - Glb: - Sub: - tokc: %d \n",
+				tok->t.meta.tokc);
 			if (0 != ft_lstiter(tok->t.meta.tokens, tok_print))
 				err("LSTITER");
 		}
 		else if (tok_get_issubtoken(tok))
-			log_print(_MOD_": Sub_tok: %02d Exp: %d Glb: %d Sub: %d Val: %s \n", tok->t.tok.type,
-			tok->t.tok.do_expansion, tok->t.tok.do_globbing, tok->t.tok.is_subtoken, tok->t.tok.raw);	
-		else		
-			log_print(_MOD_": Token: %02d Exp: %d Glb: %d Sub: %d Val: %s \n", tok->t.tok.type,
-			tok->t.tok.do_expansion, tok->t.tok.do_globbing, tok->t.tok.is_subtoken, tok->t.tok.raw);	
+			log_print(_MOD_ ": Sub_tok: %02d Exp: %d Glb: %d Sub: %d Val:\
+				%s \n", tok->t.tok.type, tok->t.tok.do_expansion,
+				tok->t.tok.do_globbing, tok->t.tok.is_subtoken, tok->t.tok.raw);
+		else
+			log_print(_MOD_ ": Token: %02d Exp: %d Glb: %d Sub: %d Val: %s \n",
+				tok->t.tok.type, tok->t.tok.do_expansion,
+				tok->t.tok.do_globbing, tok->t.tok.is_subtoken, tok->t.tok.raw);
 	}
 	return (0);
 }
 
 // Passed to llist iterator to collect word parts
 // c must be a t_tok
-// Stores result in s->tmp, which is later 
+// Stores result in s->tmp, which is later
 // assigned to grp token's raw string
 // Memory allocations are local to this scope.
 int	tok_do_grp_combine(t_state *s, void *c)
 {
-	const t_tok			*content = (t_tok *)c;
-	static char			*str = NULL;
-	char				*tmp;
+	const t_tok	*content = (t_tok *)c;
+	static char	*str = NULL;
+	char		*tmp;
 
 	tmp = NULL;
 	if (NULL == c)
@@ -63,8 +66,7 @@ int	tok_do_grp_combine(t_state *s, void *c)
 }
 
 /* Looks for env values of key loaded in buf, replaces raw. */
-static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf,
-	char **value)
+static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf, char **value)
 {
 	char	*new_raw;
 
@@ -80,12 +82,13 @@ static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf,
 	else
 	{
 		debug_print(_MOD_ ": %s: checking envp\n", __FUNCTION__);
-		*value = get_sh_env(s, buf);
+		*value = get_env_val(s, buf);
 		if (*value)
 		{
 			new_raw = ft_strdup_tmp(get_mem(s), *value);
 			if (!new_raw)
-				exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+				exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__,
+					EMSG_MALLOC);
 		}
 		myfree(&get_mem(s)->list, c->t.tok.raw);
 		((t_tok *)c)->t.tok.raw = new_raw;
@@ -96,11 +99,11 @@ static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf,
 // Likely to be used only on subtoken lists
 int	tok_do_expansion(t_state *s, void *c)
 {
-	char				*value;
-	const t_tok			*content = (t_tok *)c;
-	int					res;
-	char				buf[MAX_ENVVAR_LEN];
-	size_t				raw_len;
+	char		*value;
+	const t_tok	*content = (t_tok *)c;
+	int			res;
+	char		buf[MAX_ENVVAR_LEN];
+	size_t		raw_len;
 
 	res = 0;
 	value = NULL;
@@ -115,7 +118,8 @@ int	tok_do_expansion(t_state *s, void *c)
 	{
 		if (raw_len <= lex_get_keepd(get_lexer(s)))
 			return (err("error"), ERR_ARGS);
-		ft_memcpy(buf, content->t.tok.raw + lex_get_keepd(get_lexer(s)), raw_len - lex_get_keepd(get_lexer(s)));
+		ft_memcpy(buf, content->t.tok.raw + lex_get_keepd(get_lexer(s)), raw_len
+			- lex_get_keepd(get_lexer(s)));
 		res = _do_tok_ops(s, content, buf, &value);
 		if (0 != res)
 			return (res);

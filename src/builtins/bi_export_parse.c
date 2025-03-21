@@ -40,8 +40,8 @@ static int	_validate_key(const char *key)
 }
 
 // validates the argument format and key syntax
-static int	_process_arg_validation(const char *arg, \
-			char **equal_pos, int *error_occurred)
+static int	_process_arg_validation(const char *arg, char **equal_pos,
+		int *error_occurred)
 {
 	if (!arg || !equal_pos || !error_occurred)
 		return (0);

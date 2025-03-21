@@ -12,7 +12,7 @@ static int	_handle_no_command(t_ast_node *a)
 	return (0);
 }
 
-/* Processes args and redirs. Stores several command parameters. 
+/* Processes args and redirs. Stores several command parameters.
  * Puts node a into cmd c
  */
 static int	_do_ops(t_state *s, t_ast_node *a, t_cmd *c)
@@ -21,7 +21,7 @@ static int	_do_ops(t_state *s, t_ast_node *a, t_cmd *c)
 	int		exit_code;
 	int		res;
 
-	c->curr_node = a;	
+	c->curr_node = a;
 	args = NULL;
 	res = p_do_arg_processing(s, a, &args);
 	if (0 != res)
@@ -30,7 +30,7 @@ static int	_do_ops(t_state *s, t_ast_node *a, t_cmd *c)
 	if (NO_CMD == exit_code)
 		return (exit_code);
 	c_argstoargv(s, c, a, args);
-	c->redc = p_get_redc(a); 
+	c->redc = p_get_redc(a);
 	if (0 != p_do_redir_processing(s, a))
 		return (ERR_AMBIGUOUS_REDIR);
 	assert(c_get_node(c) == a);
@@ -46,13 +46,13 @@ static int	_do_ops(t_state *s, t_ast_node *a, t_cmd *c)
  * 	results into t_cmd not t_ast_node.
  * Throws ambiguous redirect error (1) prior to exec'g.
  * Stores argv and argc into s->curr_cmd.
- * Silently returns if non-expansion string 
+ * Silently returns if non-expansion string
  */
 int	cmd_exec_simple(t_state *s, t_ast_node *a)
 {
-	int					exit_code;
-	t_cmd				*c;
-	t_builtin_fn		bi;
+	int				exit_code;
+	t_cmd			*c;
+	t_builtin_fn	bi;
 
 	c = get_cmd(s);
 	log_print(LMSG_IN, __FUNCTION__);

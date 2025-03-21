@@ -29,7 +29,8 @@ int	bi_pwd(t_state *s, char **argv, int argc)
 	if (argv[1])
 	{
 		if (argv[1][0] == '-')
-			return (print_custom_err_err(CMD_NAME, argv[1], EMSG_OPT), ERR_GENERAL);
+			return (print_custom_err_err(CMD_NAME, argv[1], EMSG_OPT),
+				ERR_GENERAL);
 	}
 	pwd = getcwd(NULL, 0);
 	if (!pwd)

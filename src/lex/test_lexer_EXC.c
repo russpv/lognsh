@@ -3,7 +3,8 @@
 
 int main(void)
 {
-const char *inputs[] = {
+
+    const char *inputs[] = {
     // Existing Test Cases
     "(echo \"Hello, world\" > file.txt) && cat file.txt",
     "grep Hello | wc -l",
@@ -35,7 +36,7 @@ const char *inputs[] = {
 
     // Builtin cases
     "echo \"haha\"",
-};
+    };
 
     // Number of inputs to process
     int num_inputs = sizeof(inputs) / sizeof(inputs[0]);
@@ -50,7 +51,7 @@ const char *inputs[] = {
         {
             lex_print(lexer);
             fflush(stdout);
-           destroy_lexer(lexer); 
+            destroy_lexer(lexer); 
         }
         printf("\n");
     }

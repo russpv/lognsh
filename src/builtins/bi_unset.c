@@ -12,7 +12,7 @@
 
 #include "bi_int.h"
 
-// unset will always return '0'; remove_env_node will only work for valid keys
+// unset will always return ('0'); remove_env_node will only work for valid keys
 int	bi_unset(t_state *s, char **argv, int argc)
 {
 	int	i;
@@ -24,7 +24,7 @@ int	bi_unset(t_state *s, char **argv, int argc)
 	i = 1;
 	while (argv[i])
 	{
-		env_remove_node(get_mem(s), get_sh_env_list_add(s), argv[i]);
+		env_remove_node(get_mem(s), get_env_list_add(s), argv[i]);
 		i++;
 	}
 	return (0);

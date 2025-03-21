@@ -21,7 +21,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *log_node)
 		log_node->data.log.cmdc++;
 	}
 	else
-		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_LOGI_CMD_MALLOC);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LOGI_CMD_MALLOC);
 	return (0);
 }
 
@@ -38,7 +38,7 @@ static int	_process_op(t_parser *p, t_ast_node *log_node)
 	if (op)
 		ft_lstadd_back(&log_node->data.log.operators, op);
 	else
-		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, EMSG_LOGI_OP_MALLOC);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LOGI_OP_MALLOC);
 	return (0);
 }
 

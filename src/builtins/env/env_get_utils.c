@@ -15,13 +15,13 @@
 // this returns a system-managed string array. Do not modify!
 char	**env_getpath(t_mem_mgr *m)
 {
-	char		**res;
-	const char	*path_env = getenv("PATH");
-	struct s_mem_utils utils;
+	char				**res;
+	const char			*path_env = getenv("PATH");
+	struct s_mem_utils	utils;
 
 	if (!path_env)
 	{
-		perror("getenv\n"); 
+		perror("getenv\n");
 		return (NULL);
 	}
 	utils.head = &m->list;

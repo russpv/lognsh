@@ -4,8 +4,6 @@
 #define EMSG_REDIRRS_NULLARG "restore_redirs: ERR null command parameters\n"
 #define DBGMSG_REDIRRS_ANNOUNCE "save_redirs: saving redir fns...\n"
 
-
-
 int	save_redirs(t_cmd *c)
 {
 	if (!c)

@@ -12,8 +12,8 @@
 
 #include "bi_int.h"
 
-extern int	find_and_validate_cmd(t_state *s, const char *name, \
-			char **fullpath, const char *caller);
+extern int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath,
+				const char *caller);
 extern char	**environ;
 
 /* Takes first argument
@@ -27,8 +27,9 @@ int	bi_exec(t_state *s, char **argv, int argc)
 	(void)argc;
 	if (!argv || !argv[1])
 	{
-		write(STDERR_FILENO, "Usage: exec \
-			<command>\n", sizeof("Usage: exec <command>\n"));
+		write(STDERR_FILENO,
+				"Usage: exec <command>\n",
+				sizeof("Usage: exec <command>\n"));
 		return (-1);
 	}
 	fullpath = NULL;

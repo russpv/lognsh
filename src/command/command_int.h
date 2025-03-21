@@ -24,19 +24,21 @@ struct					s_cmd
 
 typedef struct s_cmd	t_cmd;
 
-struct s_context {
-	t_state *s;
-	t_ast_node *a;
-	char **args;
-	char **argv;
-	const char *cmdname;
-	int argc;
+struct					s_context
+{
+	t_state				*s;
+	t_ast_node			*a;
+	char				**args;
+	char				**argv;
+	const char			*cmdname;
+	int					argc;
 };
 
 void					destroy_cmd(t_state *s, void *c);
 t_cmd					*init_cmd(t_state *s, t_ast_node *a);
 
-int	c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a, char **args);
+int						c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a,
+							char **args);
 
 int						run_cmd(t_state *s, t_ast_node *a);
 

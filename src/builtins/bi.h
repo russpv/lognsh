@@ -14,9 +14,8 @@
 # define BI_H
 
 # include "../state/state.h"
-
-# include <unistd.h>
 # include <stdio.h>
+# include <unistd.h>
 
 /* These are indexed in the lexer */
 # define BI_ECHO "echo"
@@ -31,10 +30,11 @@
 
 /* Forwards */
 struct s_global_state;
-typedef struct s_global_state	t_state; 
+typedef struct s_global_state	t_state;
 
-typedef int	(*t_builtin_fn)(t_state *s, char **args, int argc);
+typedef int						(*t_builtin_fn)(t_state *s, char **args,
+							int argc);
 
-t_builtin_fn	get_builtin(char *command);
+t_builtin_fn					get_builtin(char *command);
 
 #endif

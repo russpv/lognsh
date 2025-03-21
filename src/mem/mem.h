@@ -17,6 +17,7 @@ t_mem_block	*mem_get_alloc(t_mem_node *head, void *alloc);
 void		*myalloc(t_mem_node *head, size_t size);
 void		myfree(t_mem_node *head, void *alloc);
 
-extern void	exit_clean(t_mem_node *head, int exit_status, const char *caller, const char *errmsg);
+extern void	exit_clean(t_mem_node *head, int exit_status, const char *caller,
+				const char *errmsg);
 
 #endif

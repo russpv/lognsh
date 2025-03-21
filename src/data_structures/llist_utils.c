@@ -109,8 +109,7 @@ int	ft_lstsize(t_list *lst)
 	debug_print(DBGMSG_LSIZE_START, (void *)lst);
 	while (lst)
 	{
-		debug_print(DBGMSG_LSIZE_ONNODE, (void *)lst,
-			(void *)lst->next);
+		debug_print(DBGMSG_LSIZE_ONNODE, (void *)lst, (void *)lst->next);
 		count++;
 		lst = lst->next;
 	}
@@ -118,10 +117,9 @@ int	ft_lstsize(t_list *lst)
 	return (count);
 }
 
-
 void	ft_lstprint(t_list *lst)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	if (lst == NULL)
@@ -130,14 +128,14 @@ void	ft_lstprint(t_list *lst)
 	}
 	if (DEBUG)
 	{
-		fprintf(stderr,RED"linkedl: "RESET);
+		fprintf(stderr, RED "linkedl: " RESET);
 		while (lst)
 		{
 			count++;
-			fprintf(stderr, YELLOW"%s -> "RESET, (const char*)lst->content);
+			fprintf(stderr, YELLOW "%s -> " RESET, (const char *)lst->content);
 			lst = lst->next;
 		}
-		fprintf(stderr, RED"printed %d nodes.\n"RESET, count);
+		fprintf(stderr, RED "printed %d nodes.\n" RESET, count);
 	}
 	return ;
 }
@@ -145,7 +143,7 @@ void	ft_lstprint(t_list *lst)
 // Prints from lst to end
 void	ft_lstprint_betw(t_list *lst, t_list *end)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	if (lst == NULL || end == NULL)
@@ -154,14 +152,14 @@ void	ft_lstprint_betw(t_list *lst, t_list *end)
 	}
 	if (DEBUG)
 	{
-		fprintf(stderr,RED"ll segment: "RESET);
+		fprintf(stderr, RED "ll segment: " RESET);
 		while (lst != end->next)
 		{
 			count++;
-			fprintf(stderr, YELLOW"%s -> "RESET, (const char *)lst->content);
+			fprintf(stderr, YELLOW "%s -> " RESET, (const char *)lst->content);
 			lst = lst->next;
 		}
-		fprintf(stderr, RED"printed %d nodes.\n"RESET, count);
+		fprintf(stderr, RED "printed %d nodes.\n" RESET, count);
 	}
 	return ;
 }

@@ -1,12 +1,11 @@
 #include "parse_int.h"
 
-/* Custom llist iterator with t_state function ptr 
+/* Custom llist iterator with t_state function ptr
  * Calls f with NULL once after all nodes iterated
  */
-int	lstiter_state(t_state *s, t_list *lst, \
-							int (*f)(t_state *, void *))
+int	lstiter_state(t_state *s, t_list *lst, int (*f)(t_state *, void *))
 {
-	int res;
+	int	res;
 
 	res = 0;
 	if (lst == NULL)
@@ -22,14 +21,14 @@ int	lstiter_state(t_state *s, t_list *lst, \
 	return (0);
 }
 
-int	lstiter_state_rwd_trim(t_state *s, t_list **lst, \
-	int (*test)(void *), \
-		void(*del)(t_mem_mgr *, void *))
+// TODO FIX THE DELETE AND INVALID LIST PREV ISSUE
+int	lstiter_state_rwd_trim(t_state *s, t_list **lst, int (*test)(void *),
+		void (*del)(t_mem_mgr *, void *))
 {
-	int res;
-	t_mem_mgr *m;
-	t_list	*lst_rear;
-	t_list	*tmp;
+	int			res;
+	t_mem_mgr	*m;
+	t_list		*lst_rear;
+	t_list		*tmp;
 
 	m = get_mem(s);
 	if (lst == NULL)
@@ -44,7 +43,7 @@ int	lstiter_state_rwd_trim(t_state *s, t_list **lst, \
 		if (res > 0)
 		{
 			fprintf(stderr, "HOHO\n");
-			//ft_lstdelone_rwd_tmp(m, lst, lst_rear, del);
+			// ft_lstdelone_rwd_tmp(m, lst, lst_rear, del);
 		}
 		if (res < 0)
 			return (ERR_GENERAL);
@@ -54,4 +53,3 @@ int	lstiter_state_rwd_trim(t_state *s, t_list **lst, \
 	}
 	return (0);
 }
-

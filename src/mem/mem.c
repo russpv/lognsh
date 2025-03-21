@@ -22,7 +22,7 @@ void	mem_init(t_mem_node *head)
 	head->prev = head;
 }
 
-void		mem_mgr_init(t_mem_mgr *m)
+void	mem_mgr_init(t_mem_mgr *m)
 {
 	m->f = myalloc;
 	m->dealloc = myfree;
@@ -54,7 +54,7 @@ int	mem_add_mem(t_mem_node *head, void *alloc, size_t size)
 			new->node.next = head;
 			new->node.prev = head;
 			head->next = &new->node;
-			head->prev = &new->node;			
+			head->prev = &new->node;
 		}
 		else
 		{
@@ -62,7 +62,7 @@ int	mem_add_mem(t_mem_node *head, void *alloc, size_t size)
 			new->node.prev = head;
 			head->next = &new->node;
 			first->prev = &new->node;
-		}	
+		}
 		return (0);
 	}
 	return (ENOMEM);
@@ -111,7 +111,7 @@ t_mem_block	*mem_get_alloc(t_mem_node *head, void *alloc)
 			return (block);
 		node = node->next;
 	}
-	fprintf(stderr, "%s: block not found (%s) \n", __FUNCTION__, (char*)alloc);
+	fprintf(stderr, "%s: block not found (%s) \n", __FUNCTION__, (char *)alloc);
 	return (NULL);
 }
 
@@ -156,4 +156,3 @@ void	myfree(t_mem_node *head, void *alloc)
 	ft_memset(alloc, 0, block->size);
 	free(alloc);
 }
-

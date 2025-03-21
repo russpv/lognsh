@@ -22,7 +22,7 @@ int	handle_heredoc(const t_redir_data *node)
 		return (perror(EMSG_PIPE), ERR_PIPE);
 	write(fildes[1], node->heredoc_body, ft_strlen(node->heredoc_body));
 	if (0 != close(fildes[1]))
-		return(perror(EMSG_CLOSE), ERR_CLOSE);
+		return (perror(EMSG_CLOSE), ERR_CLOSE);
 	if (0 != redirect(&fildes[0], NULL, STDIN_FILENO, append))
 		return (err("Heredoc redirection issue\n"), ERR_REDIR);
 	return (0);

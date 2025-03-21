@@ -19,15 +19,15 @@
 # define SIGINT_BEFORE_FORK -130
 # define SIGEOF_AT_INPUT 300
 
-/* Global signal variable is checked periodically 
+/* Global signal variable is checked periodically
  * through execution chain, and triggers appropriate
  * action and handler. This received signal is reset
- * in the main loop. When forking children, handling 
+ * in the main loop. When forking children, handling
  * in the parent is suspended (ignores sigs).
  */
 
 // register signal handlers
-void    sig_set_handlers(void);
+void	sig_set_handlers(void);
 
 // un-register signal handlers back to defaults
 void	sig_reset_handlers(void);

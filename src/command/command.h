@@ -2,9 +2,9 @@
 #ifndef COMMAND_H
 # define COMMAND_H
 
-# include "../state/state.h"
-# include "../parse/parse.h"
 # include "../execute/execute.h"
+# include "../parse/parse.h"
+# include "../state/state.h"
 
 /* COMMAND ADT
  * Sequences execution

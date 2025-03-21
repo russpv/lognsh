@@ -3,7 +3,8 @@
 #define HALT_EXEC -1
 #define DBGMSG_CLOGI_ANNOUNCE "Cmd: \t### cmd_exec_log ###\n"
 #define DBGMSG_CLOGI_DONE "Cmd: \t### cmd_exec_log: got exit, returning\n"
-#define DBGMSG_CLOGI_EXECERR "Cmd: \t### cmd_exec_log: got negative exit, returning\n"
+#define DBGMSG_CLOGI_EXECERR "Cmd: \t### cmd_exec_log: got negative exit,\
+	returning\n"
 #define DBGMSG_CLOGI_GOT "Cmd: \t got %d cmds\n"
 #define DBGMSG_CLOGI_GOT2 "Cmd: \t### _do_log_commands got cmd:%s\n"
 #define DBGMSG_CLOGI_GOT3 "Cmd: \t### _do_log_commands got exit:%d\n"

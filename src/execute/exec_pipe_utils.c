@@ -50,9 +50,9 @@ int	exec_close_pipes(int **fildes, int cmd_count)
 	while (++i < cmd_count - 1)
 	{
 		if (0 != close(fildes[i][0]))
-			return(perror(EMSG_CLOSE), ERR_CLOSE);
+			return (perror(EMSG_CLOSE), ERR_CLOSE);
 		if (0 != close(fildes[i][1]))
-			return(perror(EMSG_CLOSE), ERR_CLOSE); 
+			return (perror(EMSG_CLOSE), ERR_CLOSE);
 	}
 	return (0);
 }

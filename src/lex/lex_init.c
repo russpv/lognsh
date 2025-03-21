@@ -1,6 +1,5 @@
 #include "lex_int.h"
 
-
 static inline void	_init_lexer_state(t_lex *lexer, int start_state)
 {
 	if (NORMAL == start_state)
@@ -39,7 +38,7 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 {
 	t_lex	*lexer;
 
-	debug_print(_MOD_": %s\n", __FUNCTION__);
+	debug_print(_MOD_ ": %s\n", __FUNCTION__);
 	lexer = myalloc(&(get_mem(state)->list), sizeof(t_lex));
 	if (lexer)
 	{
@@ -55,7 +54,8 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 		lexer->keep_dollar = LEXERKEEP$;
 		register_lexer_destroy(state, destroy_lexer);
 		if (false == _allocate_buf_and_hasht(get_mem(state), lexer))
-			exit_clean(&get_mem(state)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+			exit_clean(&get_mem(state)->list, ENOMEM, __FUNCTION__,
+				EMSG_MALLOC);
 		build_hasht(get_mem(state), lexer);
 	}
 	return (lexer);
@@ -64,12 +64,12 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 /* Doesn't free raw_string */
 void	destroy_lexer(t_state *s, void *instance)
 {
-	t_lex	*lexer;
-	t_mem_mgr *m;
-	
+	t_lex		*lexer;
+	t_mem_mgr	*m;
+
 	m = get_mem(s);
 	lexer = (t_lex *)instance;
-	debug_print(_MOD_": %s...\n", __FUNCTION__);
+	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
 	if (!lexer)
 		return ;
 	if (lexer->buf)

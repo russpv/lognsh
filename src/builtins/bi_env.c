@@ -35,6 +35,6 @@ int	bi_env(t_state *s, char **argv, int argc)
 		print_custom_err(CMD_NAME, EMSG_ENV);
 		return (ERR_GENERAL);
 	}
-	env_print(get_sh_env_list(s));
+	env_print(get_env_list(s));
 	return (0);
 }

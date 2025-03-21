@@ -18,8 +18,8 @@
  */
 int	bi_echo(t_state *s, char **argv, int argc)
 {
-	int		i;
-	int		suppress_newline;
+	int	i;
+	int	suppress_newline;
 
 	(void)s;
 	i = 1;

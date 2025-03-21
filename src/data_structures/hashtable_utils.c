@@ -6,7 +6,7 @@ void	*ht_get_payload(struct s_ht_entry *e)
 }
 
 /* Optionally copies the data before assigning it. */
-static int	_install_data(t_mem_mgr *m, struct s_ht_entry **np, void *data,\
+static int	_install_data(t_mem_mgr *m, struct s_ht_entry **np, void *data,
 		void *(*cpy)(t_mem_node *, void *))
 {
 	if (NULL != data)
@@ -23,7 +23,8 @@ static int	_install_data(t_mem_mgr *m, struct s_ht_entry **np, void *data,\
 	return (0);
 }
 
-static int		_init_node(t_mem_mgr *m, t_ht ht, struct s_ht_entry **np, char *name)
+static int	_init_node(t_mem_mgr *m, t_ht ht, struct s_ht_entry **np,
+		char *name)
 {
 	unsigned int	hashval;
 
@@ -45,7 +46,7 @@ static int		_init_node(t_mem_mgr *m, t_ht ht, struct s_ht_entry **np, char *name
 /* Makes new entry the head for the hash bucket
  * Returns NULL if name is already present
  */
-struct s_ht_entry	*ht_install(t_mem_mgr *m, t_ht ht, char *name, void *data,\
+struct s_ht_entry	*ht_install(t_mem_mgr *m, t_ht ht, char *name, void *data,
 		void *(*cpy_data)(t_mem_node *, void *))
 {
 	struct s_ht_entry	*np;

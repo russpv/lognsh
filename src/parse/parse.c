@@ -1,11 +1,11 @@
 #include "parse_int.h"
 
-#define LMSG_IN _MOD_": \t###### %s ####### \n"
-#define DMSG_GOT _MOD_": %s: got tok of %s \n"
-#define DBGMSG_PNODE_STOP _MOD_": reached end of tokens\n"
-#define DBGMSG_PNODE_NOTPROC _MOD_": not a proc...\n"
-#define DBGMSG_PNODE_NOTCMD _MOD_": not a cmd...\n"
-#define DBGMSG_PNODE_NOTPIPE _MOD_": not a pipe...\n"
+#define LMSG_IN _MOD_ ": \t###### %s ####### \n"
+#define DMSG_GOT _MOD_ ": %s: got tok of %s \n"
+#define DBGMSG_PNODE_STOP _MOD_ ": reached end of tokens\n"
+#define DBGMSG_PNODE_NOTPROC _MOD_ ": not a proc...\n"
+#define DBGMSG_PNODE_NOTCMD _MOD_ ": not a cmd...\n"
+#define DBGMSG_PNODE_NOTPIPE _MOD_ ": not a pipe...\n"
 
 /* Returns AST node.
  * Validates token type, parses args into list

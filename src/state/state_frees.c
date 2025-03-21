@@ -41,7 +41,7 @@ void	s_free_cmd(t_state *state)
 // Note: req'd to release dup'd subword aggregation
 void	s_free_tmp(t_state *s)
 {
-	t_mem_mgr *m;
+	t_mem_mgr	*m;
 
 	m = get_mem(s);
 	if (s->tmp)

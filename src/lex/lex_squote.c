@@ -7,18 +7,19 @@
  */
 static inline int	_load_buf(t_lex *lexer)
 {
-	debug_print(_MOD_": %s, ptr:_%c_\n", __FUNCTION__, *lexer->ptr);
+	debug_print(_MOD_ ": %s, ptr:_%c_\n", __FUNCTION__, *lexer->ptr);
 	if ((unsigned char)OP_SQUOTE == *lexer->ptr)
 	{
 		lexer->ptr++;
-		return (debug_print(_MOD_": found closing quote\n"), 1);
+		return (debug_print(_MOD_ ": found closing quote\n"), 1);
 	}
 	else
 	{
 		if (lexer->buf_idx < LEX_BUFSZ - 1)
 		{
 			if ((unsigned char)OP_NULL == *lexer->ptr)
-				return (debug_print(_MOD_": found null before closing quote\n"), 1);
+				return (debug_print(_MOD_ ": found null before closing quote\n"),
+					1);
 			lexer->buf[(lexer->buf_idx)] = *lexer->ptr;
 			(lexer->buf_idx)++;
 		}
@@ -38,13 +39,14 @@ int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print(_MOD_ YELLOW": STATE: %s, ptr:_%c_\n"RESET, __FUNCTION__, *lexer->ptr);
+	debug_print(_MOD_ YELLOW ": STATE: %s, ptr:_%c_\n" RESET, __FUNCTION__,
+		*lexer->ptr);
 	while (++lexer->ptr)
 		if (1 == _load_buf(lexer))
 			break ;
 	if ((unsigned char)OP_NULL == *lexer->ptr)
 	{
-		debug_print(_MOD_": WARNING: FOUND NULL\n");
+		debug_print(_MOD_ ": WARNING: FOUND NULL\n");
 		lexer->input_incomplete = true;
 	}
 	if (0 == ft_strlen(lexer->buf))
@@ -56,8 +58,6 @@ int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 		return (ERR_GENERAL);
 	if (0 != add_token(get_mem(s), lexer, token))
 		return (ERR_GENERAL);
-	
-	//lexer->ptr++;
+	// lexer->ptr++;
 	return (0);
 }
-

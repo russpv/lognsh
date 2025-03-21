@@ -5,7 +5,8 @@ int	tokenize_null(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print(_MOD_ YELLOW": STATE: %s, ptr:_%c_\n"RESET, __FUNCTION__, *lexer->ptr);
+	debug_print(_MOD_ YELLOW ": STATE: %s, ptr:_%c_\n" RESET, __FUNCTION__,
+		*lexer->ptr);
 	if (lexer)
 	{
 		if (lexer->last_grp_tok)

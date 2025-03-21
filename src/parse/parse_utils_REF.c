@@ -11,34 +11,13 @@ static void	_destroy_arr(t_mem_mgr *m, char **arr)
 		m->dealloc(&m->list, arr[i++]);
 	m->dealloc(&m->list, arr);
 }
-/*
-static int	_update_combined_subtokens(char **old, const char *curr, const char *prev)
-{
-	char *new_s; 
-
-	if (old)
-	{
-		new_s = ft_strjoin(*old, curr);
-		if (NULL == new_s)
-			return (free(*old), err(EMSG_MALLOC), ERR_MEM);
-		free(*old);
-		*old = new_s;
-	}
-	else
-	{
-		*old = ft_strjoin(curr, prev);
-		if (NULL == *old)
-			return (err(EMSG_MALLOC), ERR_MEM);
-	}
-	return (0);
-}*/
 
 // Deep copies linked list of arguments to char **array
 char	**list_to_array(t_mem_mgr *m, t_list *args, int argc)
 {
 	char	**array;
 	int		i;
-	char *new_s;
+	char	*new_s;
 
 	array = m->f(&m->list, sizeof(char *) * (size_t)(argc + 1));
 	if (NULL == array)
@@ -62,23 +41,27 @@ char	**list_to_array(t_mem_mgr *m, t_list *args, int argc)
 	return (array);
 }
 
-
-static void _print_arg_data(t_arg_data *data) 
+static void	_print_arg_data(t_arg_data *data)
 {
 	if (DEBUG && isatty(STDOUT_FILENO))
 	{
-		if (!data) {
+		if (!data)
+		{
 			printf("  t_arg_data is NULL\n");
-			return;
+			return ;
 		}
 		printf("  raw: _%s_\n", data->raw ? data->raw : "(null)");
 		printf("  tmp: ");
-		if (data->tmp) {
-			for (int i = 0; data->tmp[i] != NULL; i++) {
+		if (data->tmp)
+		{
+			for (int i = 0; data->tmp[i] != NULL; i++)
+			{
 				printf("%s ", data->tmp[i]);
 			}
 			printf("\n");
-		} else {
+		}
+		else
+		{
 			printf("(null)\n");
 		}
 		printf("  lst: %p\n", data->lst_tokens ? data->lst_tokens : 0x0);
@@ -89,14 +72,16 @@ static void _print_arg_data(t_arg_data *data)
 	}
 }
 
-void debug_print_list(t_list *head) 
+void	debug_print_list(t_list *head)
 {
-    t_list *current = head;
-    int i = 0;
-	
+	t_list	*current;
+	int		i;
+
+	current = head;
+	i = 0;
 	if (DEBUG && isatty(STDOUT_FILENO))
 	{
-		while (current) 
+		while (current)
 		{
 			printf("Node %d:\n", i);
 			_print_arg_data((t_arg_data *)current->content);
@@ -105,3 +90,4 @@ void debug_print_list(t_list *head)
 		}
 	}
 }
+

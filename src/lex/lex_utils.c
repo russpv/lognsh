@@ -1,6 +1,5 @@
 #include "lex_int.h"
 
-
 inline bool	is_too_long(const char *input)
 {
 	if (NULL == input)
@@ -63,10 +62,10 @@ size_t	ft_varnamelen(const char *c)
 /* Puts single input char on buf, and increments idx and ptr */
 int	put_on_buf(t_lex *l)
 {
-	debug_print(_MOD_": %s: _%c_\n", __FUNCTION__, *l->ptr);
+	debug_print(_MOD_ ": %s: _%c_\n", __FUNCTION__, *l->ptr);
 	if (l->buf_idx < LEX_BUFSZ - 1)
 		l->buf[(l->buf_idx)++] = *l->ptr++;
 	else
-		return (print_lex_buffer_overflow(), ERR_BUFFLOW);	
+		return (print_lex_buffer_overflow(), ERR_BUFFLOW);
 	return (0);
 }

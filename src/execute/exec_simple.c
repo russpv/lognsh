@@ -16,15 +16,15 @@
  * manages the various I/O redirections
  * And cleans up state (useless to child)
  */
- 
+
 static int	_do_child_ops(t_state *s)
 {
 	const t_cmd	*c = (const t_cmd *)get_cmd(s);
 	const char	*fullpath = (const char *)c_get_fullpath((t_cmd *)c);
 	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
 	const char	**envp = (const char **)get_envp(s);
-    debug_print("Child: envp=%p", (void *)envp);
 
+	debug_print("Child: envp=%p", (void *)envp);
 	if (!argv)
 		return (err(EMSG_NULLARGV), -1);
 	if (!fullpath)
@@ -62,7 +62,7 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi)
 	if (0 != exit_code)
 		debug_print(DMSG_ERRBLTIN, __FUNCTION__);
 	restore_redirs((t_cmd *)c);
-	set_exit_status(s, exit_code); //update s->current_exit_code
+	set_exit_status(s, exit_code); // update s->current_exit_code
 	s_free_cmd(s);
 	return (exit_code); // return bi exit codes
 }
@@ -84,7 +84,8 @@ int	exec_fork_execve(t_state *s)
 	{
 		sig_reset_handlers();
 		if (0 != _do_child_ops(s))
-			exit_clean(&get_mem(s)->list, ERR_CHILD_FAILED, __FUNCTION__, EMSG_CHILD);
+			exit_clean(&get_mem(s)->list, ERR_CHILD_FAILED, __FUNCTION__,
+				EMSG_CHILD);
 	}
 	else if (p < 0)
 		return (perror(EMSG_FORK), ERR_FORK);

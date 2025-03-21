@@ -5,7 +5,7 @@ static inline void	_init_parser(t_state *s, t_parser *p)
 	p->ast = NULL;
 	p->curr_idx = -1;
 	p->curr_cmd = NULL;
-	p->last_node = NULL;	
+	p->last_node = NULL;
 	p->ref_node = NULL;
 	p->parse_error = false;
 	p->global_state = s;
@@ -22,7 +22,8 @@ t_parser	*create_parser(t_state *s, t_list *tokens)
 	p = (t_parser *)get_mem(s)->f(&get_mem(s)->list, sizeof(t_parser));
 	if (p)
 	{
-		p->tokens = ft_lstcopy_tmp(get_mem(s), tokens, copy_token, destroy_token);
+		p->tokens = ft_lstcopy_tmp(get_mem(s), tokens, copy_token,
+				destroy_token);
 		if (!p->tokens)
 			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		p->curr_tok = tokens;

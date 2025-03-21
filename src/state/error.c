@@ -1,6 +1,6 @@
 #include "error.h"
 
-extern	char	*get_input(t_state *s);
+extern char	*get_input(t_state *s);
 
 /* Prints errno err for 'dingus' */
 void	print_perror(const char *dingus)
@@ -21,7 +21,8 @@ void	print_custom_err(const char *dingus, const char *msg)
 }
 
 /* Prints msg for the 'dingus' (no \n added) */
-void	print_custom_err_err(const char *dingus, const char *gizmo, const char *msg)
+void	print_custom_err_err(const char *dingus, const char *gizmo,
+		const char *msg)
 {
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	write(STDERR_FILENO, ": ", ft_strlen(": "));
@@ -64,8 +65,8 @@ void	print_lex_buffer_overflow(void)
 
 void	print_parse_error(t_state *s, const char *word, size_t pos)
 {
-	const char *input = (const char *)get_input(s);
-	size_t i;
+	const char	*input = (const char *)get_input(s);
+	size_t		i;
 
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	printf(": parse error near `%s` in:\n", word);

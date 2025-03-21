@@ -2,10 +2,9 @@
 #ifndef EXECUTE_H
 # define EXECUTE_H
 
-# include "../state/state.h"
 # include "../builtins/bi.h"
 # include "../command/command.h"
-
+# include "../state/state.h"
 # include <stdbool.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -16,10 +15,10 @@ typedef struct s_node	t_ast_node;
 typedef int				(*t_execute_fn)(t_state *s, t_ast_node *node);
 typedef int				(*t_builtin_fn)(t_state *s, char **args, int argc);
 
-
 int						redirect(int *to, char *topath, int from,
 							bool ifappend);
-int						exec_create_pipes(t_mem_mgr *m, int ***fildes, int cmd_count);
+int						exec_create_pipes(t_mem_mgr *m, int ***fildes,
+							int cmd_count);
 
 /* Atomic commands */
 int						exec_fork_execve(t_state *s);
@@ -37,6 +36,5 @@ int						exec_close_pipes(int **fildes, int cmd_count);
 
 int						get_exit_status(int status);
 int						waitchild(int *status, int childc);
-
 
 #endif

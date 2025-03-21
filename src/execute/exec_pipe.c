@@ -78,7 +78,7 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
  * Calling command func will wait for exit status
  * Parent does not wait (until all pipe commands are forked).
  */
-int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,\
+int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,
 		t_execute_fn executor)
 {
 	pid_t	pid;

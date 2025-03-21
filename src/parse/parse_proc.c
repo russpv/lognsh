@@ -7,7 +7,8 @@ static t_ast_node	*_init_proc(t_mem_mgr *m)
 
 	proc_node = m->f(&m->list, sizeof(struct s_node));
 	if (!proc_node)
-		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Memory allocation error for process node\n");
+		exit_clean(&m->list, ENOMEM, __FUNCTION__,
+			"Memory allocation error for process node\n");
 	proc_node->type = AST_NODE_PROC;
 	proc_node->data.proc.cmds = NULL;
 	proc_node->data.proc.cmdc = 0;
@@ -33,7 +34,8 @@ static int	_add_cmd(t_parser *p, t_ast_node *proc_node)
 		proc_node->data.proc.cmdc++;
 	}
 	else
-		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, "Memory allocation error while creating \
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__,
+			"Memory allocation error while creating \
 			proc's command node\n");
 	return (0);
 }
@@ -75,7 +77,7 @@ static int	_process_proc(t_state *s, t_parser *p, t_ast_node *proc_node)
  * Example behavior:
  * - In expressions like `cmd && cmd2 | cmd3`, the swap happens because
  *   `|` has higher precedence than `&&`.
- * - In `cmd | cmd3 && cmd4`, parsing stops when `&&` is encountered 
+ * - In `cmd | cmd3 && cmd4`, parsing stops when `&&` is encountered
  *   after the pipeline.
  * - Complex expressions such as `(cmd && cmd2 | cmd3 && cmd4)` will result
  *   in a series of swaps for logical and subordinate pipe node.
@@ -84,12 +86,12 @@ static int	_process_proc(t_state *s, t_parser *p, t_ast_node *proc_node)
  *
  * Notes:
  * - In `_add_cmd`, the next operator is checked after the parsed command.
- *   	If it does not terminate the expression, (and it is a lower 
+ *   	If it does not terminate the expression, (and it is a lower
  * 		priority node) `last_node` is not added as the proc node child.
  * - `_process_proc` will then parse the next node (as a grouping node) that
- * 	 	associates with the higher-priority node just parsed. This node 
+ * 			associates with the higher-priority node just parsed. This node
  * 		will not return until `)` is encountered, as it has the lowest priority.
- * - For `process_log`, the same logic applies. `process_pipe` does 
+ * - For `process_log`, the same logic applies. `process_pipe` does
  * 		not swap nodes since it works only on `proc` or `atom`, and `proc`
  * 		is always prefixed (not infixed).
  * - p->last_node is how information is obtained from sub-nodes.
@@ -111,7 +113,8 @@ t_ast_node	*parse_proc(t_state *s, t_parser *p)
 	debug_print(_MOD_ ": parse_proc tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = _init_proc(p->mmgr);
 	if (NULL == ast_node)
-		exit_clean(&p->mmgr->list,ENOMEM, __FUNCTION__, "Allocation failed for proc node\n");
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__,
+			"Allocation failed for proc node\n");
 	res = _process_proc(s, p, ast_node);
 	if (0 != res)
 	{

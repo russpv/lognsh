@@ -31,8 +31,8 @@ void	lex_print(t_lex *lexer)
 	ft_lstiter(lexer->token_list, tok_print);
 }
 
-/* for ht_install this will return a new copy of the argument 
- * But we don't need to use this 
+/* for ht_install this will return a new copy of the argument
+ * But we don't need to use this
  */
 void	*lex_copy_ht_data(t_mem_node *head, void *data)
 {

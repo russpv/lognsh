@@ -15,7 +15,7 @@
 #define EMSG_BADMALLOC "memory allocation failed.\n"
 
 // Returns 0 if error.
-// updates an existing environment variable's value 
+// updates an existing environment variable's value
 int	update_existing_var(t_mem_mgr *m, t_env *existing_key, const char *value)
 {
 	char	*new_value;

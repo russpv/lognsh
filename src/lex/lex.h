@@ -1,13 +1,11 @@
 #ifndef LEX_H
 # define LEX_H
 
+# include "../builtins/bi.h"
 # include "../data_structures/hashtable.h"
 # include "../data_structures/llist.h"
 # include "../data_structures/stack.h"
-
 # include "../token/token.h"
-# include "../builtins/bi.h"
-
 # include <stdbool.h>
 
 /* Error handling */

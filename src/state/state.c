@@ -1,6 +1,5 @@
 #include "state_int.h"
 
-
 static inline void	_init_state_ptrs(t_state *s)
 {
 	s->current_parser = NULL;

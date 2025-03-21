@@ -6,7 +6,8 @@
 
 static int	_setup_pipes(t_mem_mgr *m, t_cmd *c)
 {
-	int res;
+	int	res;
+
 	res = exec_create_pipes(m, &c->fildes, c->curr_cmdc);
 	if (0 != res)
 		return (err(EMSG_CPIPE_PIPE), res);

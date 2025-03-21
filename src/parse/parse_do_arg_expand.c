@@ -33,7 +33,7 @@ int	check_special_expansions(t_state *s, const char *buf, char **value)
 		debug_print(DMSG_OUT, __FUNCTION__, *value);
 		return (-1);
 	}
-	return (ERR_GENERAL);	
+	return (ERR_GENERAL);
 }
 
 /* Looks for env values of key loaded in buf */
@@ -53,12 +53,13 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
 	}
 	else
 	{
-		*value = get_sh_env(s, buf);
+		*value = get_env_val(s, buf);
 		if (*value)
 		{
 			new_raw = ft_strdup_tmp(get_mem(s), *value);
 			if (!new_raw)
-				exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_PATH_MALLOC);
+				exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__,
+					EMSG_PATH_MALLOC);
 		}
 		get_mem(s)->dealloc(&get_mem(s)->list, c->raw);
 		((t_arg_data *)c)->raw = new_raw;
@@ -111,7 +112,8 @@ static int	_p_do_grparg_processing(t_state *s, void *c)
 	content = (t_arg_data *)c;
 	if (NULL == c || false == content->is_grouparg)
 		return (0);
-	debug_print("%s: got list: %p exp:%d glob:%d\n", __FUNCTION__, content->lst_tokens, content->do_expansion, content->do_globbing);
+	debug_print("%s: got list: %p exp:%d glob:%d\n", __FUNCTION__,
+		content->lst_tokens, content->do_expansion, content->do_globbing);
 	if (content->do_expansion)
 	{
 		res = lstiter_state(s, content->lst_tokens, tok_do_expansion);
@@ -143,7 +145,6 @@ int	p_is_arg_null(void *c)
 		return (1);
 	return (0);
 }
-
 
 /* Replaces any expansions and inserts any globbing
  * results into args list, converts to array

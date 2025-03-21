@@ -4,11 +4,10 @@
 # include "../../include/libft.h"
 # include "../data_structures/llist.h"
 # include "../data_structures/stack.h"
-# include "../state/state.h"
-
-# include "../token/token.h"
-# include "../lex/lex.h"
 # include "../execute/execute.h"
+# include "../lex/lex.h"
+# include "../state/state.h"
+# include "../token/token.h"
 
 //# include "../utils/log.h"
 
@@ -76,17 +75,17 @@ int								p_do_arg_processing(t_state *s, t_ast_node *a,
 									char ***args);
 int								p_do_redir_processing(t_state *s,
 									t_ast_node *a);
-
 int								p_do_redirections(t_ast_node *a);
-int								p_set_cmd(t_mem_mgr *m, t_ast_node *a, const char *cmd);
-int								p_update_argc(t_ast_node *a, int amt);
 
-void							print_ast(t_ast_node *ast, int depth);
+int								p_set_cmd(t_mem_mgr *m, t_ast_node *a,
+									const char *cmd);
+int								p_update_argc(t_ast_node *a, int amt);
 
 void							destroy_redir(t_mem_mgr *m, void *in);
 
 bool							is_globbing(t_tok *tok);
 
+void							print_ast(t_ast_node *ast, int depth);
 void							debug_print_list(t_list *head);
 
 /*  Expansions */

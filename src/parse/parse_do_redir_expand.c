@@ -4,11 +4,11 @@
 #define EMSG_PATH_MALLOC "Allocation for path value failed.\n"
 #define EMSG_NULL_EXPAN "Null expansion variable.\n"
 
-#define DEBUGMSG_REDIRP_ANNOUNCE _MOD_": p_do_redir_processing...\n"
-#define DBGMSG_REDIRP_GOT _MOD_": p_do_redir_processing got: glob_%d exp_%d\n"
+#define DEBUGMSG_REDIRP_ANNOUNCE _MOD_ ": p_do_redir_processing...\n"
+#define DBGMSG_REDIRP_GOT _MOD_ ": p_do_redir_processing got: glob_%d exp_%d\n"
 
-#define DEBUGMSG_DOEXP_ANNOUNCE _MOD_": p_do_expansion got: %s\n"
-#define DEBUGMSG_DOEXP_RES _MOD_": p_do_expansion found: %s\n"
+#define DEBUGMSG_DOEXP_ANNOUNCE _MOD_ ": p_do_expansion got: %s\n"
+#define DEBUGMSG_DOEXP_RES _MOD_ ": p_do_expansion found: %s\n"
 
 /* Looks for env values of key loaded in buf */
 static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf,
@@ -26,12 +26,13 @@ static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf,
 	}
 	else
 	{
-		*value = get_sh_env(s, buf);
+		*value = get_env_val(s, buf);
 		if (*value)
 		{
 			new_fn = ft_strdup_tmp(get_mem(s), *value);
 			if (!new_fn)
-				exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_PATH_MALLOC);
+				exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__,
+					EMSG_PATH_MALLOC);
 			get_mem(s)->dealloc(&get_mem(s)->list, r->filename);
 			((t_redir_data *)r)->filename = new_fn;
 		}
@@ -54,7 +55,7 @@ static int	_insert_expanded_var(t_state *s, char *buf, char **ptr,
 	if (res > 0)
 		return (res);
 	if (res == 0)
-		new_val = get_sh_env(s, buf);
+		new_val = get_env_val(s, buf);
 	offset = *ptr - r->heredoc_body;
 	if (ft_strlen(r->heredoc_body) + ft_strlen(new_val) > MAX_RAW_INPUT_LEN)
 		return (ERR_BUFFLOW);
@@ -66,7 +67,7 @@ static int	_insert_expanded_var(t_state *s, char *buf, char **ptr,
 	get_mem(s)->dealloc(&get_mem(s)->list, r->heredoc_body);
 	r->heredoc_body = ft_strdup_tmp(get_mem(s), new_body);
 	if (NULL == r->heredoc_body)
-		exit_clean(&get_mem(s)->list,ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	*ptr = r->heredoc_body + offset - 1;
 	return (0);
 }
@@ -174,7 +175,8 @@ int	p_do_redir_processing(t_state *s, t_ast_node *a)
 		if (0 != res)
 			return (res);
 		if (true == a->data.cmd.do_redir_globbing)
-			orig_filen = ft_lstiterstr_mem(get_mem(s), redirs, p_do_globbing_redirs);
+			orig_filen = ft_lstiterstr_mem(get_mem(s), redirs,
+					p_do_globbing_redirs);
 		if (NULL != orig_filen)
 		{
 			print_ambiguous_redirect(((t_redir_data *)orig_filen)->filename);

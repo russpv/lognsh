@@ -2,10 +2,10 @@
 # define ERROR_H
 
 # include "../globals/globals.h"
-# include <signal.h>
-# include <unistd.h>
-# include <stdio.h>
 # include <errno.h>
+# include <signal.h>
+# include <stdio.h>
+# include <unistd.h>
 
 # define ERR_NONE 0
 # define ERR_AMBIGUOUS_REDIR 1
@@ -69,10 +69,12 @@ void							print_lex_buffer_overflow(void);
 void							print_ambiguous_redirect(const char *orig_fn);
 void							print_too_many_args(const char *caller);
 void							print_redirect_error(char *topath);
-void							print_custom_err(const char *dingus, \
+void							print_custom_err(const char *dingus,
 									const char *msg);
-void	print_custom_err_err(const char *dingus, const char *gizmo, const char *msg);
-void							print_parse_error(t_state *s, const char *word, size_t pos);
+void							print_custom_err_err(const char *dingus,
+									const char *gizmo, const char *msg);
+void							print_parse_error(t_state *s, const char *word,
+									size_t pos);
 
 /* To avoid circular includes: */
 extern void						set_error(t_state *s, int e);

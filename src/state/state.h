@@ -2,12 +2,11 @@
 # define STATE_H
 
 # include "../../include/libft.h"
+# include "../builtins/env/env.h"
+# include "../mem/mem.h"
+# include "../signal/signal.h"
 # include "../utils/debug.h"
 # include "../utils/log.h"
-# include "../mem/mem.h"
-# include "../builtins/env/env.h"
-# include "../signal/signal.h"
-
 # include "error.h"
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -77,13 +76,13 @@ char							*get_input(t_state *s);
 t_cmd							*get_cmd(t_state *s);
 
 char							**get_envp(t_state *s);
-char							*get_sh_env(t_state *s, const char *key);
-char							**get_sh_path(t_state *s);
+char							*get_env_val(t_state *s, const char *key);
+char							**get_env_path(t_state *s);
 char							*get_tmp(t_state *s);
 t_lex							*get_lexer(t_state *s);
 
-t_env							*get_sh_env_list(t_state *s);
-t_env							**get_sh_env_list_add(t_state *s);
+t_env							*get_env_list(t_state *s);
+t_env							**get_env_list_add(t_state *s);
 char							*get_pwd(t_state *s);
 // int	set_sh_env(t_state *s, const char *key, const char *value);
 // For export()
@@ -100,11 +99,10 @@ void							s_free_cmd_lex_parse(t_state *state);
 
 bool							has_sh_envp(t_state *s);
 
-
 extern void						*myalloc(t_mem_node *head, size_t size);
 extern void						myfree(t_mem_node *head, void *alloc);
 void							exit_clean(t_mem_node *n, int exit_status,
 									const char *caller, const char *errmsg);
-t_mem_mgr 						*get_mem(t_state *s);
+t_mem_mgr						*get_mem(t_state *s);
 
 #endif

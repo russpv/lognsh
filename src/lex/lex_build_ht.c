@@ -2,8 +2,9 @@
 
 static inline int	_insert_builtins(t_mem_mgr *m, t_ht ht)
 {
-	int			i;
-	const char	*cmd[] = {
+	int	i;
+
+	const char *cmd[] = {
 		BI_ECHO,
 		BI_CD,
 		BI_PWD,
@@ -13,11 +14,10 @@ static inline int	_insert_builtins(t_mem_mgr *m, t_ht ht)
 		BI_EXIT,
 		BI_EXEC,
 	};
-
 	i = -1;
 	while (++i < BI_COUNT)
-		if (!ht_install(m, ht, (char *)cmd[i], lex_create_ht_node(m, false, TOK_BI),
-				NULL))
+		if (!ht_install(m, ht, (char *)cmd[i], lex_create_ht_node(m, false,
+					TOK_BI), NULL))
 			return (1);
 	return (0);
 }
@@ -39,7 +39,6 @@ static inline void	_insert_reserved_words(t_mem_mgr *m, t_ht ht)
 	ht_install(m, ht, WD_FOR, lex_create_ht_node(m, false, TOK_FOR), NULL);
 	ht_install(m, ht, WD_IN, lex_create_ht_node(m, false, TOK_IN), NULL);
 }*/
-
 static inline void	_insert_operators(t_mem_mgr *m, t_ht ht)
 {
 	ht_install(m, ht, "(", lex_create_ht_node(m, false, TOK_OPEN_PAREN), NULL);
@@ -50,11 +49,14 @@ static inline void	_insert_operators(t_mem_mgr *m, t_ht ht)
 	ht_install(m, ht, OP_ORIF, lex_create_ht_node(m, false, TOK_ORIF), NULL);
 	ht_install(m, ht, ">", lex_create_ht_node(m, true, TOK_REDIRECT_OUT), NULL);
 	ht_install(m, ht, "<", lex_create_ht_node(m, true, TOK_REDIRECT_IN), NULL);
-	ht_install(m, ht, OP_DGREAT, lex_create_ht_node(m, false, TOK_REDIRECT_APPEND),
+	ht_install(m, ht, OP_DGREAT, lex_create_ht_node(m, false,
+			TOK_REDIRECT_APPEND), NULL);
+	ht_install(m, ht, OP_DLESS, lex_create_ht_node(m, false, TOK_HEREDOC),
 		NULL);
-	ht_install(m, ht, OP_DLESS, lex_create_ht_node(m, false, TOK_HEREDOC), NULL);
-	ht_install(m, ht, "\'", lex_create_ht_node(m, false, TOK_SINGLE_QUOTE), NULL);
-	ht_install(m, ht, "\"", lex_create_ht_node(m, false, TOK_DOUBLE_QUOTE), NULL);
+	ht_install(m, ht, "\'", lex_create_ht_node(m, false, TOK_SINGLE_QUOTE),
+		NULL);
+	ht_install(m, ht, "\"", lex_create_ht_node(m, false, TOK_DOUBLE_QUOTE),
+		NULL);
 }
 
 /* Creates reference t_tok records, and t_ht_data records
@@ -67,7 +69,8 @@ void	build_hasht(t_mem_mgr *m, t_lex *lexer)
 
 	assert(NULL != ht);
 	ht_install(m, ht, "\0", lex_create_ht_node(m, false, TOK_EOF), NULL);
-	ht_install(m, ht, "$?", lex_create_ht_node(m, false, TOK_EXIT_STATUS), NULL);
+	ht_install(m, ht, "$?", lex_create_ht_node(m, false, TOK_EXIT_STATUS),
+		NULL);
 	ht_install(m, ht, "'\n'", lex_create_ht_node(m, false, TOK_NEWLINE), NULL);
 	_insert_operators(m, ht);
 	_insert_builtins(m, ht);
