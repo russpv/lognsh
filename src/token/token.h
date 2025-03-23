@@ -54,15 +54,15 @@
 
 enum					e_tok_type
 {
-	TOK_WORD,       // command names, built-ins
-					// In the shell command language, a token other than
-					// an operator. In some cases a word is also a portion
-					// of a word token: in the various forms of parameter
-					// expansion, such as ${name-word}, and variable
-					// assignment, such as name=word, the word is the
-					// portion of the token depicted by word. The concept
-					// of a word is no longer applicable following word
-					// expansions-only fields remain.
+	TOK_WORD, // command names, built-ins
+				// In the shell command language, a token other than
+				// an operator. In some cases a word is also a portion
+				// of a word token: in the various forms of parameter
+				// expansion, such as ${name-word}, and variable
+				// assignment, such as name=word, the word is the
+				// portion of the token depicted by word. The concept
+				// of a word is no longer applicable following word
+				// expansions-only fields remain.
 	TOK_GROUP_WORD, // for metas
 	TOK_NAME,
 	// In the shell command language, a word consisting
@@ -109,7 +109,7 @@ typedef struct s_tok	t_tok;
 
 t_tok					*create_token(t_mem_mgr *st, const char *s, int type,
 							size_t pos);
-// t_tok					*create_ht_token(void);
+void					*create_tmp_token(t_mem_mgr *mgr, const void *s);
 void					*copy_token(t_mem_mgr *st, const void *tok);
 void					destroy_token(t_mem_mgr *mgr, void *token);
 
@@ -133,8 +133,14 @@ bool					tok_get_issubtoken(t_tok *token);
 bool					tok_isgrouptoken(t_tok *token);
 
 int						tok_print(void *token);
+void					tok_print_list(t_list *head);
 
 int						tok_do_grp_combine(t_state *s, void *c);
 int						tok_do_expansion(t_state *s, void *c);
+int						tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node,
+							void *c);
+t_list					*split_word(t_mem_mgr *mgr, const char *word);
+int						do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos,
+							t_list **ins_lst);
 
 #endif

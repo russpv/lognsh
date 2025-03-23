@@ -16,8 +16,8 @@
 # include "bi.h"
 
 # define _MOD_ "Bi"
-# define EMSG_OPT "No options provided. Sorry!\n"
-# define EMSG_ARGC "No args for you! (Not implemented)\n"
+# define EMSG_OPT "No options provided. Sorry!"
+# define EMSG_ARGC "No args for you! (Not implemented)"
 
 int		bi_echo(t_state *s, char **args, int argc);
 int		bi_pwd(t_state *s, char **args, int argc);
@@ -27,11 +27,6 @@ int		bi_unset(t_state *s, char **argv, int argc);
 int		bi_cd(t_state *s, char **args, int argc);
 int		bi_exit(t_state *s, char **args, int argc);
 int		bi_exec(t_state *s, char **args, int argc);
-
-// int	env_set_value(t_env **env_list, const char *key, const char *value);
-t_env	*find_env_key(t_env *env_list, const char *key);
-int		update_existing_var(t_mem_mgr *m, t_env *existing_key,
-			const char *value);
 
 // export helper functions (bi_export_do 1 & 2)
 int		process_arg_update_add(t_state *s, const char *arg, char *equal_pos,

@@ -46,24 +46,18 @@ static void	_print_arg_data(t_arg_data *data)
 	if (DEBUG && isatty(STDOUT_FILENO))
 	{
 		if (!data)
-		{
-			printf("  t_arg_data is NULL\n");
-			return ;
-		}
+			return ((void)printf("  t_arg_data is NULL\n"));
 		printf("  raw: _%s_\n", data->raw ? data->raw : "(null)");
 		printf("  tmp: ");
 		if (data->tmp)
 		{
 			for (int i = 0; data->tmp[i] != NULL; i++)
-			{
 				printf("%s ", data->tmp[i]);
-			}
 			printf("\n");
 		}
 		else
-		{
 			printf("(null)\n");
-		}
+		printf("  grouparg: %s\n", data->is_grouparg ? "true" : "false");
 		printf("  lst: %p\n", data->lst_tokens ? data->lst_tokens : 0x0);
 		printf("  option: %s\n", data->option ? "true" : "false");
 		printf("  do_globbing: %s\n", data->do_globbing ? "true" : "false");

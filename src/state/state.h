@@ -12,9 +12,9 @@
 # include <readline/readline.h>
 # include <stdbool.h>
 
-# define SHELL_NAME "minish"
 # define MAX_RAW_INPUT_LEN 2056
 # define MAX_ENVVAR_LEN 1024 // length of variable names
+# define OLDPWD_KEY "OLDPWD"
 
 # ifdef TESTMODE
 #  define TESTFLAG 1
@@ -70,6 +70,8 @@ void							set_lexer(t_state *state, t_lex *l);
 void							set_input(t_state *s, char *input);
 void							set_command(t_state *s, t_cmd *c);
 void							set_tmp(t_state *s, char *str);
+void							set_pwd(t_state *s);
+int								set_oldpwd(t_state *s, const char *caller);
 
 int								*get_status(t_state *s);
 char							*get_input(t_state *s);
@@ -84,6 +86,8 @@ t_lex							*get_lexer(t_state *s);
 t_env							*get_env_list(t_state *s);
 t_env							**get_env_list_add(t_state *s);
 char							*get_pwd(t_state *s);
+char							*get_prompt(t_state *s);
+
 // int	set_sh_env(t_state *s, const char *key, const char *value);
 // For export()
 

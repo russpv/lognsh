@@ -41,7 +41,7 @@ void				ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
 						t_list **node, void (*del)(t_mem_mgr *, void *));
 
 t_list				*ft_lstmap_tmp(t_mem_mgr *mgr, t_list *lst,
-						void *(*f)(t_mem_mgr *, void *),
+						void *(*f)(t_mem_mgr *, const void *),
 						void (*del)(t_mem_mgr *, void *));
 
 void				ft_lstiter_ins_rwd_tmp(t_mem_mgr *mgr, t_list **lst,

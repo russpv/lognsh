@@ -72,6 +72,7 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 		if (!grp_token)
 			return (err(EMSG_MALLOC), NULL);
 		lexer->last_grp_tok = grp_token;
+		//lexer->do_wordsplit && tok_set_dquotes(grp_token);
 		debug_print(_MOD_ ": %s: Created GROUP token\n", __FUNCTION__);
 	}
 	token = create_token(m, lexer->buf, type, (size_t)(lexer->ptr
@@ -80,8 +81,7 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 	{
 		if (true == lexer->is_subtoken)
 			tok_set_subtoken(token);
-		if (IN_DOUBLE_QUOTES == lexer->state)
-			tok_set_dquotes(token);
+		!lexer->do_wordsplit && tok_set_dquotes(token);
 		if (true == lexer->do_globbing)
 		{
 			tok_set_globbing(token);

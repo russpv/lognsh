@@ -20,9 +20,8 @@ typedef struct s_list
 
 typedef struct s_list	t_list;
 
-
 /* Sort comparitor */
-extern	int ft_strcmplow(const char *a, const char *b);
+extern int				ft_strcmplow(const char *a, const char *b);
 
 void					ft_lstadd_back(t_list **lst, t_list *new);
 void					ft_lstadd_front(t_list **lst, t_list *new);
@@ -34,6 +33,8 @@ int						ft_lstiter(t_list *lst, int (*f)(void *));
 char					*ft_lstiterstr(t_list *lst, int (*f)(void *));
 
 t_list					*ft_lstlast(t_list *lst);
+t_list					*ft_lstfirst(t_list *lst);
+
 t_list					*ft_lstmap(t_list *lst, void *(*f)(void *),
 							void (*del)(void *));
 t_list					*ft_lstnew(void *content);
@@ -52,9 +53,9 @@ void					ft_lstadd_insert(t_list **lst, t_list *new);
 void					ft_lstdelone_rwd(t_list **lst, t_list **node,
 							void (*del)(void *));
 
-t_list *ft_lstsort(t_list **lst);
-void	ft_lstprint(t_list *lst);
-void	ft_lstprint_betw(t_list *lst, t_list *end);
-int	ft_lstsize_betw(t_list *lst, t_list *last);
+t_list					*ft_lstsort(t_list **lst);
+void					ft_lstprint(t_list *lst);
+void					ft_lstprint_betw(t_list *lst, t_list *end);
+int						ft_lstsize_betw(t_list *lst, t_list *last);
 
 #endif

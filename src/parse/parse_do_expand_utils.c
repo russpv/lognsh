@@ -21,36 +21,32 @@ int	lstiter_state(t_state *s, t_list *lst, int (*f)(t_state *, void *))
 	return (0);
 }
 
-// TODO FIX THE DELETE AND INVALID LIST PREV ISSUE
+// Returns the args removed as a negative qty
 int	lstiter_state_rwd_trim(t_state *s, t_list **lst, int (*test)(void *),
 		void (*del)(t_mem_mgr *, void *))
 {
 	int			res;
-	t_mem_mgr	*m;
-	t_list		**lst_rear;
+	t_list		*lst_rear;
 	t_list		*tmp;
+	int			args_removed;
 
-	m = get_mem(s);
+	args_removed = 0;
 	if (lst == NULL)
 		return (ERR_ARGS);
-	lst_rear = lst;
-	*lst_rear = ft_lstlast(*lst);
-	while (*lst_rear)
+	lst_rear = ft_lstlast(*lst);
+	while (lst_rear)
 	{
 		res = 0;
-		fprintf(stderr, "HAHA\n");
-		tmp = (*lst_rear)->prev;
-		res = test((*lst_rear)->content);
+		tmp = (lst_rear)->prev;
+		res = test((lst_rear)->content);
 		if (res > 0)
 		{
-			fprintf(stderr, "HOHO\n");
-			ft_lstdelone_rwd_tmp(m, lst, lst_rear, del);
+			ft_lstdelone_rwd_tmp(get_mem(s), lst, &lst_rear, del);
+			args_removed--;
 		}
 		if (res < 0)
 			return (ERR_GENERAL);
-		if (NULL == tmp)
-			*lst = *lst_rear;
-		*lst_rear = tmp;
+		lst_rear = tmp;
 	}
-	return (0);
+	return (args_removed);
 }

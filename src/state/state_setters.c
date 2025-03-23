@@ -26,3 +26,4 @@ void	set_tmp(t_state *s, char *str)
 		myfree(&get_mem(s)->list, s->tmp);
 	s->tmp = ft_strdup_tmp(get_mem(s), str);
 }
+

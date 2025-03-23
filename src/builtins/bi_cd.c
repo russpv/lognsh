@@ -13,6 +13,7 @@
 #include "bi_int.h"
 
 #define CMD_NAME "cd"
+#define PWD_KEY "PWD"
 #define EMSG_OLDPWDNOTSET "OLDPWD not set.\n"
 #define EMSG_INVLD "invalid state or arguments\n"
 #define EMSG_NOFILE "No such file or directory\n"
@@ -20,60 +21,81 @@
 #define EMSG_NOHOME "HOME not set.\n"
 #define EMSG_BADMALLOC "memory allocation failed.\n"
 
-static int	_set_env_value(t_mem_mgr *m, t_env **env_list, const char *key,
-		const char *value)
-{
-	t_env	*node;
+#define MAX_BUFSZ 1024
 
-	if (!env_list || !key)
-		return (1);
-	node = find_env_key(*env_list, key);
-	if (node)
-	{
-		if (!update_existing_var(m, node, value))
-			return (1);
-	}
-	else
-	{
-		node = create_env_node(m, key, value);
-		if (!node)
-			return (1);
-		env_add_node(env_list, node);
-	}
+static int	_go_up(char *pwdbuf)
+{
+	size_t	len;
+	size_t	del_len;
+	char	*marker;
+
+	marker = ft_strrchr(pwdbuf, '/');
+	if (NULL == marker)
+		return (ERR_GENERAL);
+	len = (size_t)(marker - pwdbuf);
+	if (0 == len)
+		return (ERR_GENERAL);
+	if (len > MAX_BUFSZ - 1)
+		return (ERR_BUFFLOW);
+	del_len = ft_strnlen(pwdbuf, MAX_BUFSZ) - len;
+	ft_memset(pwdbuf + len, 0, del_len);
 	return (0);
+}
+
+// Returns NULL if invalid abs path
+char	*make_absolute(t_state *s, const char *relpath)
+{
+	char	*pwd;
+	char	buf[MAX_BUFSZ];
+
+	ft_memset(buf, 0, MAX_BUFSZ);
+	pwd = get_env_val(s, PWD_KEY);
+	fprintf(stderr, "PWD:%s\n", pwd);
+	ft_memmove(buf, pwd, ft_strlen(pwd));
+	while (*relpath && 0 == ft_strncmp(relpath, "..", 2))
+	{
+		relpath += 2;
+		if (0 != _go_up(buf))
+			return (NULL);
+		if (0 == ft_strncmp(relpath, "/", 1))
+			relpath++;
+	}
+	buf[ft_strnlen(buf, MAX_BUFSZ)] = '/';
+	return (ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, buf, relpath));
 }
 
 // Wraps chdir()
 static int	_change_dir(t_state *s, const char *target)
 {
 	char	*new_dir;
+	char	*alt_dir;
 	char	*old_pwd;
 
 	if (0 == ft_strcmp(target, "-"))
 	{
-		new_dir = env_getenv_value("OLDPWD", get_env_list(s));
+		new_dir = env_getenv_value(OLDPWD_KEY, get_env_list(s));
 		if (!new_dir || ft_strcmp(new_dir, "") == 0)
 			return (print_custom_err(CMD_NAME, EMSG_OLDPWDNOTSET), 1);
 	}
 	else
 		new_dir = (char *)target;
+	set_oldpwd(s, CMD_NAME);
 	if (0 != chdir(new_dir))
 	{
-		print_custom_err_err(CMD_NAME, target, EMSG_NOFILE);
-		return (ERR_GENERAL);
+		if (NULL == ft_strchr(new_dir, '/'))
+		{
+			alt_dir = make_absolute(s, new_dir);
+			if (0 != chdir(alt_dir))
+				return (print_custom_err_err(CMD_NAME, target, strerror(errno)),
+					ERR_GENERAL);
+		}
 	}
-	old_pwd = get_pwd(s);
-	if (old_pwd && 0 != _set_env_value(get_mem(s), get_env_list_add(s),
-			"OLDPWD", old_pwd))
-	{
-		print_custom_err(CMD_NAME, EMSG_BADMALLOC);
-		return (ERR_GENERAL);
-	}
-	myfree(&get_mem(s)->list, old_pwd);
+	set_pwd(s);
 	return (0);
 }
 
-/* Does what it says on the tin */
+/* Change the current directory to DIR.  The default DIR is the value of the
+HOME shell variable. If DIR is "-", it is converted to $OLDPWD. */
 int	bi_cd(t_state *s, char **args, int argc)
 {
 	char	*target;

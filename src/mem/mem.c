@@ -28,6 +28,12 @@ void	mem_mgr_init(t_mem_mgr *m)
 	m->dealloc = myfree;
 	mem_init(&m->list);
 }
+void	mem_struct_init(t_mem_mgr *mgr, struct s_mem_utils *m)
+{
+	m->f = mgr->f;
+	m->u = mgr->dealloc;
+	m->head = &mgr->list;
+}
 
 void	mem_free(t_mem_block *m)
 {

@@ -1,5 +1,4 @@
 #include "../include/libft.h"
-
 #include <stdio.h>
 
 /* STRCHR
@@ -34,4 +33,31 @@ char	*ft_strchr(const char *s, int c_in)
 		else if (!*p++)
 			return (NULL);
 	}
+}
+
+/* STRCHRS
+** Returns ptr to first occurrence of any char in char set
+** or NULL
+** UNPROTECTED
+** Note: gcc runs it faster w/o longword checking or independent
+** loop instrucs
+*/
+char	*ft_strchrs(const char *raw, const char *chars)
+{
+	char		c;
+	const char	*res;
+	char		*nearest;
+
+	if (!raw || !chars)
+		return (NULL);
+	nearest = NULL;
+	while (*chars)
+	{
+		c = *chars;
+		res = (const char *)ft_strchr(raw, c);
+		if (res && (NULL == nearest || res < nearest))
+			nearest = (char *)res;
+		chars++;
+	}
+	return (nearest);
 }

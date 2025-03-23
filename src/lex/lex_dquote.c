@@ -50,7 +50,6 @@ static inline t_tok	*_process_dquote_logic(t_state *s, t_lex *lexer)
 		lexer->ptr++;
 		st_int_pop(lexer->stack);
 		lexer->state = ON_EOF;
-		getchar();
 		return (lex_create_token(get_mem(s), lexer, TOK_WORD));
 			// creates final token
 	}
@@ -66,7 +65,7 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print(_MOD_ ": %s: %c\n", __FUNCTION__, *lexer->ptr);
+	debug_print(_MOD_ ": %s: _%c_\n", __FUNCTION__, *lexer->ptr);
 	token = NULL;
 	if (lexer->ptr)
 	{
@@ -86,7 +85,6 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 		if (false == is_normal_delim(lexer, 0))
 			lexer->is_subtoken = true;
 		token = lex_create_token(get_mem(s), lexer, TOK_WORD);
-			// tokenize subtoken
 	}
 	return (token);
 }

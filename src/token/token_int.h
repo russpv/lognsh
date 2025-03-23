@@ -19,7 +19,7 @@ typedef struct s_normal_tok
 	bool				do_globbing;
 	bool				do_expansion;
 	bool				is_subtoken;
-	bool in_dquotes; // Does this do anything?
+	bool				in_dquotes;
 }						t_normal_tok;
 
 typedef struct s_meta_tok
@@ -27,6 +27,7 @@ typedef struct s_meta_tok
 	t_list				*tokens;
 	bool				do_globbing;
 	bool				do_expansion;
+	bool				in_dquotes;
 	size_t				pos;
 	size_t				tokc;
 }						t_meta_tok;

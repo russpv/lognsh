@@ -15,6 +15,7 @@
 #define CMD_NAME "env"
 #define EMSG_ENV "Failed to retrieve environment.\n"
 
+// Prints the shell's copy of env
 int	bi_env(t_state *s, char **argv, int argc)
 {
 	(void)argc;

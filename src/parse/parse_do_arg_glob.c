@@ -107,14 +107,14 @@ t_list	*match_glob(t_mem_mgr *m, const char *pattern)
 }
 
 /*
- * lst is incoming list of glob matches to be inserted
+ * ins_lst is incoming list of glob matches to be inserted
  * at the lst_node position, overwriting it.
  * content is the existing arg node.
  * Deletes lst_node, deep copies glst and inserts
  * at lst_node position.
  * glst destroyed in arg_destroy
  */
-static int	_do_ops(t_mem_mgr *mgr, t_list **lst_node, t_list **glst,
+int	do_arg_inserts(t_mem_mgr *mgr, t_list **lst_node, t_list **ins_lst,
 		t_arg_data *content)
 {
 	t_list	*new_arg_data_lst;
@@ -122,22 +122,22 @@ static int	_do_ops(t_mem_mgr *mgr, t_list **lst_node, t_list **glst,
 
 	new_arg_data_lst = NULL;
 	new_arg = NULL;
-	if (ft_lstsize(*glst) > 1)
+	if (ft_lstsize(*ins_lst) > 1)
 	{
 		ft_lstdelone_rwd_tmp(mgr, lst_node, lst_node, destroy_arg);
-		new_arg_data_lst = ft_lstmap_tmp(mgr, *glst, create_arg_data_node_deep,
+		new_arg_data_lst = ft_lstmap_tmp(mgr, *ins_lst, create_arg_data_node_deep,
 				destroy_arg);
 		ft_lstadd_insert(lst_node, new_arg_data_lst);
-		ft_lstclear_str_tmp(mgr, glst);
+		ft_lstclear_str_tmp(mgr, ins_lst);
 	}
 	else
 	{
-		new_arg = ft_strdup_tmp(mgr, (*glst)->content);
+		new_arg = ft_strdup_tmp(mgr, (*ins_lst)->content);
 		if (!new_arg)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		mgr->dealloc(&mgr->list, content->raw);
 		content->raw = new_arg;
-		ft_lstclear_str_tmp(mgr, glst);
+		ft_lstclear_str_tmp(mgr, ins_lst);
 	}
 	return (0);
 }
@@ -178,7 +178,7 @@ int	p_do_globbing_args(t_mem_mgr *mgr, t_list **lst_node, void *lst_c)
 		if (lst)
 		{
 			debug_print(DBGMSG_MATCHES, ft_lstsize(lst), lst->content);
-			res = _do_ops(mgr, lst_node, &lst, arg);
+			res = do_arg_inserts(mgr, lst_node, &lst, arg);
 			if (0 != res)
 				return (res);
 		}

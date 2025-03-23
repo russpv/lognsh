@@ -110,6 +110,7 @@ static t_tok	*_match_normal(t_state *s, t_lex *lexer)
 /* Expected to add multiple tokens to the llist
  * Adds token to llist when ptr advances to a
  * delimiter char or transition char. Tokenizes transition operator.
+ * If starting on a normal delim, commits any incomplete grp token.
  */
 int	tokenize_normal(t_state *s, t_lex *lexer)
 {
@@ -118,6 +119,8 @@ int	tokenize_normal(t_state *s, t_lex *lexer)
 	debug_print(_MOD_ YELLOW ": STATE: %s\n" RESET, __FUNCTION__);
 	while (lexer->ptr && !is_transition_delim(lexer))
 	{
+		if (is_normal_delim(lexer, 0) && lexer->last_grp_tok)
+			add_grptoken(get_mem(s), lexer);
 		token = _match_normal(s, lexer);
 		if (lexer->ptr)
 			debug_print(_MOD_ ": ptr at:_%c_\n", *lexer->ptr);

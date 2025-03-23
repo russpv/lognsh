@@ -1,6 +1,7 @@
 #include "lex_int.h"
 
-// Note: this offers an override to terminate lexing
+// Stops tokenizer loop from running
+// ON_EOF can be set only after NULL token is added
 static inline bool	_handle_eof_state(t_lex *lexer)
 {
 	if (ON_EOF == lexer->state)
@@ -20,17 +21,19 @@ static inline bool	_handle_quote_state(t_lex *lexer)
 		if ((unsigned char)*lexer->ptr == OP_DQUOTE
 			&& IN_DOUBLE_QUOTES == st_int_peek(lexer->stack))
 		{
-			debug_print(_MOD_ ": %s: Popping stack\n", __FUNCTION__,
+			debug_print(_MOD_ ": %s: Popping stack and transitioning \n", __FUNCTION__,
 				*lexer->ptr);
 			st_int_pop(lexer->stack);
+			lexer->do_wordsplit = 1;
 			lexer->ptr++;
-			return (true);
+			return (false);
 		}
 		debug_print(_MOD_ ": %s: Transitioning to IN_DOUBLE_QUOTES state %c\n",
 			__FUNCTION__, *lexer->ptr);
 		if (IN_DOUBLE_QUOTES != st_int_peek(lexer->stack))
 			st_int_push(lexer->stack, IN_DOUBLE_QUOTES);
 		lexer->state = IN_DOUBLE_QUOTES;
+		lexer->do_wordsplit = 0;
 		lexer->tokenizer = tokenize_double_quotes;
 		return (true);
 	}
@@ -107,11 +110,11 @@ int	do_state_transition(t_lex *lexer)
 		return (0);
 	if (_handle_eof_state(lexer))
 		return (0);
+	if (_handle_null_state(lexer))
+		return (0);
 	if (_handle_dollar_state(lexer))
 		return (0);
 	if (_handle_quote_state(lexer))
-		return (0);
-	if (_handle_null_state(lexer))
 		return (0);
 	lexer->state = NORMAL;
 	lexer->tokenizer = tokenize_normal;

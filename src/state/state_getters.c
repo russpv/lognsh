@@ -35,3 +35,12 @@ char *get_input(t_state *s)
 		return (NULL);
 	return (s->input);
 }
+
+char	*get_prompt(t_state *s)
+{
+	if (!s)
+		return (NULL);
+	if (!s->prompt)
+		return (DFL_PROMPT);
+	return (get_env_val(s, PROMPT_KEY));
+}

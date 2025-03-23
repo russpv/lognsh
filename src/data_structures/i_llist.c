@@ -1,7 +1,7 @@
 #include "i_llist.h"
 
-#define DMSG_GOT "%p got lst = %p, list = %p\n"
-#define DMSG_DEL "%p deleting node = %p\n"
+#define DMSG_GOT "%s: got lst = %p, list = %p\n"
+#define DMSG_DEL "%s: deleting node = %p\n"
 
 /* LSTNEW
 ** Returns new linked list list ptr with one node
@@ -206,17 +206,17 @@ void	ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst, t_list **node,
 		return ;
 	debug_print(DMSG_IN, __FUNCTION__, (void *)(*node),
 		(void *)((*node)->content), (void *)lst);
-	tmp = (*node)->prev;
+	tmp = (*node)->next;
 	if ((*node)->prev)
 		(*node)->prev->next = (*node)->next;
 	if ((*node)->next)
 		(*node)->next->prev = (*node)->prev;
 	if ((*node)->content)
 		del(mgr, (*node)->content);
-	mgr->dealloc(&mgr->list, *node);
-	*node = NULL;
 	if (*lst == *node)
 		*lst = tmp;
+	mgr->dealloc(&mgr->list, *node);
+	*node = NULL;
 	debug_print(DMSG_OUT, __FUNCTION__);
 }
 
@@ -228,7 +228,7 @@ void	ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst, t_list **node,
 ** UNPROTECTED: returns NULL only when !lst
 */
 t_list	*ft_lstmap_tmp(t_mem_mgr *mgr, t_list *lst, void *(*f)(t_mem_mgr *,
-			void *), void (*del)(t_mem_mgr *, void *))
+			const void *), void (*del)(t_mem_mgr *, void *))
 {
 	t_list	*newlst;
 	t_list	*new;
@@ -256,18 +256,19 @@ t_list	*ft_lstmap_tmp(t_mem_mgr *mgr, t_list *lst, void *(*f)(t_mem_mgr *,
 	}
 	return (newlst);
 }
-#define DBGMSG_LSTINSRWD_ANNOUNCE "lstiter_ins_rwd: got lst: %p, list:%p.\n"
-#define DBGMSG_LSTINSRWD_NULLARG "lstiter_ins_rwd: NULL input.\n"
-#define DBGMSG_LSTINSRWD_ENDNODE "lstiter_ins_rwd: Starting from end: %p\n"
+
+#define DBGMSG_LSTINSRWD_ANNOUNCE "%s: got lst: %p, list:%p.\n"
+#define DBGMSG_LSTINSRWD_NULLARG "%s: NULL input.\n"
+#define DBGMSG_LSTINSRWD_ENDNODE "%s: Starting from end: %p\n"
 #define DBGMSG_LSTINSRWD_PREF \
-	"lstiter_ins_rwd: Iterating node: %p, content: \
+	"%s: Applying f to node: %p, content: \
 	%p\n"
 #define DBGMSG_LSTINSRWD_POSTF \
-	"lstiter_ins_rwd: Function f applied to node: \
+	"%s: f applied to node: \
 	%p\n"
-#define DBGMSG_LSTINSRWD_SUCCESS "lstiter_ins_rwd: ft_lstiter_ins_rwd Iteration complete.\n"
+#define DBGMSG_LSTINSRWD_SUCCESS "%s: Iteration complete.\n"
 
-/* Iterates BACKWARDS and applies f */
+/* Iterates BACKWARDS and applies insertion func f */
 void	ft_lstiter_ins_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
 		int (*f)(t_mem_mgr *, t_list **, void *))
 {
@@ -275,21 +276,21 @@ void	ft_lstiter_ins_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
 	t_list	*tmp;
 
 	if (lst == NULL)
-		return (debug_print(DBGMSG_LSTINSRWD_NULLARG));
+		return (debug_print(DBGMSG_LSTINSRWD_NULLARG, __FUNCTION__));
 	lst_rear = ft_lstlast(*lst);
-	debug_print(DBGMSG_LSTINSRWD_ENDNODE, (void *)lst_rear);
+	debug_print(DBGMSG_LSTINSRWD_ENDNODE, __FUNCTION__, (void *)lst_rear);
 	while (lst_rear)
 	{
 		tmp = lst_rear->prev;
-		debug_print(DBGMSG_LSTINSRWD_PREF, (void *)lst_rear,
+		debug_print(DBGMSG_LSTINSRWD_PREF, __FUNCTION__, (void *)lst_rear,
 			(void *)lst_rear->content);
 		f(mgr, &(lst_rear), lst_rear->content);
-		debug_print(DBGMSG_LSTINSRWD_POSTF, (void *)lst_rear);
+		debug_print(DBGMSG_LSTINSRWD_POSTF, __FUNCTION__, (void *)lst_rear);
 		if (NULL == tmp)
 			*lst = lst_rear;
 		lst_rear = tmp;
 	}
-	debug_print(DBGMSG_LSTINSRWD_SUCCESS);
+	debug_print(DBGMSG_LSTINSRWD_SUCCESS, __FUNCTION__);
 }
 
 /* STRDUP

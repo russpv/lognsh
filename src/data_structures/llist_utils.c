@@ -20,6 +20,18 @@ t_list	*ft_lstlast(t_list *lst)
 	return (lst);
 }
 
+/* LSTFIRST
+** Returns last node of a list
+*/
+t_list	*ft_lstfirst(t_list *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->prev)
+		lst = lst->prev;
+	return (lst);
+}
+
 /*LSTMAP
 ** Returns new (doubly) linked list head ptr using func f
 ** on each node of an existing list.

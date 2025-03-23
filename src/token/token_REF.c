@@ -5,6 +5,7 @@ static void	_init_group_token(t_tok *token, size_t pos)
 	token->class = GROUP;
 	token->t.meta.pos = pos;
 	token->t.meta.tokc = 0;
+	token->t.meta.in_dquotes = false;
 	token->t.meta.do_expansion = false;
 	token->t.meta.do_globbing = false;
 	token->t.meta.tokens = NULL;
@@ -52,6 +53,21 @@ t_tok	*create_token(t_mem_mgr *mgr, const char *s, int type, size_t pos)
 	return (token);
 }
 
+void	*create_tmp_token(t_mem_mgr *mgr, const void *s)
+{
+	t_tok	*token;
+
+	if (!s)
+		return (NULL);
+	token = mgr->f(&mgr->list, sizeof(t_tok));
+	if (token)
+	{
+		debug_print(_MOD_": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s, TOK_WORD);
+		_init_normal_token(mgr, token, (const char *)s, TOK_WORD, -1);
+	}
+	return (token);
+}
+
 /* void star due to linked list destroy method */
 void	destroy_token(t_mem_mgr *mgr, void *token)
 {
@@ -77,10 +93,12 @@ void	*copy_token(t_mem_mgr *mgr, const void *tok)
 	t_tok	*t;
 	t_tok	*new_t;
 
+	if (!mgr || !tok)
+		return (NULL);
 	t = (t_tok *)tok;
 	new_t = mgr->f(&mgr->list, sizeof(t_tok));
 	if (new_t == NULL)
-		return (err(EMSG_MALLOC), NULL);
+		exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	new_t->class = t->class;
 	if (GROUP == t->class)
 	{

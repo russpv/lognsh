@@ -98,6 +98,7 @@ typedef struct s_cmd
 
 	bool					do_globbing;
 	bool					do_expansion;
+	bool					do_wordsplit;
 	bool					do_redir_globbing;
 	bool					do_redir_expansion;
 	bool					has_grouptoks;
@@ -220,7 +221,7 @@ t_ast_node					*parse_logical(t_state *s, t_parser *p);
 int							process_redir(t_parser *p, t_ast_node *cmd_node);
 void						*create_arg_data_node(void *content);
 void						*create_arg_data_node_deep(t_mem_mgr *mgr,
-								void *content);
+								const void *content);
 t_pstack					*create_stack(t_mem_mgr *m);
 void						destroy_stack(t_mem_mgr *m, t_pstack *s);
 int							push(t_pstack *stack);
@@ -233,6 +234,8 @@ int							p_do_globbing_redirs(t_mem_mgr *mgr, void *c);
 int							check_special_expansions(t_state *s,
 								const char *buf, char **value);
 t_list						*match_glob(t_mem_mgr *mgr, const char *pattern);
+int							do_arg_inserts(t_mem_mgr *mgr, t_list **lst_node,
+								t_list **ins_lst, t_arg_data *content);
 
 /* Tests */
 bool						is_option(t_tok *tok);

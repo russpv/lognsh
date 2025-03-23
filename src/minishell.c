@@ -22,7 +22,7 @@ static int	_do_loop(t_state *s)
 	t_ast_node	*ast;
 
 	g_last_signal = -1;
-	set_input(s, readline(PROMPT));
+	set_input(s, readline(get_prompt(s)));
 	if (NULL == get_input(s))
 	{
 		write(STDOUT_FILENO, "exit\n", sizeof("exit\n") - 1);

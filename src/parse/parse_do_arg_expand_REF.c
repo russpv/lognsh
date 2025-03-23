@@ -101,18 +101,54 @@ static int	_p_do_arg_expansion(t_state *s, void *c)
 	return (0);
 }
 
-// runs through llist and calls iterator on any group token llists
+
+// Explicit empty strings retained as empty strings. 
+// Unquoted nulls resulting from expansions are removed.
+// Quoted nulls resulting from expansions are retained as empty strings, (done prior)
+// unless part of a non-null expansion word. -d'' is -d
+// Inserts the list at lst_node position
+int	p_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node, void *lst_c)
+{
+	t_arg_data	*arg;
+	t_list		*lst;
+	int			res;
+
+	res = 0;
+	lst = NULL;
+	arg = (t_arg_data *)lst_c;
+	if (false == arg->in_dquotes && true == arg->do_expansion)
+	{
+		debug_print(_MOD_ ": %s: got _%s_ \n", __FUNCTION__, arg->raw);
+		lst = split_word(mgr, arg->raw);
+		if (lst)
+		{
+			if (lst->content)
+				debug_print("%d %s\n", ft_lstsize(lst), lst->content);
+			res = do_arg_inserts(mgr, lst_node, &lst, arg);
+			if (0 != res)
+				return (res);
+		}
+		debug_print(_MOD_ ": %s: done. \n", __FUNCTION__);
+	}
+	return (0);
+}
+
+// Passed to arg llist iterator to iterate any group arg's token llist 
+// if (null) results, still returns empty heap string,
+// since a grouparg implies non-null word
+// Ignores all (null) token raws
+// Inserts into arg llist as needed
 static int	_p_do_grparg_processing(t_state *s, void *c)
 {
 	t_arg_data	*content;
-	t_list		**lst;
+	t_list		**lst; //not needed?
 	int			res;
 
 	res = 0;
 	content = (t_arg_data *)c;
 	if (NULL == c || false == content->is_grouparg)
 		return (0);
-	debug_print("%s: got list: %p exp:%d glob:%d\n", __FUNCTION__,
+	debug_print(_MOD_ ": %s: got list: %p exp:%d glob:%d\n", __FUNCTION__,\
 		content->lst_tokens, content->do_expansion, content->do_globbing);
 	if (content->do_expansion)
 	{
@@ -120,14 +156,19 @@ static int	_p_do_grparg_processing(t_state *s, void *c)
 		if (0 != res)
 			return (res);
 	}
+	tok_print_list(content->lst_tokens);
+	if (content->do_expansion && !content->in_dquotes)
+		ft_lstiter_ins_rwd_tmp(get_mem(s), &content->lst_tokens, tok_do_wordsplits); // TODO, mark which ones can't combine
+	tok_print_list(content->lst_tokens);
 	if (content->do_globbing)
 	{
 		lst = &content->lst_tokens;
 		ft_lstiter_ins_rwd_tmp(get_mem(s), lst, p_do_globbing_args);
 	}
-	res = lstiter_state(s, content->lst_tokens, tok_do_grp_combine);
+	res = lstiter_state(s, content->lst_tokens, tok_do_grp_combine); // TODO, differentially combine based on flag
 	if (0 == res)
-		content->raw = ft_strdup_tmp(get_mem(s), get_tmp(s));
+		content->raw = ft_strdup_tmp(get_mem(s), get_tmp(s)); //TODO, tmp needs to be a lst
+	//ft_lstiter_ins_rwd_tmp(get_mem(s), lst, ...); //TODO, insert any separate words as separate args
 	debug_print("%s: returning str: %s\n", __FUNCTION__, content->raw);
 	return (res);
 }
@@ -146,29 +187,30 @@ int	p_is_arg_null(void *c)
 	return (0);
 }
 
-/* Replaces any expansions and inserts any globbing
- * results into args list, converts to array
- * and returns that array via args ptr.
+/* Does expansions: Shell parameters, word splitting,
+ * filename expansions (glob*) as needed.
+ * Then converts to array and returns that array via args ptr.
  */
 int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 {
 	t_list	**argl;
 	int		res;
 
-	argl = NULL;
 	res = 0;
 	if (a->type != AST_NODE_CMD)
 		return (ERR_INVALID_CMD_TYPE);
 	argl = p_get_args(a);
-	test_prev_integrity(*argl);
 	if (*argl)
 	{
+		debug_print_list(*argl);
 		if (a->data.cmd.has_grouptoks)
-			res = lstiter_state(s, *argl, _p_do_grparg_processing);
+			res = lstiter_state(s, *argl, _p_do_grparg_processing); // Need to pass **lst? can get lst back
 		else
 		{
 			if (a->data.cmd.do_expansion)
 				res = lstiter_state(s, *argl, _p_do_arg_expansion);
+			if (a->data.cmd.do_expansion && a->data.cmd.do_wordsplit)
+				ft_lstiter_ins_rwd_tmp(get_mem(s), argl, p_do_wordsplits);
 			if (a->data.cmd.do_globbing)
 			{
 				debug_print(DEBUGMSG_ARGP_PRE_G, argl, *argl); // TODO remove
@@ -180,7 +222,9 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 			return (res);
 		a->data.cmd.argc = ft_lstsize(*argl);
 		debug_print_list(*argl);
-		lstiter_state_rwd_trim(s, argl, p_is_arg_null, destroy_arg);
+		res = lstiter_state_rwd_trim(s, argl, p_is_arg_null, destroy_arg);
+		if (res < 0)
+			a->data.cmd.argc += res;
 		debug_print_list(*argl);
 		*args = list_to_array(get_mem(s), *argl, a->data.cmd.argc);
 		if (NULL == *args)

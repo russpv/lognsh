@@ -47,8 +47,15 @@ char					*env_get_value(t_env *node);
 t_env					*env_get_next(t_env *node);
 
 // env setters
+int						env_upsert_value(t_mem_mgr *m, t_env **env_list,
+							const char *key, const char *value);
 void					env_set_node_value(t_mem_mgr *m, t_env *node,
 							const char *value);
 void					env_set_next(t_env *node, t_env *next);
+
+// int	env_set_value(t_env **env_list, const char *key, const char *value);
+t_env					*find_env_key(t_env *env_list, const char *key);
+int						update_existing_var(t_mem_mgr *m, t_env *existing_key,
+							const char *value);
 
 #endif

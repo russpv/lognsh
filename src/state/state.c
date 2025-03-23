@@ -11,6 +11,7 @@ static inline void	_init_state_ptrs(t_state *s)
 	s->destroy_parser = NULL;
 	s->tmp = NULL;
 	s->pwd = NULL;
+	s->prompt = DFL_PROMPT;
 }
 
 t_state	*init_state(char **envp)
@@ -31,6 +32,7 @@ t_state	*init_state(char **envp)
 	s->sh_env_list = copy_envp(&s->mem_mgr, envp);
 	if (!s->sh_env_list)
 		return (free(s), exit(ENOMEM), NULL);
+	init_env_vars(s);
 	sig_set_handlers();
 	return (s);
 }
@@ -50,5 +52,7 @@ void	destroy_state(t_state *s)
 		free(s->input);
 	if (s->sh_env_list)
 		env_free_list(get_mem(s), s->sh_env_list);
+	if (s->pwd)
+		get_mem(s)->dealloc(&get_mem(s)->list, s->pwd);
 	mem_free_all(&s->mem_mgr.list);
 }

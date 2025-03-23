@@ -15,7 +15,7 @@ static int	_handle_no_command(t_ast_node *a)
 /* Processes args and redirs. Stores several command parameters.
  * Puts node a into cmd c
  */
-static int	_do_ops(t_state *s, t_ast_node *a, t_cmd *c)
+static int	_do_args_redirs(t_state *s, t_ast_node *a, t_cmd *c)
 {
 	char	**args;
 	int		exit_code;
@@ -60,7 +60,7 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 		return (ERR_ARGS);
 	if (p_get_type(a) != AST_NODE_CMD)
 		return (ERR_INVALID_CMD_TYPE);
-	exit_code = _do_ops(s, a, c);
+	exit_code = _do_args_redirs(s, a, c);
 	if (ERR_AMBIGUOUS_REDIR == exit_code || NO_CMD == exit_code)
 		return (exit_code);
 	log_command_info((t_cmd *)c, a);

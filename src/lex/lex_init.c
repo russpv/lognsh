@@ -30,6 +30,7 @@ static inline void	_init_lexer_flags(t_lex *lexer)
 	lexer->escape_mode = false;
 	lexer->do_expansion = INITVAL;
 	lexer->do_globbing = INITVAL;
+	lexer->do_wordsplit = 1;
 	lexer->input_incomplete = false;
 	lexer->is_subtoken = false;
 }

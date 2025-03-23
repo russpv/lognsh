@@ -53,6 +53,8 @@ t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node,
 		arg->lst_tokens = ft_lstcopy_tmp(m, tok_get_tlist(tok), copy_token,
 				destroy_token);
 		arg->global_state = p->global_state;
+		if (false == arg->in_dquotes)
+			cmd_node->data.cmd.do_wordsplit = true;
 		if (true == arg->do_expansion)
 			cmd_node->data.cmd.do_expansion = true;
 		if (true == arg->do_globbing)
@@ -91,7 +93,7 @@ void	*create_arg_data_node(void *content)
  * Returns new void *content for llist construction/duplication.
  * Copies content.
  */
-void	*create_arg_data_node_deep(t_mem_mgr *mgr, void *content)
+void	*create_arg_data_node_deep(t_mem_mgr *mgr, const void *content)
 {
 	t_arg_data	*arg_data;
 

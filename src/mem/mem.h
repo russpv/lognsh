@@ -7,6 +7,7 @@
 t_mem_block	*mem_init_block(void);
 void		mem_init(t_mem_node *head);
 void		mem_mgr_init(t_mem_mgr *m);
+void		mem_struct_init(t_mem_mgr *m, struct s_mem_utils *s);
 
 void		mem_free(t_mem_block *m);
 int			mem_add_mem(t_mem_node *head, void *alloc, size_t size);
