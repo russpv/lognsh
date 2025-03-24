@@ -81,8 +81,8 @@
 #define CRESET "\e[0m"
 #define COLOR_RESET "\e[0m"
 
-# define RESET "\033[0m"
-# define GREEN "\033[32m"
+# define RESET "\001\033[0m\002"
+# define GREEN "\001\033[32m\002"
 # define BLUE "\033[34m"
 # define RED "\033[1;31m"
 # define YELLOW "\033[1;33m"
