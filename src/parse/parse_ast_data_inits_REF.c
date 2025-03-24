@@ -67,54 +67,28 @@ t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node,
 
 /* t_arg_data llist copy constructor using a llist of char*.
  * Returns new void *content for llist construction/duplication.
+ * Copies content.
  */
-void	*create_arg_data_node(void *content)
+void	*create_arg_data_node_deep(t_mem_mgr *mgr, const void *content)
 {
 	t_arg_data	*arg_data;
+	char		*raw;
 
-	content = (char *)content;
-	arg_data = malloc(sizeof(t_arg_data));
+	raw = (char *)content;
+	arg_data = mgr->f(&mgr->list, sizeof(t_arg_data));
 	if (arg_data)
 	{
+		arg_data->raw = ft_strdup_tmp(mgr, raw);
+		if (!arg_data->raw)
+			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		arg_data->do_expansion = false;
 		arg_data->do_globbing = false;
 		arg_data->global_state = NULL;
 		arg_data->in_dquotes = false;
 		arg_data->option = false;
 		arg_data->tmp = NULL;
-		arg_data->raw = content;
 		arg_data->is_grouparg = false;
 		arg_data->lst_tokens = NULL;
-	}
-	return ((void *)arg_data);
-}
-
-/* t_arg_data llist copy constructor using a llist of char*.
- * Returns new void *content for llist construction/duplication.
- * Copies content.
- */
-void	*create_arg_data_node_deep(t_mem_mgr *mgr, const void *content)
-{
-	t_arg_data	*arg_data;
-
-	content = (char *)content;
-	arg_data = mgr->f(&mgr->list, sizeof(t_arg_data));
-	if (arg_data)
-	{
-		arg_data->raw = ft_strdup_tmp(mgr, content);
-		if (arg_data->raw)
-		{
-			arg_data->do_expansion = false;
-			arg_data->do_globbing = false;
-			arg_data->global_state = NULL;
-			arg_data->in_dquotes = false;
-			arg_data->option = false;
-			arg_data->tmp = NULL;
-			arg_data->is_grouparg = false;
-			arg_data->lst_tokens = NULL;
-		}
-		else
-			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	return ((void *)arg_data);
 }

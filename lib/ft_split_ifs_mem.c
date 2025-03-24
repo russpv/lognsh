@@ -79,33 +79,62 @@ static char **_init_arr(struct s_mem_utils *m, size_t count)
 	return (arr);
 }
 
+char	*ft_skip_delims(char const *s, char const *ref)
+{
+	char *delims;
+	char *word;
+
+	if (!s || !ref)
+		return (NULL);
+	word = (char *)s;
+	while (*word)
+	{
+		delims = (char *)ref;
+		while (*delims)
+		{
+			if (*word == *delims)
+				break;
+			delims++;
+		}
+		if (0 == *delims)
+			return (word);
+		word++;
+	}
+	return (NULL);
+}
+
 /* SPLIT IFS
 ** Returns new C-strings split by string set (cannot have \0)
 ** Array is null terminated
-** Allows empty strings from consecutive c's
+** Skips initial whitespace
 */
 char	**ft_split_ifs_mem(struct s_mem_utils *m, char const *s, char const *set)
 {
 	char			**arr;
-	char const		*temp;
+	char			*temp;
 	size_t				count;
 	unsigned int	i;
+	char			*s2;
 
-	count = _get_word_count(s, set);
+	s2 = ft_skip_delims(s, set);
+	count = _get_word_count(s2, set);
 	arr = _init_arr(m, count); 
 	if (!arr)
 		return (NULL);
 	i = 0;
-	while (*s && count)
+	while (s2 && count)
 	{
-		temp = _get_temp(s, set); 
-		if (temp - s > 0)
+		if (!*s2)
+			break;
+		temp = _get_temp(s2, set); 
+		if (temp - s2 > 0)
 		{
 			if (!_copy_word(m, s, &(arr[i++]), temp - s))
 				return (_arr_free(m, arr, i), NULL);
 			--count;
 		}
 		s = temp + 1;
+		s2 = temp + 1;
 	}
 	return (arr);
 }

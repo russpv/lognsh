@@ -1,7 +1,32 @@
 #include "token_int.h"
 
 
+char	*_skip_delims(char const *s, char const *ref)
+{
+	char *delims;
+	char *word;
+
+	if (!s)
+		return (NULL);
+	word = (char *)s;
+	while (word && *word)
+	{
+		delims = (char *)ref;
+		while (*delims)
+		{
+			if (*word == *delims)
+				break;
+			delims++;
+		}
+		if (0 == *delims)
+			return (word);
+		word++;
+	}
+	return (NULL);
+}
+
 // Returns list of strings
+// Leading spaces are preserved!
 t_list	*split_word(t_mem_mgr *mgr, const char *word)
 {
 	t_list				*lst;
@@ -16,7 +41,7 @@ t_list	*split_word(t_mem_mgr *mgr, const char *word)
 	lst = NULL;
 	i = -1;
 	debug_print(_MOD_ ": %s: Got _%s_\n", __FUNCTION__, word);
-	if (NULL != ft_strchrs(word, IFS))
+	if (NULL != ft_strchrs(_skip_delims(word, IFS), IFS))
 	{
 		debug_print("splitting\n");
 		split_raw = ft_split_ifs_mem(&mem, word, IFS);
@@ -63,9 +88,11 @@ int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst)
 		new_tok = create_tmp_token(mgr, (*ins_lst)->content);
 		if (!new_tok)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		tok_print(new_tok);
+		fprintf(stderr, "HEYYYY\n");
 		new_tok->t.tok.is_combinable = true;
 		destroy_token(mgr, (*lst_pos)->content);
-		(*lst_pos)->content = ft_lstnew_tmp(mgr, new_tok);
+		(*lst_pos)->content = new_tok;
 	}
 	ft_lstclear_str_tmp(mgr, ins_lst);
 	return (0);
@@ -97,7 +124,8 @@ int	tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_pos, void *lst_c)
 			debug_print(DBGMSG_MATCHES, __FUNCTION__, ft_lstsize(str_lst),
 			str_lst->content);
 			do_tok_inserts(mgr, lst_pos, &str_lst);
-			tok_print_list(*lst_pos); //
+			ft_lstclear_str_tmp(mgr, &str_lst);
+			tok_print_list(*lst_pos);
 			debug_print(_MOD_ ": %s: Done.\n", __FUNCTION__);
 		}
 		else

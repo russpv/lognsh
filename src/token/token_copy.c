@@ -2,6 +2,7 @@
 
 static void _init_meta(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
 {
+	new_t->class = t->class;
 	new_t->t.meta.pos = t->t.meta.pos;
 	new_t->t.meta.tokc = t->t.meta.tokc;
 	new_t->t.meta.do_expansion = t->t.meta.do_expansion;
@@ -11,6 +12,7 @@ static void _init_meta(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
 
 static void	_init_norm(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
 {
+	new_t->class = t->class;
 	new_t->t.tok.raw = ft_strdup_tmp(mgr, t->t.tok.raw);
 	if (NULL == new_t->t.tok.raw)
 		exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
@@ -19,6 +21,8 @@ static void	_init_norm(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
 	new_t->t.tok.do_globbing = t->t.tok.do_globbing;
 	new_t->t.tok.do_expansion = t->t.tok.do_expansion;
 	new_t->t.tok.is_combinable = t->t.tok.is_combinable;
+	new_t->t.tok.is_subtoken = t->t.tok.is_subtoken;
+	new_t->t.tok.in_dquotes = t->t.tok.in_dquotes;
 }
 
 // Called by parser to deep copy tokens and keep free routines separate
@@ -34,7 +38,6 @@ void	*copy_token(t_mem_mgr *mgr, const void *tok)
 	new_t = mgr->f(&mgr->list, sizeof(t_tok));
 	if (new_t == NULL)
 		exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
-	new_t->class = t->class;
 	if (GROUP == t->class)
 		_init_meta(mgr, t, new_t);
 	else 

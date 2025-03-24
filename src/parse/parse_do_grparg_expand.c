@@ -11,8 +11,8 @@ static int	_do_expansions(t_state *s, t_arg_data *grparg)
 		res = lstiter_state(s, grparg->lst_tokens, tok_do_expansion);
 		if (0 != res)
 			return (res);
+		tok_print_list(grparg->lst_tokens);
 	}
-	tok_print_list(grparg->lst_tokens);
 	return (0);
 }
 
@@ -46,7 +46,13 @@ void _print_arg(void *arg)
 	t_arg_data *node;
 
 	node = (t_arg_data *)arg;
-	fprintf(stderr, "%s", node->raw);
+	if (node)
+	{
+		if (node->raw)
+			fprintf(stderr, "%s", node->raw);
+		else 
+			fprintf(stderr, "(null)");
+	}
 }
 
 /* Replace this group arg node with resulting promoted args based on token list */

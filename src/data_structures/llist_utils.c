@@ -167,7 +167,8 @@ void	ft_lstprinter(t_list *lst, void (*f)(void *))
 		while (lst)
 		{
 			count++;
-			f(lst->content);
+			if (lst->content)
+				f(lst->content);
 			fprintf(stderr, YELLOW " -> " RESET);
 			lst = lst->next;
 		}

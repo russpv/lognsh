@@ -47,7 +47,6 @@ int	ft_lstiter_state_ins_rwd_tmp(t_state *s, t_list **lst,
 	return (0);
 }
 
-
 // Returns the args removed as a negative qty
 int	lstiter_state_rwd_trim(t_state *s, t_list **lst, int (*test)(void *),
 		void (*del)(t_mem_mgr *, void *))

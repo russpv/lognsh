@@ -162,5 +162,6 @@ char	**ft_split_ifs_mem(struct s_mem_utils *m, char const *s, char const *set);
 
 int							ft_strcmp_low(const char *s1, const char *s2);
 int							ft_strcmp_casefold(const char *s1, const char *s2);
+char	*ft_skip_delims(char const *s, char const *ref);
 
 #endif
