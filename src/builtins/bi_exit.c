@@ -71,7 +71,7 @@ int	bi_exit(t_state *s, char **argv, int argc)
 		write(STDOUT_FILENO, "exit\n", 5);
 	if (argc < 2)
 		_exit_no_arg(s);
-	else if (!is_numeric(argv[1]))
+	else if ((ft_strlen(argv[1]) > 19) || !is_numeric(argv[1]))
 		_exit_nonnumeric_arg(s); // Return, don't exit (but bash DOES exit)
 	else if (argv[2])
 	{
