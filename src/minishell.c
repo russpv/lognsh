@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include "../src/lex/lex_int.h"
 
 static void	_do_test(t_state *s)
 {
@@ -42,8 +43,9 @@ static int	_do_loop(t_state *s)
 		add_history(get_input(s));
 	else
 		return (0);
-	clear_current_line();
 	ast = parse(s, get_input(s));
+	if (ast && (!get_lexer(s) || !get_lexer(s)->do_heredoc))
+		clear_current_line();
 	if (ast)
 		set_exit_status(s, cmd_execute(s, ast));
 	s_free_cmd_lex_parse(s);
