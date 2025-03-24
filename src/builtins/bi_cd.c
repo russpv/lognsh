@@ -69,7 +69,6 @@ static int	_change_dir(t_state *s, const char *target)
 {
 	char	*new_dir;
 	char	*alt_dir;
-	char	*old_pwd;
 
 	if (0 == ft_strcmp(target, "-"))
 	{

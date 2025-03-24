@@ -6,12 +6,10 @@
 #define DMSG_CEXEC_NOTPIP _MOD_ ": node not a pipe...\n"
 #define EMSG_CEXEC_UNK _MOD_ ": ERR unknown node...\n"
 
-void	destroy_cmd(t_state *s, void *c)
+void	destroy_cmd(t_mem_mgr *m, void *c)
 {
 	t_cmd		*cmd;
-	t_mem_mgr	*m;
 
-	m = get_mem(s);
 	cmd = (t_cmd *)c;
 	if (cmd->st)
 		st_int_destroy(m, cmd->st);

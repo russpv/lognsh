@@ -54,6 +54,7 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 		lexer->tokc = 0;
 		lexer->keep_dollar = LEXERKEEP$;
 		register_lexer_destroy(state, destroy_lexer);
+		register_token_destroy(state, destroy_token);
 		if (false == _allocate_buf_and_hasht(get_mem(state), lexer))
 			exit_clean(&get_mem(state)->list, ENOMEM, __FUNCTION__,
 				EMSG_MALLOC);
@@ -63,12 +64,10 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 }
 
 /* Doesn't free raw_string */
-void	destroy_lexer(t_state *s, void *instance)
+void	destroy_lexer(t_mem_mgr *m, void *instance)
 {
 	t_lex		*lexer;
-	t_mem_mgr	*m;
 
-	m = get_mem(s);
 	lexer = (t_lex *)instance;
 	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
 	if (!lexer)

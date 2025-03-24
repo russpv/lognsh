@@ -17,6 +17,15 @@ static void	_do_test(t_state *s)
 	}
 }
 
+void	clear_current_line(void)
+{
+#ifndef MACOS
+	rl_replace_line("", 0); // Replace the current line with an empty string
+#endif
+	rl_on_new_line();
+	rl_redisplay();
+}
+
 static int	_do_loop(t_state *s)
 {
 	t_ast_node	*ast;
@@ -33,6 +42,7 @@ static int	_do_loop(t_state *s)
 		add_history(get_input(s));
 	else
 		return (0);
+	clear_current_line();
 	ast = parse(s, get_input(s));
 	if (ast)
 		set_exit_status(s, cmd_execute(s, ast));

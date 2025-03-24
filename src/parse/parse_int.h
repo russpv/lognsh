@@ -5,6 +5,8 @@
 
 # define _MOD_ "Parser"
 # define MAX_CMD_ARGS 10
+# define DMSG_IN _MOD_ ": %s: got: %s\n"
+# define DMSG_OUT _MOD_ ": %s: found: %s\n"
 
 /*
 From Bash Manual:
@@ -134,9 +136,12 @@ typedef struct s_arg
 	bool					do_globbing;
 	bool					do_expansion;
 	bool					in_dquotes;
+	t_state					*global_state;
+
 	bool					is_grouparg;
 	t_list					*lst_tokens;
-	t_state					*global_state;
+
+	
 }							t_arg_data;
 
 /* Next refactor, remove the t_list since
@@ -196,7 +201,7 @@ typedef struct s_parser
 }							t_parser;
 
 t_parser					*create_parser(t_state *s, t_list *tokens);
-void						destroy_parser(t_state *s, void *instance);
+void						destroy_parser(t_mem_mgr *m, void *instance);
 t_ast_node					*init_log(t_mem_mgr *m);
 t_redir_data				*init_redir(t_mem_mgr *m, t_ast_node *target,
 								enum e_tok_type type);
@@ -236,6 +241,11 @@ int							check_special_expansions(t_state *s,
 t_list						*match_glob(t_mem_mgr *mgr, const char *pattern);
 int							do_arg_inserts(t_mem_mgr *mgr, t_list **lst_node,
 								t_list **ins_lst, t_arg_data *content);
+void						*token_to_arg(t_mem_mgr *m, const void *tok);
+int							p_do_grparg_processing(t_state *s, t_list **this,
+								void *c);
+int							p_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node,
+								void *lst_c);
 
 /* Tests */
 bool						is_option(t_tok *tok);
@@ -273,6 +283,9 @@ int							lstiter_state(t_state *s, t_list *lst,
 								int (*f)(t_state *, void *));
 int							lstiter_state_rwd_trim(t_state *s, t_list **lst,
 								int (*f)(void *), void (*del)(t_mem_mgr *,
+									void *));
+int							ft_lstiter_state_ins_rwd_tmp(t_state *s,
+								t_list **lst, int (*f)(t_state *, t_list **,
 									void *));
 int							p_is_arg_null(void *c);
 

@@ -14,3 +14,8 @@ void	register_command_destroy(t_state *s, t_destroy_fn fn)
 {
 	s->destroy_command = fn;
 }
+
+void	register_token_destroy(t_state *s, t_destroy_fn fn)
+{
+	s->destroy_token = fn;
+}

@@ -32,6 +32,7 @@ static void	_set_lvl(t_state *s)
 		exit_clean(&s->mem_mgr.list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	env_upsert_value(get_mem(s), &lst, LVL_KEY, value);
 }
+
 int	set_oldpwd(t_state *s, const char *caller)
 {
 	char *old_pwd;

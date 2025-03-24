@@ -50,7 +50,7 @@
 struct s_global_state;
 typedef struct s_global_state	t_state;
 
-typedef void					(*t_destroy_fn)(t_state *s, void *instance);
+typedef void					(*t_destroy_fn)(t_mem_mgr *m, void *instance);
 typedef void					(*t_attach_fn)(void *instance);
 
 /* Duplicate declarations instead of includes */
@@ -69,13 +69,14 @@ void							set_parser(t_state *state, t_parser *p);
 void							set_lexer(t_state *state, t_lex *l);
 void							set_input(t_state *s, char *input);
 void							set_command(t_state *s, t_cmd *c);
-void							set_tmp(t_state *s, char *str);
 void							set_pwd(t_state *s);
 int								set_oldpwd(t_state *s, const char *caller);
+void							set_tmp(t_state *s, char *str);
 
 int								*get_status(t_state *s);
 char							*get_input(t_state *s);
 t_cmd							*get_cmd(t_state *s);
+t_list							*get_tmp_tok_list(t_state *s);
 
 char							**get_envp(t_state *s);
 char							*get_env_val(t_state *s, const char *key);
@@ -96,6 +97,8 @@ void							register_command_destroy(t_state *s,
 void							register_parser_destroy(t_state *s,
 									t_destroy_fn fn);
 void							register_lexer_destroy(t_state *s,
+									t_destroy_fn fn);
+void							register_token_destroy(t_state *s,
 									t_destroy_fn fn);
 void							s_free_tmp(t_state *s);
 void							s_free_cmd(t_state *s);

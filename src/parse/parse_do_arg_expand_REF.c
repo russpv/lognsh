@@ -6,36 +6,6 @@
 #define DEBUGMSG_ARGP_PRE_G _MOD_ ": Pre-glob headp: %p, 1st node: %p\n"
 #define DEBUGMSG_ARGP_POST_G _MOD_ ": Post-glob headp: %p, 1st node: %p\n"
 
-#define DMSG_IN _MOD_ ": %s: got: %s\n"
-#define DMSG_OUT _MOD_ ": %s: found: %s\n"
-
-/* Add special $? codes here.
- * buf will start with char after any '$'.
- * Returns the negated length of the expansion found (minus $).
- * Or error codes.
- * Places the expanded heap string in *value
- */
-int	check_special_expansions(t_state *s, const char *buf, char **value)
-{
-	const int	*status = get_status(s);
-
-	if (!buf || !value)
-		return (ERR_ARGS);
-	debug_print(DMSG_IN, __FUNCTION__, buf);
-	if (ft_strcmp(buf, "?") == 0)
-	{
-		if (status == NULL)
-			*value = ft_itoa_mem(&get_mem(s)->list, myalloc, 0);
-		else
-			*value = ft_itoa_mem(&get_mem(s)->list, myalloc, *status);
-		if (*value == NULL)
-			return (ERR_MEM);
-		debug_print(DMSG_OUT, __FUNCTION__, *value);
-		return (-1);
-	}
-	return (ERR_GENERAL);
-}
-
 /* Looks for env values of key loaded in buf */
 static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
 		char **value)
@@ -101,95 +71,10 @@ static int	_p_do_arg_expansion(t_state *s, void *c)
 	return (0);
 }
 
-
-// Explicit empty strings retained as empty strings. 
-// Unquoted nulls resulting from expansions are removed.
-// Quoted nulls resulting from expansions are retained as empty strings, (done prior)
-// unless part of a non-null expansion word. -d'' is -d
-// Inserts the list at lst_node position
-int	p_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node, void *lst_c)
-{
-	t_arg_data	*arg;
-	t_list		*lst;
-	int			res;
-
-	res = 0;
-	lst = NULL;
-	arg = (t_arg_data *)lst_c;
-	if (false == arg->in_dquotes && true == arg->do_expansion)
-	{
-		debug_print(_MOD_ ": %s: got _%s_ \n", __FUNCTION__, arg->raw);
-		lst = split_word(mgr, arg->raw);
-		if (lst)
-		{
-			if (lst->content)
-				debug_print("%d %s\n", ft_lstsize(lst), lst->content);
-			res = do_arg_inserts(mgr, lst_node, &lst, arg);
-			if (0 != res)
-				return (res);
-		}
-		debug_print(_MOD_ ": %s: done. \n", __FUNCTION__);
-	}
-	return (0);
-}
-
-// Passed to arg llist iterator to iterate any group arg's token llist 
-// if (null) results, still returns empty heap string,
-// since a grouparg implies non-null word
-// Ignores all (null) token raws
-// Inserts into arg llist as needed
-static int	_p_do_grparg_processing(t_state *s, void *c)
-{
-	t_arg_data	*content;
-	t_list		**lst; //not needed?
-	int			res;
-
-	res = 0;
-	content = (t_arg_data *)c;
-	if (NULL == c || false == content->is_grouparg)
-		return (0);
-	debug_print(_MOD_ ": %s: got list: %p exp:%d glob:%d\n", __FUNCTION__,\
-		content->lst_tokens, content->do_expansion, content->do_globbing);
-	if (content->do_expansion)
-	{
-		res = lstiter_state(s, content->lst_tokens, tok_do_expansion);
-		if (0 != res)
-			return (res);
-	}
-	tok_print_list(content->lst_tokens);
-	if (content->do_expansion && !content->in_dquotes)
-		ft_lstiter_ins_rwd_tmp(get_mem(s), &content->lst_tokens, tok_do_wordsplits); // TODO, mark which ones can't combine
-	tok_print_list(content->lst_tokens);
-	if (content->do_globbing)
-	{
-		lst = &content->lst_tokens;
-		ft_lstiter_ins_rwd_tmp(get_mem(s), lst, p_do_globbing_args);
-	}
-	res = lstiter_state(s, content->lst_tokens, tok_do_grp_combine); // TODO, differentially combine based on flag
-	if (0 == res)
-		content->raw = ft_strdup_tmp(get_mem(s), get_tmp(s)); //TODO, tmp needs to be a lst
-	//ft_lstiter_ins_rwd_tmp(get_mem(s), lst, ...); //TODO, insert any separate words as separate args
-	debug_print("%s: returning str: %s\n", __FUNCTION__, content->raw);
-	return (res);
-}
-
-int	p_is_arg_null(void *c)
-{
-	t_arg_data	*content;
-
-	content = (t_arg_data *)c;
-	if (NULL == c)
-		return (-1);
-	if (true == content->is_grouparg)
-		return (0);
-	if (NULL == content->raw)
-		return (1);
-	return (0);
-}
-
 /* Does expansions: Shell parameters, word splitting,
  * filename expansions (glob*) as needed.
  * Then converts to array and returns that array via args ptr.
+ * Note: we traverse llists backwards to avoid inserted nodes
  */
 int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 {
@@ -204,7 +89,7 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 	{
 		debug_print_list(*argl);
 		if (a->data.cmd.has_grouptoks)
-			res = lstiter_state(s, *argl, _p_do_grparg_processing); // Need to pass **lst? can get lst back
+			res = ft_lstiter_state_ins_rwd_tmp(s, argl, p_do_grparg_processing);
 		else
 		{
 			if (a->data.cmd.do_expansion)

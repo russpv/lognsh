@@ -152,6 +152,30 @@ void	ft_lstprint(t_list *lst)
 	return ;
 }
 
+void	ft_lstprinter(t_list *lst, void (*f)(void *))
+{
+	int	count;
+
+	count = 0;
+	if (lst == NULL)
+	{
+		return ;
+	}
+	if (DEBUG)
+	{
+		fprintf(stderr, RED "linkedl: " RESET);
+		while (lst)
+		{
+			count++;
+			f(lst->content);
+			fprintf(stderr, YELLOW " -> " RESET);
+			lst = lst->next;
+		}
+		fprintf(stderr, RED "printed %d nodes.\n" RESET, count);
+	}
+	return ;
+}
+
 // Prints from lst to end
 void	ft_lstprint_betw(t_list *lst, t_list *end)
 {

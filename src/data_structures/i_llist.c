@@ -22,7 +22,7 @@ t_list	*ft_lstnew_tmp(t_mem_mgr *mgr, void *content)
 
 /* LSTDELONE
 ** Removes passed node in doubly linked list
-** Assuming list to rear iteration direction
+** Assuming front to rear iteration direction
 ** lst: parent list
 ** node: node to free
 ** del: ptr to func that deletes node.content
@@ -45,7 +45,7 @@ void	ft_lstdelone_tmp(t_mem_mgr *m, t_list **lst, t_list *node,
 }
 
 /* LSTCLEAR
-** Deletes all subsequent nodes and current node
+** Deletes all subsequent nodes and current node (entire list if head)
 ** lst: ptr to ptr to node
 ** del: ptr to free(content) function
 */

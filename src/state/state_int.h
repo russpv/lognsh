@@ -15,6 +15,8 @@ struct							s_global_state
 	int							current_exit_code;
 	int							error_code;
 	char						*input;
+
+	t_list						*tmp_tok_lst;
 	char						*tmp;
 
 	char						*prompt;
@@ -26,6 +28,7 @@ struct							s_global_state
 	t_destroy_fn				destroy_parser;
 	t_destroy_fn				destroy_lexer;
 	t_destroy_fn				destroy_command;
+	t_destroy_fn				destroy_token;
 
 	t_mem_mgr					mem_mgr;
 };

@@ -209,7 +209,7 @@ typedef struct s_ht_data	*t_ht_data;
 
 t_lex						*create_lexer(t_state *state, int start_state,
 								const char *s);
-void						destroy_lexer(t_state *s, void *instance);
+void						destroy_lexer(t_mem_mgr *m, void *instance);
 
 /* ht */
 void						build_hasht(t_mem_mgr *m, t_lex *lexer);

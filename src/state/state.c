@@ -9,6 +9,8 @@ static inline void	_init_state_ptrs(t_state *s)
 	s->destroy_command = NULL;
 	s->destroy_lexer = NULL;
 	s->destroy_parser = NULL;
+	s->destroy_token = NULL;
+	s->tmp_tok_lst = NULL;
 	s->tmp = NULL;
 	s->pwd = NULL;
 	s->prompt = DFL_PROMPT;
@@ -42,17 +44,20 @@ t_state	*init_state(char **envp)
  */
 void	destroy_state(t_state *s)
 {
+	t_mem_mgr *m;
+	
+	m = get_mem(s);
 	if (s->current_parser)
-		s->destroy_parser(s, s->current_parser);
+		s->destroy_parser(m, s->current_parser);
 	if (s->current_lexer)
-		s->destroy_lexer(s, s->current_lexer);
+		s->destroy_lexer(m, s->current_lexer);
 	if (s->current_cmd)
-		s->destroy_command(s, s->current_cmd);
+		s->destroy_command(m, s->current_cmd);
 	if (s->input)
 		free(s->input);
 	if (s->sh_env_list)
-		env_free_list(get_mem(s), s->sh_env_list);
+		env_free_list(m, s->sh_env_list);
 	if (s->pwd)
-		get_mem(s)->dealloc(&get_mem(s)->list, s->pwd);
+		m->dealloc(&m->list, s->pwd);
 	mem_free_all(&s->mem_mgr.list);
 }

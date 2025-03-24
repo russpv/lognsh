@@ -22,8 +22,7 @@ void	set_command(t_state *s, t_cmd *c)
 
 void	set_tmp(t_state *s, char *str)
 {
-	if (s->tmp)
-		myfree(&get_mem(s)->list, s->tmp);
+	if (NULL != s->tmp)
+		get_mem(s)->dealloc(&get_mem(s)->list, s->tmp);
 	s->tmp = ft_strdup_tmp(get_mem(s), str);
 }
-

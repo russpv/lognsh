@@ -20,6 +20,8 @@ typedef struct s_normal_tok
 	bool				do_expansion;
 	bool				is_subtoken;
 	bool				in_dquotes;
+	
+	bool				is_combinable;
 }						t_normal_tok;
 
 typedef struct s_meta_tok

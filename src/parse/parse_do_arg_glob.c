@@ -107,7 +107,7 @@ t_list	*match_glob(t_mem_mgr *m, const char *pattern)
 }
 
 /*
- * ins_lst is incoming list of glob matches to be inserted
+ * ins_lst is incoming list of glob match strings to be inserted
  * at the lst_node position, overwriting it.
  * content is the existing arg node.
  * Deletes lst_node, deep copies glst and inserts
