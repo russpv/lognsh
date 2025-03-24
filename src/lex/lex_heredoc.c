@@ -40,7 +40,8 @@ static inline int	_match_heredoc(t_mem_mgr *m, t_lex *l)
 
 	while (1)
 	{
-		line = readline("> ");
+		write(STDOUT_FILENO, "> ", 2);
+		line = readline("");
 		if (NULL == line)
 		{
 			debug_print(LOGMSG_SIG); //lexer interrupted
