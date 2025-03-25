@@ -7,6 +7,8 @@
 # include <stdio.h>
 # include <unistd.h>
 
+# define EXIT_NULLCMD 0
+
 # define ERR_NONE 0
 # define ERR_AMBIGUOUS_REDIR 1
 # define ERR_GENERAL 1

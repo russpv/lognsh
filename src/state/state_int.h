@@ -14,6 +14,7 @@ struct							s_global_state
 	char						*pwd;
 	int							current_exit_code;
 	int							error_code;
+	bool						got_heredoc;
 	char						*input;
 
 	t_list						*tmp_tok_lst;

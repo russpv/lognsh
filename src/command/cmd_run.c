@@ -86,12 +86,16 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	int		exit_status;
 
 	c = get_cmd(s);
-	if (p_get_type(a) != AST_NODE_CMD || NULL == p_get_cmd(a))
+	debug_print(_MOD_ ": %s: preparing to exec...\n", __FUNCTION__);
+	if (p_get_type(a) != AST_NODE_CMD)
 		return (EINVAL);
+	if (NULL == p_get_cmd(a))
+		return (EXIT_NULLCMD);
 	if (0 != find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath))
 		return (s_free_cmd(s), ERR_CMD_NOT_FOUND);
 	if (c->fullpath)
 		log_print(LOGMSG_RUNC_GOT, c->fullpath);
+	debug_print(_MOD_ ": %s: exec'g\n", __FUNCTION__);
 	if (CTXT_PIPELINE == st_int_peek(get_cmd(s)->st)
 		|| CTXT_PROC == st_int_peek(get_cmd(s)->st))
 	{
