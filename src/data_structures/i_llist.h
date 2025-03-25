@@ -23,13 +23,13 @@ typedef struct s_mem_mgr
 // TODO organize these methods somewhere else
 t_list				*ft_lstnew_tmp(t_mem_mgr *m, void *content);
 void				ft_lstdelone_tmp(t_mem_mgr *s, t_list **lst, t_list *node,
-						void (*del)(t_mem_mgr *m, void *));
+						void (*del)(t_mem_mgr *m, void **));
 void				ft_lstclear_tmp(t_mem_mgr *mgr, t_list **lst,
-						void (*del)(t_mem_mgr *m, void *));
+						void (*del)(t_mem_mgr *m, void **));
 
 t_list				*ft_lstcopy_tmp(t_mem_mgr *mgr, t_list *orig,
 						void *(*f)(t_mem_mgr *s, const void *),
-						void (*del)(t_mem_mgr *, void *));
+						void (*del)(t_mem_mgr *, void **));
 
 t_list				*ft_lstcopy_node_tmp(t_mem_mgr *mgr, const t_list *orig,
 						void *(*f)(t_mem_mgr *s, const void *));
@@ -38,11 +38,11 @@ t_list				*ft_lstnew_copystr_mem(t_mem_mgr *m, void *content,
 						char *(*f)(t_mem_mgr *, const char *));
 
 void				ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
-						t_list **node, void (*del)(t_mem_mgr *, void *));
+						t_list **node, void (*del)(t_mem_mgr *, void **));
 
 t_list				*ft_lstmap_tmp(t_mem_mgr *mgr, t_list *lst,
 						void *(*f)(t_mem_mgr *, const void *),
-						void (*del)(t_mem_mgr *, void *));
+						void (*del)(t_mem_mgr *, void **));
 
 void				ft_lstiter_ins_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
 						int (*f)(t_mem_mgr *, t_list **, void *));

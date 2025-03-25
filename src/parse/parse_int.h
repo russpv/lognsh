@@ -201,7 +201,7 @@ typedef struct s_parser
 }							t_parser;
 
 t_parser					*create_parser(t_state *s, t_list *tokens);
-void						destroy_parser(t_mem_mgr *m, void *instance);
+void						destroy_parser(t_mem_mgr *m, void **instance);
 t_ast_node					*init_log(t_mem_mgr *m);
 t_redir_data				*init_redir(t_mem_mgr *m, t_ast_node *target,
 								enum e_tok_type type);
@@ -283,19 +283,19 @@ int							lstiter_state(t_state *s, t_list *lst,
 								int (*f)(t_state *, void *));
 int							lstiter_state_rwd_trim(t_state *s, t_list **lst,
 								int (*f)(void *), void (*del)(t_mem_mgr *,
-									void *));
+									void **));
 int							ft_lstiter_state_ins_rwd_tmp(t_state *s,
 								t_list **lst, int (*f)(t_state *, t_list **,
 									void *));
 int							p_is_arg_null(void *c);
 
 /* AST list frees */
-void						destroy_ast_node(t_mem_mgr *m, void *node);
-void						destroy_pipe_node(t_mem_mgr *m, void *n);
-void						destroy_cmd_node(t_mem_mgr *m, void *n);
-void						destroy_proc_node(t_mem_mgr *m, void *n);
-void						destroy_log_node(t_mem_mgr *m, void *n);
-void						destroy_arg(t_mem_mgr *m, void *in);
+void						destroy_ast_node(t_mem_mgr *m, void **node);
+void						destroy_pipe_node(t_mem_mgr *m, void **n);
+void						destroy_cmd_node(t_mem_mgr *m, void **n);
+void						destroy_proc_node(t_mem_mgr *m, void **n);
+void						destroy_log_node(t_mem_mgr *m, void **n);
+void						destroy_arg(t_mem_mgr *m, void **in);
 
 /* Debugging */
 void						parse_print(t_ast_node *ast);

@@ -28,7 +28,7 @@ t_list	*ft_lstnew_tmp(t_mem_mgr *mgr, void *content)
 ** del: ptr to func that deletes node.content
 */
 void	ft_lstdelone_tmp(t_mem_mgr *m, t_list **lst, t_list *node,
-		void (*del)(t_mem_mgr *, void *))
+		void (*del)(t_mem_mgr *, void **))
 {
 	if (!m || !lst || !node)
 		return ;
@@ -40,7 +40,7 @@ void	ft_lstdelone_tmp(t_mem_mgr *m, t_list **lst, t_list *node,
 		node->next->prev = node->prev;
 	if (node == *lst)
 		*lst = node->next;
-	del(m, node->content);
+	del(m, &node->content);
 	m->dealloc(&m->list, node);
 }
 
@@ -50,7 +50,7 @@ void	ft_lstdelone_tmp(t_mem_mgr *m, t_list **lst, t_list *node,
 ** del: ptr to free(content) function
 */
 void	ft_lstclear_tmp(t_mem_mgr *mgr, t_list **lst, void (*del)(t_mem_mgr *m,
-			void *))
+			void **))
 {
 	t_list	*tmp;
 	t_list	*next;
@@ -138,7 +138,7 @@ t_list	*ft_lstcopy_node_tmp(t_mem_mgr *mgr, const t_list *orig,
 
 // Uses copy function f
 t_list	*ft_lstcopy_tmp(t_mem_mgr *mgr, t_list *orig, void *(*f)(t_mem_mgr *,
-			const void *), void (*del)(t_mem_mgr *, void *))
+			const void *), void (*del)(t_mem_mgr *, void **))
 {
 	t_list	*new_list;
 	t_list	*prev_node;
@@ -198,7 +198,7 @@ t_list	*ft_lstnew_copystr_mem(t_mem_mgr *m, void *content,
 ** Handles case where same pointer passed in arg 1 and 2
 */
 void	ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst, t_list **node,
-		void (*del)(t_mem_mgr *, void *))
+		void (*del)(t_mem_mgr *, void **))
 {
 	t_list	*tmp;
 
@@ -212,7 +212,7 @@ void	ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst, t_list **node,
 	if ((*node)->next)
 		(*node)->next->prev = (*node)->prev;
 	if ((*node)->content)
-		del(mgr, (*node)->content);
+		del(mgr, &(*node)->content);
 	if (*lst == *node)
 		*lst = tmp;
 	mgr->dealloc(&mgr->list, *node);
@@ -228,7 +228,7 @@ void	ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst, t_list **node,
 ** UNPROTECTED: returns NULL only when !lst
 */
 t_list	*ft_lstmap_tmp(t_mem_mgr *mgr, t_list *lst, void *(*f)(t_mem_mgr *,
-			const void *), void (*del)(t_mem_mgr *, void *))
+			const void *), void (*del)(t_mem_mgr *, void **))
 {
 	t_list	*newlst;
 	t_list	*new;

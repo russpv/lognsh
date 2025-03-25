@@ -76,7 +76,7 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 	if (0 != res)
 	{
 		set_error(s, res);
-		destroy_ast_node(get_mem(s), ast_node);
+		destroy_ast_node(get_mem(s), (void **)&ast_node);
 		err(EMSG_PPIPE_GEN);
 		return (NULL);
 	}

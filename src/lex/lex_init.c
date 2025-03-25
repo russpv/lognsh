@@ -64,11 +64,11 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 }
 
 /* Doesn't free raw_string */
-void	destroy_lexer(t_mem_mgr *m, void *instance)
+void	destroy_lexer(t_mem_mgr *m, void **instance)
 {
 	t_lex		*lexer;
 
-	lexer = (t_lex *)instance;
+	lexer = (t_lex *)(*instance);
 	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
 	if (!lexer)
 		return ;
@@ -81,4 +81,5 @@ void	destroy_lexer(t_mem_mgr *m, void *instance)
 	if (lexer->token_list)
 		ft_lstclear_tmp(m, &lexer->token_list, destroy_token);
 	m->dealloc(&m->list, lexer);
+	*instance = NULL;
 }

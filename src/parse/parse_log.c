@@ -105,7 +105,7 @@ t_ast_node	*parse_logical(t_state *s, t_parser *p)
 	res = _process_log(s, p, ast_node);
 	if (0 != res)
 	{
-		destroy_ast_node(get_mem(s), ast_node);
+		destroy_ast_node(get_mem(s), (void **)&ast_node);
 		set_error(s, res);
 		return (NULL);
 	}

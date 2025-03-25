@@ -72,7 +72,7 @@ int	main(int argc, char **argv, char **envp)
 					break ;
 			}
 		}
-		destroy_state(s);
+		destroy_state(&s);
 	}
 	return (0);
 }

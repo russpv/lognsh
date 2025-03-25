@@ -19,7 +19,7 @@ t_lex	*tokenize(t_state *s, const char *input)
 		{
 			if (0 != lexer->tokenizer(s, lexer))
 			{
-				destroy_lexer(get_mem(s), lexer);
+				destroy_lexer(get_mem(s), (void**)&lexer);
 				return (debug_print(_MOD_ ": ERR\n"), NULL);
 			}
 			do_state_transition(lexer);

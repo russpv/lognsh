@@ -6,11 +6,11 @@
 #define DMSG_CEXEC_NOTPIP _MOD_ ": node not a pipe...\n"
 #define EMSG_CEXEC_UNK _MOD_ ": ERR unknown node...\n"
 
-void	destroy_cmd(t_mem_mgr *m, void *c)
+void	destroy_cmd(t_mem_mgr *m, void **c)
 {
 	t_cmd		*cmd;
 
-	cmd = (t_cmd *)c;
+	cmd = (t_cmd *)(*c);
 	if (cmd->st)
 		st_int_destroy(m, cmd->st);
 	//	if (cmd->fullpath)
@@ -22,6 +22,7 @@ void	destroy_cmd(t_mem_mgr *m, void *c)
 	if (cmd->argv)
 		ft_freearr_mem(&m->list, m->dealloc, (void **)cmd->argv, -1);
 	m->dealloc(&m->list, cmd);
+	*c = NULL;
 }
 
 t_cmd	*init_cmd(t_state *s, t_ast_node *a)

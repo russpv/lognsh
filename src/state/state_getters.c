@@ -45,7 +45,7 @@ char	*get_prompt(t_state *s)
 	return (get_env_val(s, PROMPT_KEY));
 }
 
-bool		get_heredoc(t_state *s)
+bool	get_heredoc(t_state *s)
 {
 	if (!s)
 		return (false);

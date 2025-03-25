@@ -66,7 +66,30 @@ bool has_lagging_delims(char const *s, char const *set)
 	return (false);
 }
 
-static int _load_str(t_state *s, char *raw, char **str, char **tmp_str)
+static int _load_str_normal(t_state *s, char *raw, char **str, char **tmp_str)
+{
+	struct s_mem_utils m;
+	int combined;
+
+	m.f = get_mem(s)->f;
+	m.u = get_mem(s)->dealloc;
+	m.head = &get_mem(s)->list;
+	combined = NOTCOMBINED;
+	if (*str)
+	{
+		_announce(__FUNCTION__, raw, *str, SAYCOMBINE);
+		*tmp_str = ft_strjoin_mem(m.head, m.f, *str, raw);
+		combined = COMBINED;
+	}
+	else
+	{
+		*tmp_str = raw;
+		_announce(__FUNCTION__, raw, NULL, SAYCACHEONLY);
+	}
+	return (combined);
+}
+
+static int _load_str_post_expansion(t_state *s, char *raw, char **str, char **tmp_str)
 {
 	struct s_mem_utils m;
 	int combined;
@@ -112,7 +135,10 @@ static void	_do_combine(t_state *s, const t_tok	*content, char	**str, int *combi
 	if (true == content->t.tok.is_combinable) //either combined with previous, or modified cache and passed tmp_str
 	{
 		_announce(__FUNCTION__, content->t.tok.raw, NULL, SAYCANCOMB);
-		*combined = _load_str(s, content->t.tok.raw, str, &tmp_str);
+		if (true == content->t.tok.do_expansion)
+			*combined = _load_str_post_expansion(s, content->t.tok.raw, str, &tmp_str);
+		else
+			*combined = _load_str_normal(s, content->t.tok.raw, str, &tmp_str);
 		fprintf(stderr, "freeing str %s got tmp_str %s\n", *str, tmp_str );
 		if (*str)
 			free(*str); //May need to commit token here
