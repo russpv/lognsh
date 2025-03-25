@@ -20,6 +20,7 @@ void	s_free_cmd_lex_parse(t_state *state)
 	{
 		state->destroy_lexer(m, state->current_lexer);
 		state->current_lexer = NULL;
+		state->got_heredoc = false;
 	}
 	if (state->current_cmd)
 	{
@@ -37,6 +38,7 @@ void	s_free_cmd(t_state *state)
 	{
 		state->destroy_command(get_mem(state), state->current_cmd);
 		state->current_cmd = NULL;
+		state->got_heredoc = false;
 	}
 	s_free_tmp(state);
 }

@@ -72,6 +72,7 @@ void							set_command(t_state *s, t_cmd *c);
 void							set_pwd(t_state *s);
 int								set_oldpwd(t_state *s, const char *caller);
 void							set_tmp(t_state *s, char *str);
+void							set_got_heredoc(t_state *s);
 
 int								*get_status(t_state *s);
 char							*get_input(t_state *s);
@@ -81,13 +82,14 @@ t_list							*get_tmp_tok_list(t_state *s);
 char							**get_envp(t_state *s);
 char							*get_env_val(t_state *s, const char *key);
 char							**get_env_path(t_state *s);
-char							*get_tmp(t_state *s);
-t_lex							*get_lexer(t_state *s);
-
 t_env							*get_env_list(t_state *s);
 t_env							**get_env_list_add(t_state *s);
+
+char							*get_tmp(t_state *s);
+t_lex							*get_lexer(t_state *s);
 char							*get_pwd(t_state *s);
 char							*get_prompt(t_state *s);
+bool							get_heredoc(t_state *s);
 
 // int	set_sh_env(t_state *s, const char *key, const char *value);
 // For export()

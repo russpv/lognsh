@@ -40,7 +40,8 @@ static inline int	_match_heredoc(t_mem_mgr *m, t_lex *l)
 
 	while (1)
 	{
-		line = readline("> ");
+		write(STDOUT_FILENO, "> ", 2);
+		line = readline("");
 		if (NULL == line)
 		{
 			debug_print(LOGMSG_SIG); //lexer interrupted
@@ -84,6 +85,7 @@ int	tokenize_heredoc(t_state *s, t_lex *lexer)
 		assert(NULL != lexer && NULL != token);
 		if (0 != add_token(get_mem(s), lexer, token))
 			return (ERR_GENERAL);
+		set_got_heredoc(s);
 	}
 	else
 		return (err(EMSG_MEM), ERR_MEM);
