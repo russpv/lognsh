@@ -99,7 +99,7 @@ static int _load_str(t_state *s, char *raw, char **str, char **tmp_str)
 		*tmp_str = ft_strtrimfront_mem(&m, raw, IFS); //trim incoming and pass by reference
 		_announce(__FUNCTION__, raw, NULL, SAYCACHEONLY);
 	}
-	fprintf(stderr, "tmp_str %s\n", *tmp_str);
+	fprintf(stderr, "tmp_str %s\n", *tmp_str);	
 	return (combined);
 }
 
