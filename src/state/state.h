@@ -77,7 +77,7 @@ void							set_got_heredoc(t_state *s);
 int								*get_status(t_state *s);
 char							*get_input(t_state *s);
 t_cmd							*get_cmd(t_state *s);
-t_list							*get_tmp_tok_list(t_state *s);
+t_list							**get_tmp_tok_list(t_state *s);
 
 char							**get_envp(t_state *s);
 char							*get_env_val(t_state *s, const char *key);

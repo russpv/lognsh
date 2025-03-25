@@ -60,22 +60,24 @@ static int	_do_combine_and_insert(t_state *s, t_arg_data *grparg, t_list **this_
 {
 	int res;
 	char *str;
-	t_list *tok_lst;
+	t_list **tok_lst;
 
 	res = lstiter_state(s, grparg->lst_tokens, tok_do_grp_combine);
 	if (0 != res)
 		return (err("grp tok aggregation failure\n"), res);
 	tok_lst = get_tmp_tok_list(s);
+	tok_print_list(*tok_lst);
 	str = get_tmp(s);
 	if (str)
 	{
 		fprintf(stderr, "got tmp:%s\n",str);
-		ft_lstadd_back(&tok_lst, ft_lstnew_tmp(get_mem(s), create_tmp_token(get_mem(s), str)));
+		if (*str)
+			ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s), create_tmp_token(get_mem(s), str)));
 	}
-	tok_print_list(tok_lst);
+	tok_print_list(*tok_lst);
 	fprintf(stderr, "printed combined list\n");
 
-	t_list *argl = ft_lstmap_tmp(get_mem(s), tok_lst, token_to_arg, destroy_arg);
+	t_list *argl = ft_lstmap_tmp(get_mem(s), *tok_lst, token_to_arg, destroy_arg);
 	ft_lstprinter(argl, _print_arg);
 	ft_lstadd_insert(this_node, argl); 
 	ft_lstprinter(*this_node, _print_arg);
@@ -89,6 +91,12 @@ static int	_do_combine_and_insert(t_state *s, t_arg_data *grparg, t_list **this_
  * since a grouparg implies non-null word.
  * Ignores all (null) token raws.
  * Inserts into arg llist as needed. 
+ * expand > split > glob > combine > insert 
+ * // Explicit empty strings retained as empty strings.
+// Unquoted nulls resulting from expansions are removed.
+// Quoted nulls resulting from expansions are retained as empty strings,
+//	(done prior)
+// unless part of a non-null expansion word. -d'' is -d
  */
 int	p_do_grparg_processing(t_state *s, t_list **this, void *c)
 {
@@ -103,13 +111,17 @@ int	p_do_grparg_processing(t_state *s, t_list **this, void *c)
 	res = _do_expansions(s, grparg);
 	if (0 != res)
 		return res;
+	fprintf(stderr, "Expansions Done.\n");
 	res = _do_wordsplits(s, grparg);
 	if (0 != res)
 		return res;
+	fprintf(stderr, "Wordsplits Done.\n");
 	res = _do_globbing(s, grparg);
 	if (0 != res)
 		return res;
+	fprintf(stderr, "Globbing Done.\n");
 	res = _do_combine_and_insert(s, grparg, this);
+	fprintf(stderr, "Combines and Inserts Done.\n");
 	debug_print("%s: returning lst_size: %d, %p\n", __FUNCTION__, ft_lstsize(*this), *this);
 	return (res);
 }

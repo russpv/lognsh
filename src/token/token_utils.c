@@ -15,14 +15,14 @@ int	tok_print(void *content)
 				err("LSTITER");
 		}
 		else if (tok_get_issubtoken(tok))
-			log_print(_MOD_ ": Sub_tok:%02d Exp:%d Glb:%d Sub:%d Dq:%d \
-				+:%d Val: %s \n",
+			log_print(_MOD_ ": Sub_tok:%02d Exp:%d Glb:%d Sub:%d Dq:%d +:%d Val:(%s)\
+				 \n",
 						tok->t.tok.type,tok->t.tok.do_expansion,
 						tok->t.tok.do_globbing,tok->t.tok.is_subtoken,
 						tok->t.tok.in_dquotes,tok->t.tok.is_combinable,tok->t.tok.raw);
 		else
-			log_print(_MOD_ ": Token:%02d Exp:%d Glb:%d Sub:%d Dq:%d +:%d Val:\
-				%s \n", tok->t.tok.type, tok->t.tok.do_expansion,
+			log_print(_MOD_ ": Token:%02d Exp:%d Glb:%d Sub:%d Dq:%d +:%d Val:(%s)\
+				\n", tok->t.tok.type, tok->t.tok.do_expansion,
 				tok->t.tok.do_globbing, tok->t.tok.is_subtoken,
 				tok->t.tok.in_dquotes, tok->t.tok.is_combinable, tok->t.tok.raw);
 	}
@@ -40,11 +40,11 @@ void	tok_print_list(t_list *head)
 	{
 		while (current)
 		{
-			printf("Node %d:\n", i);
+			debug_print("Node %d:\n", i);
 			tok_print(current->content);
 			current = current->next;
 			i++;
 		}
+		debug_print("List printed.\n");
 	}
-	printf("List printed.\n");
 }

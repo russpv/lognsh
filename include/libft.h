@@ -159,9 +159,14 @@ char						*ft_strjoin_mem(t_mem_node *head, t_alloc_fn f,
 char						**ft_split_mem(struct s_mem_utils *m, char const *s,
 								char c);
 char	**ft_split_ifs_mem(struct s_mem_utils *m, char const *s, char const *set);
+char	*ft_strtrim_mem(struct s_mem_utils *m, char const *s1, char const *set);
 
 int							ft_strcmp_low(const char *s1, const char *s2);
 int							ft_strcmp_casefold(const char *s1, const char *s2);
 char	*ft_skip_delims(char const *s, char const *ref);
+
+char	*ft_strtrimback_mem(struct s_mem_utils *m, char const *s1, char const *set);
+char	*ft_strtrimfront_mem(struct s_mem_utils *m, char const *s1, char const *set);
+int	ft_is_set(char const *s1, char const *set);
 
 #endif

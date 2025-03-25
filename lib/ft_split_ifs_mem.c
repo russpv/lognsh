@@ -129,11 +129,11 @@ char	**ft_split_ifs_mem(struct s_mem_utils *m, char const *s, char const *set)
 		temp = _get_temp(s2, set); 
 		if (temp - s2 > 0)
 		{
-			if (!_copy_word(m, s, &(arr[i++]), temp - s))
+			if (!_copy_word(m, s2, &(arr[i++]), temp - s2))
 				return (_arr_free(m, arr, i), NULL);
 			--count;
 		}
-		s = temp + 1;
+		//s = temp + 1;
 		s2 = temp + 1;
 	}
 	return (arr);

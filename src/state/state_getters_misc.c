@@ -15,9 +15,9 @@ int	*get_status(t_state *s)
 	return (&s->current_exit_code);
 }
 
-t_list	*get_tmp_tok_list(t_state *s)
+t_list	**get_tmp_tok_list(t_state *s)
 {
 	if (!s)
 		return (NULL);
-	return (s->tmp_tok_lst);
+	return (&s->tmp_tok_lst);
 }

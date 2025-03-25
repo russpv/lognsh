@@ -52,6 +52,7 @@ t_tok	*create_token(t_mem_mgr *mgr, const char *s, int type, size_t pos)
 	return (token);
 }
 
+// Creates a dummy token, non-combinable
 void	*create_tmp_token(t_mem_mgr *mgr, const void *s)
 {
 	t_tok	*token;
@@ -63,6 +64,7 @@ void	*create_tmp_token(t_mem_mgr *mgr, const void *s)
 	{
 		debug_print(_MOD_": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s, TOK_WORD);
 		_init_normal_token(mgr, token, (const char *)s, TOK_WORD, -1);
+		token->t.tok.is_combinable = false;
 	}
 	return (token);
 }

@@ -101,11 +101,6 @@ int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst)
 #define DBGMSG_MATCHES _MOD_ ": %s split %d words, 1st: %s\n"
 
 // Takes list of tokens (lst_pos) and returns list of strings.
-// Explicit empty strings retained as empty strings.
-// Unquoted nulls resulting from expansions are removed.
-// Quoted nulls resulting from expansions are retained as empty strings,
-//	(done prior)
-// unless part of a non-null expansion word. -d'' is -d
 // Returns list of strings
 int	tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_pos, void *lst_c)
 {
@@ -118,7 +113,7 @@ int	tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_pos, void *lst_c)
 	tok_print_list(*lst_pos);
 	if (false == tok->t.tok.in_dquotes)
 	{
-		str_lst = split_word(mgr, tok->t.tok.raw);
+		str_lst = split_word(mgr, tok->t.tok.raw); //dont trim
 		if (str_lst)
 		{
 			debug_print(DBGMSG_MATCHES, __FUNCTION__, ft_lstsize(str_lst),
