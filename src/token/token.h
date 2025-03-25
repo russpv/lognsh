@@ -111,7 +111,7 @@ t_tok					*create_token(t_mem_mgr *st, const char *s, int type,
 							size_t pos);
 void					*create_tmp_token(t_mem_mgr *mgr, const void *s);
 void					*copy_token(t_mem_mgr *st, const void *tok);
-void					destroy_token(t_mem_mgr *mgr, void *token);
+void					destroy_token(t_mem_mgr *mgr, void **token);
 
 int						tok_set_globbing(t_tok *token);
 int						tok_set_expansion(t_tok *token);

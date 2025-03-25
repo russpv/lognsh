@@ -81,7 +81,7 @@ int								p_set_cmd(t_mem_mgr *m, t_ast_node *a,
 									const char *cmd);
 int								p_update_argc(t_ast_node *a, int amt);
 
-void							destroy_redir(t_mem_mgr *m, void *in);
+void							destroy_redir(t_mem_mgr *m, void **in);
 
 bool							is_globbing(t_tok *tok);
 

@@ -38,14 +38,14 @@ static void	_exit_no_arg(t_state *s)
 	int	exit_code;
 
 	exit_code = *(get_status(s));
-	destroy_state(s);
+	destroy_state(&s);
 	exit(exit_code);
 }
 
 static void	_exit_nonnumeric_arg(t_state *s)
 {
 	print_custom_err(CMD_NAME, EMSG_NONNUM);
-	destroy_state(s);
+	destroy_state(&s);
 	exit(2);
 }
 
@@ -56,7 +56,7 @@ static void	_exit_valid_arg(t_state *s, char *arg)
 	exit_code = ft_atoi(arg) % 256;
 	if (exit_code < 0)
 		exit_code = exit_code + 256;
-	destroy_state(s);
+	destroy_state(&s);
 	exit(exit_code);
 }
 

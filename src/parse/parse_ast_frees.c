@@ -1,10 +1,10 @@
 #include "parse_int.h"
 
-void	destroy_cmd_node(t_mem_mgr *mgr, void *n)
+void	destroy_cmd_node(t_mem_mgr *mgr, void **n)
 {
 	t_ast_node	*node;
 
-	node = (t_ast_node *)n;
+	node = (t_ast_node *)(*n);
 	debug_print(_MOD_ ":  destroy_cmd_node...\n");
 	if (NULL == node)
 		return ;
@@ -18,13 +18,14 @@ void	destroy_cmd_node(t_mem_mgr *mgr, void *n)
 		ft_lstclear_tmp(mgr, &node->data.cmd.redirs, destroy_redir);
 	mgr->dealloc(&mgr->list, node);
 	debug_print(_MOD_ ":  destroy_cmd_node...DONE\n");
+	*n = NULL;
 }
 
-void	destroy_proc_node(t_mem_mgr *mgr, void *n)
+void	destroy_proc_node(t_mem_mgr *mgr, void **n)
 {
 	t_ast_node	*node;
 
-	node = (t_ast_node *)n;
+	node = (t_ast_node *)(*n);
 	debug_print(_MOD_ ":  destroy_proc_node...\n");
 	if (NULL == node)
 		return ;
@@ -36,14 +37,15 @@ void	destroy_proc_node(t_mem_mgr *mgr, void *n)
 		ft_lstclear_tmp(mgr, &node->data.proc.cmds, destroy_ast_node);
 	mgr->dealloc(&mgr->list, node);
 	debug_print(_MOD_ ":  destroy_proc_node...DONE\n");
+	*n = NULL;
 }
 
 // destroy t_list cmds, char **operators
-void	destroy_log_node(t_mem_mgr *mgr, void *n)
+void	destroy_log_node(t_mem_mgr *mgr, void **n)
 {
 	t_ast_node	*node;
 
-	node = (t_ast_node *)n;
+	node = (t_ast_node *)(*n);
 	debug_print(_MOD_ ":  destroy_log_node...\n");
 	if (NULL == node)
 		return ;
@@ -55,13 +57,14 @@ void	destroy_log_node(t_mem_mgr *mgr, void *n)
 		ft_lstclear_tmp(mgr, &node->data.log.cmds, destroy_ast_node);
 	mgr->dealloc(&mgr->list, node);
 	debug_print(_MOD_ ":  destroy_log_node...DONE\n");
+	*n = NULL;
 }
 
-void	destroy_pipe_node(t_mem_mgr *mgr, void *n)
+void	destroy_pipe_node(t_mem_mgr *mgr, void **n)
 {
 	t_ast_node	*node;
 
-	node = (t_ast_node *)n;
+	node = (t_ast_node *)(*n);
 	debug_print(_MOD_ ":  destroy_pipe_node...\n");
 	if (NULL == node)
 		return ;
@@ -71,26 +74,28 @@ void	destroy_pipe_node(t_mem_mgr *mgr, void *n)
 		ft_lstclear_tmp(mgr, &node->data.pipe.cmds, destroy_ast_node);
 	mgr->dealloc(&mgr->list, node);
 	debug_print(_MOD_ ":  destroy_pipe_node...DONE\n");
+	*n = NULL;
 }
 
 /* Switch for freeing various t_ast_node types
  * For use in llist destroy
  */
-void	destroy_ast_node(t_mem_mgr *mgr, void *node)
+void	destroy_ast_node(t_mem_mgr *mgr, void **node)
 {
 	t_ast_node	*ast;
 
-	ast = (t_ast_node *)node;
+	ast = (t_ast_node *)(*node);
 	debug_print(_MOD_ ":  destroy_ast...\n");
 	if (NULL == ast)
 		return ;
 	if (AST_NODE_PROC == ast->type)
-		destroy_proc_node(mgr, ast);
+		destroy_proc_node(mgr, (void **)&ast);
 	else if (AST_NODE_CMD == ast->type)
-		destroy_cmd_node(mgr, ast);
+		destroy_cmd_node(mgr, (void **)&ast);
 	else if (AST_NODE_PIPELINE == ast->type)
-		destroy_pipe_node(mgr, ast);
+		destroy_pipe_node(mgr, (void **)&ast);
 	else
-		destroy_log_node(mgr, ast);
+		destroy_log_node(mgr, (void **)&ast);
 	debug_print(_MOD_ ":  destroy_ast...DONE\n");
+	*node = NULL;
 }

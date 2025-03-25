@@ -50,7 +50,7 @@
 struct s_global_state;
 typedef struct s_global_state	t_state;
 
-typedef void					(*t_destroy_fn)(t_mem_mgr *m, void *instance);
+typedef void					(*t_destroy_fn)(t_mem_mgr *m, void **instance);
 typedef void					(*t_attach_fn)(void *instance);
 
 /* Duplicate declarations instead of includes */
@@ -61,7 +61,7 @@ typedef struct s_env			t_env;
 
 /* Methods */
 t_state							*init_state(char **envp);
-void							destroy_state(t_state *state);
+void							destroy_state(t_state **state);
 
 int								set_exit_status(t_state *state, int value);
 void							set_error(t_state *state, int code);

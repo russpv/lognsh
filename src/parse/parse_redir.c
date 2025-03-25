@@ -103,15 +103,15 @@ static int	_parse_redir(t_parser *p, t_ast_node *node)
 		if (false == is_heredoc_token((t_tok *)tok))
 		{
 			if (0 != _process_normal_redir(p, tok, red, node))
-				return (destroy_redir(p->mmgr, red), ERR_GENERAL);
+				return (destroy_redir(p->mmgr, (void**)&red), ERR_GENERAL);
 		}
 		else
 		{
 			if (0 != _process_heredoc_redir(p, red, tok, node))
-				return (destroy_redir(p->mmgr, red), ERR_GENERAL);
+				return (destroy_redir(p->mmgr, (void**)&red), ERR_GENERAL);
 		}
 		if (0 != _add_redir(p->mmgr, node, red))
-			return (destroy_redir(p->mmgr, red), ERR_GENERAL);
+			return (destroy_redir(p->mmgr, (void**)&red), ERR_GENERAL);
 	}
 	debug_print(_MOD_ ": _parse_redir: curr peek tok: %s\n",
 		tok_get_raw(peek(p)));

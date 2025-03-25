@@ -37,17 +37,17 @@ t_parser	*create_parser(t_state *s, t_list *tokens)
 	return (p);
 }
 
-void	destroy_parser(t_mem_mgr *m, void *instance)
+void	destroy_parser(t_mem_mgr *m, void **instance)
 {
 	t_parser	*p;
 
-	p = (t_parser *)instance;
+	p = (t_parser *)(*instance);
 	if (!p)
 		return ;
 	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
 	if (p->ast)
 	{
-		destroy_ast_node(m, p->ast);
+		destroy_ast_node(m, (void **)&p->ast);
 		p->ast = NULL;
 	}
 	if (p->tokens)
@@ -62,4 +62,5 @@ void	destroy_parser(t_mem_mgr *m, void *instance)
 		p->st = NULL;
 	}
 	m->dealloc(&m->list, p);
+	*instance = NULL;
 }

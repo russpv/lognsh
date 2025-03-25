@@ -22,7 +22,7 @@ int	exec_fork_wait(t_state *s, t_ast_node *node, t_execute_fn executor)
 	{
 		sig_reset_handlers();
 		exit_status = executor(s, node);
-		destroy_state(s);
+		destroy_state(&s);
 		exit(exit_status);
 	}
 	waitchild(&status, 1);

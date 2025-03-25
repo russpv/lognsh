@@ -38,7 +38,7 @@ static int	_do_child_ops(t_state *s)
 		return (-1);
 	else if (-1 == execve(fullpath, (char **)argv, (char **)envp))
 		return (perror(EMSG_EXECVE), ERR_EXECVE);
-	destroy_state(s);
+	destroy_state(&s);
 	return (0);
 }
 
