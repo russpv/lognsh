@@ -52,7 +52,8 @@ t_tok	*create_token(t_mem_mgr *mgr, const char *s, int type, size_t pos)
 	return (token);
 }
 
-// Creates a dummy token, non-combinable
+// Creates a simple token, non-combinable
+// Signals no further processing needed
 void	*create_tmp_token(t_mem_mgr *mgr, const void *s)
 {
 	t_tok	*token;
@@ -70,6 +71,30 @@ void	*create_tmp_token(t_mem_mgr *mgr, const void *s)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		_init_normal_token(token, TOK_WORD, -1);
 		token->t.tok.is_combinable = false;
+	}
+	return (token);
+}
+
+// Creates a dummy tokenas as result of expansion
+// Signals combiner to combine only token list boundaries
+void	*create_split_token(t_mem_mgr *mgr, const void *s)
+{
+	t_tok	*token;
+
+	if (!s)
+		return (NULL);
+	token = mgr->f(&mgr->list, sizeof(t_tok));
+	if (token)
+	{
+		debug_print(_MOD_": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s, TOK_WORD);
+		if (ft_strnlen(s, 4096) > MAX_RAW_INPUT_LEN)
+			return (err(_MOD_": raw input buf overflow\n"), mgr->dealloc(&mgr->list, token), NULL);
+		token->t.tok.raw = ft_strdup_tmp(mgr, s);
+		if (!token->t.tok.raw)
+			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		_init_normal_token(token, TOK_WORD, -1);
+		token->t.tok.is_combinable = false;
+		token->t.tok.do_expansion = true;
 	}
 	return (token);
 }

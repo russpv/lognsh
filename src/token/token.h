@@ -110,6 +110,7 @@ typedef struct s_tok	t_tok;
 t_tok					*create_token(t_mem_mgr *st, const char *s, int type,
 							size_t pos);
 void					*create_tmp_token(t_mem_mgr *mgr, const void *s);
+void	*create_split_token(t_mem_mgr *mgr, const void *s);
 void					*copy_token(t_mem_mgr *st, const void *tok);
 void					destroy_token(t_mem_mgr *mgr, void **token);
 
@@ -140,7 +141,6 @@ int						tok_do_expansion(t_state *s, void *c);
 int						tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node,
 							void *c);
 t_list					*split_word(t_mem_mgr *mgr, const char *word);
-int						do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos,
-							t_list **ins_lst);
-
+int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst, \
+	void *(*createf)(t_mem_mgr *, const void *));
 #endif

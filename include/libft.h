@@ -168,5 +168,6 @@ char	*ft_skip_delims(char const *s, char const *ref);
 char	*ft_strtrimback_mem(struct s_mem_utils *m, char const *s1, char const *set);
 char	*ft_strtrimfront_mem(struct s_mem_utils *m, char const *s1, char const *set);
 int	ft_is_set(char const *s1, char const *set);
+char	*ft_strchrs_betw(const char *start, const char *end, const char *chars);
 
 #endif

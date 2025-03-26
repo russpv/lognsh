@@ -1,5 +1,32 @@
 #include "token_int.h"
 
+char	*_skip_delims_post(char const *s, char const *ref)
+{
+	char *delims;
+	char *end;
+	int len;
+
+	if (!s)
+		return (NULL);
+	len = ft_strnlen((char *)s, MAX_ENVVAR_LEN);
+	if (len < 2)
+		return (NULL);
+	end = (char *)s + len - 1;
+	while (end != (char*)s)
+	{
+		delims = (char *)ref;
+		while (*delims)
+		{
+			if (*end == *delims)
+				break;
+			delims++;
+		}
+		if (0 == *delims)
+			return (end);
+		end--;
+	}
+	return (NULL);
+}
 
 char	*_skip_delims(char const *s, char const *ref)
 {
@@ -26,7 +53,7 @@ char	*_skip_delims(char const *s, char const *ref)
 }
 
 // Returns list of strings
-// Leading spaces are preserved!
+// Leading and lagging spaces are preserved!
 t_list	*split_word(t_mem_mgr *mgr, const char *word)
 {
 	t_list				*lst;
@@ -41,7 +68,7 @@ t_list	*split_word(t_mem_mgr *mgr, const char *word)
 	lst = NULL;
 	i = -1;
 	debug_print(_MOD_ ": %s: Got _%s_\n", __FUNCTION__, word);
-	if (NULL != ft_strchrs(_skip_delims(word, IFS), IFS))
+	if (NULL != ft_strchrs_betw(_skip_delims(word, IFS), _skip_delims_post(word, IFS), IFS))
 	{
 		debug_print("splitting\n");
 		split_raw = ft_split_ifs_mem(&mem, word, IFS);
@@ -55,6 +82,36 @@ t_list	*split_word(t_mem_mgr *mgr, const char *word)
 	}
 	return (lst);
 }
+/*
+int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_node, t_list **ins_lst,
+	void *tok)
+{
+	t_list	*new_tok_lst;
+	char	*new_tok;
+	t_tok *content;
+
+	new_tok_lst = NULL;
+	new_tok = NULL;
+	content = (t_tok *)tok;
+	if (ft_lstsize(*ins_lst) > 1)
+	{
+		ft_lstdelone_rwd_tmp(mgr, lst_node, lst_node, destroy_token);
+		new_tok_lst = ft_lstmap_tmp(mgr, *ins_lst, create_tmp_token,
+				destroy_token);
+		ft_lstadd_insert(lst_node, new_tok_lst);
+		ft_lstclear_str_tmp(mgr, ins_lst);
+	}
+	else // one token, don't delete node, just replace content
+	{
+		new_tok = copy_token(mgr, content);
+		if (!new_tok)
+			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		destroy_token(mgr, content);
+		content = new_tok;
+		ft_lstclear_str_tmp(mgr, ins_lst);
+	}
+	return (0);
+}*/
 
 /*
  * ins_lst is incoming list of split strings to be inserted
@@ -62,9 +119,10 @@ t_list	*split_word(t_mem_mgr *mgr, const char *word)
  * Deletes lst_pos, deep copies insert list and inserts
  * at lst_pos position.
  * ins_lst is then destroyed.
- * Sets is_combinable on the first token.
+ * Sets is_combinable on the first token. (Use with create_tmp_token)
  */
-int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst)
+int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst, \
+	void *(*createf)(t_mem_mgr *, const void *))
 {
 	t_list	*head;
 	t_list	*new_lst;
@@ -75,7 +133,7 @@ int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst)
 	if (ft_lstsize(*ins_lst) > 1)
 	{
 		debug_print(_MOD_ ": %s: Inserting lst \n", __FUNCTION__);
-		new_lst = ft_lstmap_tmp(mgr, *ins_lst, create_tmp_token, destroy_token);
+		new_lst = ft_lstmap_tmp(mgr, *ins_lst, createf, destroy_token);
 		((t_tok*)((ft_lstfirst(new_lst))->content))->t.tok.is_combinable = true;
 		ft_lstadd_insert(lst_pos, new_lst);
 		head = ft_lstfirst(*lst_pos);
@@ -85,11 +143,10 @@ int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst)
 	{
 		debug_print(_MOD_ ": %s: Inserting single tok _%s_\n", __FUNCTION__,\
 			(*ins_lst)->content);
-		new_tok = create_tmp_token(mgr, (*ins_lst)->content);
+		new_tok = createf(mgr, (*ins_lst)->content);
 		if (!new_tok)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		tok_print(new_tok);
-		fprintf(stderr, "HEYYYY\n");
 		new_tok->t.tok.is_combinable = true;
 		destroy_token(mgr, &(*lst_pos)->content);
 		(*lst_pos)->content = new_tok;
@@ -100,8 +157,8 @@ int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst)
 
 #define DBGMSG_MATCHES _MOD_ ": %s split %d words, 1st: %s\n"
 
-// Takes list of tokens (lst_pos) and returns list of strings.
-// Returns list of strings
+// Takes list of tokens (lst_pos) and inserts list of split tokens 
+// at lst_pos node
 int	tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_pos, void *lst_c)
 {
 	t_list		*str_lst;
@@ -118,7 +175,7 @@ int	tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_pos, void *lst_c)
 		{
 			debug_print(DBGMSG_MATCHES, __FUNCTION__, ft_lstsize(str_lst),
 			str_lst->content);
-			do_tok_inserts(mgr, lst_pos, &str_lst);
+			do_tok_inserts(mgr, lst_pos, &str_lst, create_split_token);
 			ft_lstclear_str_tmp(mgr, &str_lst);
 			tok_print_list(*lst_pos);
 			debug_print(_MOD_ ": %s: Done.\n", __FUNCTION__);

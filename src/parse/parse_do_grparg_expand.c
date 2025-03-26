@@ -1,5 +1,6 @@
 #include "parse_int.h"
 
+// Modifies args token list
 static int	_do_expansions(t_state *s, t_arg_data *grparg)
 {
 	int res;
@@ -16,6 +17,7 @@ static int	_do_expansions(t_state *s, t_arg_data *grparg)
 	return (0);
 }
 
+// Modifies args token list
 static int	_do_wordsplits(t_state *s, t_arg_data *grparg)
 {
 	if (!grparg || !s)
@@ -26,17 +28,17 @@ static int	_do_wordsplits(t_state *s, t_arg_data *grparg)
 	return (0);
 }
 
-// Runs if there was an expansion
+// Saves list in state
 static int	_do_globbing(t_state *s, t_arg_data *grparg)
 {
-	t_list		*lst; //grparg's token list
+	t_list		**saved_lst;
 
 	if (!grparg || !s)
 		return (ERR_ARGS);
+	saved_lst = get_tmp_tok_list(s);
 	if (grparg->do_globbing || grparg->do_expansion)
 	{
-		lst = grparg->lst_tokens;
-		ft_lstiter_ins_rwd_tmp(get_mem(s), &lst, p_do_globbing_args);
+		ft_lstiter_ins_rwd_tmp(get_mem(s), saved_lst, p_do_globbing_toks);
 	}
 	return (0);
 }
@@ -55,8 +57,8 @@ void _print_arg(void *arg)
 	}
 }
 
-/* Replace this group arg node with resulting promoted args based on token list */
-static int	_do_combine_and_insert(t_state *s, t_arg_data *grparg, t_list **this_node)
+//Saves modified token list in state cache
+static int	_do_combine(t_state *s, t_arg_data *grparg)
 {
 	int res;
 	char *str;
@@ -66,17 +68,25 @@ static int	_do_combine_and_insert(t_state *s, t_arg_data *grparg, t_list **this_
 	if (0 != res)
 		return (err("grp tok aggregation failure\n"), res);
 	tok_lst = get_tmp_tok_list(s);
+	fprintf(stderr,"This should show the tokens:\n");
 	tok_print_list(*tok_lst);
 	str = get_tmp(s);
 	if (str)
 	{
-		fprintf(stderr, "got tmp:%s\n",str);
+		fprintf(stderr, "(DELETE?)got tmp:%s\n",str);
 		if (*str)
 			ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s), create_tmp_token(get_mem(s), str)));
 	}
 	tok_print_list(*tok_lst);
 	fprintf(stderr, "printed combined list\n");
+	return (0);
+}
 
+static void	_do_insert(t_state *s, t_arg_data *grparg, t_list **this_node)
+{
+	t_list **tok_lst;
+
+	tok_lst = get_tmp_tok_list(s);
 	t_list *argl = ft_lstmap_tmp(get_mem(s), *tok_lst, token_to_arg, destroy_arg);
 	ft_lstprinter(argl, _print_arg);
 	ft_lstprinter(*this_node, _print_arg);
@@ -84,7 +94,7 @@ static int	_do_combine_and_insert(t_state *s, t_arg_data *grparg, t_list **this_
 	ft_lstprinter(*this_node, _print_arg);
 	ft_lstdelone_tmp(get_mem(s), this_node, *this_node, destroy_arg);
 	ft_lstprinter(*this_node, _print_arg);
-	return (0);
+	*tok_lst = NULL;
 }
 
 /* Passed to arg llist iterator to iterate any group arg's token llist.
@@ -117,12 +127,15 @@ int	p_do_grparg_processing(t_state *s, t_list **this_arg, void *c)
 	if (0 != res)
 		return res;
 	fprintf(stderr, "Wordsplits Done.\n");
+	res = _do_combine(s, grparg);
+	if (0 != res)
+		return res;
+	fprintf(stderr, "Combines and Inserts Done.\n");
 	res = _do_globbing(s, grparg);
 	if (0 != res)
 		return res;
+	_do_insert(s, grparg, this_arg);
 	fprintf(stderr, "Globbing Done.\n");
-	res = _do_combine_and_insert(s, grparg, this_arg);
-	fprintf(stderr, "Combines and Inserts Done.\n");
 	debug_print("%s: returning lst_size: %d, %p\n", __FUNCTION__, ft_lstsize(*this_arg), *this_arg);
 	return (res);
 }

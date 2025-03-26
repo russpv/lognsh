@@ -61,3 +61,24 @@ char	*ft_strchrs(const char *raw, const char *chars)
 	}
 	return (nearest);
 }
+
+char	*ft_strchrs_betw(const char *start, const char *end, const char *chars)
+{
+	char		c;
+	const char	*res;
+	char		*nearest;
+
+	if (!start || !end || !chars)
+		return (NULL);
+	nearest = NULL;
+	while (*chars)
+	{
+		c = *chars;
+		res = (const char *)ft_strchr(start, c);
+		if (res <= end)
+			if (res && (NULL == nearest || res < nearest))
+				nearest = (char *)res;
+		chars++;
+	}
+	return (nearest);
+}

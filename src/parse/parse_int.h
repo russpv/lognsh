@@ -244,6 +244,7 @@ int							do_arg_inserts(t_mem_mgr *mgr, t_list **lst_node,
 void						*token_to_arg(t_mem_mgr *m, const void *tok);
 int							p_do_grparg_processing(t_state *s, t_list **this,
 								void *c);
+int	p_do_globbing_toks(t_mem_mgr *mgr, t_list **lst_node, void *lst_c);
 int							p_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node,
 								void *lst_c);
 
