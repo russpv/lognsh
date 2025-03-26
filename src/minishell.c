@@ -29,6 +29,7 @@ void	clear_current_line(void)
 static int	_do_loop(t_state *s)
 {
 	t_ast_node	*ast;
+	int	exit_status;
 
 	g_last_signal = -1;
 	set_input(s, readline(get_prompt(s)));
@@ -43,10 +44,16 @@ static int	_do_loop(t_state *s)
 	else
 		return (0);
 	ast = parse(s, get_input(s));
-	if (ast && (!get_lexer(s) || !get_heredoc(s)))
-		clear_current_line();
+	//if (ast && (!get_lexer(s) || !get_heredoc(s)))
+	//	clear_current_line();
+	//if (ast)
+	//	set_exit_status(s, cmd_execute(s, ast));
+	exit_status = 0;
 	if (ast)
-		set_exit_status(s, cmd_execute(s, ast));
+        	exit_status = cmd_execute(s, ast);
+    // >> Only clear line after execution if not a heredoc or shell-spawning command
+	if (ast && !get_heredoc(s) && !(get_cmd(s)))
+		clear_current_line();
 	s_free_cmd_lex_parse(s);
 	return (0);
 }
