@@ -5,9 +5,11 @@ void	destroy_token(t_mem_mgr *mgr, void **token)
 {
 	t_tok *t;
 	
-	t = (t_tok *)(*token);
-	if (!t)
+	if (!token)
 		return ;
+	if (!(*token))
+		return ;
+	t = (t_tok *)(*token);
 	if (GROUP == t->class)
 		ft_lstclear_tmp(mgr, &t->t.meta.tokens, destroy_token);
 	else

@@ -3,23 +3,40 @@
 static void	_fill_argv_nocmd(t_mem_mgr *m, int i, struct s_context *ctxt)
 {
 	if (i == 0)
+	{
 		ctxt->argv[0] = ft_strdup_tmp(m, ctxt->args[0]);
+		if (!ctxt->argv[0])
+			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	}
 	else if (ctxt->args && i < ctxt->argc)
+	{
 		ctxt->argv[i] = ft_strdup_tmp(m, ctxt->args[i]);
+		if (!ctxt->argv[i])
+			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	}
 	else if (ctxt->args && i >= ctxt->argc)
+	{
 		ctxt->argv[i] = NULL;
-	if (i < ctxt->argc - 1 && !ctxt->argv[i])
-		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		ctxt->count--;
+	}
+	ctxt->count++;
 }
 
 static void	_fill_argv_cmdname(t_mem_mgr *m, int i, struct s_context *ctxt)
 {
 	if (i == 0)
+	{
 		ctxt->argv[0] = ft_strdup_tmp(m, ctxt->cmdname);
+		if (!ctxt->argv[0])
+			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	}
 	else if (ctxt->args)
+	{
 		ctxt->argv[i] = ft_strdup_tmp(m, ctxt->args[i - 1]);
-	if (!ctxt->argv[i])
-		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		if (!ctxt->argv[i])
+			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	}
+	ctxt->count++;
 }
 
 static int	_do_loop(t_state *s, struct s_context *ctxt)
@@ -27,6 +44,7 @@ static int	_do_loop(t_state *s, struct s_context *ctxt)
 	int	i;
 
 	i = -1;
+	ctxt->count = 0;
 	while (++i <= ctxt->argc)
 	{
 		if (ctxt->cmdname)
@@ -37,6 +55,19 @@ static int	_do_loop(t_state *s, struct s_context *ctxt)
 			return (-1);
 	}
 	return (i);
+}
+
+int arrlen(char *arr[]) 
+{
+    int len;
+	
+	len = 0;
+    while (arr[len] != NULL)
+	{
+        len++;
+	}
+
+    return len;
 }
 
 /* Builds argv from args and stores in command
@@ -64,7 +95,9 @@ int	c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a, char **args)
 	if (i < 0)
 		return (ERR_GENERAL);
 	ctxt.argv[i] = NULL;
-	cmd->argvc = i;
+	assert(arrlen(ctxt.argv) == ctxt.count);
+	cmd->argvc = ctxt.count;
+	debug_print(_MOD_ ": %s: adjusted argc:%d\n", __FUNCTION__, cmd->argvc);
 	cmd->argv = ctxt.argv;
 	if (NULL == ctxt.cmdname)
 		p_set_cmd(get_mem(s), a, ctxt.argv[0]);

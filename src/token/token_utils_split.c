@@ -91,7 +91,7 @@ int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst)
 		tok_print(new_tok);
 		fprintf(stderr, "HEYYYY\n");
 		new_tok->t.tok.is_combinable = true;
-		destroy_token(mgr, (*lst_pos)->content);
+		destroy_token(mgr, &(*lst_pos)->content);
 		(*lst_pos)->content = new_tok;
 	}
 	ft_lstclear_str_tmp(mgr, ins_lst);

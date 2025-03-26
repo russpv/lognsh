@@ -111,7 +111,6 @@ static int _load_str_post_expansion(t_state *s, char *raw, char **str, char **tm
 			fprintf(stderr, "has lagging delims %s\n", *str);
 			*tmp_str = *str;
 			*str = ft_strtrimback_mem(&m, *tmp_str, IFS); // don't join, trim whats in cache, 
-			//free(*tmp_str);
 			*tmp_str = ft_strtrimfront_mem(&m, raw, IFS); // trim incoming and pass by reference
 			_announce(__FUNCTION__, *tmp_str, *str, SAYTRIMMED);
 		}
@@ -135,13 +134,12 @@ static void	_do_combine(t_state *s, const t_tok	*content, char	**str, int *combi
 	if (true == content->t.tok.is_combinable) //either combined with previous, or modified cache and passed tmp_str
 	{
 		_announce(__FUNCTION__, content->t.tok.raw, NULL, SAYCANCOMB);
-		if (true == content->t.tok.do_expansion)
+		if (true == content->t.tok.do_expansion && false == content->t.tok.in_dquotes)
 			*combined = _load_str_post_expansion(s, content->t.tok.raw, str, &tmp_str);
 		else
 			*combined = _load_str_normal(s, content->t.tok.raw, str, &tmp_str);
 		fprintf(stderr, "freeing str %s got tmp_str %s\n", *str, tmp_str );
-		if (*str)
-			free(*str); //May need to commit token here
+		; //May need to commit token here
 		*str = NULL;
 		if (tmp_str)
 			*str = tmp_str;
@@ -153,8 +151,6 @@ static void	_do_combine(t_state *s, const t_tok	*content, char	**str, int *combi
 			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		ft_lstadd_back(get_tmp_tok_list(s), ft_lstnew_tmp(get_mem(s), create_tmp_token(get_mem(s), tmp_str)));
 		get_mem(s)->dealloc(&get_mem(s)->list, tmp_str);
-		if (*str)
-			free(*str);
 		*str = NULL;
 	}
 }
@@ -176,7 +172,6 @@ int	tok_do_grp_combine(t_state *s, void *c)
 	tok_lst = get_tmp_tok_list(s);
 	if (NULL == c)
 	{
-		free(str);
 		str = NULL;
 		return (_announce(__FUNCTION__, NULL, NULL, SAYNULL), 0);
 	}
@@ -188,7 +183,6 @@ int	tok_do_grp_combine(t_state *s, void *c)
 	if (str && combined == COMBINED)
 	{ 	// commit if we have cached aggregation and need to start new cache
 		ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s), create_tmp_token(get_mem(s), str)));
-		free(str);
 		str = NULL;
 		set_tmp(s, str);
 	}

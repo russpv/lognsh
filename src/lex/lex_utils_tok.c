@@ -81,7 +81,7 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 	{
 		if (true == lexer->is_subtoken)
 			tok_set_subtoken(token);
-		if (!lexer->do_wordsplit)
+		if (false == lexer->do_wordsplit)
 			tok_set_dquotes(token);
 		if (true == lexer->do_globbing)
 		{
@@ -95,7 +95,7 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 		}
 		lexer->do_globbing = INITVAL;
 		lexer->do_expansion = INITVAL;
-		debug_print(_MOD_ ": %s: Created token\n", __FUNCTION__);
+		debug_print(_MOD_ ": %s: Created token \n", __FUNCTION__);
 	}
 	return (token);
 }

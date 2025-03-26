@@ -14,6 +14,7 @@ static inline void	_init_state_ptrs(t_state *s)
 	s->tmp = NULL;
 	s->pwd = NULL;
 	s->prompt = DFL_PROMPT;
+	s->got_heredoc = false;
 }
 
 t_state	*init_state(char **envp)

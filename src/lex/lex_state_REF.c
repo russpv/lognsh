@@ -21,19 +21,18 @@ static inline bool	_handle_quote_state(t_lex *lexer)
 		if ((unsigned char)*lexer->ptr == OP_DQUOTE
 			&& IN_DOUBLE_QUOTES == st_int_peek(lexer->stack))
 		{
-			debug_print(_MOD_ ": %s: Popping stack and transitioning \n", __FUNCTION__,
-				*lexer->ptr);
+			debug_print(_MOD_ ": %s: Popping stack and transitioning\n", __FUNCTION__);
 			st_int_pop(lexer->stack);
-			lexer->do_wordsplit = 1;
+			lexer->do_wordsplit = true;
 			lexer->ptr++;
 			return (false);
 		}
-		debug_print(_MOD_ ": %s: Transitioning to IN_DOUBLE_QUOTES state %c\n",
-			__FUNCTION__, *lexer->ptr);
+		debug_print(_MOD_ ": %s: Transitioning to IN_DOUBLE_QUOTES state\n",
+			__FUNCTION__);
 		if (IN_DOUBLE_QUOTES != st_int_peek(lexer->stack))
 			st_int_push(lexer->stack, IN_DOUBLE_QUOTES);
 		lexer->state = IN_DOUBLE_QUOTES;
-		lexer->do_wordsplit = 0;
+		lexer->do_wordsplit = false;
 		lexer->tokenizer = tokenize_double_quotes;
 		return (true);
 	}

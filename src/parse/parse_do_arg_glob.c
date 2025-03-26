@@ -170,7 +170,11 @@ int	p_do_globbing_args(t_mem_mgr *mgr, t_list **lst_node, void *lst_c)
 
 	res = 0;
 	lst = NULL;
+	if (!lst_c)
+		return (ERR_ARGS);
 	arg = (t_arg_data *)lst_c;
+	if (!arg->raw)
+		return (ERR_ARGS);
 	debug_print(DBGMSG_GOTARGS, arg->raw, (void *)lst_node);
 	if (true == arg->do_globbing)
 	{

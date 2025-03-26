@@ -7,7 +7,11 @@ static inline void	_init_lexer_state(t_lex *lexer, int start_state)
 	if (IN_SINGLE_QUOTES == start_state)
 		lexer->tokenizer = tokenize_single_quotes;
 	if (IN_DOUBLE_QUOTES == start_state)
+	{
 		lexer->tokenizer = tokenize_double_quotes;
+		lexer->do_wordsplit = false;
+		st_int_push(lexer->stack, IN_DOUBLE_QUOTES);
+	}
 	lexer->state = start_state;
 }
 
@@ -30,7 +34,7 @@ static inline void	_init_lexer_flags(t_lex *lexer)
 	lexer->escape_mode = false;
 	lexer->do_expansion = INITVAL;
 	lexer->do_globbing = INITVAL;
-	lexer->do_wordsplit = 1;
+	lexer->do_wordsplit = true;
 	lexer->input_incomplete = false;
 	lexer->is_subtoken = false;
 }
@@ -43,7 +47,6 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 	lexer = myalloc(&(get_mem(state)->list), sizeof(t_lex));
 	if (lexer)
 	{
-		_init_lexer_state(lexer, start_state);
 		_init_lexer_flags(lexer);
 		lexer->stack = st_int_create(get_mem(state));
 		lexer->raw_string = s;
@@ -59,6 +62,7 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 			exit_clean(&get_mem(state)->list, ENOMEM, __FUNCTION__,
 				EMSG_MALLOC);
 		build_hasht(get_mem(state), lexer);
+		_init_lexer_state(lexer, start_state);
 	}
 	return (lexer);
 }

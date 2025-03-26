@@ -21,7 +21,7 @@ bool	tok_get_expansion(t_tok *token)
 bool	tok_get_dquotes(t_tok *token)
 {
 	if (!token)
-		return (false);
+		return (err("No Token\n"), false);
 	return (token->t.tok.in_dquotes);
 }
 

@@ -26,16 +26,17 @@ static int	_do_wordsplits(t_state *s, t_arg_data *grparg)
 	return (0);
 }
 
+// Runs if there was an expansion
 static int	_do_globbing(t_state *s, t_arg_data *grparg)
 {
-	t_list		**lst; //grparg's token list
+	t_list		*lst; //grparg's token list
 
 	if (!grparg || !s)
 		return (ERR_ARGS);
-	if (grparg->do_globbing)
+	if (grparg->do_globbing || grparg->do_expansion)
 	{
-		lst = &grparg->lst_tokens;
-		ft_lstiter_ins_rwd_tmp(get_mem(s), lst, p_do_globbing_args);
+		lst = grparg->lst_tokens;
+		ft_lstiter_ins_rwd_tmp(get_mem(s), &lst, p_do_globbing_args);
 	}
 	return (0);
 }

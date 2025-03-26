@@ -32,6 +32,7 @@ struct					s_context
 	char				**argv;
 	const char			*cmdname;
 	int					argc;
+	int					count;
 };
 
 void					destroy_cmd(t_mem_mgr *m, void **c);

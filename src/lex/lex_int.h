@@ -187,7 +187,7 @@ typedef struct s_lex
 	int						do_globbing;
 	int						do_heredoc;
 	int						do_heredoc_expansion;
-	int						do_wordsplit; 
+	bool					do_wordsplit; 
 	bool					is_subtoken;
 	char					*eof_word;
 
