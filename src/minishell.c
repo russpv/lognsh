@@ -52,7 +52,7 @@ static int	_do_loop(t_state *s)
 	if (ast)
         	exit_status = cmd_execute(s, ast);
     // >> Only clear line after execution if not a heredoc or shell-spawning command
-	if (ast && !get_heredoc(s) && !(get_cmd(s)))
+	if (ast && !get_heredoc(s) && exit_status != 0)
 		clear_current_line();
 	s_free_cmd_lex_parse(s);
 	return (0);
