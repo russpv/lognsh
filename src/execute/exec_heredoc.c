@@ -1,6 +1,5 @@
 #include "execute_int.h"
 
-//Forks (Move to execute)
 int	exec_heredoc(t_mem_mgr *m, t_lex *l)
 {
 	int fildes[2];
@@ -17,10 +16,15 @@ int	exec_heredoc(t_mem_mgr *m, t_lex *l)
 	else if (0 == pid)
 	{
 		close(fildes[0]);
-		sig_reset_handlers();
+		sig_set_handlers(INT_KRL);
 		res = match_heredoc(m, l);
-		if (0 != res)
-			exit_clean(&m->list, res, __FUNCTION__, NULL);
+		if (SIGINT == g_last_signal || res == ERR_CMD_SIGINTD)
+		{
+			close(STDOUT_FILENO);
+			close(STDERR_FILENO);
+			close(fildes[1]);
+			exit_clean(&m->list, ERR_CMD_SIGINTD, __FUNCTION__, NULL);
+		}
 		write_heredoc(fildes[1], l);
 		exit_clean(&m->list, res, __FUNCTION__, NULL);
 	}
@@ -28,14 +32,12 @@ int	exec_heredoc(t_mem_mgr *m, t_lex *l)
 	{
 		close(fildes[1]);
 		waitchild(&status, 1);
-		if (ERR_CHILD_SIGINT == status)
-		{
+		if (ERR_CMD_SIGINTD == status)
 			write(STDOUT_FILENO, HDOC_PROMPT"^C\n", ft_strlen(HDOC_PROMPT) + 3);
-			g_last_signal = -1;
-		}
-		read_heredoc(fildes[0], l);
+		else
+			read_heredoc(fildes[0], l);
 		close (fildes[0]);
-		sig_set_handlers();
+		sig_set_handlers(INT_DFL);
 	}
 	return (0);
 }

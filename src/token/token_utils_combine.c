@@ -184,11 +184,9 @@ int	tok_do_grp_combine(t_state *s, void *c)
 {
 	const t_tok	*content = (t_tok *)c;
 	static char	*str = NULL;
-	t_list		**tok_lst;
 	int			combined;
 
 	combined = NOTCOMBINED;
-	tok_lst = get_tmp_tok_list(s);
 	if (NULL == c)
 	{
 		str = NULL;

@@ -94,6 +94,6 @@ int	exec_fork_execve(t_state *s)
 	if (SIGINT == exit_code)
 		write(STDOUT_FILENO, "\n", 1);
 	s_free_cmd(s);
-	sig_set_handlers();
+	sig_set_handlers(INT_DFL);
 	return (exit_code);
 }

@@ -59,6 +59,36 @@ int	waitchild(int *status, int childc)
 	return (0);
 }
 
+int	waitchild_sigint(int *status, pid_t child_pid)
+{
+	int code;
+	int	raw_status;
+
+	code = 0;
+	if (g_last_signal == SIGINT)
+	{
+		fprintf(stderr, "WTF\n");
+	}
+	while (code <= 0)
+	{
+		code = waitpid(child_pid, &raw_status, WNOHANG);
+		if (code > 0 && WIFEXITED(raw_status))
+		{
+			*status = get_exit_status(raw_status);  // Sets to 1
+			debug_print(DBGMSG_EXEC_EXITCODE, child_pid, *status);
+		}
+		else if (code > 0 && WIFSIGNALED(raw_status))
+		{
+			*status = 128 + WTERMSIG(raw_status);
+			debug_print(DBGMSG_EXEC_EXITSIG, child_pid, WTERMSIG(raw_status));
+		}
+		else if (code < 0)
+			return (perror(EMSG_WAITPID), ERR_WAITPID);
+	}
+	debug_print(DBGMSG_EXEC_DONE);
+	return (0);
+}
+
 /* Interpret waitpid() exit status (signals ignored here) */
 int	get_exit_status(int status)
 {

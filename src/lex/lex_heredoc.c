@@ -29,8 +29,8 @@ static inline bool	_line_is_eof(t_lex *l, const char *line)
 
 size_t	read_heredoc(int fd, t_lex *l)
 {
-	size_t sz;
-	size_t bytes;
+	int sz;
+	int bytes;
 	char buf[MAX_HDOCSZ];
 
 	bytes = 1;
@@ -38,7 +38,7 @@ size_t	read_heredoc(int fd, t_lex *l)
 	ft_memset(buf, 0, MAX_HDOCSZ);
 	while (bytes > 0 && sz < MAX_HDOCSZ)
 	{
-		bytes = read(fd, buf, MAX_HDOCSZ - sz);
+		bytes = (int)read(fd, buf, MAX_HDOCSZ - sz);
 		if (bytes < 0)
 			perror("Pipe read");
 		sz+=bytes;
@@ -74,7 +74,7 @@ int	match_heredoc(t_mem_mgr *m, t_lex *l)
 		line = readline(HDOC_PROMPT);
 		if (NULL == line)
 		{
-			debug_print(LOGMSG_SIG); //lexer interrupted
+			debug_print(LOGMSG_SIG);
 			m->dealloc(&m->list, l->eof_word);
 			l->eof_word = NULL;
 			return (ERR_CMD_SIGINTD);
@@ -108,7 +108,7 @@ int	tokenize_heredoc(t_state *s, t_lex *lexer)
 	res = exec_heredoc(get_mem(s), lexer);
 	if (0 != res)
 		return (res);
-
+	debug_print("Reeived doc:%s\n", lexer->buf);
 	debug_print(DBGMSG_PTRAT, *lexer->ptr);
 	token = lex_create_token(get_mem(s), lexer, TOK_HEREDOC_WORD);
 	if (token)

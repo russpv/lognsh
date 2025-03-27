@@ -36,7 +36,7 @@ t_state	*init_state(char **envp)
 	if (!s->sh_env_list)
 		return (free(s), exit(ENOMEM), NULL);
 	init_env_vars(s);
-	sig_set_handlers();
+	sig_set_handlers(INT_DFL);
 	return (s);
 }
 
