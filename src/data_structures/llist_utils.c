@@ -115,17 +115,17 @@ int	ft_lstsize(t_list *lst)
 	count = 0;
 	if (lst == NULL)
 	{
-		debug_print(DBGMSG_LSIZE_NULL);
+		debugv_print(DBGMSG_LSIZE_NULL);
 		return (0);
 	}
-	debug_print(DBGMSG_LSIZE_START, (void *)lst);
+	debugv_print(DBGMSG_LSIZE_START, (void *)lst);
 	while (lst)
 	{
-		debug_print(DBGMSG_LSIZE_ONNODE, (void *)lst, (void *)lst->next);
+		debugv_print(DBGMSG_LSIZE_ONNODE, (void *)lst, (void *)lst->next);
 		count++;
 		lst = lst->next;
 	}
-	debug_print(DBGMSG_LSIZE_DONE, count);
+	debugv_print(DBGMSG_LSIZE_DONE, count);
 	return (count);
 }
 
@@ -144,7 +144,7 @@ void	ft_lstprint(t_list *lst)
 		while (lst)
 		{
 			count++;
-			fprintf(stderr, YELLOW "%s -> " RESET, (const char *)lst->content);
+			fprintf(stderr, YELLOW "_%s_ -> " RESET, (const char *)lst->content);
 			lst = lst->next;
 		}
 		fprintf(stderr, RED "printed %d nodes.\n" RESET, count);
@@ -152,13 +152,14 @@ void	ft_lstprint(t_list *lst)
 	return ;
 }
 
-void	ft_lstprinter(t_list *lst, void (*f)(void *))
+void	ft_lstprinter(t_list *lst, int (*f)(void *))
 {
 	int	count;
 
 	count = 0;
 	if (lst == NULL)
 	{
+		fprintf(stderr, RED "nothing to print.\n" RESET);
 		return ;
 	}
 	if (DEBUG)

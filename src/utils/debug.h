@@ -14,10 +14,19 @@
 #  define DEBUG 0
 # endif
 
+
+# ifdef DEBUGVMODE
+#  define DEBUGVERBOSE 1
+# else
+#  define DEBUGVERBOSE 0
+# endif
+
 typedef struct s_list	t_list;
 
 void					debug_print(const char *format, ...);
+void					debugv_print(const char *format, ...);
 void					log_print(const char *s, ...);
+
 void					err(const char *s);
 void					colored_printf(const char *color, const char *format,
 							...);

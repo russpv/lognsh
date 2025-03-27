@@ -57,15 +57,16 @@ void	ft_lstclear_tmp(t_mem_mgr *mgr, t_list **lst, void (*del)(t_mem_mgr *m,
 
 	if (!mgr || !*lst || !lst)
 		return ;
-	debug_print(DMSG_GOT, __FUNCTION__, (void *)lst, (void *)*lst);
+	debugv_print(DMSG_GOT, __FUNCTION__, (void *)lst, (void *)*lst);
 	tmp = *lst;
 	while (tmp)
 	{
-		debug_print(DMSG_DEL, __FUNCTION__, (void *)tmp);
+		debugv_print(DMSG_DEL, __FUNCTION__, (void *)tmp);
 		next = tmp->next;
 		ft_lstdelone_tmp(mgr, lst, tmp, del);
 		tmp = next;
 	}
+	debug_print("%s: Lst deleted successfully\n", __FUNCTION__);
 	*lst = NULL;
 }
 
@@ -104,16 +105,17 @@ void	ft_lstclear_str_tmp(t_mem_mgr *mgr, t_list **lst)
 
 	if (!mgr || !*lst || !lst)
 		return ;
-	debug_print(DMSG_GOT, __FUNCTION__, (void *)lst, (void *)*lst);
+	debugv_print(DMSG_GOT, __FUNCTION__, (void *)lst, (void *)*lst);
 	tmp = *lst;
 	while (tmp)
 	{
-		debug_print(DMSG_DEL, __FUNCTION__, (void *)tmp);
+		debugv_print(DMSG_DEL, __FUNCTION__, (void *)tmp);
 		next = tmp->next;
 		ft_lstdelone_str_tmp(mgr, lst, tmp);
 		tmp = next;
 	}
 	*lst = NULL;
+	debug_print("%s: Lst deleted successfully\n", __FUNCTION__);
 }
 
 // Helper function: Deep copy a single node's content
@@ -192,7 +194,7 @@ t_list	*ft_lstnew_copystr_mem(t_mem_mgr *m, void *content,
 /* LSTDELONE RWD
 ** Removes passed node in doubly linked list
 ** Assuming REAR to list iteration direction
-** lst: parent list
+** lst: parent list (result passed by ref here)
 ** node: node to free
 ** del: ptr to func that deletes node.content
 ** Handles case where same pointer passed in arg 1 and 2
@@ -204,7 +206,7 @@ void	ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst, t_list **node,
 
 	if (!mgr || !lst || !node || !(*node))
 		return ;
-	debug_print(DMSG_IN, __FUNCTION__, (void *)(*node),
+	debugv_print(DMSG_IN, __FUNCTION__, (void *)(*node),
 		(void *)((*node)->content), (void *)lst);
 	tmp = (*node)->next;
 	if ((*node)->prev)
@@ -214,7 +216,7 @@ void	ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst, t_list **node,
 	if ((*node)->content)
 		del(mgr, &(*node)->content);
 	if (*lst == *node)
-		*lst = tmp;
+		*lst = (*node)->next;
 	mgr->dealloc(&mgr->list, *node);
 	*node = NULL;
 	debug_print(DMSG_OUT, __FUNCTION__);
@@ -266,7 +268,7 @@ t_list	*ft_lstmap_tmp(t_mem_mgr *mgr, t_list *lst, void *(*f)(t_mem_mgr *,
 #define DBGMSG_LSTINSRWD_POSTF \
 	"%s: f applied to node: \
 	%p\n"
-#define DBGMSG_LSTINSRWD_SUCCESS "%s: Iteration complete.\n"
+#define DBGMSG_LSTINSRWD_SUCCESS "%s: Inserts done successfully.\n"
 
 /* Iterates BACKWARDS and applies insertion func f */
 void	ft_lstiter_ins_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
@@ -278,14 +280,14 @@ void	ft_lstiter_ins_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
 	if (lst == NULL)
 		return (debug_print(DBGMSG_LSTINSRWD_NULLARG, __FUNCTION__));
 	lst_rear = ft_lstlast(*lst);
-	debug_print(DBGMSG_LSTINSRWD_ENDNODE, __FUNCTION__, (void *)lst_rear);
+	debugv_print(DBGMSG_LSTINSRWD_ENDNODE, __FUNCTION__, (void *)lst_rear);
 	while (lst_rear)
 	{
 		tmp = lst_rear->prev;
-		debug_print(DBGMSG_LSTINSRWD_PREF, __FUNCTION__, (void *)lst_rear,
+		debugv_print(DBGMSG_LSTINSRWD_PREF, __FUNCTION__, (void *)lst_rear,
 			(void *)lst_rear->content);
 		f(mgr, &(lst_rear), lst_rear->content);
-		debug_print(DBGMSG_LSTINSRWD_POSTF, __FUNCTION__, (void *)lst_rear);
+		debugv_print(DBGMSG_LSTINSRWD_POSTF, __FUNCTION__, (void *)lst_rear);
 		if (NULL == tmp)
 			*lst = lst_rear;
 		lst_rear = tmp;

@@ -1,6 +1,5 @@
 #include "token_int.h"
 
-
 # define SAYGOT 0
 # define SAYCANCOMB 1
 # define SAYDONE 2
@@ -29,7 +28,7 @@ static void _announce(const char *caller, char *raw, char *str, int msg)
 	else if (SAYCANCOMB == msg)
 		debug_print(_MOD_ ": %s: got combinable _%s_\n", caller, raw);
 	else if (SAYCANNOTCOMB == msg)
-		debug_print(_MOD_ ": %s: got uncombinable, commiting _%s_\n", caller, raw);
+		debug_print(_MOD_ ": %s: got uncombinable %s, committing cached _%s_\n", caller, raw, str);
 	else if (SAYCOMBINE == msg)
 		debug_print(_MOD_ ": %s: combining _%s_ + _%s_(cache)\n", caller, raw, str);
 	else if (SAYTRIMMED == msg)
@@ -124,7 +123,7 @@ static int _load_str_post_expansion(t_state *s, char *raw, char **str, char **tm
 		*tmp_str = ft_strtrimfront_mem(&m, raw, IFS); //trim incoming and pass by reference
 		_announce(__FUNCTION__, raw, NULL, SAYCACHEONLY);
 	}
-	fprintf(stderr, "tmp_str %s\n", *tmp_str);	
+	debug_print(_MOD_ ": %s: loaded _%s_\n", *tmp_str);
 	return (combined);
 }
 
@@ -137,12 +136,11 @@ static int	_put_str_on_toklst(t_state *s, char *str)
 	if (!s || !str)
 		return (ERR_ARGS);
 	tok_lst = get_tmp_tok_list(s);
-	fprintf(stderr, "%s\n", __FUNCTION__);	
+	debug_print(_MOD_ ": %s: %s\n", __FUNCTION__, str);	
 	tmp = ft_strdup_tmp(get_mem(s), str);
 	if (!tmp)
 		exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s), create_tmp_token(get_mem(s), tmp)));
-	tok_print_list(*tok_lst);
 	return (0);
 }
 
@@ -159,20 +157,19 @@ static void	_do_combine(t_state *s, const t_tok	*content, char	**str, int *combi
 			*combined = _load_str_post_expansion(s, content->t.tok.raw, str, &tmp_str);
 		else
 			*combined = _load_str_normal(s, content->t.tok.raw, str, &tmp_str);
-		fprintf(stderr, "commiting str %s got tmp_str %s\n", *str, tmp_str );
-		if (*str)
-			_put_str_on_toklst(s, *str);
-		*str = NULL;
-		if (tmp_str)
+		//fprintf(stderr, "commiting str %s got tmp_str %s\n", *str, tmp_str );
+		//if (*str) //check result
+		//	_put_str_on_toklst(s, *str);
+		//*str = NULL;
+		if (tmp_str) //will have trimmed incoming raw or joined *str and raw
 			*str = tmp_str;
 	}
-	else
+	else //can't combine, flush cache, store on cache
 	{
-		_announce(__FUNCTION__, content->t.tok.raw, NULL, SAYCANNOTCOMB);
+		_announce(__FUNCTION__, content->t.tok.raw, *str, SAYCANNOTCOMB);
 		if (*str)
 			_put_str_on_toklst(s, *str);
-		*str = NULL;
-		_put_str_on_toklst(s, content->t.tok.raw);
+		*str = content->t.tok.raw;
 	}
 }
 
@@ -198,19 +195,15 @@ int	tok_do_grp_combine(t_state *s, void *c)
 		return (_announce(__FUNCTION__, NULL, NULL, SAYNULL), 0);
 	}
 	_announce(__FUNCTION__, content->t.tok.raw, str, SAYGOT);
-	if (NULL == content->t.tok.raw) // Nothing to process
+	if (NULL == content->t.tok.raw)
 		return (0);
 	if (0 != *(content->t.tok.raw))
 		_do_combine(s, content, &str, &combined);
 	if (str && combined == COMBINED)
 	{ 	// commit if we have cached aggregation and need to start new cache
-		fprintf(stderr, RED"commiting (delete this branch?)%s \n"RESET, str );
 		_put_str_on_toklst(s, str);
 		str = NULL;
-		set_tmp(s, str);
 	}
-	//if (str) //save to cache
-	//	set_tmp(s, str);
 	_announce(__FUNCTION__, NULL, str, SAYDONE);
 	return (0);
 }

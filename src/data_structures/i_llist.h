@@ -11,6 +11,7 @@
 /* Forwards */
 
 extern void			debug_print(const char *format, ...);
+extern void			debugv_print(const char *format, ...);
 extern void			err(const char *s);
 
 typedef struct s_mem_mgr

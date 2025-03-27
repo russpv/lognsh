@@ -31,19 +31,19 @@ int	ft_lstiter_state_ins_rwd_tmp(t_state *s, t_list **lst,
 	if (lst == NULL)
 		return (debug_print("Null arg\n", __FUNCTION__), ERR_ARGS);
 	lst_rear = ft_lstlast(*lst);
-	debug_print(_MOD_ "%s: %p\n", __FUNCTION__, (void *)lst_rear);
+	debugv_print(_MOD_ ": %s: %p\n", __FUNCTION__, (void *)lst_rear);
 	while (lst_rear)
 	{
 		tmp = lst_rear->prev;
-		debug_print(_MOD_ "%s: %p, content:%p\n", __FUNCTION__, (void *)lst_rear,
+		debugv_print(_MOD_ "%s: %p, content:%p\n", __FUNCTION__, (void *)lst_rear,
 			(void *)lst_rear->content);
 		f(s, &(lst_rear), lst_rear->content);
-		debug_print(_MOD_ "%s: Applied f to %p\n", __FUNCTION__, (void *)lst_rear);
+		debugv_print(_MOD_ "%s: Applied f to %p\n", __FUNCTION__, (void *)lst_rear);
 		if (NULL == tmp)
 			*lst = lst_rear;
 		lst_rear = tmp;
 	}
-	debug_print(_MOD_ ": %s: Done\n", __FUNCTION__);
+	debug_print(_MOD_ ": %s: Inserts done successfully.\n", __FUNCTION__);
 	return (0);
 }
 

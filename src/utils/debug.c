@@ -16,6 +16,21 @@ void	debug_print(const char *format, ...)
 	}
 }
 
+void	debugv_print(const char *format, ...)
+{
+	va_list	args;
+
+	if (DEBUGVERBOSE && isatty(STDERR_FILENO))
+	{
+		va_start(args, format);
+		fprintf(stderr, BLUE "[PID %d] [DEBUG] ", getpid());
+		vfprintf(stderr, format, args);
+		fprintf(stderr, RESET);
+		va_end(args);
+		fflush(stderr);
+	}
+}
+
 void	debug_detect_cycle(t_list *head)
 {
 	t_list	*slow;

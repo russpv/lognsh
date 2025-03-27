@@ -70,7 +70,7 @@ t_list	*split_word(t_mem_mgr *mgr, const char *word)
 	debug_print(_MOD_ ": %s: Got _%s_\n", __FUNCTION__, word);
 	if (NULL != ft_strchrs_betw(_skip_delims(word, IFS), _skip_delims_post(word, IFS), IFS))
 	{
-		debug_print("splitting\n");
+		debug_print(_MOD_ ": %s: splitting\n", __FUNCTION__);
 		split_raw = ft_split_ifs_mem(&mem, word, IFS);
 		while (split_raw[++i])
 		{
@@ -79,6 +79,7 @@ t_list	*split_word(t_mem_mgr *mgr, const char *word)
 				exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 			ft_lstadd_back(&lst, new);
 		}
+		ft_lstprint(lst);
 	}
 	return (lst);
 }
@@ -127,17 +128,24 @@ int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst, \
 	t_list	*head;
 	t_list	*new_lst;
 	t_tok	*new_tok;
+	bool	reattach_head;
 
 	new_lst = NULL;
 	new_tok = NULL;
+	reattach_head = false;
 	if (ft_lstsize(*ins_lst) > 1)
 	{
-		debug_print(_MOD_ ": %s: Inserting lst \n", __FUNCTION__);
+		debug_print(_MOD_ ": %s: Inserting lst %p\n", __FUNCTION__, *ins_lst);
 		new_lst = ft_lstmap_tmp(mgr, *ins_lst, createf, destroy_token);
 		((t_tok*)((ft_lstfirst(new_lst))->content))->t.tok.is_combinable = true;
 		ft_lstadd_insert(lst_pos, new_lst);
 		head = ft_lstfirst(*lst_pos);
+		if (head == *lst_pos)
+			reattach_head = true;
 		ft_lstdelone_rwd_tmp(mgr, &head, lst_pos, destroy_token);
+		if (reattach_head)
+			*lst_pos = head;
+
 	}
 	else
 	{
@@ -177,7 +185,6 @@ int	tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_pos, void *lst_c)
 			str_lst->content);
 			do_tok_inserts(mgr, lst_pos, &str_lst, create_split_token);
 			ft_lstclear_str_tmp(mgr, &str_lst);
-			tok_print_list(*lst_pos);
 			debug_print(_MOD_ ": %s: Done.\n", __FUNCTION__);
 		}
 		else

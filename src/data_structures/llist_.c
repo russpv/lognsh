@@ -61,7 +61,7 @@ void	ft_lstadd_insert(t_list **lst, t_list *new)
 
 	save_next = NULL;
 	last_new_node = NULL;
-	debug_print(DEBUGMSG_INSERT_GOT, (void *)lst, (void *)*lst);
+	debugv_print(DEBUGMSG_INSERT_GOT, (void *)lst, (void *)*lst);
 	if (!lst || !new)
 		return (debug_print(DEBUGMSG_INSERT_NULL, (void *)lst, (void *)new));
 	if (*lst == NULL)
@@ -75,7 +75,7 @@ void	ft_lstadd_insert(t_list **lst, t_list *new)
 		save_next = (*lst)->next;
 	(*lst)->next = new;
 	new->prev = *lst;
-	debug_print(DEBUGMSG_INSERTED, (void *)new->prev, (void *)(*lst)->next);
+	debugv_print(DEBUGMSG_INSERTED, (void *)new->prev, (void *)(*lst)->next);
 	last_new_node->next = save_next;
 	if (save_next)
 		save_next->prev = last_new_node;

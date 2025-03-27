@@ -43,7 +43,7 @@ static int	_do_globbing(t_state *s, t_arg_data *grparg)
 	return (0);
 }
 
-void _print_arg(void *arg)
+int _print_arg(void *arg)
 {
 	t_arg_data *node;
 
@@ -61,24 +61,22 @@ void _print_arg(void *arg)
 static int	_do_combine(t_state *s, t_arg_data *grparg)
 {
 	int res;
-	char *str;
+	//char *str;
 	t_list **tok_lst;
 
 	res = lstiter_state(s, grparg->lst_tokens, tok_do_grp_combine);
 	if (0 != res)
 		return (err("grp tok aggregation failure\n"), res);
 	tok_lst = get_tmp_tok_list(s);
-	fprintf(stderr,"This should show the tokens:\n");
-	tok_print_list(*tok_lst);
-	str = get_tmp(s);
+	/*str = get_tmp(s);
 	if (str)
 	{
 		fprintf(stderr, "(DELETE?)got tmp:%s\n",str);
 		if (*str)
 			ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s), create_tmp_token(get_mem(s), str)));
-	}
+	}*/
 	tok_print_list(*tok_lst);
-	fprintf(stderr, "printed combined list\n");
+	fprintf(stderr, "Done iterating. Tmp:%s Lst:%p \n", get_tmp(s), *tok_lst);
 	return (0);
 }
 
@@ -88,11 +86,9 @@ static void	_do_insert(t_state *s, t_arg_data *grparg, t_list **this_node)
 
 	tok_lst = get_tmp_tok_list(s);
 	t_list *argl = ft_lstmap_tmp(get_mem(s), *tok_lst, token_to_arg, destroy_arg);
-	ft_lstprinter(argl, _print_arg);
-	ft_lstprinter(*this_node, _print_arg);
 	ft_lstadd_insert(this_node, argl); 
-	ft_lstprinter(*this_node, _print_arg);
 	ft_lstdelone_tmp(get_mem(s), this_node, *this_node, destroy_arg);
+	fprintf(stderr, "Done iterating. Tmp:%s Lst:%p \n", get_tmp(s), *tok_lst);
 	ft_lstprinter(*this_node, _print_arg);
 	*tok_lst = NULL;
 }
@@ -122,20 +118,20 @@ int	p_do_grparg_processing(t_state *s, t_list **this_arg, void *c)
 	res = _do_expansions(s, grparg);
 	if (0 != res)
 		return res;
-	fprintf(stderr, "Expansions Done.\n");
+	log_print("Expansions Done.\n");
 	res = _do_wordsplits(s, grparg);
 	if (0 != res)
 		return res;
-	fprintf(stderr, "Wordsplits Done.\n");
+	log_print("Wordsplits Done.\n");
 	res = _do_combine(s, grparg);
 	if (0 != res)
 		return res;
-	fprintf(stderr, "Combines and Inserts Done.\n");
+	log_print("Combines and Inserts Done.\n");
 	res = _do_globbing(s, grparg);
 	if (0 != res)
 		return res;
 	_do_insert(s, grparg, this_arg);
-	fprintf(stderr, "Globbing Done.\n");
+	log_print("Globbing Done.\n");
 	debug_print("%s: returning lst_size: %d, %p\n", __FUNCTION__, ft_lstsize(*this_arg), *this_arg);
 	return (res);
 }

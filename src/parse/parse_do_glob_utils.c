@@ -78,6 +78,7 @@ t_list	*match_glob(t_mem_mgr *m, const char *pattern)
 	char			*name;
 
 	lst = NULL;
+	got = NULL;
 	debug_print(DBGMSG_GOTPATTERN, pattern);
 	dir = opendir(".");
 	if (!dir)
@@ -97,9 +98,12 @@ t_list	*match_glob(t_mem_mgr *m, const char *pattern)
 		res = _glob_readdir(dir);
 	}
 	closedir(dir);
-	ft_lstprint(lst);
-	debug_detect_cycle(lst);
-	got = ft_lstsort(&lst);
-	debug_detect_cycle(got);
+	if (lst)
+	{
+		ft_lstprint(lst);
+		debug_detect_cycle(lst);
+		got = ft_lstsort(&lst);
+		debug_detect_cycle(got);
+	}
 	return (got);
 }

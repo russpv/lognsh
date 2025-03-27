@@ -55,7 +55,7 @@ void					ft_lstdelone_rwd(t_list **lst, t_list **node,
 
 t_list					*ft_lstsort(t_list **lst);
 void					ft_lstprint(t_list *lst);
-void					ft_lstprinter(t_list *lst, void (*f)(void *));
+void					ft_lstprinter(t_list *lst, int (*f)(void *));
 
 void					ft_lstprint_betw(t_list *lst, t_list *end);
 int						ft_lstsize_betw(t_list *lst, t_list *last);
