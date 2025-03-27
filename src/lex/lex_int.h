@@ -58,6 +58,7 @@ chars. That must be done each call to lex_create_token. Might as well encapsulat
 // # handled in NORMAL
 // $ must be followed by alphanum or _ to delim a (sub)token
 #define LEX_BUFSZ 1024
+#define MAX_HDOCSZ LEX_BUFSZ
 #define INITVAL 0 // Lexer default flag value
 #define MOD "Lexer"
 
@@ -206,6 +207,10 @@ struct						s_ht_data
 };
 
 typedef struct s_ht_data	*t_ht_data;
+
+/* Forwards */
+extern int					exec_heredoc(t_mem_mgr *m, t_lex *l);
+
 
 t_lex						*create_lexer(t_state *state, int start_state,
 								const char *s);

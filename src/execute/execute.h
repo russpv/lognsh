@@ -37,4 +37,6 @@ int						exec_close_pipes(int **fildes, int cmd_count);
 int						get_exit_status(int status);
 int						waitchild(int *status, int childc);
 
+int	exec_heredoc(t_mem_mgr *m, t_lex *l);
+
 #endif

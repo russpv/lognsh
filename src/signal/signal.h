@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 17:02:00 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/14 15:30:11 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/27 14:47:35 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,7 @@ void	sig_set_handlers(void);
 void	sig_reset_handlers(void);
 
 void	sig_ignore(void);
+
+void	clear_current_line(void);
+
 #endif

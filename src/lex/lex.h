@@ -25,5 +25,6 @@ t_list					*lex_get_tokens(t_lex *lexer);
 unsigned int			lex_get_keepd(t_lex *lexer);
 
 size_t					ft_varnamelen(const char *c);
+int						match_heredoc(t_mem_mgr *m, t_lex *l);
 
 #endif

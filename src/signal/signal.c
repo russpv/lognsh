@@ -6,11 +6,22 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 17:11:09 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/19 16:53:40 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/27 16:15:01 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signal_int.h"
+
+# define RETAIN_HIST 0
+
+void	clear_current_line(void)
+{
+#ifndef MACOS
+	rl_replace_line("", RETAIN_HIST); // Replace the current line with an empty string
+#endif
+	rl_on_new_line();
+	rl_redisplay();
+}
 
 // SIGINT (Ctrl-C) handler
 void	sigint_handler(int signo)
@@ -20,11 +31,7 @@ void	sigint_handler(int signo)
 		g_last_signal = SIGINT;
 		debug_print(_MOD_ ": I got this SIGINT.");
 		write(STDOUT_FILENO, "\n", 1);
-#ifndef MACOS // TODO remove in final
-		rl_replace_line("", 1);
-		rl_on_new_line();
-		rl_redisplay();
-#endif
+		clear_current_line();
 	}
 }
 

@@ -4,4 +4,9 @@
 # include "execute.h"
 # define _MOD_ "Exec"
 
+/* Forwards */
+
+extern size_t	write_heredoc(int fd, t_lex *l);
+extern size_t	read_heredoc(int fd, t_lex *l);
+
 #endif

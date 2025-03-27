@@ -55,6 +55,7 @@ int _print_arg(void *arg)
 		else 
 			fprintf(stderr, "(null)");
 	}
+	return (0);
 }
 
 //Saves modified token list in state cache
@@ -80,7 +81,7 @@ static int	_do_combine(t_state *s, t_arg_data *grparg)
 	return (0);
 }
 
-static void	_do_insert(t_state *s, t_arg_data *grparg, t_list **this_node)
+static void	_do_insert(t_state *s, t_list **this_node)
 {
 	t_list **tok_lst;
 
@@ -130,7 +131,7 @@ int	p_do_grparg_processing(t_state *s, t_list **this_arg, void *c)
 	res = _do_globbing(s, grparg);
 	if (0 != res)
 		return res;
-	_do_insert(s, grparg, this_arg);
+	_do_insert(s, this_arg);
 	log_print("Globbing Done.\n");
 	debug_print("%s: returning lst_size: %d, %p\n", __FUNCTION__, ft_lstsize(*this_arg), *this_arg);
 	return (res);

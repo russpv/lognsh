@@ -24,6 +24,7 @@ static inline void	_put_eof_in_buf(t_lex *l)
 
 // Returns eof delimiter
 // Skips any spaces. Also flushes buf to prepare body token
+// Sets expansion flags
 int	get_eof_word(t_mem_mgr *m, t_lex *l)
 {
 	if (!l->ptr)
@@ -34,6 +35,7 @@ int	get_eof_word(t_mem_mgr *m, t_lex *l)
 		l->ptr++;
 	_put_eof_in_buf(l);
 	_skip_to_next_op(l);
+	//set_expansion_flags(); //TODO
 	if (0 == ft_strlen(l->buf))
 		return (err(EMSG_NOEOF), ERR_SYNTAX);
 	l->eof_word = ft_strdup_tmp(m, l->buf);

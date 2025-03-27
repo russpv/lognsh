@@ -13,6 +13,7 @@ void	set_lexer(t_state *state, t_lex *l)
 void	set_input(t_state *s, char *input)
 {
 	s->input = input;
+	g_last_signal = -1;
 }
 
 void	set_command(t_state *s, t_cmd *c)

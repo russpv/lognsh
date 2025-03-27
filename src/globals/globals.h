@@ -5,6 +5,7 @@
 
 # define SHELL_NAME "minish"
 # define DFL_PROMPT GREEN SHELL_NAME "> " RESET
+# define HDOC_PROMPT "> "
 # define INPUT_BUF_SZ 1024
 # define IFS " \t\n"
 

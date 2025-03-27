@@ -36,6 +36,7 @@
 # define ERR_CMD_NOT_FOUND 127
 # define ERR_CMD_NOT_EXEC 126
 # define ERR_CMD_SIGINTD 130
+# define ERR_CHILD_SIGINT 130
 # define ERR_EXIT_RANGE 255
 
 # define EMSG_MALLOC SHELL_NAME ": malloc"

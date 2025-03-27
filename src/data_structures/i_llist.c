@@ -202,13 +202,10 @@ t_list	*ft_lstnew_copystr_mem(t_mem_mgr *m, void *content,
 void	ft_lstdelone_rwd_tmp(t_mem_mgr *mgr, t_list **lst, t_list **node,
 		void (*del)(t_mem_mgr *, void **))
 {
-	t_list	*tmp;
-
 	if (!mgr || !lst || !node || !(*node))
 		return ;
 	debugv_print(DMSG_IN, __FUNCTION__, (void *)(*node),
 		(void *)((*node)->content), (void *)lst);
-	tmp = (*node)->next;
 	if ((*node)->prev)
 		(*node)->prev->next = (*node)->next;
 	if ((*node)->next)
