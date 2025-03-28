@@ -16,7 +16,7 @@ static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf,
 {
 	char	*new_fn;
 
-	if (check_special_expansions(s, buf, value) < 0)
+	if (check_special_expansions(s, buf, value) < 0)		
 	{
 		if (*value)
 		{
@@ -50,7 +50,7 @@ static int	_insert_expanded_var(t_state *s, char *buf, char **ptr,
 	int		res;
 
 	new_val = NULL;
-	printf("got:_%s\n", buf);
+	debug_print("%s: got:_%s\n", __FUNCTION__, buf);
 	res = check_special_expansions(s, buf, &new_val);
 	if (res > 0)
 		return (res);
@@ -58,7 +58,7 @@ static int	_insert_expanded_var(t_state *s, char *buf, char **ptr,
 		new_val = get_env_val(s, buf);
 	offset = *ptr - r->heredoc_body;
 	if (ft_strlen(r->heredoc_body) + ft_strlen(new_val) > MAX_RAW_INPUT_LEN)
-		return (ERR_BUFFLOW);
+		return (print_bufflow(), ERR_BUFFLOW);
 	ft_strlcpy(new_body, r->heredoc_body, offset);
 	offset += ft_strlen(new_val);
 	ft_strlcat(new_body, new_val, MAX_RAW_INPUT_LEN - offset);
@@ -79,6 +79,7 @@ static int	_p_do_heredoc_expansion(t_state *s, t_redir_data *r)
 	int		len;
 
 	ft_memset(buf, 0, sizeof(buf));
+	fprintf(stderr,"here: %s buf:%s\n", __FUNCTION__, buf);
 	if (NULL == r)
 		return (ERR_ARGS);
 	if (NULL == r->heredoc_body)

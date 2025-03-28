@@ -73,11 +73,13 @@ void							set_pwd(t_state *s);
 int								set_oldpwd(t_state *s, const char *caller);
 void							set_tmp(t_state *s, char *str);
 void							set_got_heredoc(t_state *s);
+void							set_tmp_flag(t_state *s, int val);
 
 int								*get_status(t_state *s);
 char							*get_input(t_state *s);
 t_cmd							*get_cmd(t_state *s);
 t_list							**get_tmp_tok_list(t_state *s);
+int								get_tmp_flag(t_state *s);
 
 char							**get_envp(t_state *s);
 char							*get_env_val(t_state *s, const char *key);

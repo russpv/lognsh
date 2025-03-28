@@ -155,5 +155,5 @@ int	check_special_expansions(t_state *s, const char *buf, char **value)
 		debug_print(DMSG_OUT, __FUNCTION__, *value);
 		return (-1);
 	}
-	return (ERR_GENERAL);
+	return (0);
 }

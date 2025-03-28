@@ -12,6 +12,14 @@
 # define COMBINED 0
 # define NOTCOMBINED 1
 
+# define UNQUOTED 1
+# define QUOTED 0
+# define LTRL 2
+# define INITVAL -1
+
+# define FRONT 0
+# define BACK 1
+
 static void _announce(const char *caller, char *raw, char *str, int msg)
 {
 	if (!caller)
@@ -39,10 +47,47 @@ static void _announce(const char *caller, char *raw, char *str, int msg)
 		debug_print(_MOD_ ": %s: got NULL\n", caller);
 }
 
+static char	*_do_join(t_state *s, char *left, char *right)
+{
+	char *res;
+	struct s_mem_utils m;
+
+	if (!s || !left || !right)
+		return (NULL);
+	m.f = get_mem(s)->f;
+	m.u = get_mem(s)->dealloc;
+	m.head = &get_mem(s)->list;
+	res = ft_strjoin_mem(m.head, m.f, left, right);
+	if (!res)
+		exit_clean(m.head, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	return (res);
+}
+
+static char	*_do_trim(t_state *s, char *str, char *set, int side)
+{
+	char *res;
+	struct s_mem_utils m;
+
+	if (!s || !s || !set)
+		return (NULL);
+	m.f = get_mem(s)->f;
+	m.u = get_mem(s)->dealloc;
+	m.head = &get_mem(s)->list;
+	if (FRONT == side)
+		res = ft_strtrimfront_mem(&m, str, set);
+	else
+		res = ft_strtrimback_mem(&m, str, set);
+	if (!res)
+		exit_clean(m.head, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	return (res);
+}
+
 bool has_leading_delims(char const *s, char const *set)
 {
 	char *tmp;
 
+	if (!s || !set)
+		return (ERR_ARGS);
 	tmp = (char*)s;
 	while (ft_is_set(tmp, set))
 		tmp++;
@@ -56,6 +101,8 @@ bool has_lagging_delims(char const *s, char const *set)
 	char *end;
 	char *tmp;
 
+	if (!s || !set)
+		return (ERR_ARGS);
 	end = ft_strchr(s, 0);
 	tmp = end;
 	if (end != s)
@@ -68,125 +115,147 @@ bool has_lagging_delims(char const *s, char const *set)
 	return (false);
 }
 
-static int _load_str_normal(t_state *s, char *raw, char **str, char **tmp_str)
+bool	_is_joinable(t_state *s, char *str)
 {
-	struct s_mem_utils m;
-	int combined;
-
-	m.f = get_mem(s)->f;
-	m.u = get_mem(s)->dealloc;
-	m.head = &get_mem(s)->list;
-	combined = NOTCOMBINED;
-	if (*str)
-	{
-		_announce(__FUNCTION__, raw, *str, SAYCOMBINE);
-		*tmp_str = ft_strjoin_mem(m.head, m.f, *str, raw);
-		combined = COMBINED;
-	}
-	else
-	{
-		*tmp_str = raw;
-		_announce(__FUNCTION__, raw, NULL, SAYCACHEONLY);
-	}
-	return (combined);
+	if (!s || !str)
+		return (ERR_ARGS);
+	if (UNQUOTED == get_tmp_flag(s))
+		if (false == has_lagging_delims(str, IFS))
+			return (true);
+	if (QUOTED == get_tmp_flag(s) || LTRL == get_tmp_flag(s))
+		return (true);
+	return (false);
 }
 
-static int _load_str_post_expansion(t_state *s, char *raw, char **str, char **tmp_str)
-{
-	struct s_mem_utils m;
-	int combined;
-
-	m.f = get_mem(s)->f;
-	m.u = get_mem(s)->dealloc;
-	m.head = &get_mem(s)->list;
-	combined = NOTCOMBINED;
-	if (*str)
-	{
-		if (false == has_leading_delims(raw, IFS) && false == has_lagging_delims(*str, IFS))
-		{
-			_announce(__FUNCTION__, raw, *str, SAYCOMBINE);
-			*tmp_str = ft_strjoin_mem(m.head, m.f, *str, raw); // join, decide tokenize later
-			combined = COMBINED;
-		}
-		else if (true == has_lagging_delims(*str, IFS))
-		{
-			fprintf(stderr, "has lagging delims %s\n", *str);
-			*tmp_str = *str;
-			*str = ft_strtrimback_mem(&m, *tmp_str, IFS); // don't join, trim whats in cache, 
-			*tmp_str = ft_strtrimfront_mem(&m, raw, IFS); // trim incoming and pass by reference
-			_announce(__FUNCTION__, *tmp_str, *str, SAYTRIMMED);
-		}
-	}
-	else //nothing to combine. cache token.
-	{
-		fprintf(stderr, "no combine, trimming token %s\n", raw);
-		*tmp_str = ft_strtrimfront_mem(&m, raw, IFS); //trim incoming and pass by reference
-		_announce(__FUNCTION__, raw, NULL, SAYCACHEONLY);
-	}
-	debug_print(_MOD_ ": %s: loaded _%s_\n", *tmp_str);
-	return (combined);
-}
-
-static int	_put_str_on_toklst(t_state *s, char *str)
+// Whether contents was a quoted expansion, trims, then commits list
+static int	_put_str_on_toklst(t_state *s, char **str)
 {
 	char *tmp;
-
 	t_list **tok_lst;
 
 	if (!s || !str)
 		return (ERR_ARGS);
 	tok_lst = get_tmp_tok_list(s);
-	debug_print(_MOD_ ": %s: %s\n", __FUNCTION__, str);	
-	tmp = ft_strdup_tmp(get_mem(s), str);
+	debug_print(_MOD_ ": %s: _%s_\n", __FUNCTION__, *str);	
+	if (UNQUOTED == get_tmp_flag(s))
+		*str = _do_trim(s, *str, IFS, BACK);
+	tmp = ft_strdup_tmp(get_mem(s), *str);
 	if (!tmp)
 		exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s), create_tmp_token(get_mem(s), tmp)));
+	get_mem(s)->dealloc(&get_mem(s)->list, *str);
+	set_tmp_flag(s, INITVAL);
+	*str = NULL;
 	return (0);
 }
 
-// Either loads the static str cache for combinable raws, or commits tokens and clears cache
-static void	_do_combine(t_state *s, const t_tok	*content, char	**str, int *combined)
+// If something in cache, join it with raw regardless of delims
+// Else, place in tmp_str
+static int _load_tmp_normal(t_state *s, char *raw, char **str)
 {
-	char *tmp_str;
+	if (true == _is_joinable(s, *str))
+	{
+		_announce(__FUNCTION__, raw, *str, SAYCOMBINE);
+		*str = _do_join(s, *str, raw);
+	}
+	else
+	{
+		_announce(__FUNCTION__, raw, *str, SAYCANNOTCOMB);
+		if (*str)
+			_put_str_on_toklst(s, str);
+		*str = raw;
+	}
+	set_tmp_flag(s, LTRL);
+	return (0);
+}
 
-	tmp_str = NULL;
+// Ignores delimiters for quoted expansion tokens
+static int _load_str_expanded_quoted(t_state *s, char *raw, char **str)
+{
+	if (true == _is_joinable(s, *str))
+	{ 
+		_announce(__FUNCTION__, raw, *str, SAYCOMBINE);
+		*str = _do_join(s, *str, raw);
+	} 
+	else
+	{
+		_announce(__FUNCTION__, raw, *str, SAYCANNOTCOMB);
+		if (*str)
+			_put_str_on_toklst(s, str);
+		*str = raw;
+	}
+	set_tmp_flag(s, QUOTED);
+	return (0);
+}
+
+// Minds delimiters for unquoted expansion tokens
+static int _load_str_expanded(t_state *s, char *raw, char **str)
+{
+	if (*str)
+	{	// try to join
+		if (false == has_leading_delims(raw, IFS) && false == has_lagging_delims(*str, IFS))
+		{
+			_announce(__FUNCTION__, raw, *str, SAYCOMBINE);
+			*str = _do_join(s, *str, raw); 
+			set_tmp_flag(s, UNQUOTED);
+		} // otherwise, commit cache
+		else if (true == has_leading_delims(raw, IFS))
+		{
+			_put_str_on_toklst(s, str);
+			*str = _do_trim(s, raw, IFS, FRONT); 
+			set_tmp_flag(s, UNQUOTED);
+			_announce(__FUNCTION__, NULL, *str, SAYTRIMMED);
+		}
+	}
+	else //nothing to combine. trim and cache token.
+	{
+		*str = _do_trim(s, raw, IFS, FRONT); //trim incoming and pass by reference
+		set_tmp_flag(s, UNQUOTED);
+		_announce(__FUNCTION__, raw, NULL, SAYCACHEONLY);
+	}
+	debug_print(_MOD_ ": %s: loaded _%s_\n", *str);
+	return (0);
+}
+
+// If no expansion, joins tokens.
+// If expansion, processing and rules required.
+// -- any delimiters on the boundary prevent joining, but must be trimmed before committing
+// -- only the first token of a split expansion are left-joinable (last token can accept a join)
+// -- if it was quoted, treat like no-expansion token (don't mess with trimming/delimiters)
+// Note: only the non-initial unquoted expansion tokens can be uncombinable
+static void	_do_combine(t_state *s, const t_tok	*content, char	**str)
+{;
 	if (true == content->t.tok.is_combinable) //either combined with previous, or modified cache and passed tmp_str
 	{
 		_announce(__FUNCTION__, content->t.tok.raw, NULL, SAYCANCOMB);
+
 		if (true == content->t.tok.do_expansion && false == content->t.tok.in_dquotes)
-			*combined = _load_str_post_expansion(s, content->t.tok.raw, str, &tmp_str);
+			_load_str_expanded(s, content->t.tok.raw, str); //fronttrims last token
+		else if (true == content->t.tok.do_expansion && true == content->t.tok.in_dquotes)
+			_load_str_expanded_quoted(s, content->t.tok.raw, str); //no trimming
 		else
-			*combined = _load_str_normal(s, content->t.tok.raw, str, &tmp_str);
-		//fprintf(stderr, "commiting str %s got tmp_str %s\n", *str, tmp_str );
-		//if (*str) //check result
-		//	_put_str_on_toklst(s, *str);
-		//*str = NULL;
-		if (tmp_str) //will have trimmed incoming raw or joined *str and raw
-			*str = tmp_str;
+			_load_tmp_normal(s, content->t.tok.raw, str); //tries to join last token
 	}
-	else //can't combine, flush cache, store on cache
+	else //can't combine, commit cache, store on cache as a literal
 	{
 		_announce(__FUNCTION__, content->t.tok.raw, *str, SAYCANNOTCOMB);
 		if (*str)
-			_put_str_on_toklst(s, *str);
+			_put_str_on_toklst(s, str);
 		*str = content->t.tok.raw;
+		set_tmp_flag(s, UNQUOTED);
 	}
+	return;
 }
 
-// Passed to token llist iterator to collect word parts
-// on static str with successive calls.
+/* Passed to token llist iterator to collect word parts with successive calls.
 // Discards null raw strings.
-// c must be a t_tok
-// If c is a boundary token, checks if either end has space
-// if space, trims both ends, does not combine
-// if is result of globbing, does not combine
+// If c is a boundary token, doesn't join if it has delimiters
+*/
 int	tok_do_grp_combine(t_state *s, void *c)
 {
 	const t_tok	*content = (t_tok *)c;
 	static char	*str = NULL;
-	int			combined;
 
-	combined = NOTCOMBINED;
 	if (NULL == c)
 	{
 		str = NULL;
@@ -196,12 +265,14 @@ int	tok_do_grp_combine(t_state *s, void *c)
 	if (NULL == content->t.tok.raw)
 		return (0);
 	if (0 != *(content->t.tok.raw))
-		_do_combine(s, content, &str, &combined);
-	if (str && combined == COMBINED)
+		_do_combine(s, content, &str);
+	/*if (str && combined == COMBINED) 
 	{ 	// commit if we have cached aggregation and need to start new cache
 		_put_str_on_toklst(s, str);
 		str = NULL;
-	}
+	}*/
+	if (str)
+		set_tmp(s, str);
 	_announce(__FUNCTION__, NULL, str, SAYDONE);
 	return (0);
 }

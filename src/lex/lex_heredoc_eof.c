@@ -33,9 +33,9 @@ int	get_eof_word(t_mem_mgr *m, t_lex *l)
 		return (ERR_BUFFLOW);
 	while (ft_isspace(*l->ptr))
 		l->ptr++;
+	l->do_expansion = true;
 	_put_eof_in_buf(l);
 	_skip_to_next_op(l);
-	//set_expansion_flags(); //TODO
 	if (0 == ft_strlen(l->buf))
 		return (err(EMSG_NOEOF), ERR_SYNTAX);
 	l->eof_word = ft_strdup_tmp(m, l->buf);

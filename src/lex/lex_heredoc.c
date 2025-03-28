@@ -108,7 +108,7 @@ int	tokenize_heredoc(t_state *s, t_lex *lexer)
 	res = exec_heredoc(get_mem(s), lexer);
 	if (0 != res)
 		return (res);
-	debug_print("Reeived doc:%s\n", lexer->buf);
+	debug_print("Received doc:%s\n", lexer->buf);
 	debug_print(DBGMSG_PTRAT, *lexer->ptr);
 	token = lex_create_token(get_mem(s), lexer, TOK_HEREDOC_WORD);
 	if (token)

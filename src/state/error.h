@@ -78,6 +78,7 @@ void							print_custom_err_err(const char *dingus,
 									const char *gizmo, const char *msg);
 void							print_parse_error(t_state *s, const char *word,
 									size_t pos);
+void							print_bufflow(void);
 
 /* To avoid circular includes: */
 extern void						set_error(t_state *s, int e);

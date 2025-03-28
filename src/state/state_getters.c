@@ -53,3 +53,10 @@ bool	get_heredoc(t_state *s)
 		return (false);
 	return (s->got_heredoc);
 }
+
+int		get_tmp_flag(t_state *s)
+{
+	if (!s)
+		return (INT_MAX);
+	return (s->tmp_flag);
+}

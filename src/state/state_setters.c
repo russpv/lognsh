@@ -34,3 +34,10 @@ void	set_got_heredoc(t_state *s)
 		return ;
 	s->got_heredoc = true;
 }
+
+void	set_tmp_flag(t_state *s, int val)
+{
+	if (NULL == s)
+		return ;
+	s->tmp_flag = val;
+}

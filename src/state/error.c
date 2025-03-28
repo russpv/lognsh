@@ -2,6 +2,13 @@
 
 extern char	*get_input(t_state *s);
 
+void	print_bufflow(void)
+{
+	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+	write(STDERR_FILENO, ": ", ft_strlen(": "));
+	write(STDERR_FILENO, "Input exceeds limits.\n", ft_strlen("Input exceeds limits.\n"));
+}
+
 /* Prints errno err for 'dingus' */
 void	print_perror(const char *dingus)
 {

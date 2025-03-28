@@ -51,9 +51,9 @@ int _print_arg(void *arg)
 	if (node)
 	{
 		if (node->raw)
-			fprintf(stderr, "%s", node->raw);
+			colored_printf(MAGENTA, "%s", node->raw);
 		else 
-			fprintf(stderr, "(null)");
+			colored_printf(MAGENTA, "(null)");
 	}
 	return (0);
 }
@@ -62,22 +62,20 @@ int _print_arg(void *arg)
 static int	_do_combine(t_state *s, t_arg_data *grparg)
 {
 	int res;
-	//char *str;
+	char *str;
 	t_list **tok_lst;
 
 	res = lstiter_state(s, grparg->lst_tokens, tok_do_grp_combine);
 	if (0 != res)
 		return (err("grp tok aggregation failure\n"), res);
 	tok_lst = get_tmp_tok_list(s);
-	/*str = get_tmp(s);
+	str = get_tmp(s);
 	if (str)
 	{
-		fprintf(stderr, "(DELETE?)got tmp:%s\n",str);
 		if (*str)
 			ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s), create_tmp_token(get_mem(s), str)));
-	}*/
+	}
 	tok_print_list(*tok_lst);
-	fprintf(stderr, "Done iterating. Tmp:%s Lst:%p \n", get_tmp(s), *tok_lst);
 	return (0);
 }
 
@@ -89,7 +87,6 @@ static void	_do_insert(t_state *s, t_list **this_node)
 	t_list *argl = ft_lstmap_tmp(get_mem(s), *tok_lst, token_to_arg, destroy_arg);
 	ft_lstadd_insert(this_node, argl); 
 	ft_lstdelone_tmp(get_mem(s), this_node, *this_node, destroy_arg);
-	fprintf(stderr, "Done iterating. Tmp:%s Lst:%p \n", get_tmp(s), *tok_lst);
 	ft_lstprinter(*this_node, _print_arg);
 	*tok_lst = NULL;
 }

@@ -19,7 +19,8 @@ struct							s_global_state
 
 	t_list						*tmp_tok_lst;
 	char						*tmp;
-
+	int							tmp_flag;
+	
 	char						*prompt;
 
 	t_parser					*current_parser;
