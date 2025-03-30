@@ -82,7 +82,7 @@ void	debug_print_list(t_list *head)
 			current = current->next;
 			i++;
 		}
+		printf("List printed.\n");
 	}
-	printf("List printed.\n");
 }
 

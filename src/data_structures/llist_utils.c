@@ -140,14 +140,14 @@ void	ft_lstprint(t_list *lst)
 	}
 	if (DEBUG)
 	{
-		fprintf(stderr, RED "linkedl: " RESET);
+		colored_printf(RED,  "linkedl: " RESET);
 		while (lst)
 		{
 			count++;
 			fprintf(stderr, YELLOW "_%s_ -> " RESET, (const char *)lst->content);
 			lst = lst->next;
 		}
-		fprintf(stderr, RED "printed %d nodes.\n" RESET, count);
+		colored_printf(RED, "printed %d nodes.\n" RESET, count);
 	}
 	return ;
 }
@@ -159,12 +159,12 @@ void	ft_lstprinter(t_list *lst, int (*f)(void *))
 	count = 0;
 	if (lst == NULL)
 	{
-		fprintf(stderr, RED "nothing to print.\n" RESET);
+		colored_printf(RED, "nothing to print.\n" RESET);
 		return ;
 	}
 	if (DEBUG)
 	{
-		fprintf(stderr, RED "linkedl: " RESET);
+		colored_printf(RED, "linkedl: " RESET);
 		while (lst)
 		{
 			count++;
@@ -173,7 +173,7 @@ void	ft_lstprinter(t_list *lst, int (*f)(void *))
 			fprintf(stderr, YELLOW " -> " RESET);
 			lst = lst->next;
 		}
-		fprintf(stderr, RED "printed %d nodes.\n" RESET, count);
+		colored_printf(RED, "printed %d nodes.\n" RESET, count);
 	}
 	return ;
 }
@@ -190,14 +190,14 @@ void	ft_lstprint_betw(t_list *lst, t_list *end)
 	}
 	if (DEBUG)
 	{
-		fprintf(stderr, RED "ll segment: " RESET);
+		colored_printf(RED, "ll segment: " RESET);
 		while (lst != end->next)
 		{
 			count++;
 			fprintf(stderr, YELLOW "%s -> " RESET, (const char *)lst->content);
 			lst = lst->next;
 		}
-		fprintf(stderr, RED "printed %d nodes.\n" RESET, count);
+		colored_printf(RED,  "printed %d nodes.\n" RESET, count);
 	}
 	return ;
 }

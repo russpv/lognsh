@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:17:24 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/19 14:58:53 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/28 17:08:55 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
  * export [name[=value]]
  * Marks each name to be passed to child processes in the environment,
  * as long as equal sign is present.
+ * Sets error exit code if nothing was exported.
  */
 int	bi_export(t_state *s, char **argv, int argc)
 {

@@ -78,7 +78,7 @@ bool	test_prev_integrity(t_list *lst)
 	// If the list is empty, there's nothing to test
 	if (current == NULL)
 	{
-		printf("List is empty.\n");
+		colored_printf(YELLOW, "List is empty.\n");
 		return (true);
 	}
 
@@ -88,7 +88,7 @@ bool	test_prev_integrity(t_list *lst)
 		// Check that the current node's prev points to the previous node
 		if (current->prev != previous)
 		{
-			printf("Integrity check failed: Node at\
+			colored_printf(YELLOW,"Integrity check failed: Node at\
 				%p's prev pointer is incorrect.\n", current);
 			return (false);
 		}
@@ -96,7 +96,7 @@ bool	test_prev_integrity(t_list *lst)
 		// Check that the previous node's next points to the current node
 		if (previous != NULL && previous->next != current)
 		{
-			printf("Integrity check failed: Node at\
+			colored_printf(YELLOW,"Integrity check failed: Node at\
 				%p's next pointer is incorrect.\n", previous);
 			return (false);
 		}
@@ -106,6 +106,6 @@ bool	test_prev_integrity(t_list *lst)
 		current = current->next;
 	}
 
-	printf("Integrity check passed.\n");
+	colored_printf(YELLOW,"Integrity check passed.\n");
 	return (true);
 }

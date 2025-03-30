@@ -14,7 +14,7 @@ void	print_redirect_error(char *topath)
 /* Prints "too many arguments"*/
 void	print_too_many_args(const char *caller)
 {
-	write(STDERR_FILENO, "minish: ", ft_strlen(SHELL_NAME) + 2);
+	write(STDERR_FILENO, SHELL_NAME": ", ft_strlen(SHELL_NAME) + 2);
 	if (caller)
 	{
 		write(STDERR_FILENO, caller, ft_strlen(caller));

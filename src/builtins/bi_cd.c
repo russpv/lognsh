@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:07:02 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/19 14:55:23 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/03/28 17:10:30 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 #define CMD_NAME "cd"
 #define PWD_KEY "PWD"
-#define EMSG_OLDPWDNOTSET "OLDPWD not set.\n"
-#define EMSG_INVLD "invalid state or arguments\n"
+#define EMSG_OLDPWDNOTSET "OLDPWD is not set.\n"
+#define EMSG_INVLD "Invalid state or arguments\n"
 #define EMSG_NOFILE "No such file or directory\n"
-#define EMSG_TOOMANYARGS "too many arguments.\n"
-#define EMSG_NOHOME "HOME not set.\n"
-#define EMSG_BADMALLOC "memory allocation failed.\n"
+#define EMSG_TOOMANYARGS "Too many arguments (oh my gawd).\n"
+#define EMSG_NOHOME "HOME is not set.\n"
+#define EMSG_BADMALLOC "Memory allocation failed.\n"
 
 #define MAX_BUFSZ 1024
 
@@ -50,7 +50,6 @@ char	*make_absolute(t_state *s, const char *relpath)
 
 	ft_memset(buf, 0, MAX_BUFSZ);
 	pwd = get_env_val(s, PWD_KEY);
-	fprintf(stderr, "PWD:%s\n", pwd);
 	ft_memmove(buf, pwd, ft_strlen(pwd));
 	while (*relpath && 0 == ft_strncmp(relpath, "..", 2))
 	{

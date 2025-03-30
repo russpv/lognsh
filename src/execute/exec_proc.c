@@ -26,6 +26,7 @@ int	exec_fork_wait(t_state *s, t_ast_node *node, t_execute_fn executor)
 		exit(exit_status);
 	}
 	waitchild(&status, 1);
+	set_exit_status(s, status);
 	sig_set_handlers(INT_DFL);
-	return (get_exit_status(status));
+	return (exec_get_exit_status(status));
 }

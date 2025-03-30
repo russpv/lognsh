@@ -117,7 +117,7 @@ t_mem_block	*mem_get_alloc(t_mem_node *head, void *alloc)
 			return (block);
 		node = node->next;
 	}
-	fprintf(stderr, "%s: block not found (%s) \n", __FUNCTION__, (char *)alloc);
+	debug_print("%s: block not found (%s) \n", __FUNCTION__, (char *)alloc);
 	return (NULL);
 }
 

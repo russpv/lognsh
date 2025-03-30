@@ -79,7 +79,6 @@ static int	_p_do_heredoc_expansion(t_state *s, t_redir_data *r)
 	int		len;
 
 	ft_memset(buf, 0, sizeof(buf));
-	fprintf(stderr,"here: %s buf:%s\n", __FUNCTION__, buf);
 	if (NULL == r)
 		return (ERR_ARGS);
 	if (NULL == r->heredoc_body)

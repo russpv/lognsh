@@ -44,7 +44,7 @@ int	waitchild(int *status, int childc)
 		child_pid = waitpid(-1, &raw_status, 0);
 		if (child_pid > 0 && WIFEXITED(raw_status))
 		{
-			*status = get_exit_status(raw_status);  // Sets to 1
+			*status = exec_get_exit_status(raw_status);  // Sets to 1
 			debug_print(DBGMSG_EXEC_EXITCODE, child_pid, *status);
 		}
 		else if (child_pid > 0 && WIFSIGNALED(raw_status))
@@ -59,22 +59,34 @@ int	waitchild(int *status, int childc)
 	return (0);
 }
 
+/* Interpret waitpid() exit status (signals ignored here) */
+int	exec_get_exit_status(int status)
+{
+	int	exit_status;
+	int	signal_number;
+
+	exit_status = 0;
+	signal_number = 0;
+	if (WIFEXITED(status))
+		exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		signal_number = WTERMSIG(status);
+	(void)signal_number;
+	return (exit_status);
+}
+
 int	waitchild_sigint(int *status, pid_t child_pid)
 {
 	int code;
 	int	raw_status;
 
 	code = 0;
-	if (g_last_signal == SIGINT)
-	{
-		fprintf(stderr, "WTF\n");
-	}
 	while (code <= 0)
 	{
 		code = waitpid(child_pid, &raw_status, WNOHANG);
 		if (code > 0 && WIFEXITED(raw_status))
 		{
-			*status = get_exit_status(raw_status);  // Sets to 1
+			*status = exec_get_exit_status(raw_status);  // Sets to 1
 			debug_print(DBGMSG_EXEC_EXITCODE, child_pid, *status);
 		}
 		else if (code > 0 && WIFSIGNALED(raw_status))
@@ -89,18 +101,3 @@ int	waitchild_sigint(int *status, pid_t child_pid)
 	return (0);
 }
 
-/* Interpret waitpid() exit status (signals ignored here) */
-int	get_exit_status(int status)
-{
-	int	exit_status;
-	int	signal_number;
-
-	exit_status = 0;
-	signal_number = 0;
-	if (WIFEXITED(status))
-		exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		signal_number = WTERMSIG(status);
-	(void)signal_number;
-	return (exit_status);
-}

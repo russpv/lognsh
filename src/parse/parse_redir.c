@@ -74,7 +74,7 @@ static int	_process_heredoc_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 		return (ERR_ARGS);
 	if (p_get_type(cmd) != AST_NODE_CMD)
 		return (ERR_ARGS);
-	debug_print(_MOD_ ": Got heredoc document\n");
+	debug_print(_MOD_ ": Got here document\n");
 	red->symbol = NULL;
 	red->filename = NULL;
 	red->do_expansion = tok_get_expansion(tok);

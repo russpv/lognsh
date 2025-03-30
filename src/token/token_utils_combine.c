@@ -118,10 +118,12 @@ bool has_lagging_delims(char const *s, char const *set)
 bool	_is_joinable(t_state *s, char *str)
 {
 	if (!s || !str)
-		return (ERR_ARGS);
+		return (false);
 	if (UNQUOTED == get_tmp_flag(s))
+	{
 		if (false == has_lagging_delims(str, IFS))
 			return (true);
+	}
 	if (QUOTED == get_tmp_flag(s) || LTRL == get_tmp_flag(s))
 		return (true);
 	return (false);
