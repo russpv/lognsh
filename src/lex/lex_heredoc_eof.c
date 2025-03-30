@@ -27,7 +27,7 @@ static inline void	_put_eof_in_buf(t_lex *l)
 // Sets expansion flags
 int	get_eof_word(t_mem_mgr *m, t_lex *l)
 {
-	if (!l->ptr)
+	if (!l->ptr)	
 		return (ERR_ARGS);
 	if (true == is_too_long(l->ptr))
 		return (ERR_BUFFLOW);
@@ -37,7 +37,10 @@ int	get_eof_word(t_mem_mgr *m, t_lex *l)
 	_put_eof_in_buf(l);
 	_skip_to_next_op(l);
 	if (0 == ft_strlen(l->buf))
+	{
+		print_lex_error(l, "<<");
 		return (err(EMSG_NOEOF), ERR_SYNTAX);
+	}
 	l->eof_word = ft_strdup_tmp(m, l->buf);
 	if (!l->eof_word)
 		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);

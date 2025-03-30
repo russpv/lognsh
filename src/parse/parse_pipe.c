@@ -44,15 +44,21 @@ static int	_process_pipe(t_state *s, t_parser *p, t_ast_node *pipe_node)
 	if (!p || !pipe_node)
 		return (ERR_ARGS);
 	if (NULL == p->last_node || TOK_PIPE == tok_get_type(previous(p)))
+	{
+		print_parse_error(s, tok_get_raw((p->curr_tok)->content), tok_get_pos((p->curr_tok)->content));
 		return (p->parse_error = true, ERR_SYNTAX);
+	}
 	if (0 != _process_cmd(p, pipe_node))
 		return (ERR_GENERAL);
 	while (!is_at_end(p) && is_pipe_token(peek(p)))
 	{
 		advance(p);
 		debug_print(DBGMSG_PPIPE_NEXT);
-		if (NULL == parse_full_cmd(s, p))
+		if (NULL == parse_full_cmd(s, p)) 
+		{
+			print_parse_error(s, tok_get_raw((p->curr_tok)->prev->content), tok_get_pos((p->curr_tok)->content));
 			return (err(EMSG_PPIPE_SYNTAX), p->parse_error = true, ERR_SYNTAX);
+		}
 		if (0 != _process_cmd(p, pipe_node))
 			return (ERR_GENERAL);
 	}

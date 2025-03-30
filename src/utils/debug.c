@@ -78,7 +78,7 @@ bool	test_prev_integrity(t_list *lst)
 	// If the list is empty, there's nothing to test
 	if (current == NULL)
 	{
-		printf("List is empty.\n");
+		debug_print("List is empty.\n");
 		return (true);
 	}
 
@@ -106,6 +106,6 @@ bool	test_prev_integrity(t_list *lst)
 		current = current->next;
 	}
 
-	printf("Integrity check passed.\n");
+	debug_print("Integrity check passed.\n");
 	return (true);
 }

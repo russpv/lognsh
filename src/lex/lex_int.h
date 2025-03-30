@@ -50,7 +50,7 @@ chars. That must be done each call to lex_create_token. Might as well encapsulat
 // $, \, # do not delimit tokens, and are skipped
 // Removed '*' so that it is included in token raws
 // and '?'?
-#define NOTDELIMITED "()<>"
+#define NOTDELIMITED "()<>|"
 // ops that have no following delims
 #define NORMALTRANSITIONS "$\'\"<\0"
 // the '\0' isn't tested, keep at end,
@@ -197,6 +197,8 @@ typedef struct s_lex
 
 	t_list					*token_list;
 	int						tokc;
+
+	t_state					*global_state;
 }							t_lex;
 
 /* This gets inserted as s_ht_entry->data */
@@ -218,7 +220,7 @@ void						destroy_lexer(t_mem_mgr *m, void **instance);
 
 /* ht */
 void						build_hasht(t_mem_mgr *m, t_lex *lexer);
-t_ht_data					lex_create_ht_node(t_mem_mgr *m, int is_substring,
+t_ht_data					lex_create_ht_node(t_mem_mgr *m, bool is_substring,
 								int type);
 void						lex_destroy_ht_node(t_mem_node *n, void *node);
 void						*lex_copy_ht_data(t_mem_node *n, void *data);

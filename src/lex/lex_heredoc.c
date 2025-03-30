@@ -104,7 +104,6 @@ int	tokenize_heredoc(t_state *s, t_lex *lexer)
 	res = get_eof_word(get_mem(s), lexer);
 	if (0 != res)
 		return (res);
-	
 	res = exec_heredoc(get_mem(s), lexer);
 	if (0 != res)
 		return (res);

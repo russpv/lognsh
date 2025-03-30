@@ -1,16 +1,17 @@
 #include "execute_int.h"
 
-/* Does the correct open() and returns new fd
- * If input file can't be opened, opens /dev/null/ to allow cmd
- * to run otherwise and prints
- * warning as fish does
- */
+
 #define LOGMSG_EREDIR_DONE "\tRedirect: dup2 from %d to %d\n"
 #define DBGMSG_EREDIR_FD _MOD_ ": %s: fd:%d\n"
 
+/* Does the correct open() and returns new fd
+ * If input file can't be opened, opens /dev/null/ to allow cmd
+ * to run otherwise and prints warning as fish does
+ */
 static inline int	_redirect_logic(char *topath, int from, bool append)
 {
 	int	fd;
+	struct stat statbuf;
 
 	if (from == STDIN_FILENO && access(topath, R_OK) == -1)
 	{
@@ -18,6 +19,10 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 		fd = open("/dev/null", O_RDONLY);
 		errno = EACCES;
 	}
+	else if (from == STDIN_FILENO && stat(topath, &statbuf) == -1) 
+		return (perror("stat"), -ERR_STAT);
+	else if (S_ISDIR(statbuf.st_mode))
+        return (print_is_dir(), -ERR_REDIR);
 	else if (from == STDIN_FILENO)
 		fd = open(topath, O_RDONLY | O_CREAT, 0644);
 	else if (from == STDOUT_FILENO && append)

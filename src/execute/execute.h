@@ -8,6 +8,7 @@
 # include <stdbool.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 
 /* Duplicate declares */
 typedef struct s_node	t_ast_node;

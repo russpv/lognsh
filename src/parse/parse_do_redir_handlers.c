@@ -1,11 +1,14 @@
 #include "parse_int.h"
 
+
+#define NOFN "No filename for input redirection.\n"
+
 int	handle_redirect_in(const t_redir_data *node)
 {
 	const int	append = false;
 
 	if (!node->filename)
-		return (err("No filename for input redirection.\n"), ERR_ARGS);
+		return (err(NOFN), ERR_ARGS);
 	if (0 != redirect(NULL, node->filename, STDIN_FILENO, append))
 		return (err("Input redirection issue\n"), ERR_REDIR);
 	return (0);
@@ -33,7 +36,7 @@ int	handle_redirect_out(const t_redir_data *node)
 	const int	append = false;
 
 	if (!node->filename)
-		return (err("No filename for output redirection.\n"), ERR_ARGS);
+		return (err(NOFN), ERR_ARGS);
 	if (0 != redirect(NULL, node->filename, STDOUT_FILENO, append))
 		return (err("Output redirection issue\n"), ERR_REDIR);
 	return (0);
@@ -44,7 +47,7 @@ int	handle_redirect_append(const t_redir_data *node)
 	const int	append = true;
 
 	if (!node->filename)
-		return (err("No filename for output redirection.\n"), ERR_ARGS);
+		return (err(NOFN), ERR_ARGS);
 	if (0 != redirect(NULL, node->filename, STDOUT_FILENO, append))
 		return (err("Append redirection issue\n"), ERR_REDIR);
 	return (0);

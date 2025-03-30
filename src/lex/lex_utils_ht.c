@@ -1,7 +1,7 @@
 #include "lex_int.h"
 
 /* Returns a new data node */
-t_ht_data	lex_create_ht_node(t_mem_mgr *m, int is_substring, int type)
+t_ht_data	lex_create_ht_node(t_mem_mgr *m, bool is_substring, int type)
 {
 	t_ht_data	data;
 

@@ -46,7 +46,10 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_REDIR_SYM_MALLOC);
 	debug_print(DBGMSG_REDIR_GOT, red->type, red->symbol);
 	if (is_at_end(p))
+	{
+		print_parse_error(p->global_state, tok_get_raw((p->curr_tok)->prev->content), tok_get_pos((p->curr_tok)->content));
 		return (err(EMSG_REDIR_FN_EOF), ERR_SYNTAX);
+	}
 	tok_fname = advance(p);
 	debug_print(DBGMSG_REDIR_FN, tok_get_raw(tok_fname));
 	if (!(is_filename_token((t_tok *)tok_fname)
@@ -133,8 +136,9 @@ int	process_redir(t_parser *p, t_ast_node *ast_node)
 			err(EMSG_REDIR_FAIL);
 			return (ERR_GENERAL);
 		}
+		return (0);
 	}
 	else
 		debug_print(_MOD_ ": Not a redir:%s\n", tok_get_raw(peek(p)));
-	return (0);
+	return (-1);
 }
