@@ -27,7 +27,6 @@ static int	_p_do_redirection(void *content)
 	if (!redir->type)
 		return (debug_print(DBGMSG_REDIR_GOTNULL), ERR_ARGS);
 	debug_print(DBGMSG_REDIR_GOT);
-	// TODO do expansion
 	if (handlers[redir->type])
 	{
 		if (0 != handlers[redir->type](redir))
@@ -45,6 +44,7 @@ static int	_p_do_redirection(void *content)
  * 	- multiple filenames, aborts command only
  *  - nonexistent input file, aborts command only
  *  - nonexistent output file, creates file and proceeds (no error)
+ *  - file is a directory, ...?
  */
 int	p_do_redirections(t_ast_node *a)
 {

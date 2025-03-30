@@ -77,12 +77,12 @@ void	debug_print_list(t_list *head)
 	{
 		while (current)
 		{
-			printf("Node %d:\n", i);
+			debug_print("Node %d:\n", i);
 			_print_arg_data((t_arg_data *)current->content);
 			current = current->next;
 			i++;
 		}
-		printf("List printed.\n");
+		debug_print("List printed.\n");
 	}
 }
 

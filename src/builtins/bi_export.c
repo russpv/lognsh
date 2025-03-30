@@ -26,11 +26,11 @@ int	bi_export(t_state *s, char **argv, int argc)
 	int	error_occurred;
 	int	i;
 
-	error_occurred = 0;
 	if (!s || !argv)
 		return (print_custom_err(CMD_NAME, EMSG_INVLD), 1);
 	if (argc == 1)
-		return (print_custom_err(CMD_NAME, MSG_NOARGS), 0);
+		return (print_custom_err(CMD_NAME, EMSG_INVLD), 0);
+	error_occurred = 0;
 	i = 1;
 	while (i < argc)
 	{
@@ -40,12 +40,10 @@ int	bi_export(t_state *s, char **argv, int argc)
 			i++;
 			continue ;
 		}
-		if (0 != parse_arg(s, argv[i], &error_occurred))
-			error_occurred = 1;
+		parse_arg(s, argv[i], &error_occurred);
 		i++;
 	}
 	if (error_occurred)
 		return (ERR_GENERAL);
-	else
-		return (0);
+	return (0);
 }

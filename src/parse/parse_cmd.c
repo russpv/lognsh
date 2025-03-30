@@ -63,10 +63,17 @@ static int	_parse_args(t_state *s, t_parser *p, t_ast_node *cmd_node)
  */
 static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 {
+	int res;
+
 	if (!p || !cmd_node)
 		return (ERR_ARGS);
-	if (0 != process_redir(p, cmd_node))
-		return (ERR_GENERAL);
+	res = 0;
+	while (res == 0)
+	{
+		res = process_redir(p, cmd_node);
+		if (is_error(res))
+			return (res);
+	}
 	if (false == is_cmd_token(peek(p)))
 		return (err("Expected a command token, but none found\n"), ERR_SYNTAX);
 	if (false == is_expansion(peek(p)) && false == is_group_token(peek(p)))
@@ -78,7 +85,14 @@ static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 	}
 	if (0 != _parse_args(s, p, cmd_node))
 		return (ERR_GENERAL);
-	if (0 != process_redir(p, cmd_node))
+	res = 0;
+	while (res == 0)
+	{
+		res = process_redir(p, cmd_node);
+		if (is_error(res))
+			return (res);
+	}
+	if (0 != _parse_args(s, p, cmd_node))
 		return (ERR_GENERAL);
 	return (0);
 }

@@ -1,6 +1,6 @@
 #include "lex_int.h"
 
-/* Checks if s is in the set of tokens that do not need to be delimited */
+/* True if s is in the set of tokens that do not need to be delimited */
 static inline bool	_is_not_delimd(const char *s)
 {
 	if (ft_strlen(s) > 1)
@@ -14,6 +14,7 @@ static inline bool	_is_not_delimd(const char *s)
 t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 {
 	struct s_ht_entry	*res;
+	void *elem;
 
 	if (ft_strnlen(lexer->buf, LEX_BUFSZ) == 0)
 		return (NULL);
@@ -28,8 +29,9 @@ t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 			|| true == _is_not_delimd(lexer->buf))
 		{
 			debug_print(_MOD_ ": Creating token...\n");
-			return (lex_create_token(get_mem(s), lexer,
-					((t_ht_data)ht_get_payload(res))->type));
+			elem = ht_get_payload(res);
+			if (elem)
+				return (lex_create_token(get_mem(s), lexer,((t_ht_data)elem)->type));
 		}
 	}
 	return (NULL);
@@ -50,14 +52,15 @@ struct s_ht_entry	*do_one_char_lookahead(t_lex *lexer, struct s_ht_entry *res)
 
 	s = lexer->ptr;
 	if (!lexer->ptr || !*(s) || 0 == buflen)
-		return (NULL);
+		return (res);
 	lexer->buf[buflen] = *(s);
-	debug_print(_MOD_ ": ------_do_one_char_lookahead with:_%s_\n", lexer->buf);
+	debug_print(_MOD_ ": ------ %s with:_%s_\n", __FUNCTION__, lexer->buf);
 	test = ht_lookup(lexer->hasht, lexer->buf);
-	if (test)
+	if (test && test != res)
 	{
-		if (true == is_normal_delim(lexer, 1))
+		if (true == is_normal_delim(lexer, 1) || _is_not_delimd(lexer->buf))
 		{
+			debug_print(_MOD_ ": ------ %s found:_%s_\n", __FUNCTION__, lexer->buf);
 			lexer->ptr++;
 			return (test);
 		}

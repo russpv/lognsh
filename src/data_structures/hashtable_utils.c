@@ -2,7 +2,9 @@
 
 void	*ht_get_payload(struct s_ht_entry *e)
 {
-	return (e->data);
+	if (e)
+		return (e->data);
+	return (NULL);
 }
 
 /* Optionally copies the data before assigning it. */

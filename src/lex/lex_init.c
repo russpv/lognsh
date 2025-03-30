@@ -56,6 +56,7 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 		lexer->last_grp_tok = NULL;
 		lexer->tokc = 0;
 		lexer->keep_dollar = LEXERKEEP$;
+		lexer->global_state = state;
 		register_lexer_destroy(state, destroy_lexer);
 		register_token_destroy(state, destroy_token);
 		if (false == _allocate_buf_and_hasht(get_mem(state), lexer))

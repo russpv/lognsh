@@ -1,6 +1,9 @@
 #include "error.h"
 
 extern char	*get_input(t_state *s);
+extern char	*lex_get_ptr(t_lex *l);
+extern const char	*lex_get_raw(t_lex *l);
+
 
 void	print_bufflow(void)
 {
@@ -85,4 +88,26 @@ void	print_parse_error(t_state *s, const char *word, size_t pos)
 	while (++i < pos)
 		write(STDERR_FILENO, "-", 1);
 	write(STDERR_FILENO, "^\n", 2);
+}
+
+void	print_lex_error(t_lex *l, char *word)
+{
+	const char	*input = (const char *)lex_get_raw(l);
+	size_t		i;
+	const size_t pos = (size_t)(lex_get_ptr(l) - (char *)input);
+
+	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+	printf(": parse error near `%s` in:\n", word);
+	printf("%s\n", input);
+	i = -1;
+	while (++i < pos)
+		write(STDERR_FILENO, "-", 1);
+	write(STDERR_FILENO, "^\n", 2);
+}
+
+
+void	print_is_dir(void)
+{
+	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+	write(STDERR_FILENO, ": Is a directory\n", ft_strlen(": Is a directory\n"));
 }

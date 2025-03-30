@@ -6,10 +6,10 @@
 # include <signal.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 # define EXIT_NULLCMD 0
 
-# define ERR_NONE 0
 # define ERR_AMBIGUOUS_REDIR 1
 # define ERR_GENERAL 1
 # define ERR_SYNTAX 2
@@ -31,6 +31,7 @@
 # define ERR_EXECVE 18
 # define ERR_DUP2 19
 # define ERR_BUFFLOW 20
+# define ERR_STAT 21
 
 # define ERR_CHILD_FAILED 127
 # define ERR_CMD_NOT_FOUND 127
@@ -64,6 +65,8 @@
 
 // no includes, but redefs, due to circular dependency
 typedef struct s_global_state	t_state;
+struct s_lex;
+typedef struct s_lex	t_lex;
 
 /* specific error messages */
 void							print_command_not_found(const char *cmd);
@@ -78,7 +81,12 @@ void							print_custom_err_err(const char *dingus,
 									const char *gizmo, const char *msg);
 void							print_parse_error(t_state *s, const char *word,
 									size_t pos);
+void							print_lex_error(t_lex *l, char *word);
+
 void							print_bufflow(void);
+void							print_is_dir(void);
+
+bool							is_error(int v);
 
 /* To avoid circular includes: */
 extern void						set_error(t_state *s, int e);

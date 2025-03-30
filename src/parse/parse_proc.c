@@ -58,7 +58,10 @@ static int	_process_proc(t_state *s, t_parser *p, t_ast_node *proc_node)
 			return (err("Failed to parse proc command\n"), ERR_GENERAL);
 	}
 	if (!is_close_paren(peek(p)))
+	{
+		print_parse_error(s, tok_get_raw((p->curr_tok)->prev->content), tok_get_pos((p->curr_tok)->content));
 		return (err("Expected ')' to close process\n"), ERR_SYNTAX);
+	}
 	if (0 != _add_cmd(p, proc_node))
 		return (ERR_GENERAL);
 	advance(p);
