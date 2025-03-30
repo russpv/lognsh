@@ -6,12 +6,18 @@
 #define LOGMSG_RUNC_SIGINT "Cmd: Received SIGINT before fork\n"
 
 /* Note: command not found is thrown in caller */
+// Checks permissions on path and also if a dir
 static int	_check_access(const char *path)
 {
+	struct stat info;
+
 	if (0 == access((const char *)path, F_OK))
 	{
 		if (0 != access((const char *)path, X_OK))
 			return (print_perror(path), ERR_CMD_NOT_EXEC);
+		if (0 == stat((const char *)path, &info))
+			if (S_ISDIR(info.st_mode))
+				return (print_is_dir(), ERR_CMD_IS_A_DIR);
 		return (0);
 	}
 	return (ERR_CMD_NOT_FOUND);
@@ -53,11 +59,15 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
  * Checks PATH, or absolute path if slash is in the name */
 int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 {
+	int res;
+	
+	res = ERR_CMD_NOT_FOUND;
 	if (NULL != name && '\0' != name[0])
 	{
 		if (ft_strchr(name, '/'))
 		{
-			if (0 == _check_access(name))
+			res = _check_access(name);
+			if (0 == res)
 			{
 				*fullpath = (char *)name;
 				return (0);
@@ -66,12 +76,16 @@ int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 		else
 		{
 			if (0 == _search_path(s, name, fullpath))
-				if (0 == _check_access(*fullpath))
-					return (0);
+			{
+				res = _check_access(*fullpath);
+				if (0 == res)
+					return (res);
+			}
 		}
 	}
-	print_command_not_found(name);
-	return (ERR_CMD_NOT_FOUND);
+	if (ERR_CMD_NOT_FOUND == res)
+		print_command_not_found(name);
+	return (res);
 }
 
 /* Forks depending on execution context
@@ -91,8 +105,9 @@ int	run_cmd(t_state *s, t_ast_node *a)
 		return (EINVAL);
 	if (NULL == p_get_cmd(a))
 		return (EXIT_NULLCMD);
-	if (0 != find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath))
-		return (s_free_cmd(s), ERR_CMD_NOT_FOUND);
+	exit_status = find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath);
+	if (0 != exit_status)
+		return (s_free_cmd(s), exit_status);
 	if (c->fullpath)
 		log_print(LOGMSG_RUNC_GOT, c->fullpath);
 	debug_print(_MOD_ ": %s: exec'g\n", __FUNCTION__);

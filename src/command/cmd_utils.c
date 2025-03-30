@@ -117,7 +117,7 @@ void	print_pipes(t_cmd *c)
 	i = -1;
 	while (++i < c->curr_cmdc - 1)
 	{
-		debug_print("Cmd: \tPipe %d: read fd=%d, write fd=%d", i,
+		debug_print("Cmd: \tPipe %d: read fd=%d, write fd=%d\n", i,
 			c->fildes[i][0], c->fildes[i][1]);
 	}
 }

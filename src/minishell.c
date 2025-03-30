@@ -34,9 +34,7 @@ static int	_do_loop(t_state *s)
 	ast = parse(s, get_input(s));
 	if (ast)
         set_exit_status(s, cmd_execute(s, ast));
-    // >> Only clear line after execution if not a heredoc or shell-spawning command
-	//if (ast && !get_heredoc(s) && *get_status(s) == ERR_CMD_NOT_FOUND)
-	//	clear_current_line();
+	colored_printf(MAGENTA, "Exit code set: %d\n",*get_status(s));
 	s_free_cmd_lex_parse(s);
 	return (*get_status(s));
 }

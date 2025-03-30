@@ -2,7 +2,7 @@
 
 #define NO_CMD -10
 #define LMSG_IN _MOD_ ": \t### %s ###\n"
-#define LMSG_OUT _MOD_ ": \tFinished %s.\n"
+#define LMSG_OUT _MOD_ ": \tFinished %s exit: %d.\n"
 
 static int	_handle_no_command(t_ast_node *a)
 {
@@ -70,6 +70,6 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 		exit_code = exec_bi_call(s, bi);
 	else
 		exit_code = run_cmd(s, a);
-	log_print(LMSG_OUT, __FUNCTION__);
+	log_print(LMSG_OUT, __FUNCTION__, exit_code);
 	return (exit_code);
 }

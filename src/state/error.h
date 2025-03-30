@@ -39,6 +39,7 @@
 # define ERR_CMD_SIGINTD 130
 # define ERR_CHILD_SIGINT 130
 # define ERR_EXIT_RANGE 255
+# define ERR_CMD_IS_A_DIR 128
 
 # define EMSG_MALLOC SHELL_NAME ": malloc"
 # define EMSG_PIPE SHELL_NAME ": pipe"

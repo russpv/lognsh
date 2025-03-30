@@ -30,10 +30,12 @@ static int	_p_do_redirection(void *content)
 	if (handlers[redir->type])
 	{
 		if (0 != handlers[redir->type](redir))
-			return (err(EMSG_REDIR_HANDLER), ERR_GENERAL);
+			return (err(EMSG_REDIR_HANDLER), ERR_REDIR);
+		if (EACCES == errno)
+			set_exit_status(redir->global_state, ERR_GENERAL);
 	}
 	else
-		return (err(EMSG_REDIR_HANDLER), ERR_GENERAL);
+		return (err(EMSG_REDIR_HANDLER), ERR_REDIR);
 	return (0);
 }
 

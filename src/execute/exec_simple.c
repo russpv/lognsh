@@ -84,8 +84,8 @@ int	exec_fork_execve(t_state *s)
 	{
 		sig_reset_handlers();
 		if (0 != _do_child_ops(s))
-			exit_clean(&get_mem(s)->list, ERR_CHILD_FAILED, __FUNCTION__,
-				EMSG_CHILD);
+			exit_clean(&get_mem(s)->list, ERR_CHILD_FAILED, NULL,
+				NULL);
 	}
 	else if (p < 0)
 		return (perror(EMSG_FORK), ERR_FORK);
