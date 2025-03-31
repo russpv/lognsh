@@ -27,7 +27,7 @@
 # define ERR_WAITPID 14
 # define ERR_GETCWD 15
 # define ERR_CHDIR 16
-# define ERR_REDIR 17
+# define ERR_REDIR 1
 # define ERR_EXECVE 18
 # define ERR_DUP2 19
 # define ERR_BUFFLOW 20
@@ -39,7 +39,7 @@
 # define ERR_CMD_SIGINTD 130
 # define ERR_CHILD_SIGINT 130
 # define ERR_EXIT_RANGE 255
-# define ERR_CMD_IS_A_DIR 128
+# define ERR_CMD_IS_A_DIR 126
 
 # define EMSG_MALLOC SHELL_NAME ": malloc"
 # define EMSG_PIPE SHELL_NAME ": pipe"
