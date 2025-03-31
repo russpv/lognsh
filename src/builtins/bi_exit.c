@@ -13,7 +13,7 @@
 #include "bi_int.h"
 
 #define CMD_NAME "exit"
-#define EMSG_NONNUM "Numeric argument required.\n"
+#define EMSG_NONNUM "numeric argument required\n"
 #define MAX_ARGSZ 20
 #define NOARG 1
 #define NONNUM 2
