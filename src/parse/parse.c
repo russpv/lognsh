@@ -40,8 +40,9 @@ t_ast_node	*parse_full_cmd(t_state *s, t_parser *p)
 	debug_print(DBGMSG_PNODE_NOTPIPE);
 	if (p->last_node && is_log_token(peek(p)))
 		return (parse_logical(s, p));
-	print_parse_error(s, tok_get_raw(peek(p)), tok_get_pos(peek(p)));
+	print_parse_error(s, tok_get_raw(peek(p)), tok_get_pos(peek(p)) - tok_get_len(peek(p)));
 	p->parse_error = true;
+	set_exit_status(s, EX_EINVAL);
 	return (NULL);
 }
 

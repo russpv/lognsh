@@ -13,22 +13,23 @@
 ** Returns single node for empty list, or adds new to end of
 ** linked list, keeps ptr to head ptr intact
 */
-void	ft_lstadd_back(t_list **lst, t_list *new)
+int	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	t_list	*tmp;
 
 	if (new == NULL)
-		return ;
+		return (-1);
 	if (lst == NULL)
-		return ;
+		return (-1);
 	if (*lst == NULL)
 	{
 		*lst = new;
-		return ;
+		return (1);
 	}
 	tmp = ft_lstlast(*lst);
 	tmp->next = new;
 	new->prev = tmp;
+	return (0);
 }
 
 /* LSTADD_FRONT

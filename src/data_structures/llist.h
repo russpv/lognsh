@@ -23,7 +23,7 @@ typedef struct s_list	t_list;
 /* Sort comparitor */
 extern int				ft_strcmplow(const char *a, const char *b);
 
-void					ft_lstadd_back(t_list **lst, t_list *new);
+int						ft_lstadd_back(t_list **lst, t_list *new);
 void					ft_lstadd_front(t_list **lst, t_list *new);
 
 void					ft_lstclear(t_list **lst, void (*del)(void *));

@@ -58,7 +58,7 @@ struct s_ht_entry	*do_one_char_lookahead(t_lex *lexer, struct s_ht_entry *res)
 	test = ht_lookup(lexer->hasht, lexer->buf);
 	if (test && test != res)
 	{
-		if (true == is_normal_delim(lexer, 1) || _is_not_delimd(lexer->buf))
+		if (true == is_normal_delim(lexer, 0) || _is_not_delimd(lexer->buf))
 		{
 			debug_print(_MOD_ ": ------ %s found:_%s_\n", __FUNCTION__, lexer->buf);
 			lexer->ptr++;

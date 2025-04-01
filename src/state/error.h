@@ -9,14 +9,18 @@
 # include <stdbool.h>
 
 # define EXIT_NULLCMD 0
+# define EX_HAPPY 0
+# define EX_ERNDM 1
+# define EX_EINVAL 2
+# define EX_EREDIR 3
 
 # define ERR_AMBIGUOUS_REDIR 1
 # define ERR_GENERAL 1
 # define ERR_SYNTAX 2
-# define ERR_FILE_NOT_FOUND 3
+# define ERR_ARGS 3
 # define ERR_TOKEN 4
 # define ERR_MEM 5
-# define ERR_ARGS 6
+# define ERR_FILE_NOT_FOUND 6
 # define ERR_INVALID_CMD_TYPE 7
 # define ERR_FORK 8
 # define ERR_INSUFFICIENT_CMDS 9
@@ -36,10 +40,12 @@
 # define ERR_CHILD_FAILED 127
 # define ERR_CMD_NOT_FOUND 127
 # define ERR_CMD_NOT_EXEC 126
-# define ERR_CMD_SIGINTD 130
 # define ERR_CHILD_SIGINT 130
 # define ERR_EXIT_RANGE 255
 # define ERR_CMD_IS_A_DIR 128
+
+# define ERR_RL_ABORTED -2
+# define ERR_CMD_GOTSIG -1
 
 # define EMSG_MALLOC SHELL_NAME ": malloc"
 # define EMSG_PIPE SHELL_NAME ": pipe"
@@ -75,7 +81,7 @@ void							print_perror(const char *dingus);
 void							print_lex_buffer_overflow(void);
 void							print_ambiguous_redirect(const char *orig_fn);
 void							print_too_many_args(const char *caller);
-void							print_redirect_error(char *topath);
+void							print_redirect_warning(char *topath);
 void							print_custom_err(const char *dingus,
 									const char *msg);
 void							print_custom_err_err(const char *dingus,
@@ -83,6 +89,10 @@ void							print_custom_err_err(const char *dingus,
 void							print_parse_error(t_state *s, const char *word,
 									size_t pos);
 void							print_lex_error(t_lex *l, char *word);
+void							print_hdoc_error(const char *line, const char *eof);
+void							print_redir_error(t_state *s, const char *word, size_t pos);
+void							print_nocmd_error(t_state *s, const char *word, size_t pos);
+
 
 void							print_bufflow(void);
 void							print_is_dir(void);

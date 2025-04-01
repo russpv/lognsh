@@ -15,6 +15,7 @@ typedef struct s_normal_tok
 {
 	enum e_tok_type		type;
 	char				*raw;
+	size_t				raw_len;
 	size_t				pos;
 	bool				do_globbing;
 	bool				do_expansion;

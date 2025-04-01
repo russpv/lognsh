@@ -190,7 +190,9 @@ typedef struct s_lex
 	int						do_heredoc_expansion;
 	bool					do_wordsplit; 
 	bool					is_subtoken;
+
 	char					*eof_word;
+	int						lines;
 
 	bool					input_incomplete;
 	int						keep_dollar;

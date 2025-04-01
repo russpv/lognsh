@@ -40,8 +40,9 @@ t_tok	*create_token(t_mem_mgr *mgr, const char *s, int type, size_t pos)
 		}
 		else
 		{
-			debug_print(_MOD_": %s: %s_ typ_%d \n", __FUNCTION__, s, type);
-			if (ft_strnlen(s, 4096) > MAX_RAW_INPUT_LEN)
+			token->t.tok.raw_len = ft_strnlen(s, 4096);
+			debug_print(_MOD_": %s: %s_ typ_%d len_%ld\n", __FUNCTION__, s, type, token->t.tok.raw_len);
+			if (token->t.tok.raw_len > MAX_RAW_INPUT_LEN)
 				return (err(_MOD_": raw input buf overflow\n"), mgr->dealloc(&mgr->list, token), NULL);
 			token->t.tok.raw = ft_strdup_tmp(mgr, s);
 			if (!token->t.tok.raw)

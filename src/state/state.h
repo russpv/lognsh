@@ -63,7 +63,7 @@ typedef struct s_env			t_env;
 t_state							*init_state(char **envp);
 void							destroy_state(t_state **state);
 
-int								set_exit_status(t_state *state, int value);
+void							set_exit_status(t_state *state, int value);
 void							set_error(t_state *state, int code);
 void							set_parser(t_state *state, t_parser *p);
 void							set_lexer(t_state *state, t_lex *l);

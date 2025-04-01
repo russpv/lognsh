@@ -27,7 +27,7 @@ t_state	*init_state(char **envp)
 	s = malloc(sizeof(struct s_global_state));
 	if (!s)
 		return (NULL);
-	s->current_exit_code = 0;
+	s->current_exit_code = EX_HAPPY;
 	s->error_code = 0;
 	s->envp = envp;
 	_init_state_ptrs(s);

@@ -15,6 +15,7 @@ static inline int	_load_line(t_lex *l, const char *line)
 	while (*line)
 		l->buf[(l->buf_idx)++] = *line++;
 	l->buf[(l->buf_idx)++] = '\n';
+	l->lines++;
 	return (0);
 }
 
@@ -26,6 +27,24 @@ static inline bool	_line_is_eof(t_lex *l, const char *line)
 		return (true);
 	return (false);
 }
+
+static int	_getncount(char buf[], unsigned int c, size_t n)
+{
+	size_t i;
+	int res;
+
+	i = 0;
+	res = 0;
+	if (!buf || !n)
+		return (-1);
+	while (buf[i] && i < n)
+	{
+		if (buf[i++] == c)
+			res++;
+	}
+	return ((int)res);
+}
+
 
 size_t	read_heredoc(int fd, t_lex *l)
 {
@@ -45,6 +64,7 @@ size_t	read_heredoc(int fd, t_lex *l)
 	}
 	if (sz > LEX_BUFSZ)
 		sz = LEX_BUFSZ;
+	l->lines = _getncount(buf, '\n', sz);
 	if (0 != buf[0] && sz > 0)
 		ft_memmove(l->buf, buf, sz);
 	return (sz);
@@ -69,21 +89,18 @@ int	match_heredoc(t_mem_mgr *m, t_lex *l)
 {
 	char	*line;
 
+	(void)m;
 	while (1)
 	{
 		line = readline(HDOC_PROMPT);
 		if (NULL == line)
 		{
 			debug_print(LOGMSG_SIG);
-			m->dealloc(&m->list, l->eof_word);
-			l->eof_word = NULL;
-			return (ERR_CMD_SIGINTD);
+			return (ERR_RL_ABORTED);
 		}
 		if (true == _line_is_eof(l, line))
 		{
 			debug_print(DBGMSG_FOUNDDEL);
-			m->dealloc(&m->list, l->eof_word);
-			l->eof_word = NULL;
 			return (0);
 		}
 		_load_line(l, line);
@@ -107,7 +124,9 @@ int	tokenize_heredoc(t_state *s, t_lex *lexer)
 	res = exec_heredoc(get_mem(s), lexer);
 	if (0 != res)
 		return (res);
-	debug_print("Received doc:%s\n", lexer->buf);
+	get_mem(s)->dealloc(&get_mem(s)->list, lexer->eof_word);
+	lexer->eof_word = NULL;
+	debug_print("Received doc:%s lines:%d\n", lexer->buf, lexer->lines);
 	debug_print(DBGMSG_PTRAT, *lexer->ptr);
 	token = lex_create_token(get_mem(s), lexer, TOK_HEREDOC_WORD);
 	if (token)

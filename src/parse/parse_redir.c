@@ -54,7 +54,10 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 	debug_print(DBGMSG_REDIR_FN, tok_get_raw(tok_fname));
 	if (!(is_filename_token((t_tok *)tok_fname)
 			|| is_expansion((t_tok *)tok_fname)))
+	{
+		print_redir_error(p->global_state, tok_get_raw((p->curr_tok)->prev->prev->content), tok_get_pos((p->curr_tok)->prev->prev->content));
 		return (err(EMSG_REDIR_FN_INVALID), ERR_SYNTAX);
+	}
 	red->do_globbing = tok_get_globbing((t_tok *)tok_fname);
 	red->do_expansion = tok_get_expansion((t_tok *)tok_fname);
 	red->filename = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok_fname));
@@ -134,6 +137,7 @@ int	process_redir(t_parser *p, t_ast_node *ast_node)
 		if (0 != _parse_redir(p, ast_node))
 		{
 			err(EMSG_REDIR_FAIL);
+			set_exit_status(p->global_state, EX_EREDIR);
 			return (ERR_GENERAL);
 		}
 		return (0);

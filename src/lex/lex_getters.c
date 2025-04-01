@@ -21,3 +21,18 @@ const char	*lex_get_raw(t_lex *lexer)
 		return (NULL);
 	return (lexer->raw_string);
 }
+
+
+int	lex_get_lines(t_lex *lexer)
+{
+	if (!lexer)
+		return (-1);
+	return (lexer->lines);
+}
+
+char *lex_get_eof(t_lex *lexer)
+{
+	if (!lexer)
+		return (NULL);
+	return (lexer->eof_word);
+}

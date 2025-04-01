@@ -41,8 +41,8 @@ int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 			else
 			{
 				debug_print(_MOD_ ": %s adding token to list\n", __FUNCTION__);
-				ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m, token));
-				lexer->tokc++;
+				if (ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m, token)) > 0)
+					lexer->tokc++;
 			}
 		}
 		else

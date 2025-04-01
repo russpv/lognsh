@@ -129,6 +129,7 @@ bool					tok_get_expansion(t_tok *token);
 bool					tok_get_dquotes(t_tok *token);
 t_list					*tok_get_tlist(t_tok *token);
 size_t					tok_get_pos(t_tok *token);
+size_t					tok_get_len(t_tok *token);
 
 bool					tok_get_issubtoken(t_tok *token);
 bool					tok_isgrouptoken(t_tok *token);

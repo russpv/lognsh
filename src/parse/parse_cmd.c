@@ -75,7 +75,11 @@ static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 			return (res);
 	}
 	if (false == is_cmd_token(peek(p)))
+	{
+		set_exit_status(s, EX_ERNDM);
+		print_nocmd_error(s, tok_get_raw(previous(p)), tok_get_pos(peek(p)));
 		return (err("Expected a command token, but none found\n"), ERR_SYNTAX);
+	}
 	if (false == is_expansion(peek(p)) && false == is_group_token(peek(p)))
 	{
 		cmd_node->data.cmd.name = ft_strdup_tmp(p->mmgr,
@@ -115,6 +119,10 @@ t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 	if (0 != res)
 	{
 		set_error(s, res);
+		if (get_status(s) == EX_HAPPY)
+			set_exit_status(s, EX_ERNDM);
+		//else
+	//		set_exit_status(s, EX_EINVAL);
 		destroy_ast_node(get_mem(s), (void **)&ast_node);
 		return (NULL);
 	}

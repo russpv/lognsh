@@ -53,6 +53,7 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 		lexer->ptr = (char *)s;
 		lexer->token_list = NULL;
 		lexer->eof_word = NULL;
+		lexer->lines = 0;
 		lexer->last_grp_tok = NULL;
 		lexer->tokc = 0;
 		lexer->keep_dollar = LEXERKEEP$;

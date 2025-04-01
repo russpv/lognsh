@@ -15,7 +15,7 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 
 	if (from == STDIN_FILENO && access(topath, R_OK) == -1)
 	{
-		print_redirect_error(topath);
+		print_redirect_warning(topath);
 		fd = open("/dev/null", O_RDONLY);
 		errno = EACCES;
 	}

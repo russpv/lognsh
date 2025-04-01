@@ -25,6 +25,9 @@ t_list					*lex_get_tokens(t_lex *lexer);
 unsigned int			lex_get_keepd(t_lex *lexer);
 const char				*lex_get_raw(t_lex *lexer);
 char					*lex_get_ptr(t_lex *lexer);
+char *lex_get_eof(t_lex *lexer);
+int	lex_get_lines(t_lex *lexer);
+
 
 size_t					ft_varnamelen(const char *c);
 int						match_heredoc(t_mem_mgr *m, t_lex *l);

@@ -64,3 +64,12 @@ enum e_tok_type	tok_get_type(t_tok *token)
 	}
 	return (token->t.tok.type);
 }
+
+size_t	tok_get_len(t_tok *token)
+{
+	if (!token)
+		return (-1);
+	if (NORMAL == token->class)
+		return (token->t.tok.raw_len);
+	return (-1);
+}
