@@ -129,6 +129,7 @@ static int	_parse_redir(t_parser *p, t_ast_node *node)
  * Adds redirections to node's t_list
  * Upon failure, frees any downstream heap mem
  * and returns. Does nothing to args.
+ * Returns -1 if nothing processed.
  */
 int	process_redir(t_parser *p, t_ast_node *ast_node)
 {

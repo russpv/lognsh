@@ -96,11 +96,13 @@ int	match_heredoc(t_mem_mgr *m, t_lex *l)
 		if (NULL == line)
 		{
 			debug_print(LOGMSG_SIG);
+			free(line);
 			return (ERR_RL_ABORTED);
 		}
 		if (true == _line_is_eof(l, line))
 		{
 			debug_print(DBGMSG_FOUNDDEL);
+			free(line);
 			return (0);
 		}
 		_load_line(l, line);

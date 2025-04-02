@@ -8,7 +8,7 @@
  * Note: assuming waitpid() behaves irrespective of actual
  * number of children.
  */
-/*int	waitchild(int *status, int childc)
+/*int	waitchilds(int *status, int childc)
 {
 	int		i;
 	pid_t	child_pid;
@@ -32,7 +32,29 @@
 	return (0);
 }*/
 
-int	waitchild(int *status, int childc)
+int	waitchildpid(int *status, pid_t p)
+{
+	pid_t	child_pid;
+	int	raw_status;
+
+	child_pid = waitpid(p, &raw_status, 0);
+	if (child_pid > 0 && WIFEXITED(raw_status))
+	{
+		*status = exec_get_exit_status(raw_status);  // Sets to 1
+		debug_print(DBGMSG_EXEC_EXITCODE, child_pid, *status);
+	}
+	else if (child_pid > 0 && WIFSIGNALED(raw_status))
+	{
+		*status = 128 + WTERMSIG(raw_status);
+		debug_print(DBGMSG_EXEC_EXITSIG, child_pid, WTERMSIG(raw_status));
+	}
+	else if (child_pid < 0)
+		return (perror(EMSG_WAITPID), ERR_WAITPID);
+	debug_print(DBGMSG_EXEC_DONE);
+	return (0);
+}
+
+int	waitchilds(int *status, int childc)
 {
 	int	i;
 	pid_t	child_pid;
@@ -101,3 +123,13 @@ int	waitchild_sigint(int *status, pid_t child_pid)
 	return (0);
 }
 
+int	handle_exit(t_state *s, int code)
+{
+	fprintf(stderr, "got code:%d\n", code);
+	if (EX_HAPPY == code)
+		return (EX_HAPPY);
+	else if (ERR_REDIR == code)
+		return (set_exit_status(s, EX_EREDIR), EX_ERNDM); // Basb likes dumb codes
+	else
+		return (set_exit_status(s, code), code);
+}

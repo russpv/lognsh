@@ -99,6 +99,7 @@ int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,
 		_close_other_pipe_ends(get_cmd(s), i);
 		_redirect_pipes(get_cmd(s), i);
 		exit_status = executor(s, node);
+		exit_status = handle_exit(s, exit_status);
 		destroy_state(&s);
 		exit(exit_status);
 	}

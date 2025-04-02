@@ -43,7 +43,7 @@ static int	_do_log_commands(t_state *s, t_list *cmds, t_cmd *c)
 		debug_print(DBGMSG_CLOGI_GOT2, p_get_cmd(a));
 		if (0 != exec_fork_run(s, a, i, cmd_execute_full))
 			return (-1);
-		if (0 != waitchild(&exit_status, 1))
+		if (0 != waitchilds(&exit_status, 1))
 			return (-1);
 		if (HALT_EXEC == _do_more_ops(ops, exit_status))
 			break ;

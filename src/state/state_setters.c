@@ -12,8 +12,17 @@ void	set_lexer(t_state *state, t_lex *l)
 
 void	set_input(t_state *s, char *input)
 {
+	int len;
+
+	len = 0;
+	if (!s)
+		return ;
 	s->input = input;
-	g_last_signal = -1;
+	if (NULL != input)
+		len = ft_strnlen(input, MAX_RAW_INPUT_LEN + 1);
+	if (len == MAX_RAW_INPUT_LEN + 1)
+		return ;
+	mem_add_mem(&s->mem_mgr.list, input, len + 1);
 }
 
 void	set_command(t_state *s, t_cmd *c)

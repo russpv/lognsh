@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:07:02 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/28 17:10:30 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/01 16:18:25 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,14 @@ static int	_change_dir(t_state *s, const char *target)
 }
 
 /* Change the current directory to DIR.  The default DIR is the value of the
-HOME shell variable. If DIR is "-", it is converted to $OLDPWD. */
+ * HOME shell variable. If DIR is "-", it is converted to $OLDPWD. 
+ * Note: return value becomes exit code.
+ */
 int	bi_cd(t_state *s, char **args, int argc)
 {
 	char	*target;
 
-	if (!s || !args)
+	if (!s || !args) 
 	{
 		print_custom_err(CMD_NAME, EMSG_INVLD);
 		return (ERR_ARGS);
@@ -110,7 +112,7 @@ int	bi_cd(t_state *s, char **args, int argc)
 	else
 	{
 		print_custom_err(CMD_NAME, EMSG_TOOMANYARGS);
-		return (ERR_ARGS);
+		return (EX_ERNDM);
 	}
 	if (!target || ft_strcmp(target, "") == 0)
 	{

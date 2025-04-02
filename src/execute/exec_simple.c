@@ -83,16 +83,17 @@ int	exec_fork_execve(t_state *s)
 	if (0 == p)
 	{
 		sig_reset_handlers();
-		if (0 != _do_child_ops(s))
-			exit_clean(&get_mem(s)->list, ERR_CHILD_FAILED, NULL,
+		exit_code = _do_child_ops(s);
+		if (0 != exit_code)
+			exit_clean(&get_mem(s)->list, exit_code, NULL,
 				NULL);
 	}
 	else if (p < 0)
 		return (perror(EMSG_FORK), ERR_FORK);
-	waitchild(&exit_code, 1);
-	set_exit_status(s, exit_code);
+	waitchildpid(&exit_code, p);
 	if (SIGINT == exit_code)
 		write(STDOUT_FILENO, "\n", 1);
+	exit_code = handle_exit(s, exit_code);
 	s_free_cmd(s);
 	sig_set_handlers(INT_DFL);
 	return (exit_code);

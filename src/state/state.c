@@ -58,7 +58,7 @@ void	destroy_state(t_state **state)
 	if (s->current_cmd)
 		s->destroy_command(m, (void**)&s->current_cmd);
 	if (s->input)
-		free(s->input);
+		m->dealloc(&m->list, s->input);
 	if (s->sh_env_list)
 		env_free_list(m, s->sh_env_list);
 	if (s->pwd)

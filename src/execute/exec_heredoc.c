@@ -39,7 +39,7 @@ int	exec_heredoc(t_mem_mgr *m, t_lex *l)
 	else
 	{
 		close(fildes[1]);
-		waitchild(&status, 1);
+		waitchilds(&status, 1);
 		if (SIGINT == status)
 			write(STDOUT_FILENO, HDOC_PROMPT"^C\n", ft_strlen(HDOC_PROMPT) + 3);
 		read_heredoc(fildes[0], l);

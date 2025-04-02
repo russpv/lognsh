@@ -3,9 +3,16 @@
 /* True if s is in the set of tokens that do not need to be delimited */
 static inline bool	_is_not_delimd(const char *s)
 {
-	if (ft_strlen(s) > 1)
-		return (false);
-	if (ft_strchr(NOTDELIMITED, *s))
+	if (ft_strlen(s) == 1)
+		if (ft_strchr(NOTDELIMITED, *s))
+			return (true);
+	if (0 == ft_strcmp(s, "<<"))
+		return (true);
+	if (0 == ft_strcmp(s, ">>"))
+		return (true);
+	if (0 == ft_strcmp(s, "||"))
+		return (true);
+	if (0 == ft_strcmp(s, "&&"))
 		return (true);
 	return (false);
 }

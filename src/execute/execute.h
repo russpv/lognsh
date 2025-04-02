@@ -36,8 +36,9 @@ int						exec_fork_run(t_state *s, t_ast_node *node, int i,
 int						exec_close_pipes(int **fildes, int cmd_count);
 
 int	exec_get_exit_status(int status);
-int						waitchild(int *status, int childc);
+int						waitchilds(int *status, int childc);
 int	waitchild_sigint(int *status, pid_t child_pid);
+int	waitchildpid(int *status, pid_t p);
 
 int	exec_heredoc(t_mem_mgr *m, t_lex *l);
 

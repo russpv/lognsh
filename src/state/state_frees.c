@@ -9,7 +9,7 @@ void	s_free_cmd_lex_parse(t_state *state)
 	
 	m = get_mem(state);
 	if (TESTFLAG == 0)
-		free(state->input);
+		m->dealloc(&m->list, state->input);
 	state->input = NULL;
 	if (state->current_parser)
 	{

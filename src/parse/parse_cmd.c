@@ -26,16 +26,17 @@ static t_ast_node	*_init_cmd_node(t_mem_mgr *m)
 
 /* This helper consumes argument tokens and adds them to ast node's
  * linked list.
- * Returns NULL if syntax error.
+ * Returns -1 if nothing processed
  */
-static int	_parse_args(t_state *s, t_parser *p, t_ast_node *cmd_node)
+static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
 {
 	t_arg_data	*arg;
 	t_list		*new;
+	int			initval;
 
 	if (!p || !cmd_node)
 		return (ERR_ARGS);
-	(void)s;
+	initval = cmd_node->data.cmd.argc;
 	while (!is_at_end(p) && is_arg_token(peek(p)))
 	{
 		arg = init_arg(p->mmgr, p, cmd_node, advance(p));
@@ -51,7 +52,9 @@ static int	_parse_args(t_state *s, t_parser *p, t_ast_node *cmd_node)
 	}
 	debug_print(_MOD_ ": %s: done on %d arg(s)\n", __FUNCTION__,
 		cmd_node->data.cmd.argc);
-	return (0);
+	if (cmd_node->data.cmd.argc > initval)
+		return (0);
+	return (-1);
 }
 
 /* This helper consumes any redirection tokens,
@@ -63,6 +66,7 @@ static int	_parse_args(t_state *s, t_parser *p, t_ast_node *cmd_node)
  */
 static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 {
+	int res2;
 	int res;
 
 	if (!p || !cmd_node)
@@ -87,17 +91,19 @@ static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 		if (NULL == cmd_node->data.cmd.name)
 			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
-	if (0 != _parse_args(s, p, cmd_node))
-		return (ERR_GENERAL);
 	res = 0;
-	while (res == 0)
+	while (res > -2)
 	{
-		res = process_redir(p, cmd_node);
-		if (is_error(res))
-			return (res);
+		res = 0;
+		res = _parse_args(p, cmd_node);
+		if (res > 0)
+			return (ERR_GENERAL);
+		res2 = process_redir(p, cmd_node);
+		if (is_error(res2))
+			return (res2);
+		if (-1 == res2)
+			res--;
 	}
-	if (0 != _parse_args(s, p, cmd_node))
-		return (ERR_GENERAL);
 	return (0);
 }
 
