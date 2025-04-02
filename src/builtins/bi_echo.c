@@ -16,27 +16,38 @@
  * derived from code echo.c in Bash.
  * Option -n.* defeats newline print
  */
-int	bi_echo(t_state *s, char **argv, int argc)
-{
-	int	i;
-	int	suppress_newline;
+ 
+ static void	print_arg(char *arg, int *first_arg)
+ {
+ 	if (!*first_arg)
+ 		write(STDOUT_FILENO, " ", 1);
+ 	write(STDOUT_FILENO, arg, ft_strlen(arg));
+ 	*first_arg = 0;
+ }
+ 
+ int	bi_echo(t_state *s, char **argv, int argc)
+ {
+ 
+ 	int	i;
+ 	int	first_arg;
+ 	int	suppress_newline;
+ 	
+ 	(void)s;
+ 	i = 1;
+ 	suppress_newline = 0;
+ 	first_arg = 1;
+ 	while (i < argc && argv[i][0] == '-' && argv[i][1] == 'n')
+ 	{
+ 		suppress_newline = 1;
+ 		i++;
+ 	}
+ 	while (i < argc)
+ 	{
+		print_arg(argv[i], &first_arg);
+ 		i++; 
+ 	}
+ 	if (!suppress_newline && (argc == 1 || !first_arg))
+ 		write(STDOUT_FILENO, "\n", 1);
+ 	return (0);
+ }
 
-	(void)s;
-	i = 1;
-	suppress_newline = 0;
-	if (argc > 1 && ft_strcmp(argv[1], "-n") == 0)
-	{
-		suppress_newline = 1;
-		i++;
-	}
-	while (i < argc)
-	{
-		write(STDOUT_FILENO, argv[i], ft_strlen(argv[i]));
-		if (i < argc - 1)
-			write(STDOUT_FILENO, " ", 1);
-		i++;
-	}
-	if (!suppress_newline)
-		write(STDOUT_FILENO, "\n", 1);
-	return (0);
-}
