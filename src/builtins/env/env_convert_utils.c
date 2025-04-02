@@ -46,7 +46,7 @@ static char	*_lst_join_env(t_mem_mgr *m, char *key, char *val)
 }
 
 // Converts t_env* to char**
-char	**lst_to_array(t_mem_mgr *m, t_env *env_list)
+char	**env_to_array(t_mem_mgr *m, t_env *env_list)
 {
 	char	**env_array;
 	t_env	*tmp;
@@ -62,7 +62,7 @@ char	**lst_to_array(t_mem_mgr *m, t_env *env_list)
 	i = 0;
 	while (tmp)
 	{
-		env_array[i] = _lst_join_env(m, env_get_key(tmp), env_get_value(tmp));
+		env_array[i] = _lst_join_env(m, env_get_node_key(tmp), env_get_node_value(tmp));
 		if (!env_array[i])
 			return (NULL);
 		i++;

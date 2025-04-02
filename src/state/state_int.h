@@ -6,6 +6,7 @@
 # define PROMPT_KEY "PROMPT"
 # define LVL_KEY "SHLVL"
 # define CWD_KEY "PWD"
+# define PATH_KEY "PATH"
 
 struct							s_global_state
 {

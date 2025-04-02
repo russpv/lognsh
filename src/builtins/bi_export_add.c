@@ -16,6 +16,7 @@
 #define EMSG_BADMALLOC "memory allocation failed.\n"
 #define EMSG_KEY_NOTVALID "not a valid identifier\n"
 
+/*
 // adds a new environment variable to the list and syncs s->pwd if its PWD
 static int	_add_new_var(t_mem_mgr *m, t_env **sh_env_list, const char *key,
 		const char *value)
@@ -41,7 +42,7 @@ static int	_add_new_var(t_mem_mgr *m, t_env **sh_env_list, const char *key,
 	env_add_node(sh_env_list, new_node);
 	free(new_value);
 	return (0);
-}
+}*/
 
 // Returns key string, or copy of arg if no equal sign found
 static int	_extract_key(char key[], const char *arg, char *equal_pos)
@@ -77,21 +78,20 @@ static void	_set_value(char *equal_pos, const char **value_ptr)
 		*value_ptr = NULL;
 }
 
-// Commits change
-static int	_update_or_add_env(t_state *s, t_env *existing_key, const char *key,
+/*
+static int	_update_or_add_env(t_state *s, t_env *existing_node, const char *key,
 		const char *value)
 {
-	if (existing_key)
-		return (update_existing_var(get_mem(s), existing_key, value));
-	return (_add_new_var(get_mem(s), get_env_list_add(s), key, value));
-}
+	if (existing_node)
+		return (update_existing_var(get_mem(s), existing_node, value));
+	return (_add_new_var(get_mem(s), get_env_list_ptr(s), key, value));
+}*/
 
 // updates or adds key-value pair in s->sh_env_list
 // assumes equal_pos is within arg
 int	process_arg_update_add(t_state *s, const char *arg, char *equal_pos,
 		int *error_occurred)
 {
-	t_env		*existing_key;
 	const char	*value;
 	char		key[MAX_ENVVAR_LEN];
 	int			exit_code;
@@ -103,8 +103,7 @@ int	process_arg_update_add(t_state *s, const char *arg, char *equal_pos,
 	if (0 == ft_strnlen(key, MAX_ENVVAR_LEN))
 		return (ERR_ARGS);
 	_set_value(equal_pos, &value);
-	existing_key = find_env_key(get_env_list(s), key);
-	exit_code = _update_or_add_env(s, existing_key, key, value);
+	exit_code = env_upsert_value(get_mem(s), get_env_list(s), key, value);
 	if (0 != exit_code)
 		*error_occurred = 1; // TODO, check what this flag does
 	return (exit_code);

@@ -71,7 +71,7 @@ static int	_change_dir(t_state *s, const char *target)
 
 	if (0 == ft_strcmp(target, "-"))
 	{
-		new_dir = env_getenv_value(OLDPWD_KEY, get_env_list(s));
+		new_dir = env_find_value(OLDPWD_KEY, get_env_list(s));
 		if (!new_dir || ft_strcmp(new_dir, "") == 0)
 			return (print_custom_err(CMD_NAME, EMSG_OLDPWDNOTSET), 1);
 	}
@@ -106,7 +106,7 @@ int	bi_cd(t_state *s, char **args, int argc)
 		return (ERR_ARGS);
 	}
 	if (argc == 1)
-		target = env_getenv_value("HOME", get_env_list(s));
+		target = env_find_value("HOME", get_env_list(s));
 	else if (argc == 2)
 		target = args[1];
 	else

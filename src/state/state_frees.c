@@ -22,11 +22,7 @@ void	s_free_cmd_lex_parse(t_state *state)
 		state->current_lexer = NULL;
 		state->got_heredoc = false;
 	}
-	if (state->current_cmd)
-	{
-		state->destroy_command(m, (void**)&state->current_cmd);
-		state->current_cmd = NULL;
-	}
+	s_free_cmd(state);
 	s_free_tmp(state);
 }
 
@@ -42,6 +38,7 @@ void	s_free_cmd(t_state *state)
 	}
 	s_free_tmp(state);
 }
+
 extern void		destroy_token(t_mem_mgr *m, void **token);
 
 // Note: req'd to release dup'd subword aggregation

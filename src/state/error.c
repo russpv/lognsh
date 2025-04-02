@@ -1,10 +1,5 @@
 #include "error.h"
 
-extern char	*get_input(t_state *s);
-extern char	*lex_get_ptr(t_lex *l);
-extern const char	*lex_get_raw(t_lex *l);
-extern void	ft_putstr_fd(char const *s, int fd);
-extern char	*ft_strchr(const char *s, int c_in);
 
 
 void	print_bufflow(void)

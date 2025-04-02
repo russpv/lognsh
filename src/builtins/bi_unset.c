@@ -12,17 +12,19 @@
 
 #include "bi_int.h"
 
-static int	is_valid_var_name(char *name)
+#define _CMD_NAME_ "unset"
+
+static bool	_is_valid_var_name(char *name)
 {
 	if (!name || !*name || ft_isdigit(*name))
-		return (0);
+		return (false);
 	while (*name)
 	{
-		if (!ft_isalnum(*name) && *name != '_')
-			return (0);
+		if (false == ft_isalnum(*name) && *name != '_')
+			return (false);
 		name++;
 	}
-	return (1);
+	return (true);
 }
 
 // unset will always return ('0'); remove_env_node will only work for valid keys
@@ -36,18 +38,17 @@ int	bi_unset(t_state *s, char **argv, int argc)
 	if (argc == 1)
 		return (0);
 	i = 1;
+	ret = 0;
 	while (argv[i])
 	{
 		ret = 0;
-		if (!is_valid_var_name(argv[i]))
+		if (false == _is_valid_var_name(argv[i]))
 		{
-			write(STDERR_FILENO, "unset: ", 7);
-			write(STDERR_FILENO, argv[i], ft_strlen(argv[i]));
-			write(STDERR_FILENO, ": invalid parameter name\n", 25);
+			print_invalid_name(_CMD_NAME_, argv[i]);
 			ret = 1;
 		}
 		else
-			env_remove_node(get_mem(s), get_env_list_add(s), argv[i]);
+			env_remove_node(get_mem(s), get_env_list_ptr(s), argv[i]);
 		i++;
 	}
 	return (ret);

@@ -24,6 +24,15 @@ void	print_too_many_args(const char *caller)
 		ft_strlen("too many arguments\n"));
 }
 
+void	print_invalid_name(const char *caller, const char *name)
+{
+	write(STDERR_FILENO, caller, ft_strnlen(caller, MAX_ENVVAR_LEN));
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, name, ft_strnlen(name, MAX_ENVVAR_LEN));
+	write(STDERR_FILENO, ": invalid parameter name\n", \
+		ft_strlen(": invalid parameter name\n"));
+}
+
 bool	is_error(int v)
 {
 	if (v <= ERR_STAT && v >= ERR_GENERAL)

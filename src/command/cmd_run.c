@@ -33,7 +33,7 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 	int		i;
 
 	i = -1;
-	paths = get_env_path(s);
+	paths = get_envp(s);
 	if (NULL == paths)
 		return (ERR_GENERAL);
 	while (paths[++i])

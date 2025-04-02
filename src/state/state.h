@@ -12,8 +12,6 @@
 # include <readline/readline.h>
 # include <stdbool.h>
 
-# define MAX_RAW_INPUT_LEN 2056
-# define MAX_ENVVAR_LEN 1024 // length of variable names
 # define OLDPWD_KEY "OLDPWD"
 
 # ifdef TESTMODE
@@ -83,9 +81,8 @@ int								get_tmp_flag(t_state *s);
 
 char							**get_envp(t_state *s);
 char							*get_env_val(t_state *s, const char *key);
-char							**get_env_path(t_state *s);
 t_env							*get_env_list(t_state *s);
-t_env							**get_env_list_add(t_state *s);
+t_env							**get_env_list_ptr(t_state *s);
 
 char							*get_tmp(t_state *s);
 t_lex							*get_lexer(t_state *s);

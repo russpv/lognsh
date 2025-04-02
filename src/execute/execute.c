@@ -125,7 +125,7 @@ int	waitchild_sigint(int *status, pid_t child_pid)
 
 int	handle_exit(t_state *s, int code)
 {
-	fprintf(stderr, "got code:%d\n", code);
+	colored_printf(MAGENTA, "got code:%d\n", code);
 	if (EX_HAPPY == code)
 		return (EX_HAPPY);
 	else if (ERR_REDIR == code)

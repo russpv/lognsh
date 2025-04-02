@@ -28,7 +28,7 @@ static inline bool	_line_is_eof(t_lex *l, const char *line)
 	return (false);
 }
 
-static int	_getncount(char buf[], unsigned int c, size_t n)
+static int	_getncount(char buf[], unsigned char c, size_t n)
 {
 	size_t i;
 	int res;

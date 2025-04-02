@@ -12,7 +12,7 @@
 
 #include "env_int.h"
 
-void	env_set_next(t_env *node, t_env *next)
+void	env_set_node_next(t_env *node, t_env *next)
 {
 	if (!node)
 		return ;
@@ -37,11 +37,9 @@ void	env_set_node_value(t_mem_mgr *m, t_env *node, const char *value)
 	node->value = new_value;
 }
 
-#define EMSG_BADMALLOC "memory allocation failed.\n"
-
 // Returns 0 if error.
 // updates an existing environment variable's value
-int	update_existing_var(t_mem_mgr *m, t_env *existing_key, const char *value)
+static int	_update_existing_var(t_mem_mgr *m, t_env *existing_key, const char *value)
 {
 	char	*new_value;
 
@@ -61,7 +59,8 @@ int	update_existing_var(t_mem_mgr *m, t_env *existing_key, const char *value)
 	return (1);
 }
 
-t_env	*find_env_key(t_env *env_list, const char *key)
+/* Returns the key's t_env node if present */
+t_env	*env_find_node(t_env *env_list, const char *key)
 {
 	t_env	*current;
 
@@ -70,35 +69,35 @@ t_env	*find_env_key(t_env *env_list, const char *key)
 	current = env_list;
 	while (current)
 	{
-		if (ft_strcmp(env_get_key(current), key) == 0)
+		if (ft_strcmp(env_get_node_key(current), key) == 0)
 			return (current);
-		current = env_get_next(current);
+		current = env_get_node_next(current);
 	}
 	return (NULL);
 }
 
-
-int	env_upsert_value(t_mem_mgr *m, t_env **env_list, const char *key,
+/* Updates or adds new key and value */
+int	env_upsert_value(t_mem_mgr *m, t_env *env_list, const char *key,
 	const char *value)
 {
-t_env	*node;
+	t_env	*node;
 
-if (!env_list || !key)
-	return (1);
-node = find_env_key(*env_list, key);
-if (node)
-{
-	debug_print("%s: found key:%s\n", __FUNCTION__, key);
-	if (!update_existing_var(m, node, value))
-		return (1);
-}
-else
-{
-	debug_print("%s: inserting key:%s\n", __FUNCTION__, key);
-	node = create_env_node(m, key, value);
-	if (!node)
-		return (1);
-	env_add_node(env_list, node);
-}
-return (0);
+	if (!env_list || !key)
+		return (ERR_GENERAL);
+	node = env_find_node(env_list, key);
+	if (node)
+	{
+		debug_print("%s: found key:%s\n", __FUNCTION__, key);
+		if (!_update_existing_var(m, node, value))
+			return (ERR_GENERAL);
+	}
+	else
+	{
+		debug_print("%s: inserting key:%s\n", __FUNCTION__, key);
+		node = create_env_node(m, key, value);
+		if (!node)
+			return (ERR_MEM);
+		env_add_node(&env_list, node);
+	}
+	return (0);
 }

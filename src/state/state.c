@@ -35,7 +35,7 @@ t_state	*init_state(char **envp)
 	mem_add_mem(&s->mem_mgr.list, s, sizeof(struct s_global_state));
 	s->sh_env_list = copy_envp(&s->mem_mgr, envp);
 	if (!s->sh_env_list)
-		return (free(s), exit(ENOMEM), NULL);
+		exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	init_env_vars(s);
 	sig_set_handlers(INT_DFL);
 	return (s);

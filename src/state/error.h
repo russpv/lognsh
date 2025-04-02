@@ -8,6 +8,9 @@
 # include <unistd.h>
 # include <stdbool.h>
 
+# define MAX_RAW_INPUT_LEN 2056
+# define MAX_ENVVAR_LEN 1024 // length of variable names
+
 # define EXIT_NULLCMD 0
 # define EX_HAPPY 0
 # define EX_ERNDM 1
@@ -91,7 +94,7 @@ void							print_lex_error(t_lex *l, char *word);
 void							print_hdoc_error(const char *line, const char *eof);
 void							print_redir_error(t_state *s, const char *word, size_t pos);
 void							print_nocmd_error(t_state *s, const char *word, size_t pos);
-
+void							print_invalid_name(const char *caller, const char *name);
 
 void							print_bufflow(void);
 void							print_is_dir(void);
@@ -101,6 +104,15 @@ bool							is_error(int v);
 /* To avoid circular includes: */
 extern void						set_error(t_state *s, int e);
 extern size_t					ft_strlen(const char *s);
+extern char	*get_input(t_state *s);
+extern char	*lex_get_ptr(t_lex *l);
+extern const char	*lex_get_raw(t_lex *l);
+extern void	ft_putstr_fd(char const *s, int fd);
+extern char	*ft_strchr(const char *s, int c_in);
+extern size_t	ft_strnlen(const char *s, size_t maxlen);
 void							perror(const char *);
+
+
+
 
 #endif
