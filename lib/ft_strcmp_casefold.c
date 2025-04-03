@@ -15,14 +15,12 @@
 int	ft_strcmp_casefold(const char *s1, const char *s2)
 {
 	size_t				i;
-	const unsigned char	l;
-	const unsigned char	r;
 
 	i = 0;
 	while (s1[i] || s2[i])
 	{
-		l = ft_tolower((unsigned char)s1[i]);
-		r = ft_tolower((unsigned char)s2[i]);
+		const unsigned char	l = ft_tolower((unsigned char)s1[i]);
+		const unsigned char	r = ft_tolower((unsigned char)s2[i]);
 		if (l != r)
 			return (l - r);
 		i++;
@@ -30,8 +28,8 @@ int	ft_strcmp_casefold(const char *s1, const char *s2)
 	i = 0;
 	while (s1[i] || s2[i])
 	{
-		l = ((unsigned char)s1[i]);
-		r = ((unsigned char)s2[i]);
+		const unsigned char	l = ((unsigned char)s1[i]);
+		const unsigned char	r = ((unsigned char)s2[i]);
 		if (l != r)
 			return (-(l - r));
 		i++;

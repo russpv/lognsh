@@ -70,12 +70,18 @@ static int	_extract_key(char key[], const char *arg, char *equal_pos)
 }
 
 // Returns ptr to the start of value
-static void	_set_value(char *equal_pos, const char **value_ptr)
+static void	_reset_value_ptr(char *equal_pos, const char **value_ptr)
 {
 	if (equal_pos)
 		*value_ptr = equal_pos + 1;
 	else
 		*value_ptr = NULL;
+}
+
+static void _update_special_state_vars(t_state *s, char *key, const char *value)
+{
+	if (0 == ft_strncmp(PATH_KEY, key, MAX_ENVVAR_LEN))
+		set_path(s, value);
 }
 
 /*
@@ -102,9 +108,11 @@ int	process_arg_update_add(t_state *s, const char *arg, char *equal_pos,
 	_extract_key(key, arg, equal_pos);
 	if (0 == ft_strnlen(key, MAX_ENVVAR_LEN))
 		return (ERR_ARGS);
-	_set_value(equal_pos, &value);
+	_reset_value_ptr(equal_pos, &value);
 	exit_code = env_upsert_value(get_mem(s), get_env_list(s), key, value);
 	if (0 != exit_code)
-		*error_occurred = 1; // TODO, check what this flag does
+		*error_occurred = 1;
+	if (0 == exit_code)
+		_update_special_state_vars(s, key, value);
 	return (exit_code);
 }

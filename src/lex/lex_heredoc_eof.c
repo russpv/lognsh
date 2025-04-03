@@ -4,21 +4,47 @@
 
 static inline void	_skip_to_next_op(t_lex *l)
 {
+	if ('\0' == *l->ptr)
+		return ;
 	while (*l->ptr && false == on_cmd_op(l))
+	{
 		l->ptr++;
+		if ('\0' == *l->ptr)
+			break ;
+	}
+}
+
+// Taking a less expressive stance on delimiter content
+static inline bool	_is_hdoc_eof_char(unsigned char c)
+{
+	if (ft_isalnum((int)c))
+		return (true);
+	if ('_' == c)
+		return (true);
+	if ('\'' == c)
+		return (true);
+	if ('\"' == c)
+		return (true);
+	return (false);
 }
 
 // Determines type of EOF, quoted or not
+// Cannot be an expansion. If any part of the word is quoted, sets processing type.
 static inline void	_put_eof_in_buf(t_lex *l)
 {
-	while (*l->ptr && *l->ptr != '\n' && !ft_isspace(*l->ptr))
+	while (*l->ptr && *l->ptr != '\n' && !ft_isspace(*l->ptr) \
+		&& _is_hdoc_eof_char(*l->ptr))
 	{
-		if ('\'' == *l->ptr || '\"' == *l->ptr)
+		while ('\'' == *l->ptr || '\"' == *l->ptr)
 		{
 			l->do_expansion = false;
 			l->ptr++;
 		}
+		if ('\0' == *l->ptr)
+			break ;
 		l->buf[l->buf_idx++] = *l->ptr++;
+		if ('\0' == *l->ptr)
+			break ;
 	}
 }
 

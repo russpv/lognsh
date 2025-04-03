@@ -108,6 +108,7 @@ t_env	*copy_envp(t_mem_mgr *m, char **envp)
 
 	env_list = NULL;
 	i = 0;
+	debug_print(_MOD_ ": copying envp\n");
 	while (envp[i] != NULL)
 	{
 		ft_memset(key, 0, sizeof(key));

@@ -15,6 +15,8 @@
 
 # include "env.h"
 
+# define _MOD_ "env"
+
 // Env variable linked list node
 typedef struct s_env
 {

@@ -1,8 +1,9 @@
 #include "lex_int.h"
 
-// returns true if
-// closing quote found at l->ptr (and pops stack, skips char)
-// $_ found
+/* Returns true if closing quote found at l->ptr 
+** (and pops stack, skips char)
+** checks also for $ transition
+*/
 static bool	_is_dquote_transition_delim(t_lex *l)
 {
 	debug_print(_MOD_ ": -------- %s:_%c_", __FUNCTION__, *l->ptr);
@@ -21,7 +22,7 @@ static bool	_is_dquote_transition_delim(t_lex *l)
 			l->ptr++;
 			return (debug_print(" YES\n"), true);
 		}
-		if (l->ptr != NULL && OP_NULL != *l->ptr)
+		else if (l->ptr != NULL && OP_NULL != *l->ptr)
 		{
 			if (is_dollar_delim(l))
 				return (debug_print(" YES\n"), true);
@@ -31,7 +32,7 @@ static bool	_is_dquote_transition_delim(t_lex *l)
 	return (false);
 }
 
-// TODO process specials
+/* Note: add special parameters here */
 static inline t_tok	*_process_dquote_logic(t_state *s, t_lex *lexer)
 {
 	if ((unsigned char)TK_ESC == *lexer->ptr)
@@ -51,15 +52,15 @@ static inline t_tok	*_process_dquote_logic(t_state *s, t_lex *lexer)
 		st_int_pop(lexer->stack);
 		lexer->state = ON_EOF;
 		return (lex_create_token(get_mem(s), lexer, TOK_WORD));
-			// creates final token
 	}
 	return (NULL);
 }
 
 /* Returns next (sub)token, loads buf, doesn't flush buf
  * if unescaped $, record it in the token record for later expansion
- * if bs, skip it IF next char is bs, dollar, double quote (or backtick)
+ * if bs\, skip it IF next char is bs\, $, double quote
  * if normal loop doesn't find closing ", flags incomplete
+ * if nothing on buf at transition exit, tokenizes null raw TOK_WORD
  */
 static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 {
@@ -80,8 +81,8 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 			put_on_buf(lexer);
 		}
 		lexer->input_incomplete = true;
-		if (0 == ft_strlen(lexer->buf))
-			return (NULL);
+		//if (0 == ft_strlen(lexer->buf))
+		//	return (NULL);
 		if (false == is_normal_delim(lexer, 0))
 			lexer->is_subtoken = true;
 		token = lex_create_token(get_mem(s), lexer, TOK_WORD);

@@ -1,6 +1,6 @@
 #include "state_int.h"
 
-/* Returns new heap array each call */
+/* Returns and caches new env heap array if cached env is null */
 char	**get_envp(t_state *s)
 {
 	extern char	**environ;
@@ -34,4 +34,17 @@ t_env	**get_env_list_ptr(t_state *s)
 	if (!s)
 		return (NULL);
 	return (&s->sh_env_list);
+}
+
+char	**get_path(t_state *s)
+{
+	extern char	**environ;
+
+	if (!s)
+		return (NULL);
+	if (!s->sh_env_list)
+		s->sh_env_list = copy_envp(get_mem(s), environ);
+	if (NULL == s->path)
+		set_path(s, env_find_value(PATH_KEY, s->sh_env_list));
+	return (s->path);
 }

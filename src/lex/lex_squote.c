@@ -49,8 +49,8 @@ int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 		debug_print(_MOD_ ": WARNING: FOUND NULL\n");
 		lexer->input_incomplete = true;
 	}
-	if (0 == ft_strlen(lexer->buf))
-		return (0);
+	//if (0 == ft_strlen(lexer->buf))
+	//	return (0);
 	if (false == is_normal_delim(lexer, 0))
 		lexer->is_subtoken = true;
 	token = lex_create_token(get_mem(s), lexer, TOK_WORD);
@@ -58,6 +58,5 @@ int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 		return (ERR_GENERAL);
 	if (0 != add_token(get_mem(s), lexer, token))
 		return (ERR_GENERAL);
-	// lexer->ptr++;
 	return (0);
 }

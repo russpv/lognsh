@@ -54,9 +54,7 @@ static char	*_do_join(t_state *s, char *left, char *right)
 
 	if (!s || !left || !right)
 		return (NULL);
-	m.f = get_mem(s)->f;
-	m.u = get_mem(s)->dealloc;
-	m.head = &get_mem(s)->list;
+	mem_struct_init(get_mem(s), &m);
 	res = ft_strjoin_mem(m.head, m.f, left, right);
 	if (!res)
 		exit_clean(m.head, ENOMEM, __FUNCTION__, EMSG_MALLOC);
@@ -70,9 +68,7 @@ static char	*_do_trim(t_state *s, char *str, char *set, int side)
 
 	if (!s || !s || !set)
 		return (NULL);
-	m.f = get_mem(s)->f;
-	m.u = get_mem(s)->dealloc;
-	m.head = &get_mem(s)->list;
+	mem_struct_init(get_mem(s), &m);
 	if (FRONT == side)
 		res = ft_strtrimfront_mem(&m, str, set);
 	else

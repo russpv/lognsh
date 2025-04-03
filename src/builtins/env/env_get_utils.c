@@ -24,9 +24,7 @@ char	**env_getenv_path(t_mem_mgr *m)
 		perror("getenv\n");
 		return (NULL);
 	}
-	utils.head = &m->list;
-	utils.f = m->f;
-	utils.u = m->dealloc;
+	mem_struct_init(m, &utils);
 	res = ft_split_mem(&utils, path_env, ':');
 	if (!res)
 		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);

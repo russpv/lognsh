@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+# include "../include/libft.h"
 /* SPLIT
 ** Returns new C-strings split by c or NULL (malloc)
 ** Array is null terminated
@@ -119,6 +120,8 @@ char	**ft_split_mem(struct s_mem_utils *m, char const *s, char c)
 			--count;
 		}
 		s = temp + 1;
+		if (*temp == '\0')
+			break;
 	}
 	return (arr);
 }

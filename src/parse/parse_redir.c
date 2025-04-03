@@ -7,7 +7,7 @@
 #define EMSG_HEREDOC_MALLOC "Memory allocation failed for redirection heredoc\n"
 #define EMSG_REDIR_NODE_MALLOC "Failed to create execution node for redirection\n"
 #define EMSG_REDIR_FAIL "Failed to parse redirection\n"
-#define DBGMSG_REDIR_FN _MOD_ ": _process_normal_redir filename:%s\n"
+#define DBGMSG_REDIR_FN _MOD_ ": _process_normal_redir filename:_%s_\n"
 #define DBGMSG_REDIR_GOT _MOD_ ": Redirection: type=%d symbol=%s\n"
 
 /* Creates new redir node and adds to t_list.
@@ -52,8 +52,9 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 	}
 	tok_fname = advance(p);
 	debug_print(DBGMSG_REDIR_FN, tok_get_raw(tok_fname));
-	if (!(is_filename_token((t_tok *)tok_fname)
-			|| is_expansion((t_tok *)tok_fname)))
+	if (!(is_filename_token((t_tok *)tok_fname) //TODO: WIP: ensure these detect grp toks eg. ''k
+			|| is_expansion((t_tok *)tok_fname))
+			|| 0 == ft_strcmp(tok_get_raw(tok_fname), ""))
 	{
 		print_redir_error(p->global_state, tok_get_raw((p->curr_tok)->prev->prev->content), tok_get_pos((p->curr_tok)->prev->prev->content));
 		return (err(EMSG_REDIR_FN_INVALID), ERR_SYNTAX);

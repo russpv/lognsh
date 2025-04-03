@@ -16,7 +16,6 @@
  * manages the various I/O redirections
  * And cleans up state (useless to child)
  */
-
 static int	_do_child_ops(t_state *s)
 {
 	const t_cmd	*c = (const t_cmd *)get_cmd(s);

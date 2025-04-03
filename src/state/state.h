@@ -13,6 +13,7 @@
 # include <stdbool.h>
 
 # define OLDPWD_KEY "OLDPWD"
+# define PATH_KEY "PATH"
 
 # ifdef TESTMODE
 #  define TESTFLAG 1
@@ -72,6 +73,7 @@ int								set_oldpwd(t_state *s, const char *caller);
 void							set_tmp(t_state *s, char *str);
 void							set_got_heredoc(t_state *s);
 void							set_tmp_flag(t_state *s, int val);
+void	set_path(t_state *s, const char *val);
 
 int								*get_status(t_state *s);
 char							*get_input(t_state *s);
@@ -83,6 +85,7 @@ char							**get_envp(t_state *s);
 char							*get_env_val(t_state *s, const char *key);
 t_env							*get_env_list(t_state *s);
 t_env							**get_env_list_ptr(t_state *s);
+char	**get_path(t_state *s);
 
 char							*get_tmp(t_state *s);
 t_lex							*get_lexer(t_state *s);

@@ -71,6 +71,21 @@ void	set_pwd(t_state *s)
 	debug_print("Set pwd:%s\n", s->pwd);
 }
 
+// Updates internal PATH with string delimited by :
+void	set_path(t_state *s, const char *value)
+{
+	struct s_mem_utils mem;
+
+	if (!s)
+		return ;
+	mem_struct_init(get_mem(s), &mem);
+	debug_print(_MOD_ ": setting path\n");
+	if (NULL != s->path)
+		ft_freearr_mem(mem.head, mem.u, (void**)s->path, -1);
+	debug_print("Got path:%s\n", value);
+	s->path = ft_split_mem(&mem, value, ':');
+}
+
 void	init_env_vars(t_state *s)
 {
 	if (!s)

@@ -6,7 +6,7 @@
 # define PROMPT_KEY "PROMPT"
 # define LVL_KEY "SHLVL"
 # define CWD_KEY "PWD"
-# define PATH_KEY "PATH"
+# define _MOD_ "State"
 
 struct							s_global_state
 {
@@ -23,6 +23,7 @@ struct							s_global_state
 	int							tmp_flag;
 	
 	char						*prompt;
+	char						**path;
 
 	t_parser					*current_parser;
 	t_lex						*current_lexer;
