@@ -15,8 +15,8 @@
 int	ft_strcmp_casefold(const char *s1, const char *s2)
 {
 	size_t				i;
-	const unsigned char	l;
-	const unsigned char	r;
+	unsigned char	l;
+	unsigned char	r;
 
 	i = 0;
 	while (s1[i] || s2[i])
