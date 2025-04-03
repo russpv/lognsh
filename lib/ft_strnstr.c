@@ -1,6 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 15:53:30 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 15:53:30 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../include/libft.h"
-
-
 /* STRNSTR
 ** Returns first occurrence of substring within n
 ** characters of s
@@ -8,7 +17,6 @@
 ** or NULL if not found
 ** UNPROTECTED: if NULL passed as s raises segfault
 */
-
 char	*ft_strnstr(const char *s, const char *sub, size_t n)
 {
 	const char	*find;

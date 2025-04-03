@@ -1,7 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 15:52:07 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 15:52:07 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../include/libft.h"
 #include <stdio.h> 
-
-
 /* STRJOIN
 ** Returns a new C-string of s1 and s2
 ** concatenation.
@@ -24,7 +33,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (s3);
 }
 
-char	*ft_strjoin_mem(t_mem_node *n, t_alloc_fn f, char const *s1, char const *s2)
+char	*ft_strjoin_mem(t_mem_node *n, t_alloc_fn f, \
+		char const *s1, char const *s2)
 {
 	size_t	len1;
 	size_t	len2;

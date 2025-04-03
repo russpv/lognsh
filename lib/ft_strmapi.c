@@ -1,13 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 15:52:27 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 15:52:27 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../include/libft.h"
-
-
 /* STRMAPI
 ** Returns new string by applying func f to each char in s
 ** or NULL if bad malloc
 ** arg1: index of char
 ** arg2: char literal
 */
-
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
 	char			*res;

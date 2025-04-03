@@ -1,7 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strscpy.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 15:53:39 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 15:53:40 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../include/libft.h"
-
 #include <errno.h>
-
 /* STRSCPY
 ** Copy a C-string into a sized buffer
 ** Returns # of chars copied (excl NULL) (E2BIG if buffer too small)

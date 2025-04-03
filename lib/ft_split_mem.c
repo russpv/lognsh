@@ -1,12 +1,20 @@
-#include "../include/libft.h"
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split_mem.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 15:50:39 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 16:34:20 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 /* SPLIT
 ** Returns new C-strings split by c or NULL (malloc)
 ** Array is null terminated
 ** Allows empty strings from consecutive c's
 */
-
 static inline void	_arr_free(struct s_mem_utils *m, char **arr, unsigned int i)
 {
 	unsigned int	j;
@@ -52,7 +60,8 @@ static inline int	_get_word_count(char const *p, char ch)
 	return (count);
 }
 
-static inline void	*_copy_word(struct s_mem_utils *m, char const *s, char **elem, size_t len)
+static inline void	*_copy_word(struct s_mem_utils *m, \
+				char const *s, char **elem, size_t len)
 {
 	*elem = m->f(m->head, sizeof(char) * (len + 1));
 	if (!*elem)
@@ -64,7 +73,7 @@ static inline void	*_copy_word(struct s_mem_utils *m, char const *s, char **elem
 
 static char	*_get_temp(char const *str, char delim)
 {
-	char *temp;
+	char	*temp;
 
 	temp = ft_strchr(str, delim);
 	if (!temp)
@@ -72,9 +81,9 @@ static char	*_get_temp(char const *str, char delim)
 	return (temp);
 }
 
-static char **_init_arr(struct s_mem_utils *m, size_t count)
+static char	**_init_arr(struct s_mem_utils *m, size_t count)
 {
-	char **arr;
+	char	**arr;
 
 	arr = m->f(m->head, sizeof(char *) * (count + 1));
 	if (!arr)
@@ -90,19 +99,19 @@ static char **_init_arr(struct s_mem_utils *m, size_t count)
 */
 char	**ft_split_mem(struct s_mem_utils *m, char const *s, char c)
 {
+	size_t			count;
 	char			**arr;
 	char const		*temp;
-	size_t				count;
 	unsigned int	i;
 
 	count = _get_word_count(s, c);
-	arr = _init_arr(m, count); 
+	arr = _init_arr(m, count);
 	if (!arr)
 		return (NULL);
 	i = 0;
 	while (*s && count)
 	{
-		temp = _get_temp(s, c); 
+		temp = _get_temp(s, c);
 		if (temp - s > 0)
 		{
 			if (!_copy_word(m, s, &(arr[i++]), temp - s))

@@ -1,12 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 15:50:45 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 15:50:46 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/libft.h"
-
-
 /* SPLIT
 ** Returns new C-strings split by c or NULL (malloc)
 ** Array is null terminated
 ** Allows empty strings from consecutive c's
 */
-
 static inline void	arr_free(char **arr, unsigned int i)
 {
 	unsigned int	j;
@@ -55,7 +64,7 @@ static inline int	get_word_count(char const *p, char ch)
 static inline void	*copy_word(char const *s, char ***arr, char const *temp,
 		unsigned int i)
 {
-	size_t len;
+	size_t	len;
 
 	len = temp - s;
 	(*arr)[i] = malloc(sizeof(char) * (len + 1));

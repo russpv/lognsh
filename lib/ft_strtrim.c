@@ -1,13 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 15:53:45 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 15:53:45 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../include/libft.h"
-
-
 /* STRTRIM
 ** Returns a new c-string copy of s1 without chars in set
 ** at front and back of s1
 ** least sig bit higher address
 ** UNPROTECTED
 */
-
 int	ft_is_set(char const *s1, char const *set)
 {
 	while (*s1 && *set)
@@ -66,7 +74,8 @@ char	*ft_strtrim_mem(struct s_mem_utils *m, char const *s1, char const *set)
 	return (ft_memcpy(str, s1, len));
 }
 
-char	*ft_strtrimfront_mem(struct s_mem_utils *m, char const *s1, char const *set)
+char	*ft_strtrimfront_mem(struct s_mem_utils *m, \
+		char const *s1, char const *set)
 {
 	size_t	len;
 	char	*str;
@@ -89,7 +98,8 @@ char	*ft_strtrimfront_mem(struct s_mem_utils *m, char const *s1, char const *set
 	return (ft_memcpy(str, s1, len));
 }
 
-char	*ft_strtrimback_mem(struct s_mem_utils *m, char const *s1, char const *set)
+char	*ft_strtrimback_mem(struct s_mem_utils *m, \
+		char const *s1, char const *set)
 {
 	size_t	len;
 	char	*str;

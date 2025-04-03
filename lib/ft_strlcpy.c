@@ -1,12 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 15:52:17 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 15:52:17 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../include/libft.h"
-
-
 /* STRLCPY
 ** Copies at most size-1 chars
 ** (buffer)size must include NULL allowance
 ** NULL terminates as long as size > 0
 */
-
 size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 {
 	size_t	i;
