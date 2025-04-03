@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 15:21:02 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 15:22:54 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TEST_H
 # define TEST_H
 
@@ -18,12 +30,10 @@
 #  define MYTEST 0
 # endif
 
-#define SHELL_EXE "./minish"
+# define SHELL_EXE "./minish"
 
-
-char *run_bash(const char *cmd);
-char *run_my_shell(const char *cmd);
-void print_string_debug(const char *str);
-
+char	*run_bash(const char *cmd);
+char	*run_my_shell(const char *cmd);
+void	print_string_debug(const char *str);
 
 #endif

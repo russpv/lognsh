@@ -1,23 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 15:20:36 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 15:20:52 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "../src/signal/signal.h"
-#include "../src/state/state.h" 
-#include "../src/command/command.h"
-#include "test.h"
+# include "../src/signal/signal.h"
+# include "../src/state/state.h" 
+# include "../src/command/command.h"
+# include "test.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <termios.h>
-#include <errno.h>
-#include <ctype.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <string.h>
+# include <sys/wait.h>
+# include <fcntl.h>
+# include <signal.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <dirent.h>
+# include <termios.h>
+# include <errno.h>
+# include <ctype.h>
 
 #endif

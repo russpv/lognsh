@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 15:17:07 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 15:20:25 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LIBFT_H
 # define LIBFT_H
 
@@ -38,18 +50,18 @@ typedef enum e_bool
 	FALSE,
 	TRUE,
 }							t_bool;
-typedef unsigned char t_uint8_t; /* 1 byte */
-typedef unsigned int t_uint32_t; /* 4 bytes */
+typedef unsigned char		t_uint8_t; /* 1 byte */
+typedef unsigned int		t_uint32_t; /* 4 bytes */
 typedef struct s_16
 {
 	t_uint8_t				data[16];
-} t_block_16; /* 16 bytes */
+}	t_block_16; /* 16 bytes */
 typedef struct s_32
 {
 	t_uint8_t				data[32];
-} t_block_32; /* 32 bytes */
+}	t_block_32; /* 32 bytes */
 
-typedef unsigned long	long(t_uint64_t);  /* Must be at least 8-bytes */
+typedef unsigned long	long(t_uint64_t); /* Must be at least 8-bytes */
 typedef unsigned long	long(t_uintptr_t); /* 64-bit ptr */
 
 # define BIGBLOCKSZ 32
@@ -157,16 +169,21 @@ char						*ft_strjoin_mem(t_mem_node *head, t_alloc_fn f,
 								char const *s1, char const *s2);
 char						**ft_split_mem(struct s_mem_utils *m, char const *s,
 								char c);
-char	**ft_split_ifs_mem(struct s_mem_utils *m, char const *s, char const *set);
-char	*ft_strtrim_mem(struct s_mem_utils *m, char const *s1, char const *set);
+char						**ft_split_ifs_mem(struct s_mem_utils *m, \
+								char const *s, char const *set);
+char						*ft_strtrim_mem(struct s_mem_utils *m, \
+								char const *s1, char const *set);
 
 int							ft_strcmp_low(const char *s1, const char *s2);
 int							ft_strcmp_casefold(const char *s1, const char *s2);
-char	*ft_skip_delims(char const *s, char const *ref);
+char						*ft_skip_delims(char const *s, char const *ref);
 
-char	*ft_strtrimback_mem(struct s_mem_utils *m, char const *s1, char const *set);
-char	*ft_strtrimfront_mem(struct s_mem_utils *m, char const *s1, char const *set);
-int	ft_is_set(char const *s1, char const *set);
-char	*ft_strchrs_betw(const char *start, const char *end, const char *chars);
+char						*ft_strtrimback_mem(struct s_mem_utils *m, \
+								char const *s1, char const *set);
+char						*ft_strtrimfront_mem(struct s_mem_utils *m, \
+								char const *s1, char const *set);
+int							ft_is_set(char const *s1, char const *set);
+char						*ft_strchrs_betw(const char *start, \
+								const char *end, const char *chars);
 
 #endif
