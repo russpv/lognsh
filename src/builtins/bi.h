@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:56:51 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/14 15:57:17 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/03 00:46:51 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,11 @@
 # define BI_EXIT "exit"
 # define BI_EXEC "exec"
 # define BI_COUNT 8
-
 /* Forwards */
-struct s_global_state;
-typedef struct s_global_state	t_state;
+typedef struct s_global_state		t_state;
+typedef int							(*t_builtin_fn)(t_state *s, \
+				char **args, int argc);
 
-typedef int						(*t_builtin_fn)(t_state *s, char **args,
-							int argc);
-
-t_builtin_fn					get_builtin(char *command);
+t_builtin_fn	get_builtin(char *command);
 
 #endif

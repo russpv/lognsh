@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/libft.h"
+#include "../include/libft.h"
 
 /* ISASCII
 ** Returns non-zero if 0-0177 inclusive 

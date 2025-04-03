@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:05:10 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/06 17:10:27 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/03 11:32:01 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,8 @@ int	bi_exec(t_state *s, char **argv, int argc)
 	(void)argc;
 	if (!argv || !argv[1])
 	{
-		write(STDERR_FILENO,
-				"Usage: exec <command>\n",
-				sizeof("Usage: exec <command>\n"));
+		write(STDERR_FILENO, "Usage: exec <command>\n", \
+			sizeof("Usage: exec <command>\n"));
 		return (-1);
 	}
 	fullpath = NULL;

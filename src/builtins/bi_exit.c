@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:05:10 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/28 17:55:00 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/03 11:41:30 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 static int	_load_buf(char buf[], const char *str)
 {
 	int	i;
-	int buf_idx;
+	int	buf_idx;
 
 	buf_idx = 0;
 	i = -1;
@@ -39,8 +39,8 @@ static int	_load_buf(char buf[], const char *str)
 
 static char	*get_numeric(t_state *s, const char *str)
 {
-	char *res;
-	char buf[MAX_ARGSZ];
+	char	*res;
+	char	buf[MAX_ARGSZ];
 
 	res = NULL;
 	ft_memset(buf, 0, MAX_ARGSZ);
@@ -89,14 +89,14 @@ static void	_exit_valid_arg(t_state *s, char *arg)
  */
 int	bi_exit(t_state *s, char **argv, int argc)
 {
-	char *arg;
-	
+	char	*arg;
+
 	if (isatty(STDOUT_FILENO))
 		write(STDOUT_FILENO, "exit\n", 5);
 	if (argc < 2)
-		_exit_arg_cond(s, NOARG); 
+		_exit_arg_cond(s, NOARG);
 	if ((ft_strlen(argv[1]) > 19))
-		_exit_arg_cond(s, NONNUM); 
+		_exit_arg_cond(s, NONNUM);
 	arg = get_numeric(s, argv[1]);
 	if (NULL == arg)
 		_exit_arg_cond(s, NONNUM);

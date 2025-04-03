@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_set_utils.c                                    :+:      :+:    :+:   */
+/*   env_set.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 08:59:52 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/12 18:47:05 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/03 11:30:20 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void	env_set_node_value(t_mem_mgr *m, t_env *node, const char *value)
 
 // Returns 0 if error.
 // updates an existing environment variable's value
-static int	_update_existing_var(t_mem_mgr *m, t_env *existing_key, const char *value)
+static int	_update_existing_var(t_mem_mgr *m, t_env *existing_key, \
+				const char *value)
 {
 	char	*new_value;
 

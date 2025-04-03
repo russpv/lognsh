@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:57:34 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/14 15:38:14 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/03 11:30:58 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,14 @@
 # include "../../state/state.h"
 # include <errno.h>
 
-struct s_env;
-typedef struct s_env	t_env;
+typedef struct s_env			t_env;
 
 t_env					*create_env_node(t_mem_mgr *m, const char *key,
 							const char *value);
 t_env					*copy_envp(t_mem_mgr *m, char **envp);
 void					env_free_list(t_mem_mgr *m, t_env *env);
 void					env_add_node(t_env **env, t_env *new_node);
-void					env_remove_node(t_mem_mgr *m, t_env **env,\
+void					env_remove_node(t_mem_mgr *m, t_env **env, \
 							const char *key);
 
 char					*env_find_value(const char *key, t_env *env);

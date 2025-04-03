@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:07:02 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/01 16:18:25 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/03 00:42:53 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	bi_cd(t_state *s, char **args, int argc)
 {
 	char	*target;
 
-	if (!s || !args) 
+	if (!s || !args)
 	{
 		print_custom_err(CMD_NAME, EMSG_INVLD);
 		return (ERR_ARGS);
