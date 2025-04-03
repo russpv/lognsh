@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_convert_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 19:24:31 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/13 18:23:35 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/03 11:29:35 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ char	**env_to_array(t_mem_mgr *m, t_env *env_list)
 	i = 0;
 	while (tmp)
 	{
-		env_array[i] = _lst_join_env(m, env_get_node_key(tmp), env_get_node_value(tmp));
+		env_array[i] = _lst_join_env(m, env_get_node_key(tmp), \
+			env_get_node_value(tmp));
 		if (!env_array[i])
 			return (NULL);
 		i++;

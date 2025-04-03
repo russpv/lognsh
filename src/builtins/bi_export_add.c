@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_export_add.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 10:47:28 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/19 15:00:37 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/03 11:33:16 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,6 @@
 #define CMD_NAME "export"
 #define EMSG_BADMALLOC "memory allocation failed.\n"
 #define EMSG_KEY_NOTVALID "not a valid identifier\n"
-
-/*
-// adds a new environment variable to the list and syncs s->pwd if its PWD
-static int	_add_new_var(t_mem_mgr *m, t_env **sh_env_list, const char *key,
-		const char *value)
-{
-	t_env	*new_node;
-	char	*new_value;
-
-	new_value = NULL;
-	if (!sh_env_list || !key)
-		return (ERR_ARGS);
-	if (value)
-		new_value = ft_strdup(value);
-	else
-		new_value = ft_strdup("");
-	if (!new_value)
-		return (ERR_GENERAL);
-	new_node = create_env_node(m, key, new_value);
-	if (!new_node)
-	{
-		free(new_value);
-		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
-	}
-	env_add_node(sh_env_list, new_node);
-	free(new_value);
-	return (0);
-}*/
 
 // Returns key string, or copy of arg if no equal sign found
 static int	_extract_key(char key[], const char *arg, char *equal_pos)
@@ -78,15 +50,6 @@ static void	_set_value(char *equal_pos, const char **value_ptr)
 		*value_ptr = NULL;
 }
 
-/*
-static int	_update_or_add_env(t_state *s, t_env *existing_node, const char *key,
-		const char *value)
-{
-	if (existing_node)
-		return (update_existing_var(get_mem(s), existing_node, value));
-	return (_add_new_var(get_mem(s), get_env_list_ptr(s), key, value));
-}*/
-
 // updates or adds key-value pair in s->sh_env_list
 // assumes equal_pos is within arg
 int	process_arg_update_add(t_state *s, const char *arg, char *equal_pos,
@@ -104,7 +67,5 @@ int	process_arg_update_add(t_state *s, const char *arg, char *equal_pos,
 		return (ERR_ARGS);
 	_set_value(equal_pos, &value);
 	exit_code = env_upsert_value(get_mem(s), get_env_list(s), key, value);
-	if (0 != exit_code)
-		*error_occurred = 1; // TODO, check what this flag does
 	return (exit_code);
 }
