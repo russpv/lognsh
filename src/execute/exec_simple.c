@@ -41,31 +41,6 @@ static int	_do_child_ops(t_state *s)
 	return (0);
 }
 
-/* Executes redirects, if any, and calls built-in */
-int	exec_bi_call(t_state *s, t_builtin_fn bi)
-{
-	int					exit_code;
-	const t_cmd			*c = (const t_cmd *)get_cmd(s);
-	const char			**argv = (const char **)c_get_argv((t_cmd *)c);
-	const int			argvc = (const int)c_get_argvc((t_cmd *)c);
-	const t_ast_node	*a = (const t_ast_node *)c_get_node((t_cmd *)c);
-
-	debug_print(DMSG_GOT, __FUNCTION__, argv[0], a);
-	if (!argv || !bi || !c || !a)
-		return (err(EMSG_NULL), ERR_ARGS);
-	save_redirs((t_cmd *)c);
-	if (0 != p_do_redirections((t_ast_node *)a))
-		return (ERR_REDIR);
-	debug_print(DMSG_DOBLTIN, __FUNCTION__);
-	exit_code = bi(s, (char **)argv, argvc);
-	if (0 != exit_code)
-		debug_print(DMSG_ERRBLTIN, __FUNCTION__);
-	restore_redirs((t_cmd *)c);
-	set_exit_status(s, exit_code); // update s->current_exit_code
-	s_free_cmd(s);
-	return (exit_code); // return bi exit codes
-}
-
 /* Forks, resets signal handlers, execve's, sets exit status.
  * Returns early in case SIGINT received.
  * If anything errors in the child, exits with 127.

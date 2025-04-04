@@ -9,19 +9,25 @@ struct					s_cmd
 {
 	t_int_stack			*st;
 	char				*fullpath;
+
+	int					argc;
+
 	char				**argv;
 	int					argvc;
+
 	t_list				*redirs;
 	int					redc;
-	int					argc;
+
 	t_ast_node			*curr_node;
-	int					**fildes;
 	int					curr_cmdc;
+
+	int					**fildes;
 	int					saved_stdout;
 	int					saved_stdin;
 	int					saved_stderr;
 };
 
+// Used to bypass func limits for creating argv
 typedef struct s_cmd	t_cmd;
 
 struct					s_context

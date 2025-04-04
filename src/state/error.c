@@ -145,6 +145,25 @@ void	print_lex_error(t_lex *l, char *word)
 		write(STDERR_FILENO, "-", 1);
 	write(STDERR_FILENO, "^\n", 2);
 }
+
+void	print_hdoc_eof_error(t_lex *l, char *word)
+{
+	const char	*input = (const char *)lex_get_raw(l);
+	size_t		i;
+	const size_t pos = (size_t)(lex_get_ptr(l) - (char *)input);
+
+	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+	write(STDERR_FILENO, ": invalid delimiter `", ft_strlen(": invalid delimiter `"));
+	ft_putstr_fd(word, STDERR_FILENO);
+	write(STDERR_FILENO, "` in:\n", ft_strlen("` in:\n"));
+	ft_putstr_fd(input, STDERR_FILENO);
+	write(STDERR_FILENO, "\n", 1);
+	i = -1;
+	while (++i < pos)
+		write(STDERR_FILENO, "-", 1);
+	write(STDERR_FILENO, "^\n", 2);
+}
+
 #define HDOC_1 "warning: here-document at line "
 #define HDOC_2 " delimited by end-of-file (wanted `"
 

@@ -92,6 +92,7 @@ void							print_parse_error(t_state *s, const char *word,
 									size_t pos);
 void							print_lex_error(t_lex *l, char *word);
 void							print_hdoc_error(const char *line, const char *eof);
+void							print_hdoc_eof_error(t_lex *l, char *word);
 void							print_redir_error(t_state *s, const char *word, size_t pos);
 void							print_nocmd_error(t_state *s, const char *word, size_t pos);
 void							print_invalid_name(const char *caller, const char *name);
