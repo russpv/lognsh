@@ -50,7 +50,8 @@ static void	_reset_value_ptr(char *equal_pos, const char **value_ptr)
 		*value_ptr = NULL;
 }
 
-static void _update_special_state_vars(t_state *s, char *key, const char *value)
+static void	_update_special_state_vars(t_state *s, char *key, \
+			const char *value)
 {
 	if (0 == ft_strncmp(PATH_KEY, key, MAX_ENVVAR_LEN))
 		set_path(s, value);

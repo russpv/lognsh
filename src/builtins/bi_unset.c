@@ -28,7 +28,7 @@ static bool	_is_valid_var_name(char *name)
 }
 
 // unset will always return ('0'); remove_env_node will only work for valid keys
-int	bi_unset(t_state *s, char **argv, int argc)
+/*int	bi_unset(t_state *s, char **argv, int argc)
 {
 	int	i;
 	int	ret;
@@ -53,6 +53,41 @@ int	bi_unset(t_state *s, char **argv, int argc)
 				set_path(s, NULL);
 			env_remove_node(get_mem(s), get_env_list_ptr(s), argv[i]);
 		}
+		i++;
+	}
+	return (ret);
+}*/
+
+static int	_process_var(t_state *s, char *var_name, int ret)
+{
+	if (!_is_valid_var_name(var_name))
+	{
+		print_invalid_name(_CMD_NAME_, var_name);
+		ret = 1;
+	}
+	else
+	{
+		if (ft_strncmp(PATH_KEY, var_name, MAX_ENVVAR_LEN) == 0)
+			set_path(s, NULL);
+		env_remove_node(get_mem(s), get_env_list_ptr(s), var_name);
+	}
+	return (ret);
+}
+
+int	bi_unset(t_state *s, char **argv, int argc)
+{
+	int		i;
+	int		ret;
+
+	if (!s || !argv)
+		return (1);
+	if (argc == 1)
+		return (0);
+	i = 1;
+	ret = 0;
+	while (argv[i])
+	{
+		ret = _process_var(s, argv[i], ret);
 		i++;
 	}
 	return (ret);
