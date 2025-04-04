@@ -9,74 +9,12 @@
 /*   Updated: 2025/04/03 15:50:32 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../include/libft.h"
+#include "../lib/libft_function_utils.h"
 /* SPLIT
 ** Returns new C-strings split by c or NULL (malloc)
 ** Array is null terminated
 ** Allows empty strings from consecutive c's
 */
-static inline void	_arr_free(struct s_mem_utils *m, char **arr, unsigned int i)
-{
-	unsigned int	j;
-
-	j = 0;
-	while (j < i)
-		m->u(m->head, arr[j++]);
-	m->u(m->head, arr);
-}
-
-static inline t_bool	_is_print(char const *p)
-{
-	while (*p)
-		if (ft_isprint(*p++))
-			return (TRUE);
-	return (FALSE);
-}
-
-/* Returns non-empty string count in C-string p*/
-static inline int	_get_word_count(char const *p, char const *set)
-{
-	const char		*temp;
-	int				count;
-
-	count = 0;
-	while (*p)
-	{
-		temp = ft_strchrs(p, set);
-		if (!temp)
-		{
-			if (_is_print(p))
-				count++;
-			break ;
-		}
-		else if (temp - p > 0)
-			count++;
-		p = temp + 1;
-	}
-	return (count);
-}
-
-static inline void	*_copy_word(struct s_mem_utils *m, \
-				char const *s, char **elem, size_t len)
-{
-	*elem = m->f(m->head, sizeof(char) * (len + 1));
-	if (!*elem)
-		return (NULL);
-	(*elem)[len] = 0;
-	ft_memmove(*elem, s, len);
-	return (*elem);
-}
-
-static char	*_get_temp(char const *str, char const *delims)
-{
-	char	*temp;
-
-	temp = ft_strchrs(str, delims);
-	if (!temp)
-		temp = ft_strchr(str, 0);
-	return (temp);
-}
-
 static char	**_init_arr(struct s_mem_utils *m, size_t count)
 {
 	char	**arr;
@@ -117,7 +55,7 @@ char	*ft_skip_delims(char const *s, char const *ref)
 ** Array is null terminated
 ** Skips initial whitespace
 */
-char	**ft_split_ifs_mem(struct s_mem_utils *m, \
+/*char	**ft_split_ifs_mem(struct s_mem_utils *m, \
 		char const *s, char const *set)
 {
 	char			**arr;
@@ -145,5 +83,48 @@ char	**ft_split_ifs_mem(struct s_mem_utils *m, \
 		}
 		s2 = temp + 1;
 	}
+	return (arr);
+}*/
+static char	**_fill_arr(struct s_mem_utils *m, char **arr, \
+			char *s2, char const *set)
+{
+	char			*temp;
+	unsigned int	i;
+
+	i = 0;
+	while (s2)
+	{
+		if (!*s2)
+			break ;
+		temp = _get_temp_if(s2, set);
+		if (temp - s2 > 0)
+		{
+			if (!_copy_word(m, s2, &(arr[i]), temp - s2))
+			{
+				_arr_free(m, arr, i);
+				return (NULL);
+			}
+			i++;
+		}
+		s2 = temp + 1;
+	}
+	return (arr);
+}
+
+char	**ft_split_ifs_mem(struct s_mem_utils *m, \
+		char const *s, char const *set)
+{
+	char	**arr;
+	size_t	count;
+	char	*s2;
+
+	s2 = ft_skip_delims(s, set);
+	count = _get_word_count_if(s2, set);
+	arr = _init_arr(m, count);
+	if (!arr)
+		return (NULL);
+	arr = _fill_arr(m, arr, s2, set);
+	if (!arr)
+		return (NULL);
 	return (arr);
 }

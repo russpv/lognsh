@@ -54,20 +54,25 @@ SOURCES = ft_memcpy.c \
 		  ft_strscpy.c \
 		  ft_strndup.c \
 		  ft_strcmplow.c \
-		  ft_strcmp_casefold.c
+		  ft_strcmp_casefold.c \
+		  ft_split_ifs_mem_utils.c \
+		  ft_split_mem_utils.c \
+		  
 
 OBJECTS = $(SOURCES:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I../include
 
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
-	$(AR) -r $@ $?
+	$(AR) -rcs $(NAME) $(OBJECTS)
+	#$(AR) -r $@ $?
 
 %.o: %.c
-	$(CC) -c $(CFLAGS) $?
+	$(CC) $(CFLAGS) -c $< -o $@
+	#$(CC) -c $(CFLAGS) $?
 
 bonus:
 
@@ -80,7 +85,7 @@ fclean: clean
 re: fclean all
 
 so:
-	$(CC) -fPIC $(CFLAGS) -c $(OBJECTS) 
+	$(CC) -fPIC $(CFLAGS) -c $(SOURCES) 
 	$(CC) -shared -o libft.so $(OBJECTS)
 
 
