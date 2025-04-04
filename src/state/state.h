@@ -3,11 +3,11 @@
 
 # include "../../include/libft.h"
 # include "../builtins/env/env.h"
+# include "../data_structures/stack.h"
 # include "../mem/mem.h"
 # include "../signal/signal.h"
 # include "../utils/debug.h"
 # include "../utils/log.h"
-# include "../data_structures/stack.h"
 # include "error.h"
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -22,31 +22,12 @@
 #  define TESTFLAG 0
 # endif
 
-/* Bash Manual
- *
- * For the shell’s purposes,
- * a command which exits with a zero exit status has succeeded.
-
-	* A non-zero exit status indicates failure. This seemingly
-		counter-intuitive scheme is used
-	* so there is one well-defined way to indicate success and
-	a variety of ways to indicate various failure modes. When
-	a command terminates on a fatal signal whose number is N,
- * Bash uses the value 128+N as the exit status.
-
- * If a command is not found,
-	the child process created to execute it returns a status of 127.
- * If a command is found but is not executable, the return
-	status is 126.
- *
- * If a command fails because of an error during expansion or redirection,
-	the exit status is greater than zero.
- */
 
 /* STATE ADT
 ** A centralized singleton-like pattern for tracking global state
-** including environment, command history, execution state.
+** including environment, execution state.
 */
+
 struct s_global_state;
 typedef struct s_global_state	t_state;
 
@@ -62,60 +43,62 @@ typedef struct s_env			t_env;
 /* For dependency injections */
 
 /* Command injector */
-typedef char *(*c_get_fullpath_fn)(t_cmd *c);
-typedef char **(*c_get_argv_fn)(t_cmd *c);
-typedef t_int_stack *(*c_get_ctxtst_fn)(t_cmd *c);
-typedef t_ast_node *(*c_get_node_fn)(t_cmd *c);
-typedef int (*c_get_cmdc_fn)(const t_cmd *c);
-typedef int (*c_get_argvc_fn)(const t_cmd *c);
-typedef const int **(*c_get_fildes_fn)(const t_cmd *c);
-typedef int (*save_redirs_fn)(t_cmd *c);
-typedef int (*restore_redirs_fn)(t_cmd *c);
+typedef char					*(*c_get_fullpath_fn)(t_cmd *c);
+typedef char					**(*c_get_argv_fn)(t_cmd *c);
+typedef t_int_stack				*(*c_get_ctxtst_fn)(t_cmd *c);
+typedef t_ast_node				*(*c_get_node_fn)(t_cmd *c);
+typedef int						(*c_get_cmdc_fn)(const t_cmd *c);
+typedef int						(*c_get_argvc_fn)(const t_cmd *c);
+typedef const int				**(*c_get_fildes_fn)(const t_cmd *c);
+typedef int						(*save_redirs_fn)(t_cmd *c);
+typedef int						(*restore_redirs_fn)(t_cmd *c);
 
-typedef struct s_command_functions {
- 	c_get_argv_fn c_get_argv;
-    c_get_argvc_fn c_get_argvc;
-    c_get_cmdc_fn c_get_cmdc;
-    c_get_node_fn c_get_node;
-	c_get_fullpath_fn c_get_fullpath;
-    c_get_ctxtst_fn c_get_ctxtst;
-    c_get_fildes_fn c_get_fildes;
-    save_redirs_fn save_redirs;
-    restore_redirs_fn restore_redirs;
-}	t_cmd_fns;
+typedef struct s_command_functions
+{
+	c_get_argv_fn				c_get_argv;
+	c_get_argvc_fn				c_get_argvc;
+	c_get_cmdc_fn				c_get_cmdc;
+	c_get_node_fn				c_get_node;
+	c_get_fullpath_fn			c_get_fullpath;
+	c_get_ctxtst_fn				c_get_ctxtst;
+	c_get_fildes_fn				c_get_fildes;
+	save_redirs_fn				save_redirs;
+	restore_redirs_fn			restore_redirs;
+}								t_cmd_fns;
 
-t_cmd_fns	*get_cmd_fns(t_state *s);
+t_cmd_fns						*get_cmd_fns(t_state *s);
+t_cmd_fns						*init_cmd_fns(t_state *s);
 
 /* Lexer injector */
-typedef char *(*lex_get_eof_fn)(t_lex *lexer);
-typedef int	(*lex_get_lines_fn)(t_lex *lexer);
-typedef int	(*match_heredoc_fn)(t_mem_mgr *m, t_lex *l);
-typedef size_t	(*write_heredoc_fn)(int fd, t_lex *l);
-typedef size_t	(*read_heredoc_fn)(int fd, t_lex *l);
+typedef char					*(*lex_get_eof_fn)(t_lex *lexer);
+typedef int						(*lex_get_lines_fn)(t_lex *lexer);
+typedef int						(*match_heredoc_fn)(t_mem_mgr *m, t_lex *l);
+typedef size_t					(*write_heredoc_fn)(int fd, t_lex *l);
+typedef size_t					(*read_heredoc_fn)(int fd, t_lex *l);
 
-typedef struct s_lexer_functions {
-	lex_get_eof_fn lex_get_eof;
-	lex_get_lines_fn lex_get_lines;
-	match_heredoc_fn lex_match_heredoc;
-	write_heredoc_fn write_heredoc;
-	read_heredoc_fn read_heredoc;
-}	t_lex_fns;
+typedef struct s_lexer_functions
+{
+	lex_get_eof_fn				lex_get_eof;
+	lex_get_lines_fn			lex_get_lines;
+	match_heredoc_fn			lex_match_heredoc;
+	write_heredoc_fn			write_heredoc;
+	read_heredoc_fn				read_heredoc;
+}								t_lex_fns;
 
-t_lex_fns	*get_lex_fns(t_state *s);
+t_lex_fns						*get_lex_fns(t_state *s);
+t_lex_fns						*init_lex_fns(t_state *s);
 
 /* Parse injector */
-typedef int	(*p_do_redirections_fn)(t_ast_node *a);
+typedef int						(*p_do_redirections_fn)(t_ast_node *a);
 
-typedef struct s_parse_functions {
-	p_do_redirections_fn p_do_redirections;
-}	t_parse_fns;
+typedef struct s_parse_functions
+{
+	p_do_redirections_fn		p_do_redirections;
+}								t_parse_fns;
 
-t_parse_fns	*get_parse_fns(t_state *s);
+t_parse_fns						*get_parse_fns(t_state *s);
+t_parse_fns						*init_parse_fns(t_state *s);
 
-/* Forwards */
-t_cmd_fns *init_cmd_fns(t_state *s);
-t_lex_fns *init_lex_fns(t_state *s);
-t_parse_fns *init_parse_fns(t_state *s);
 
 /* Methods */
 t_state							*init_state(char **envp);
@@ -132,7 +115,7 @@ int								set_oldpwd(t_state *s, const char *caller);
 void							set_tmp(t_state *s, char *str);
 void							set_got_heredoc(t_state *s);
 void							set_tmp_flag(t_state *s, int val);
-void	set_path(t_state *s, const char *val);
+void							set_path(t_state *s, const char *val);
 
 int								*get_status(t_state *s);
 char							*get_input(t_state *s);
@@ -144,16 +127,13 @@ char							**get_envp(t_state *s);
 char							*get_env_val(t_state *s, const char *key);
 t_env							*get_env_list(t_state *s);
 t_env							**get_env_list_ptr(t_state *s);
-char	**get_path(t_state *s);
+char							**get_path(t_state *s);
 
 char							*get_tmp(t_state *s);
 t_lex							*get_lexer(t_state *s);
 char							*get_pwd(t_state *s);
 char							*get_prompt(t_state *s);
 bool							get_heredoc(t_state *s);
-
-// int	set_sh_env(t_state *s, const char *key, const char *value);
-// For export()
 
 void							register_command_destroy(t_state *s,
 									t_destroy_fn fn);

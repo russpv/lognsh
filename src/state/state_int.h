@@ -43,9 +43,6 @@ struct							s_global_state
 
 typedef struct s_global_state	t_state;
 
-// TODO
-// t_ht *env_cache; TODO LATER, add hash table to env.h for faster lookups
-
 void	init_env_vars(t_state *s);
 
 #endif
