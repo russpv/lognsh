@@ -22,7 +22,6 @@
 # define INT_DFL 1
 # define INT_KRL 2
 
-
 /* Global signal variable is checked periodically
  * through execution chain, and triggers appropriate
  * action and handler. This received signal is reset
