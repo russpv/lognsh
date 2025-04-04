@@ -1,4 +1,5 @@
 #include "../parse/parse.h"
+#include "../command/command.h"
 #include "log.h"
 
 void	log_command_info(t_cmd *c, t_ast_node *a)

@@ -21,7 +21,7 @@ struct							s_global_state
 	t_list						*tmp_tok_lst;
 	char						*tmp;
 	int							tmp_flag;
-	
+
 	char						*prompt;
 	char						**path;
 
@@ -35,6 +35,10 @@ struct							s_global_state
 	t_destroy_fn				destroy_token;
 
 	t_mem_mgr					mem_mgr;
+
+	t_cmd_fns					*cmd_fns;
+	t_lex_fns					*lex_fns;
+	t_parse_fns					*parse_fns;
 };
 
 typedef struct s_global_state	t_state;

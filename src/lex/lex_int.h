@@ -188,7 +188,7 @@ typedef struct s_lex
 	int						do_globbing;
 	int						do_heredoc;
 	int						do_heredoc_expansion;
-	bool					do_wordsplit; 
+	bool					do_wordsplit;
 	bool					is_subtoken;
 
 	char					*eof_word;
@@ -210,10 +210,9 @@ struct						s_ht_data
 	enum e_tok_type			type;
 };
 
-typedef struct s_ht_data	*t_ht_data;
-
 /* Forwards */
-extern int					exec_heredoc(t_mem_mgr *m, t_lex *l);
+typedef struct s_ht_data	*t_ht_data;
+extern int					exec_heredoc(t_state *s, t_lex *l);
 
 
 t_lex						*create_lexer(t_state *state, int start_state,

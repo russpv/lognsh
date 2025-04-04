@@ -141,7 +141,7 @@ typedef struct s_arg
 	bool					is_grouparg;
 	t_list					*lst_tokens;
 
-	
+
 }							t_arg_data;
 
 /* Next refactor, remove the t_list since
@@ -242,7 +242,7 @@ t_list						*match_glob(t_mem_mgr *mgr, const char *pattern);
 int							do_arg_inserts(t_mem_mgr *mgr, t_list **lst_node,
 								t_list **ins_lst, t_arg_data *content);
 void						*token_to_arg(t_mem_mgr *m, const void *tok);
-int							p_do_grparg_processing(t_state *s, t_list **this,
+int							p_do_grparg_processing(t_state *s, t_list **this_node,
 								void *c);
 int	p_do_globbing_toks(t_mem_mgr *mgr, t_list **lst_node, void *lst_c);
 int							p_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node,

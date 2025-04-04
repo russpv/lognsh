@@ -1,3 +1,4 @@
+#include "state.h"
 #include "state_int.h"
 
 static inline void	_init_state_ptrs(t_state *s)
@@ -34,6 +35,9 @@ t_state	*init_state(char **envp)
 	_init_state_ptrs(s);
 	mem_mgr_init(&s->mem_mgr);
 	mem_add_mem(&s->mem_mgr.list, s, sizeof(struct s_global_state));
+	s->lex_fns = init_lex_fns(s);
+	s->cmd_fns = init_cmd_fns(s);
+	s->parse_fns = init_parse_fns(s);
 	s->sh_env_list = copy_envp(&s->mem_mgr, envp);
 	if (!s->sh_env_list)
 		exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
@@ -49,7 +53,7 @@ void	destroy_state(t_state **state)
 {
 	t_mem_mgr *m;
 	t_state *s;
-	
+
 	s = *state;
 	m = get_mem(s);
 	if (s->current_parser)

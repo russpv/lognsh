@@ -17,6 +17,9 @@
 
 # define _MOD_ "env"
 
+extern void							exit_clean(t_mem_node *n, int exit_status,
+									const char *caller, const char *errmsg);
+
 // Env variable linked list node
 typedef struct s_env
 {

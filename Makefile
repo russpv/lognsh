@@ -22,12 +22,12 @@ EXTDIR = external
 TESTDIR = test
 
 # Compiler and flags
-CC = cc 
-CFLAGS = -Wall -Wextra -g -DDEBUGMODE -DLOGMODE #-fsanitize=address #-DTESTMODE   #-fsanitize=address  #  
-TEST_CFLAGS = -Wall  -g -DTESTMODE  # -Werror -Wextra 
-EXT_CFLAGS = -DEXTENDEDFUNC 
-LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses #-fsanitize=address # 
-LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses 
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g -DDEBUGMODE -DLOGMODE #-fsanitize=address #-DTESTMODE   #-fsanitize=address  #
+TEST_CFLAGS = -Wall  -g -DTESTMODE  # -Werror -Wextra
+EXT_CFLAGS = -DEXTENDEDFUNC
+LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses #-fsanitize=address #
+LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
 
 ifeq ($(shell uname), Darwin)  # macOS
     INC += -I$(INCDIR) -I/usr/local/opt/readline/include/
@@ -95,7 +95,7 @@ $(OBJDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)  # % ensures obj file associates wi
 	@sed -e 's|.*:|$(OBJDIR)/$*.$(OBJEXT):|' < $(OBJDIR)/$*.$(DEPEXT).tmp > $(OBJDIR)/$*.$(DEPEXT) || exit 1
 	@sed -e 's/.*://' -e 's/\\$$//' < $(OBJDIR)/$*.$(DEPEXT).tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $(OBJDIR)/$*.$(DEPEXT)
 	@rm -f $(OBJDIR)/$*.$(DEPEXT).tmp
-	
+
 #@echo "$(GREEN)$(BOLD)SUCCESS$(RESET)"
 #@echo "$(YELLOW)Created: $(words $(OBJECTS) ) object file(s)$(RESET)"
 #@echo "$(YELLOW)Created: $(NAME)$(RESET)"
@@ -119,7 +119,7 @@ $(OBJDIR)/$(TESTDIR)/%.$(OBJEXT): $(TESTDIR)/%.$(SRCEXT)
 
 bonus: .bonus_made
 
-.bonus_made: 
+.bonus_made:
 	@echo "Creating $(NAME) $(OUTPUT) with extended functionality..."
 	$(MAKE) CFLAGS="$(CFLAGS) $(EXT_CFLAGS)"
 	-@touch .bonus_made
@@ -138,8 +138,8 @@ $(LIB_PATH):
 	@cp $(LIB_PATH) .
 
 # clean only objects
-clean: 
-	@$(RM) -rf $(OBJDIR) 
+clean:
+	@$(RM) -rf $(OBJDIR)
 	@$(RM) -f $(OBJDIR)/*.d
 	@$(MAKE) -C $(LIB_DIR) clean
 

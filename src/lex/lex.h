@@ -31,5 +31,7 @@ int	lex_get_lines(t_lex *lexer);
 
 size_t					ft_varnamelen(const char *c);
 int						match_heredoc(t_mem_mgr *m, t_lex *l);
+size_t	write_heredoc(int fd, t_lex *l);
+size_t	read_heredoc(int fd, t_lex *l);
 
 #endif

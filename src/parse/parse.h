@@ -4,7 +4,6 @@
 # include "../../include/libft.h"
 # include "../data_structures/llist.h"
 # include "../data_structures/stack.h"
-# include "../execute/execute.h"
 # include "../lex/lex.h"
 # include "../state/state.h"
 # include "../token/token.h"
@@ -49,6 +48,8 @@ enum							e_ast_node_type
 
 typedef struct s_global_state	t_state;
 typedef struct s_node			t_ast_node;
+
+t_parse_fns *init_parse_fns(t_state *s);
 
 t_ast_node						*parse(t_state *s, char *input);
 

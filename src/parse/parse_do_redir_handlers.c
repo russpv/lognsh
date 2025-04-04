@@ -3,6 +3,8 @@
 
 #define NOFN "No filename for input redirection.\n"
 
+extern int	redirect(int *to, char *topath, int from, bool ifappend);
+
 int	handle_redirect_in(const t_redir_data *node)
 {
 	const int	append = false;

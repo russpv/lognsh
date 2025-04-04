@@ -1,5 +1,21 @@
 #include "lex_int.h"
 
+t_lex_fns	*init_lex_fns(t_state *s)
+{
+	const t_mem_mgr *m = get_mem(s);
+	t_lex_fns *fns;
+
+	fns = m->f(&((t_mem_mgr *)m)->list, sizeof(t_lex_fns));
+	if (!fns)
+		exit_clean(&((t_mem_mgr *)m)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	fns->lex_get_eof = lex_get_eof;
+	fns->lex_get_lines = lex_get_lines;
+	fns->lex_match_heredoc = match_heredoc;
+	fns->write_heredoc = write_heredoc;
+	fns->read_heredoc = read_heredoc;
+	return (fns);
+}
+
 static inline void	_init_lexer_state(t_lex *lexer, int start_state)
 {
 	if (NORMAL == start_state)

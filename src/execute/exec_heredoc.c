@@ -1,6 +1,6 @@
 #include "execute_int.h"
 
-int	exec_heredoc(t_mem_mgr *m, t_lex *l)
+int	exec_heredoc(t_state *s, t_lex *l)
 {
 	int fildes[2];
 	pid_t pid;
@@ -18,10 +18,10 @@ int	exec_heredoc(t_mem_mgr *m, t_lex *l)
 	{
 		close(fildes[0]);
 		sig_set_handlers(INT_KRL);
-		res = match_heredoc(m, l);
+		res = (get_lex_fns(s))->lex_match_heredoc(get_mem(s), l);
 		if (SIGINT != g_last_signal && ERR_RL_ABORTED == res)
 		{
-			print_hdoc_error(ft_itoa_mem(&m->list, m->f, 1 + lex_get_lines(l)), lex_get_eof(l));
+			print_hdoc_error(ft_itoa_mem(&get_mem(s)->list, get_mem(s)->f, 1 + (get_lex_fns(s))->lex_get_lines(l)), (get_lex_fns(s))->lex_get_eof(l));
 			exit_code = ERR_RL_ABORTED;
 		}
 		else if (SIGINT == g_last_signal && ERR_RL_ABORTED == res)
@@ -31,11 +31,11 @@ int	exec_heredoc(t_mem_mgr *m, t_lex *l)
 			close(STDOUT_FILENO);
 			close(STDERR_FILENO);
 			close(fildes[1]);
-			exit_clean(&m->list, exit_code, __FUNCTION__, NULL);
+			exit_clean(&get_mem(s)->list, exit_code, __FUNCTION__, NULL);
 		}
 		write_heredoc(fildes[1], l);
 		close(fildes[1]);
-		exit_clean(&m->list, res, __FUNCTION__, NULL);
+		exit_clean(&get_mem(s)->list, res, __FUNCTION__, NULL);
 	}
 	else
 	{

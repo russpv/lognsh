@@ -14,7 +14,11 @@
 # define SIGNAL_H
 
 # include "../globals/globals.h"
-# include "../state/state.h"
+# include "../state/error.h"
+# include "../utils/debug.h"
+# include <readline/readline.h>
+
+//# include "../state/state.h"
 
 # define SIGINT_BEFORE_FORK -130
 # define SIGEOF_AT_INPUT 300

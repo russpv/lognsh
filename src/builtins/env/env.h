@@ -14,7 +14,9 @@
 # define ENV_H
 
 # include "../../data_structures/hashtable.h"
-# include "../../state/state.h"
+# include "../../mem/mem.h"
+# include "../../state/error.h"
+//# include "../../state/state.h"
 # include <errno.h>
 
 typedef struct s_env			t_env;

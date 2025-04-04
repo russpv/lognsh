@@ -63,6 +63,10 @@ typedef struct s_cmd			t_cmd;
 typedef struct s_global_state	t_state;
 typedef struct s_node			t_ast_node;
 
+typedef struct s_command_functions t_cmd_fns;
+
+t_cmd_fns	*init_cmd_fns(t_state *s);
+
 char							*c_get_fullpath(t_cmd *c);
 char							**c_get_argv(t_cmd *c);
 t_int_stack						*c_get_ctxtst(t_cmd *c);

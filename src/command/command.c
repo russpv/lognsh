@@ -6,6 +6,26 @@
 #define DMSG_CEXEC_NOTPIP _MOD_ ": node not a pipe...\n"
 #define EMSG_CEXEC_UNK _MOD_ ": ERR unknown node...\n"
 
+t_cmd_fns	*init_cmd_fns(t_state *s)
+{
+	const t_mem_mgr *m = get_mem(s);
+	t_cmd_fns *fns;
+
+	fns = m->f(&((t_mem_mgr*)m)->list, sizeof(t_cmd_fns));
+	if (!fns)
+		exit_clean(&((t_mem_mgr*)m)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	fns->c_get_argv = c_get_argv;
+	fns->c_get_argvc = c_get_argvc;
+	fns->c_get_cmdc = c_get_cmdc;
+	fns->c_get_node = c_get_node;
+	fns->c_get_fullpath = c_get_fullpath;
+	fns->c_get_ctxtst = c_get_ctxtst;
+	fns->c_get_fildes = c_get_fildes;
+	fns->save_redirs = save_redirs;
+	fns->restore_redirs = restore_redirs;
+	return (fns);
+}
+
 void	destroy_cmd(t_mem_mgr *m, void **c)
 {
 	t_cmd		*cmd;

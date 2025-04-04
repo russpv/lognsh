@@ -11,23 +11,24 @@
 // the right end of the pipe(s)
 // i is the ith 0-indexed cmd
 // ith - 1 pipe for read ends, ith for write ends
-static int	_redirect_pipes(const t_cmd *c, int i)
+static int	_redirect_pipes(t_state *s, int i)
 {
+	const t_cmd *c = get_cmd(s);
 	int	**fildes;
 	int	r;
 
-	fildes = (int **)c_get_fildes(c);
+	fildes = (int **)(get_cmd_fns(s))->c_get_fildes(c);
 	r = -1;
 	if (0 == i)
 		r = redirect(&fildes[i][1], NULL, STDOUT_FILENO, NO_APND);
-	else if (i < c_get_cmdc(c) - 1)
+	else if (i < (get_cmd_fns(s))->c_get_cmdc(c) - 1)
 	{
 		r = redirect(&fildes[i - 1][0], NULL, STDIN_FILENO, NO_APND);
 		if (-1 == r)
 			return (err(EMSG_EPIPE_REDIR), -1);
 		r = redirect(&fildes[i][1], NULL, STDOUT_FILENO, NO_APND);
 	}
-	else if (i == c_get_cmdc(c) - 1)
+	else if (i == (get_cmd_fns(s))->c_get_cmdc(c) - 1)
 		r = redirect(&fildes[i - 1][0], NULL, STDIN_FILENO, NO_APND);
 	if (-1 == r)
 		return (err(EMSG_EPIPE_REDIR2), -1);
@@ -43,16 +44,17 @@ static int	_redirect_pipes(const t_cmd *c, int i)
  *
  * For 1st child with heredoc, closes 1st pipe read end
  */
-static int	_close_other_pipe_ends(const t_cmd *c, int i)
+static int	_close_other_pipe_ends(t_state *s, int i)
 {
 	int			pipe;
 	int			counter;
-	const int	**fildes = c_get_fildes(c);
+	const t_cmd *c = get_cmd(s);
+	const int	**fildes = (get_cmd_fns(s))->c_get_fildes(c);
 
 	debug_print(DBGMSG_EPIPE_ANNOUNCE2, i);
 	pipe = -1;
 	counter = 0;
-	while (++pipe < c_get_cmdc(c) - 1)
+	while (++pipe < (get_cmd_fns(s))->c_get_cmdc(c) - 1)
 	{
 		if (pipe != i)
 		{
@@ -68,7 +70,7 @@ static int	_close_other_pipe_ends(const t_cmd *c, int i)
 		}
 	}
 	if (DEBUG)
-		debug_print(DBGMSG_EPIPE_CLOSED, getpid(), counter, c_get_cmdc(c));
+		debug_print(DBGMSG_EPIPE_CLOSED, getpid(), counter, (get_cmd_fns(s))->c_get_cmdc(c));
 	return (1);
 }
 
@@ -96,8 +98,8 @@ int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,
 	else if (0 == pid)
 	{
 		sig_reset_handlers();
-		_close_other_pipe_ends(get_cmd(s), i);
-		_redirect_pipes(get_cmd(s), i);
+		_close_other_pipe_ends(s, i);
+		_redirect_pipes(s, i);
 		exit_status = executor(s, node);
 		exit_status = handle_exit(s, exit_status);
 		destroy_state(&s);

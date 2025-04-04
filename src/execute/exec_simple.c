@@ -19,8 +19,8 @@
 static int	_do_child_ops(t_state *s)
 {
 	const t_cmd	*c = (const t_cmd *)get_cmd(s);
-	const char	*fullpath = (const char *)c_get_fullpath((t_cmd *)c);
-	const char	**argv = (const char **)c_get_argv((t_cmd *)c);
+	const char	*fullpath = (const char *)(get_cmd_fns(s))->c_get_fullpath((t_cmd *)c);
+	const char	**argv = (const char **)(get_cmd_fns(s))->c_get_argv((t_cmd *)c);
 	const char	**envp = (const char **)get_envp(s);
 
 	debug_print("Child: envp=%p", (void *)envp);
@@ -30,7 +30,7 @@ static int	_do_child_ops(t_state *s)
 		return (err(EMSG_NULLPATH), -1);
 	if (!c)
 		return (err(EMSG_NULLTCMD), -1);
-	if (0 != p_do_redirections(c_get_node((t_cmd *)c)))
+	if (0 != (get_parse_fns(s))->p_do_redirections((get_cmd_fns(s))->c_get_node((t_cmd *)c)))
 		return (ERR_REDIR);
 	debug_print(DMSG_DOEXEC, fullpath);
 	if (NULL == fullpath)

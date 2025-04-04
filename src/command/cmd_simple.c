@@ -53,6 +53,7 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	int				exit_code;
 	t_cmd			*c;
 	t_builtin_fn	bi;
+	t_cmd_fns		*cf;
 
 	c = get_cmd(s);
 	log_print(LMSG_IN, __FUNCTION__);
@@ -60,16 +61,18 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 		return (ERR_ARGS);
 	if (p_get_type(a) != AST_NODE_CMD)
 		return (ERR_INVALID_CMD_TYPE);
+	cf = init_cmd_fns(s);
 	exit_code = _proc_args_redirs(s, a, c);
 	if (ERR_REDIR == exit_code || NO_CMD == exit_code)
 		return (exit_code);
 	log_command_info((t_cmd *)c, a);
-	assert(c_get_node(c) == a);
+	assert(c_get_node(c) == a); //TODO remove
 	bi = get_builtin(p_get_cmd(a));
 	if (bi)
-		exit_code = exec_bi_call(s, bi);
+		exit_code = exec_bi_call(s, bi, cf);
 	else
 		exit_code = run_cmd(s, a);
 	log_print(LMSG_OUT, __FUNCTION__, exit_code);
+	get_mem(s)->dealloc(&get_mem(s)->list, cf);
 	return (exit_code);
 }

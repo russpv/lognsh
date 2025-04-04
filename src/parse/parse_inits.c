@@ -1,5 +1,17 @@
 #include "parse_int.h"
 
+t_parse_fns	*init_parse_fns(t_state *s)
+{
+	const t_mem_mgr *m = get_mem(s);
+	t_parse_fns *fns;
+
+	fns = m->f(&((t_mem_mgr *)m)->list, sizeof(t_parse_fns));
+	if (!fns)
+		exit_clean(&((t_mem_mgr *)m)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	fns->p_do_redirections = p_do_redirections;
+	return (fns);
+}
+
 static inline void	_init_parser(t_state *s, t_parser *p)
 {
 	p->ast = NULL;

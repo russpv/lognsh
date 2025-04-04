@@ -23,8 +23,8 @@ typedef struct s_list	t_list;
 /* Sort comparitor */
 extern int				ft_strcmplow(const char *a, const char *b);
 
-int						ft_lstadd_back(t_list **lst, t_list *new);
-void					ft_lstadd_front(t_list **lst, t_list *new);
+int						ft_lstadd_back(t_list **lst, t_list *node);
+void					ft_lstadd_front(t_list **lst, t_list *node);
 
 void					ft_lstclear(t_list **lst, void (*del)(void *));
 void					ft_lstdelone(t_list **lst, t_list *node,
@@ -49,7 +49,7 @@ t_list					*ft_lstcopy_node(const t_list *orig,
 
 void					ft_lstiter_ins_rwd(t_list **lst, int (*f)(t_list **,
 								void *));
-void					ft_lstadd_insert(t_list **lst, t_list *new);
+void					ft_lstadd_insert(t_list **lst, t_list *node);
 void					ft_lstdelone_rwd(t_list **lst, t_list **node,
 							void (*del)(void *));
 
