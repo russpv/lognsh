@@ -4,6 +4,7 @@
 # include "token.h"
 
 # define _MOD_ "Token"
+# define GRP_TOK_RAW "(GROUP)"
 
 enum					e_token_class
 {
@@ -21,7 +22,7 @@ typedef struct s_normal_tok
 	bool				do_expansion;
 	bool				is_subtoken;
 	bool				in_dquotes;
-	
+
 	bool				is_combinable;
 }						t_normal_tok;
 

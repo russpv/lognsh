@@ -34,6 +34,7 @@ int	exec_heredoc(t_mem_mgr *m, t_lex *l)
 			exit_clean(&m->list, exit_code, __FUNCTION__, NULL);
 		}
 		write_heredoc(fildes[1], l);
+		close(fildes[1]);
 		exit_clean(&m->list, res, __FUNCTION__, NULL);
 	}
 	else

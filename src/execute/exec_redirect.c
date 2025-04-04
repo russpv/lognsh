@@ -19,10 +19,10 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 		fd = open("/dev/null", O_RDONLY);
 		errno = EACCES;
 	}
-	else if (access(topath, F_OK) == 0 && stat(topath, &statbuf) == -1) 
+	else if (access(topath, F_OK) == 0 && stat(topath, &statbuf) == -1)
 		return (print_perror("stat"), -ERR_STAT);
-	else if (S_ISDIR(statbuf.st_mode))
-        return (print_is_dir(), -ERR_REDIR);
+	else if (access(topath, F_OK) == 0 && S_ISDIR(statbuf.st_mode))
+        return (print_is_dir(topath), -ERR_REDIR);
 	else if (from == STDIN_FILENO)
 		fd = open(topath, O_RDONLY | O_CREAT, 0644);
 	else if (from == STDOUT_FILENO && append)

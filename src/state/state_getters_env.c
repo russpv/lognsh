@@ -46,5 +46,6 @@ char	**get_path(t_state *s)
 		s->sh_env_list = copy_envp(get_mem(s), environ);
 	if (NULL == s->path)
 		set_path(s, env_find_value(PATH_KEY, s->sh_env_list));
+	print_array(s->path);
 	return (s->path);
 }

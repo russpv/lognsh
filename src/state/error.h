@@ -98,7 +98,7 @@ void							print_nocmd_error(t_state *s, const char *word, size_t pos);
 void							print_invalid_name(const char *caller, const char *name);
 
 void							print_bufflow(void);
-void							print_is_dir(void);
+void							print_is_dir(char *p);
 
 bool							is_error(int v);
 

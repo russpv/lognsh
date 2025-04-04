@@ -11,19 +11,21 @@ static int	_check_access(const char *path)
 {
 	struct stat info;
 
-	if (0 == access((const char *)path, F_OK))
+	if (0 == access(path, F_OK))
 	{
-		if (0 != access((const char *)path, X_OK))
+		if (0 != access(path, X_OK))
 			return (print_perror(path), ERR_CMD_NOT_EXEC);
-		if (0 == stat((const char *)path, &info))
+		if (0 == stat(path, &info))
 			if (S_ISDIR(info.st_mode))
-				return (print_is_dir(), ERR_CMD_IS_A_DIR);
+				return (print_is_dir((char*)path), ERR_CMD_IS_A_DIR);
 		return (0);
 	}
 	return (ERR_CMD_NOT_FOUND);
 }
 
-/* Returns 0 if absolute fullpath is found */
+/* Returns 0 if absolute fullpath is found
+ * All heap allocs are temporary within this scope
+ */
 static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 {
 	char	**paths;
@@ -56,7 +58,7 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 {
 	int res;
-	
+
 	res = ERR_CMD_NOT_FOUND;
 	if (NULL != name && '\0' != name[0])
 	{

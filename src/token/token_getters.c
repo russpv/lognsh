@@ -22,6 +22,8 @@ bool	tok_get_dquotes(t_tok *token)
 {
 	if (!token)
 		return (err("No Token\n"), false);
+	if (GROUP == token->class)
+		return (token->t.meta.in_dquotes);
 	return (token->t.tok.in_dquotes);
 }
 
@@ -50,18 +52,14 @@ char	*tok_get_raw(t_tok *token)
 	if (!token)
 		return (NULL);
 	if (GROUP == token->class)
-	{
-		return (NULL);
-	}
+		return (GRP_TOK_RAW);
 	return (token->t.tok.raw);
 }
 
 enum e_tok_type	tok_get_type(t_tok *token)
 {
 	if (GROUP == token->class)
-	{
 		return (TOK_GROUP_WORD);
-	}
 	return (token->t.tok.type);
 }
 

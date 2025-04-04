@@ -176,8 +176,12 @@ void	print_hdoc_error(const char *line, const char *eof)
 	write(STDERR_FILENO, "\')\n", 3);
 }
 
-void	print_is_dir(void)
+void	print_is_dir(char *path)
 {
-	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
-	write(STDERR_FILENO, ": Is a directory\n", ft_strlen(": Is a directory\n"));
+    (void)path;
+
+   	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+	write(STDERR_FILENO, ": `", ft_strlen(": `"));
+	ft_putstr_fd(path, STDERR_FILENO);
+	write(STDERR_FILENO, "`: is a directory\n", ft_strlen("`: Is a directory\n"));
 }
