@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   debug.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:58:08 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 11:58:09 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../data_structures/llist.h"
 #include "debug.h"
 
@@ -73,39 +85,33 @@ void	print_array(char *arr[])
 
 bool	test_prev_integrity(t_list *lst)
 {
-	t_list *current = lst;
+	t_list	*current;
+	t_list	*previous;
 
-	// If the list is empty, there's nothing to test
+	current = lst;
 	if (current == NULL)
 	{
 		colored_printf(YELLOW, "List is empty.\n");
 		return (true);
 	}
-
-	t_list *previous = NULL; // To track the previous node
+	previous = NULL;
 	while (current != NULL)
 	{
-		// Check that the current node's prev points to the previous node
 		if (current->prev != previous)
 		{
-			colored_printf(YELLOW,"Integrity check failed: Node at\
+			colored_printf(YELLOW, "Integrity check failed: Node at\
 				%p's prev pointer is incorrect.\n", current);
 			return (false);
 		}
-
-		// Check that the previous node's next points to the current node
 		if (previous != NULL && previous->next != current)
 		{
-			colored_printf(YELLOW,"Integrity check failed: Node at\
+			colored_printf(YELLOW, "Integrity check failed: Node at\
 				%p's next pointer is incorrect.\n", previous);
 			return (false);
 		}
-
-		// Move to the next node
 		previous = current;
 		current = current->next;
 	}
-
-	colored_printf(YELLOW,"Integrity check passed.\n");
+	colored_printf(YELLOW, "Integrity check passed.\n");
 	return (true);
 }
