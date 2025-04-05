@@ -108,11 +108,3 @@ t_mem_block	*mem_get_alloc(t_mem_node *head, void *alloc)
 	debug_print("%s: block not found (%s) \n", __FUNCTION__, (char *)alloc);
 	return (NULL);
 }
-
-void	dealloc_str(t_state *s, char *str_to_free)
-{
-	t_mem_mgr	*mem_mgr;
-
-	mem_mgr = get_mem(s);
-	mem_mgr->dealloc(&mem_mgr->list, str_to_free);
-}
