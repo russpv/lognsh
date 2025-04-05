@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:10:51 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 09:24:20 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "token_int.h"
 
 int	tok_print(void *content)
@@ -17,14 +29,16 @@ int	tok_print(void *content)
 		else if (tok_get_issubtoken(tok))
 			log_print(_MOD_ ": Sub_tok:%02d Exp:%d Glb:%d Sub:%d Dq:%d +:%d Val:(%s)\
 				 \n",
-						tok->t.tok.type,tok->t.tok.do_expansion,
-						tok->t.tok.do_globbing,tok->t.tok.is_subtoken,
-						tok->t.tok.in_dquotes,tok->t.tok.is_combinable,tok->t.tok.raw);
+				tok->t.tok.type, tok->t.tok.do_expansion,
+				tok->t.tok.do_globbing, tok->t.tok.is_subtoken,
+				tok->t.tok.in_dquotes, tok->t.tok.is_combinable, \
+					tok->t.tok.raw);
 		else
 			log_print(_MOD_ ": Token:%02d Exp:%d Glb:%d Sub:%d Dq:%d +:%d Val:(%s)\
 				\n", tok->t.tok.type, tok->t.tok.do_expansion,
 				tok->t.tok.do_globbing, tok->t.tok.is_subtoken,
-				tok->t.tok.in_dquotes, tok->t.tok.is_combinable, tok->t.tok.raw);
+				tok->t.tok.in_dquotes, tok->t.tok.is_combinable, \
+					tok->t.tok.raw);
 	}
 	return (0);
 }

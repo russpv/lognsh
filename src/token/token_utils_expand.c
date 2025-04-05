@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_utils_expand.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:10:39 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 09:21:26 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "token_int.h"
 
 /* Looks for env values of key loaded in buf, replaces raw. */
@@ -16,7 +28,6 @@ static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf, char **value)
 	}
 	else
 	{
-		debug_print(_MOD_ ": %s: checking envp\n", __FUNCTION__);
 		*value = get_env_val(s, buf);
 		if (*value)
 		{
@@ -47,7 +58,6 @@ int	tok_do_expansion(t_state *s, void *c)
 		return (0);
 	raw_len = ft_strnlen(content->t.tok.raw, MAX_ENVVAR_LEN);
 	ft_memset(buf, 0, sizeof(buf));
-	debug_print(_MOD_ ": %s:  %s\n", __FUNCTION__, content->t.tok.raw);
 	if (content->t.tok.do_expansion)
 	{
 		if (raw_len <= lex_get_keepd(get_lexer(s)))
@@ -57,8 +67,6 @@ int	tok_do_expansion(t_state *s, void *c)
 		res = _do_tok_ops(s, content, buf, &value);
 		if (0 != res)
 			return (res);
-		debug_print(_MOD_ ": %s: expanded var: %s\n", __FUNCTION__, value);
 	}
 	return (0);
 }
-

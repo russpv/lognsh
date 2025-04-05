@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_free.c                                       :+:      :+:    :+:   */
+/*   token_setters_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/05 09:10:06 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/05 09:20:48 by dayeo            ###   ########.fr       */
+/*   Created: 2025/04/05 20:08:39 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 20:08:48 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "token_int.h"
 
-/* void star star due to linked list destroy method */
-void	destroy_token(t_mem_mgr *mgr, void **token)
+int	tok_incr_tokc(t_tok *token)
 {
-	t_tok	*t;
-
 	if (!token)
-		return ;
-	if (!(*token))
-		return ;
-	t = (t_tok *)(*token);
-	if (GROUP == t->class)
-		ft_lstclear_tmp(mgr, &t->t.meta.tokens, destroy_token);
-	else
-	{
-		if (t->t.tok.raw)
-			mgr->dealloc(&mgr->list, t->t.tok.raw);
-	}
-	mgr->dealloc(&mgr->list, t);
-	*token = NULL;
+		return (ERR_ARGS);
+	if (GROUP != token->class)
+		return (ERR_ARGS);
+	token->t.meta.tokc++;
+	return (0);
+}
+
+int	tok_add_subtok(t_mem_mgr *mgr, t_tok *grp, t_tok *sub)
+{
+	if (!grp || !sub)
+		return (ERR_ARGS);
+	ft_lstadd_back(&grp->t.meta.tokens, ft_lstnew_tmp(mgr, sub));
+	return (0);
 }
