@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   llist_int.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:29:24 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 09:29:36 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LLIST_INT_H
 # define LLIST_INT_H
 
@@ -13,8 +25,8 @@ struct		s_merge
 	t_list	*l;
 	t_list	*r;
 	t_list	**tail;
-	t_list *tmp;  // need this to set node->prev
-	t_list *tmp2; // need this to reconnect segment with rest of list
+	t_list	*tmp; // need this to set node->prev
+	t_list	*tmp2; // need this to reconnect segment with rest of list
 	t_list	*mid;
 	t_list	**beg;
 	t_list	**end;
@@ -40,5 +52,7 @@ void		debug_print_tail_info(struct s_merge *m);
 
 bool		str_hasalnum(const char *s);
 bool		str_isalnum(const char *s);
+
+void		_get_root(char *buf, void *s);
 
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   llist_sort.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:32:08 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 09:50:12 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "llist_int.h"
 
 static int	_swap(t_list *beg, t_list *end)
@@ -26,7 +38,7 @@ static t_list	*_get_midptr(t_list *lst, t_list *end)
 	assert(tmp->next->next != NULL);
 	if (NULL == tmp || NULL == tmp->next)
 		return (lst);
-	if (NULL == tmp->next->next) // don't want the last node of a pair to be mid
+	if (NULL == tmp->next->next)
 		return (end);
 	while ((tmp != NULL && tmp->next != NULL) && (tmp != end
 			&& tmp->next != end))

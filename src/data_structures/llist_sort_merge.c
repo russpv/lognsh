@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   llist_sort_merge.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:31:47 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 22:18:14 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "llist_int.h"
 
 /* Adds the remaining nodes after one of the
@@ -15,7 +27,6 @@ static void	_add_remainder(struct s_merge *m)
 		*m->tail = m->r;
 		(*m->tail)->prev = m->tmp;
 	}
-	print_addremainder_post(m);
 }
 
 /* Swaps the current tail node for the correct
@@ -24,6 +35,7 @@ static void	_add_remainder(struct s_merge *m)
  */
 static void	_do_swap(t_list **lst, struct s_merge *m)
 {
+	(void)lst;
 	if (ALESSTHANB == compare(m->l, m->r))
 	{
 		*m->tail = m->l;
@@ -35,12 +47,7 @@ static void	_do_swap(t_list **lst, struct s_merge *m)
 		m->r = m->r->next;
 	}
 	if ((*m->tail) != NULL && m->tmp != NULL)
-	{
-		print_prev_pre(m);
 		(*m->tail)->prev = m->tmp;
-		print_prev_post(m);
-	}
-	print_swap_post(lst, m);
 }
 
 /* Advances to the end of the added remainder
@@ -51,10 +58,8 @@ static void	_adv_and_reconnect(struct s_merge *m)
 {
 	while (++m->i < m->nodec)
 		m->tail = &((*m->tail)->next);
-	print_tailadvance_post(m);
 	if (*m->tail)
 		(*m->tail)->next = m->tmp2;
-	print_tailnext_post(m);
 }
 
 /* Ensures the true head and true tail are terminated NULL
@@ -65,7 +70,6 @@ void	_terminate_ends(t_list **lst, struct s_merge *m)
 	if ((*m->end)->next == NULL && *m->tail == *m->end)
 		(*m->tail)->next = NULL;
 	(*lst)->prev = NULL;
-	print_diagnostics_end(lst, m);
 }
 
 /* MERGESORT
@@ -83,7 +87,6 @@ void	merge(t_list **lst, t_list **beg, t_list *mid, t_list **end)
 	struct s_merge	m;
 
 	init_merge(&m, beg, end, mid);
-	print_diagnostics_input(lst, &m);
 	if (ALESSTHANB == compare(mid, mid->next))
 		return (debug_print("already sorted.\n"));
 	while ((NULL != m.l && NULL != m.r) && (mid->next != m.l
@@ -93,7 +96,6 @@ void	merge(t_list **lst, t_list **beg, t_list *mid, t_list **end)
 		_do_swap(lst, &m);
 		m.tmp = *m.tail;
 		m.tail = &((*m.tail)->next);
-		debug_print_tail_info(&m);
 	}
 	_add_remainder(&m);
 	_adv_and_reconnect(&m);

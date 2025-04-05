@@ -1,19 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   llist_sort_compare.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:29:59 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 21:28:30 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "llist_int.h"
-
-static void	_get_root(char *buf, void *s)
-{
-	char	*str;
-	size_t	buf_idx;
-
-	str = (char *)s;
-	buf_idx = 0;
-	while (*str && buf_idx < MAX_BUF)
-	{
-		if (ft_isalnum(*str))
-			buf[buf_idx++] = *str;
-		str++;
-	}
-}
 
 static const char	*_strip_prespecials(void *s)
 {
@@ -64,7 +61,7 @@ static int	_check_one_alphanumeric(const char *str1, const char *str2,
 			return (ALESSTHANB);
 		if ('$' != *str1 && '$' == *str2)
 			return (ALESSTHANB);
-		if (str_isalnum(str2)) // neither have '$' ? vs 0 <haha
+		if (str_isalnum(str2))
 			return (ALESSTHANB);
 		return (ft_strcmp_casefold(str1, body2));
 	}
@@ -109,6 +106,10 @@ int	compare(t_list *beg, t_list *end)
 	if (res == 0)
 		res = _check_both_specials(beg->content, end->content);
 	if (res != 0)
-		return (res > 0 ? AMORETHANB : ALESSTHANB);
+	{
+		if (res > 0)
+			return (AMORETHANB);
+		return (ALESSTHANB);
+	}
 	return (0);
 }

@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   llist_.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:28:45 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 09:28:56 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "llist_int.h"
 
 #define DEBUGMSG_INSERT_GOT "ft_lstadd_insert got lst = %p, head = %p\n"
 #define DEBUGMSG_INSERT_NULL "NULL input detected: lst = %p, new = %p\n"
-#define DEBUGMSG_INSERT_EMPTY "List is empty. Added new node as the first element:%p\n"
+#define DEBUGMSG_INSERT_EMPTY "List is empty. Added new node as the \
+			first element:%p\n"
 #define DEBUGMSG_INSERTED "Inserted new node after the first node. new->prev =%p,\
 	(*lst)->next = %p\n"
 #define DEBUGMSG_INSERT_0 "ft_lstadd_insert completed successfully.\n"

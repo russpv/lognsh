@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   llist_sort_utils.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:31:55 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 09:50:29 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "llist_int.h"
 
 bool	str_isalnum(const char *s)
@@ -34,7 +46,6 @@ void	init_merge(struct s_merge *m, t_list **beg, t_list **end, t_list *mid)
 	m->l = *beg;
 	m->r = mid->next;
 	m->tmp2 = &(*((*end)->next));
-	// need this to reconnect segment with rest of list
 	m->nodec = ft_lstsize_betw(*beg, *end);
 	m->mid = mid;
 	m->beg = beg;
@@ -42,7 +53,8 @@ void	init_merge(struct s_merge *m, t_list **beg, t_list **end, t_list *mid)
 }
 
 /*
-// Ranks special chars ahead of alphanums; and $-prefixed strings higher than varname strings
+// Ranks special chars ahead of alphanums; \
+and $-prefixed strings higher than varname strings
 // +haha and (haha appear ahead of haha but after foo
 static int	_compare(t_list *beg, t_list *end)
 {

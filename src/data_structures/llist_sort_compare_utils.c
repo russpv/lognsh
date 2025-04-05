@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hashtable_int.h                                    :+:      :+:    :+:   */
+/*   llist_sort_compare_utils.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/05 09:27:57 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/05 09:27:58 by dayeo            ###   ########.fr       */
+/*   Created: 2025/04/05 21:59:16 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 22:03:45 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "hashtable.h"
+#include "llist_int.h"
 
-struct					s_ht_entry
+void	_get_root(char *buf, void *s)
 {
-	struct s_ht_entry	*next;
-	char				*name;
-	void				*data;
-};
+	char	*str;
+	size_t	buf_idx;
 
-struct					s_ht
-{
-	struct s_ht_entry	*buckets[HASHSIZE];
-};
-
-unsigned int			hash(const char *s);
+	str = (char *)s;
+	buf_idx = 0;
+	while (*str && buf_idx < MAX_BUF)
+	{
+		if (ft_isalnum(*str))
+			buf[buf_idx++] = *str;
+		str++;
+	}
+}

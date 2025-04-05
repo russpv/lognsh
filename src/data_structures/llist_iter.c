@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   llist_iter.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:29:44 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 11:37:38 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "llist_int.h"
 
 #define DBGMSG_LSTINSRWD_ANNOUNCE "lstiter_ins_rwd: got lst: %p, head:%p.\n"
@@ -7,7 +19,8 @@
 	%p\n"
 #define DBGMSG_LSTINSRWD_POSTF "lstiter_ins_rwd: Function f applied to node:\
 	%p\n"
-#define DBGMSG_LSTINSRWD_SUCCESS "lstiter_ins_rwd: ft_lstiter_ins_rwd Iteration complete.\n"
+#define DBGMSG_LSTINSRWD_SUCCESS "lstiter_ins_rwd: ft_lstiter_ins_rwd \
+			Iteration complete.\n"
 
 /* LSTITER
 ** Iterates linked list and applies func f to node.content

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stack.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:32:54 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 21:31:38 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STACK_H
 # define STACK_H
 
@@ -5,7 +17,6 @@
 # include "i_llist.h"
 # include <stdlib.h>
 
-struct s_int_stack;
 typedef struct s_int_stack	t_int_stack;
 
 t_int_stack					*st_int_create(t_mem_mgr *m);
@@ -14,7 +25,6 @@ int							st_int_push(t_int_stack *s, int thing);
 int							st_int_pop(t_int_stack *s);
 int							st_int_peek(t_int_stack *s);
 
-struct s_ptr_stack;
 typedef struct s_ptr_stack	t_ptr_stack;
 
 t_ptr_stack					*st_ptr_create(t_mem_mgr *m);
