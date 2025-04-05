@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:54:54 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 11:54:55 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ERROR_H
 # define ERROR_H
 
@@ -74,8 +86,7 @@
 
 // no includes, but redefs, due to circular dependency
 typedef struct s_global_state	t_state;
-struct s_lex;
-typedef struct s_lex	t_lex;
+typedef struct s_lex			t_lex;
 
 /* specific error messages */
 void							print_command_not_found(const char *cmd);
@@ -91,10 +102,14 @@ void							print_custom_err_err(const char *dingus,
 void							print_parse_error(t_state *s, const char *word,
 									size_t pos);
 void							print_lex_error(t_lex *l, char *word);
-void							print_hdoc_error(const char *line, const char *eof);
-void							print_redir_error(t_state *s, const char *word, size_t pos);
-void							print_nocmd_error(t_state *s, const char *word, size_t pos);
-void							print_invalid_name(const char *caller, const char *name);
+void							print_hdoc_error(const char *line, \
+								const char *eof);
+void							print_redir_error(t_state *s, const char *word, \
+								size_t pos);
+void							print_nocmd_error(t_state *s, const char *word, \
+								size_t pos);
+void							print_invalid_name(const char *caller, \
+								const char *name);
 
 void							print_bufflow(void);
 void							print_is_dir(void);
@@ -104,15 +119,12 @@ bool							is_error(int v);
 /* To avoid circular includes: */
 extern void						set_error(t_state *s, int e);
 extern size_t					ft_strlen(const char *s);
-extern char	*get_input(t_state *s);
-extern char	*lex_get_ptr(t_lex *l);
-extern const char	*lex_get_raw(t_lex *l);
-extern void	ft_putstr_fd(char const *s, int fd);
-extern char	*ft_strchr(const char *s, int c_in);
-extern size_t	ft_strnlen(const char *s, size_t maxlen);
-void							perror(const char *);
-
-
-
+extern char						*get_input(t_state *s);
+extern char						*lex_get_ptr(t_lex *l);
+extern const char				*lex_get_raw(t_lex *l);
+extern void						ft_putstr_fd(char const *s, int fd);
+extern char						*ft_strchr(const char *s, int c_in);
+extern size_t					ft_strnlen(const char *s, size_t maxlen);
+void							perror(const char *message);
 
 #endif

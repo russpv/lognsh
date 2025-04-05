@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   state.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:57:21 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 11:57:22 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "state_int.h"
 
 static inline void	_init_state_ptrs(t_state *s)
@@ -47,9 +59,9 @@ t_state	*init_state(char **envp)
  */
 void	destroy_state(t_state **state)
 {
-	t_mem_mgr *m;
-	t_state *s;
-	
+	t_mem_mgr	*m;
+	t_state		*s;
+
 	s = *state;
 	m = get_mem(s);
 	if (s->current_parser)

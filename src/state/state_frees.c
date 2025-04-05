@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   state_frees.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:55:40 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 11:56:03 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "state_int.h"
 
 /* Destroys parser before lexer
@@ -5,8 +17,8 @@
  */
 void	s_free_cmd_lex_parse(t_state *state)
 {
-	t_mem_mgr *m;
-	
+	t_mem_mgr	*m;
+
 	m = get_mem(state);
 	if (TESTFLAG == 0)
 		m->dealloc(&m->list, state->input);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   state.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:57:27 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 11:57:28 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STATE_H
 # define STATE_H
 
@@ -46,9 +58,7 @@
 ** A centralized singleton-like pattern for tracking global state
 ** including environment, command history, execution state.
 */
-struct s_global_state;
 typedef struct s_global_state	t_state;
-
 typedef void					(*t_destroy_fn)(t_mem_mgr *m, void **instance);
 typedef void					(*t_attach_fn)(void *instance);
 
@@ -73,7 +83,7 @@ int								set_oldpwd(t_state *s, const char *caller);
 void							set_tmp(t_state *s, char *str);
 void							set_got_heredoc(t_state *s);
 void							set_tmp_flag(t_state *s, int val);
-void	set_path(t_state *s, const char *val);
+void							set_path(t_state *s, const char *val);
 
 int								*get_status(t_state *s);
 char							*get_input(t_state *s);
@@ -85,7 +95,7 @@ char							**get_envp(t_state *s);
 char							*get_env_val(t_state *s, const char *key);
 t_env							*get_env_list(t_state *s);
 t_env							**get_env_list_ptr(t_state *s);
-char	**get_path(t_state *s);
+char							**get_path(t_state *s);
 
 char							*get_tmp(t_state *s);
 t_lex							*get_lexer(t_state *s);

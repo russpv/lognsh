@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   state_getters.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:56:25 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 11:56:36 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "state_int.h"
 
 t_cmd	*get_cmd(t_state *s)
@@ -54,7 +66,7 @@ bool	get_heredoc(t_state *s)
 	return (s->got_heredoc);
 }
 
-int		get_tmp_flag(t_state *s)
+int	get_tmp_flag(t_state *s)
 {
 	if (!s)
 		return (INT_MAX);

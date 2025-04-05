@@ -1,12 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:53:52 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 11:54:40 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "error.h"
-
-
 
 void	print_bufflow(void)
 {
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	write(STDERR_FILENO, ": ", ft_strlen(": "));
-	write(STDERR_FILENO, "Input exceeds limits.\n", ft_strlen("Input exceeds limits.\n"));
+	write(STDERR_FILENO, "Input exceeds limits.\n", \
+		ft_strlen("Input exceeds limits.\n"));
 }
 
 /* Prints errno err for 'dingus' */
@@ -79,7 +90,8 @@ void	print_parse_error(t_state *s, const char *word, size_t pos)
 	size_t		i;
 
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
-	write(STDERR_FILENO, ": parse error near `", ft_strlen(": parse error near `"));
+	write(STDERR_FILENO, ": parse error near `", \
+		ft_strlen(": parse error near `"));
 	ft_putstr_fd(word, STDERR_FILENO);
 	write(STDERR_FILENO, "` in:\n", ft_strlen("` in:\n"));
 	ft_putstr_fd(input, STDERR_FILENO);
@@ -93,11 +105,12 @@ void	print_parse_error(t_state *s, const char *word, size_t pos)
 void	print_nocmd_error(t_state *s, const char *word, size_t pos)
 {
 	const char	*input = (const char *)get_input(s);
-	const char 	*alt = "...";
+	const char	*alt = "...";
 	size_t		i;
 
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
-	write(STDERR_FILENO, ": expected valid command after `", ft_strlen(": expected valid command after `"));
+	write(STDERR_FILENO, ": expected valid command after `", \
+		ft_strlen(": expected valid command after `"));
 	if (ft_strchr(word, '\n'))
 		ft_putstr_fd(alt, STDERR_FILENO);
 	else
@@ -117,7 +130,8 @@ void	print_redir_error(t_state *s, const char *word, size_t pos)
 	size_t		i;
 
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
-	write(STDERR_FILENO, ": expected valid filename after `", ft_strlen(": expected valid filename after `"));
+	write(STDERR_FILENO, ": expected valid filename after `", \
+		ft_strlen(": expected valid filename after `"));
 	ft_putstr_fd(word, STDERR_FILENO);
 	write(STDERR_FILENO, "` in:\n", ft_strlen("` in:\n"));
 	ft_putstr_fd(input, STDERR_FILENO);
@@ -130,12 +144,13 @@ void	print_redir_error(t_state *s, const char *word, size_t pos)
 
 void	print_lex_error(t_lex *l, char *word)
 {
-	const char	*input = (const char *)lex_get_raw(l);
-	size_t		i;
-	const size_t pos = (size_t)(lex_get_ptr(l) - (char *)input);
+	const size_t	pos = (size_t)(lex_get_ptr(l) - (char *)input);
+	const char		*input = (const char *)lex_get_raw(l);
+	size_t			i;
 
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
-	write(STDERR_FILENO, ": parse error near `", ft_strlen(": parse error near `"));
+	write(STDERR_FILENO, ": parse error near `", \
+		ft_strlen(": parse error near `"));
 	ft_putstr_fd(word, STDERR_FILENO);
 	write(STDERR_FILENO, "` in:\n", ft_strlen("` in:\n"));
 	ft_putstr_fd(input, STDERR_FILENO);
