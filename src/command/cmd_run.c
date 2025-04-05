@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_run.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:27:06 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 17:17:40 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "command_int.h"
 
 #define EMSG_RUNC_STRJ "Path strjoin err\n"
@@ -9,7 +21,7 @@
 // Checks permissions on path and also if a dir
 static int	_check_access(const char *path)
 {
-	struct stat info;
+	struct stat	info;
 
 	if (0 == access((const char *)path, F_OK))
 	{
@@ -42,10 +54,10 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 		*fullpath = ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, tmp, cmd);
 		if (!*fullpath)
 			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
-		get_mem(s)->dealloc(&get_mem(s)->list, tmp);
+		dealloc_str(s, tmp);
 		if (0 == _check_access(*fullpath))
 			return (0);
-		get_mem(s)->dealloc(&get_mem(s)->list, *fullpath);
+		dealloc_str(s, *fullpath);
 		*fullpath = NULL;
 	}
 	return (ERR_CMD_NOT_FOUND);
@@ -53,10 +65,48 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 
 /* Stores command path in fullpath, if valid.
  * Checks PATH, or absolute path if slash is in the name */
+static int	validate_path(t_state *s, const char *name, char **fullpath)
+{
+	int	res;
+
+	res = ERR_CMD_NOT_FOUND;
+	if (ft_strchr(name, '/'))
+	{
+		res = _check_access(name);
+		if (0 == res)
+		{
+			*fullpath = (char *)name;
+			return (0);
+		}
+	}
+	else
+	{
+		if (0 == _search_path(s, name, fullpath))
+		{
+			res = _check_access(*fullpath);
+			if (0 == res)
+				return (res);
+		}
+	}
+	return (res);
+}
+
 int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 {
-	int res;
-	
+	int	res;
+
+	res = ERR_CMD_NOT_FOUND;
+	if (NULL != name && '\0' != name[0])
+		res = validate_path(s, name, fullpath);
+	if (ERR_CMD_NOT_FOUND == res)
+		print_command_not_found(name);
+	return (res);
+}
+
+/*int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
+{
+	int	res;
+
 	res = ERR_CMD_NOT_FOUND;
 	if (NULL != name && '\0' != name[0])
 	{
@@ -82,7 +132,7 @@ int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 	if (ERR_CMD_NOT_FOUND == res)
 		print_command_not_found(name);
 	return (res);
-}
+}*/
 
 /* Forks depending on execution context
  * In the context of a proc or pipeline, forking would already
@@ -96,7 +146,6 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	int		exit_status;
 
 	c = get_cmd(s);
-	debug_print(_MOD_ ": %s: preparing to exec...\n", __FUNCTION__);
 	if (p_get_type(a) != AST_NODE_CMD)
 		return (EINVAL);
 	if (NULL == p_get_cmd(a))
@@ -104,9 +153,6 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	exit_status = find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath);
 	if (0 != exit_status)
 		return (s_free_cmd(s), exit_status);
-	if (c->fullpath)
-		log_print(LOGMSG_RUNC_GOT, c->fullpath);
-	debug_print(_MOD_ ": %s: exec'g\n", __FUNCTION__);
 	if (CTXT_PIPELINE == st_int_peek(get_cmd(s)->st)
 		|| CTXT_PROC == st_int_peek(get_cmd(s)->st))
 	{
@@ -116,8 +162,6 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	else
 	{
 		exit_status = exec_fork_execve(s);
-		if (SIGINT_BEFORE_FORK == exit_status)
-			log_print(LOGMSG_RUNC_SIGINT);
 		s_free_cmd(s);
 		return (exit_status);
 	}

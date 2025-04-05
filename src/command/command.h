@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   command.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:27:49 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 09:27:50 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // command.h
 #ifndef COMMAND_H
 # define COMMAND_H
@@ -77,4 +89,6 @@ int								cmd_execute(t_state *s, t_ast_node *a);
 int								save_redirs(t_cmd *c);
 int								restore_redirs(t_cmd *c);
 
+// memory management
+void							dealloc_str(t_state *s, char *str_to_free);
 #endif

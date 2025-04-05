@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:27:23 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 11:40:21 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "command_int.h"
 
 static void	_fill_argv_nocmd(t_mem_mgr *m, int i, struct s_context *ctxt)
@@ -57,17 +69,14 @@ static int	_do_loop(t_state *s, struct s_context *ctxt)
 	return (i);
 }
 
-int arrlen(char *arr[]) 
+int	arrlen(char *arr[])
 {
-    int len;
-	
-	len = 0;
-    while (arr[len] != NULL)
-	{
-        len++;
-	}
+	int	len;
 
-    return len;
+	len = 0;
+	while (arr[len] != NULL)
+		len++;
+	return (len);
 }
 
 /* Builds argv from args and stores in command
@@ -89,15 +98,12 @@ int	c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a, char **args)
 	ctxt.argv = m->f(&m->list, (sizeof(char *) * ((size_t)ctxt.argc + 2)));
 	if (!ctxt.argv)
 		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
-	debug_print(_MOD_ ": %s: got cmd[%s] argc:%d args:%p \n", __FUNCTION__,
-		ctxt.cmdname, ctxt.argc, args);
 	i = _do_loop(s, &ctxt);
 	if (i < 0)
 		return (ERR_GENERAL);
 	ctxt.argv[i] = NULL;
 	assert(arrlen(ctxt.argv) == ctxt.count);
 	cmd->argvc = ctxt.count;
-	debug_print(_MOD_ ": %s: adjusted argc:%d\n", __FUNCTION__, cmd->argvc);
 	cmd->argv = ctxt.argv;
 	if (NULL == ctxt.cmdname)
 		p_set_cmd(get_mem(s), a, ctxt.argv[0]);
@@ -105,6 +111,7 @@ int	c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a, char **args)
 	return (0);
 }
 
+/* printing function to be removed in final submit
 void	print_pipes(t_cmd *c)
 {
 	int	i;
@@ -120,4 +127,4 @@ void	print_pipes(t_cmd *c)
 		debug_print("Cmd: \tPipe %d: read fd=%d, write fd=%d\n", i,
 			c->fildes[i][0], c->fildes[i][1]);
 	}
-}
+}*/

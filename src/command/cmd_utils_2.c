@@ -1,41 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_getters.c                                      :+:      :+:    :+:   */
+/*   cmd_utils_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/05 09:26:27 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/05 09:26:29 by dayeo            ###   ########.fr       */
+/*   Created: 2025/04/05 18:30:52 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 18:31:57 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "command_int.h"
+#include "command.h"
 
-char	*c_get_fullpath(t_cmd *c)
+void	dealloc_str(t_state *s, char *str_to_free)
 {
-	return (c->fullpath);
-}
+	t_mem_mgr	*mem_mgr;
 
-t_int_stack	*c_get_ctxtst(t_cmd *c)
-{
-	return (c->st);
-}
-
-t_ast_node	*c_get_node(t_cmd *c)
-{
-	assert(NULL != c);
-	return (c->curr_node);
-}
-
-const int	**c_get_fildes(const t_cmd *c)
-{
-	return ((const int **)c->fildes);
-}
-
-int	c_get_cmdc(const t_cmd *c)
-{
-	if (!c)
-		return (-1);
-	return (c->curr_cmdc);
+	mem_mgr = get_mem(s);
+	mem_mgr->dealloc(&mem_mgr->list, str_to_free);
 }

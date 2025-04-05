@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_simple.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:27:14 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 09:27:15 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "command_int.h"
 
 #define NO_CMD -10
-#define LMSG_IN _MOD_ ": \t### %s ###\n"
-#define LMSG_OUT _MOD_ ": \tFinished %s exit: %d.\n"
+//#define LMSG_IN _MOD_ ": \t### %s ###\n"
+//#define LMSG_OUT _MOD_ ": \tFinished %s exit: %d.\n"
 
 static int	_handle_no_command(t_ast_node *a)
 {
@@ -55,7 +67,6 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	t_builtin_fn	bi;
 
 	c = get_cmd(s);
-	log_print(LMSG_IN, __FUNCTION__);
 	if (!c || !a)
 		return (ERR_ARGS);
 	if (p_get_type(a) != AST_NODE_CMD)
@@ -70,6 +81,5 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 		exit_code = exec_bi_call(s, bi);
 	else
 		exit_code = run_cmd(s, a);
-	log_print(LMSG_OUT, __FUNCTION__, exit_code);
 	return (exit_code);
 }

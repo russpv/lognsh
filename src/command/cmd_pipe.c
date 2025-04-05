@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_pipe.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:26:45 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 09:26:46 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "command_int.h"
 
 #define LOGMSG_CPIPE_ANNOUNCE "Cmd: \t### cmd_exec_pipe ###\n"
@@ -11,7 +23,6 @@ static int	_setup_pipes(t_mem_mgr *m, t_cmd *c)
 	res = exec_create_pipes(m, &c->fildes, c->curr_cmdc);
 	if (0 != res)
 		return (err(EMSG_CPIPE_PIPE), res);
-	print_pipes(c);
 	return (0);
 }
 
