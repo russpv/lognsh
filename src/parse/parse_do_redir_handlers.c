@@ -1,6 +1,5 @@
 #include "parse_int.h"
 
-
 #define NOFN "No filename for input redirection.\n"
 
 extern int	redirect(int *to, char *topath, int from, bool ifappend);

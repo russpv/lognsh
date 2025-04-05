@@ -6,12 +6,17 @@
 #define DBGMSG_REDIR_GOTNULL _MOD_ ": _p_do_redirection got NULL\n"
 #define DBGMSG_REDIR_GOT _MOD_ ": _p_do_redirection got redir, executing...\n"
 #define DBGMSG_REDIR_ANNOUNCE _MOD_ ": p_do_redirections, doing redirs...\n"
+#define EMSG_PATH_MALLOC "Allocation for path value failed.\n"
+#define EMSG_NULL_EXPAN "Null expansion variable.\n"
+#define DEBUGMSG_REDIRP_ANNOUNCE _MOD_ ": p_do_redir_processing...\n"
+#define DBGMSG_REDIRP_GOT _MOD_ ": p_do_redir_processing got: glob_%d exp_%d\n"
+#define DEBUGMSG_DOEXP_ANNOUNCE _MOD_ ": p_do_expansion got: %s\n"
+#define DEBUGMSG_DOEXP_RES _MOD_ ": p_do_expansion found: %s\n"
 
 /* Executes redirection of t_redir_data llist
  * Accepts a t_redir_data.
  * Assumes a non-null set of redirections exists.
  * Note: parser does not node-rize TOK_HEREDOC
- * Note: no error code returns
  */
 static int	_p_do_redirection(void *content)
 {
@@ -59,5 +64,44 @@ int	p_do_redirections(t_ast_node *a)
 	debug_print(DBGMSG_REDIR_ANNOUNCE);
 	if (0 != ft_lstiter(a->data.cmd.redirs, _p_do_redirection))
 		return (ERR_REDIR);
+	return (0);
+}
+
+/* Modifies redirection list in case of expansions.
+ */
+int	p_do_redir_processing(t_state *s, t_ast_node *a)
+{
+	t_list	**redirs;
+	char	*orig_filen;
+	int		res;
+
+	if (a->type != AST_NODE_CMD)
+		return (ERR_ARGS);
+	res = 0;
+	orig_filen = NULL;
+	redirs = p_get_redirs_ptr(a);
+	if (redirs)
+	{
+		debug_print(DBGMSG_REDIRP_GOT, a->data.cmd.do_redir_globbing,
+			a->data.cmd.do_redir_expansion);
+		if (true == a->data.cmd.has_redgrouptoks)
+			{
+				fprintf(stderr, "doing group toks\n");
+			res = ft_lstiter_state_ins_rwd_tmp(s, redirs, p_do_grparg_processing);
+			}
+		if (true == a->data.cmd.do_redir_expansion)
+			res = lstiter_state(s, *redirs, p_do_red_expansion);
+		if (0 != res)
+			return (res);
+		if (true == a->data.cmd.do_redir_globbing)
+			orig_filen = ft_lstiterstr_mem(get_mem(s), *redirs,
+					p_do_globbing_redirs);
+		if (NULL != orig_filen)
+		{
+			print_ambiguous_redirect(((t_redir_data *)orig_filen)->filename);
+			return (ERR_AMBIGUOUS_REDIR);
+		}
+		debug_print("%s: %s: done.\n", _MOD_, __FUNCTION__);
+	}
 	return (0);
 }

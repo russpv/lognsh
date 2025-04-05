@@ -103,7 +103,8 @@ typedef struct s_cmd
 	bool					do_wordsplit;
 	bool					do_redir_globbing;
 	bool					do_redir_expansion;
-	bool					has_grouptoks;
+	bool					has_arggrouptoks;
+	bool					has_redgrouptoks;
 }							t_ast_node_cmd;
 
 // TODO, add heredoc flags for:
@@ -122,10 +123,15 @@ typedef struct s_redir
 	char					*filename;
 	char					*heredoc_body;
 	t_ast_node				*target_ptr;
+	bool					in_dquotes;
 	bool					do_globbing;
 	bool					do_expansion;
 	t_list					*lst_glob;
+
 	t_state					*global_state;
+
+	bool					is_groupred;
+	t_list					*lst_tokens;
 }							t_redir_data;
 
 typedef struct s_arg
@@ -140,8 +146,6 @@ typedef struct s_arg
 
 	bool					is_grouparg;
 	t_list					*lst_tokens;
-
-
 }							t_arg_data;
 
 /* Next refactor, remove the t_list since
@@ -203,8 +207,8 @@ typedef struct s_parser
 t_parser					*create_parser(t_state *s, t_list *tokens);
 void						destroy_parser(t_mem_mgr *m, void **instance);
 t_ast_node					*init_log(t_mem_mgr *m);
-t_redir_data				*init_redir(t_mem_mgr *m, t_ast_node *target,
-								enum e_tok_type type);
+t_redir_data				*init_redir(t_mem_mgr *m, t_parser *p, t_ast_node *t,
+								enum e_tok_type typ);
 t_arg_data					*init_arg(t_mem_mgr *m, t_parser *p,
 								t_ast_node *cmd_node, t_tok *tok);
 
@@ -232,21 +236,27 @@ void						destroy_stack(t_mem_mgr *m, t_pstack *s);
 int							push(t_pstack *stack);
 int							pop(t_pstack *stack);
 
-/* Execution helpers */
+/* Arg Expansions */
+int							p_do_arg_expansion(t_state *s, void *c);
 int							p_do_globbing_args(t_mem_mgr *mgr,
 								t_list **lst_node, void *lst_c);
-int							p_do_globbing_redirs(t_mem_mgr *mgr, void *c);
-int							check_special_expansions(t_state *s,
-								const char *buf, char **value);
-t_list						*match_glob(t_mem_mgr *mgr, const char *pattern);
+int							p_do_grparg_processing(t_state *s, t_list **this_node,
+								void *c);
+int							p_do_globbing_toks(t_mem_mgr *mgr, t_list **lst_node, void *lst_c);
+int							p_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node,
+								void *lst_c);
 int							do_arg_inserts(t_mem_mgr *mgr, t_list **lst_node,
 								t_list **ins_lst, t_arg_data *content);
 void						*token_to_arg(t_mem_mgr *m, const void *tok);
-int							p_do_grparg_processing(t_state *s, t_list **this_node,
-								void *c);
-int	p_do_globbing_toks(t_mem_mgr *mgr, t_list **lst_node, void *lst_c);
-int							p_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node,
-								void *lst_c);
+
+/* Redir Expansions */
+int							p_do_red_expansion(t_state *s, void *r);
+int							p_do_globbing_redirs(t_mem_mgr *mgr, void *c);
+
+/* Expansion Utils */
+int							check_special_expansions(t_state *s,
+								const char *buf, char **value);
+t_list						*match_glob(t_mem_mgr *mgr, const char *pattern);
 
 /* Tests */
 bool						is_option(t_tok *tok);
@@ -277,6 +287,7 @@ int							handle_redirect_out(const t_redir_data *node);
 int							handle_redirect_append(const t_redir_data *node);
 int							handle_heredoc(const t_redir_data *node);
 
+/*  */
 /* Utils */
 char						**list_to_array(t_mem_mgr *m, t_list *args,
 								int argc);

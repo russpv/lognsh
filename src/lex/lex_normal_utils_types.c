@@ -8,7 +8,7 @@ bool	on_cmd_op(t_lex *l)
 
 	if (!s)
 		return (false);
-	if (*s == OP_HASH || *s == OP_PIPE || *s == OP_OPENP || *s == OP_CLOSEDP)
+	if (*s == OP_HASH || *s == OP_PIPE || *s == OP_OPENP || *s == OP_CLOSEDP || *s == '&')
 		return (true);
 	else if (*s == OP_REDOUT || *s == OP_REDIN)
 	{

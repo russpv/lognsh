@@ -14,7 +14,7 @@
 
 /* ECHO
  * derived from code echo.c in Bash.
- * Option -n.* defeats newline print
+ * Option -n defeats newline print
  */
 static void	print_arg(char *arg, int *first_arg)
 {
@@ -34,7 +34,7 @@ int	bi_echo(t_state *s, char **argv, int argc)
 	i = 1;
 	suppress_newline = 0;
 	first_arg = 1;
-	while (i < argc && argv[i][0] == '-' && argv[i][1] == 'n')
+	while (i < argc && argv[i][0] == '-' && argv[i][1] == 'n' && argv[i][2] == ' ')
 	{
 		suppress_newline = 1;
 		i++;

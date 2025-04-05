@@ -2,8 +2,9 @@
 
 #define EMSG_REDIR_DATA_MALLOC "Memory allocation failed for redirection data\n"
 
-t_redir_data	*init_redir(t_mem_mgr *m, t_ast_node *target,
-		enum e_tok_type type)
+// Called on redir tokens, which only have the symbol info.
+t_redir_data	*init_redir(t_mem_mgr *m, t_parser *p, t_ast_node *target,
+	enum e_tok_type type)
 {
 	t_redir_data	*red;
 
@@ -16,11 +17,14 @@ t_redir_data	*init_redir(t_mem_mgr *m, t_ast_node *target,
 	red->target_ptr = target;
 	red->do_globbing = false;
 	red->do_expansion = false;
+	red->in_dquotes = false;
+	red->is_groupred = false;
 	red->heredoc_body = NULL;
 	red->symbol = NULL;
 	red->filename = NULL;
-	red->global_state = NULL;
+	red->global_state = p->global_state;
 	red->lst_glob = NULL;
+	red->lst_tokens = NULL;
 	return (red);
 }
 
@@ -55,12 +59,16 @@ t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node,
 		arg->global_state = p->global_state;
 		if (false == arg->in_dquotes)
 			cmd_node->data.cmd.do_wordsplit = true;
+		cmd_node->data.cmd.do_expansion |= arg->do_expansion;
+		cmd_node->data.cmd.do_globbing |= arg->do_globbing;
+		cmd_node->data.cmd.has_arggrouptoks |= arg->is_grouparg;
+/*
 		if (true == arg->do_expansion)
 			cmd_node->data.cmd.do_expansion = true;
 		if (true == arg->do_globbing)
 			cmd_node->data.cmd.do_globbing = true;
 		if (true == arg->is_grouparg)
-			cmd_node->data.cmd.has_grouptoks = true;
+			cmd_node->data.cmd.has_arggrouptoks = true; */
 	}
 	return (arg);
 }

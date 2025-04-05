@@ -17,6 +17,8 @@ void	destroy_redir(t_mem_mgr *m, void **in)
 		m->dealloc(&m->list, redir->heredoc_body);
 	if (redir->lst_glob)
 		ft_lstclear_str_tmp(m, &redir->lst_glob);
+	if (redir->lst_tokens)
+		ft_lstclear_tmp(m, &redir->lst_tokens, destroy_token);
 	m->dealloc(&m->list, redir);
 	*in = NULL;
 }

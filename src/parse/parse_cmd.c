@@ -19,7 +19,8 @@ static t_ast_node	*_init_cmd_node(t_mem_mgr *m)
 		node->data.cmd.do_wordsplit = false;
 		node->data.cmd.do_redir_globbing = false;
 		node->data.cmd.do_redir_expansion = false;
-		node->data.cmd.has_grouptoks = false;
+		node->data.cmd.has_arggrouptoks = false;
+		node->data.cmd.has_redgrouptoks = false;
 	}
 	return (node);
 }

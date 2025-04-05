@@ -2,11 +2,13 @@
 
 #define EMSG_NOEOF _MOD_ ": ERROR: heredoc EOF not found.\n"
 
+// This should skip whitespace only
+// Readline allows ' ' only
 static inline void	_skip_to_next_op(t_lex *l)
 {
 	if ('\0' == *l->ptr)
 		return ;
-	while (*l->ptr && false == on_cmd_op(l))
+	while (*l->ptr && ft_isspace(*l->ptr))
 	{
 		l->ptr++;
 		if ('\0' == *l->ptr)
@@ -62,7 +64,7 @@ static inline void	_put_eof_in_buf(t_lex *l)
 // Sets expansion flags
 int	get_eof_word(t_mem_mgr *m, t_lex *l)
 {
-	if (!l->ptr)	
+	if (!l->ptr)
 		return (ERR_ARGS);
 	if (true == is_too_long(l->ptr))
 		return (ERR_BUFFLOW);

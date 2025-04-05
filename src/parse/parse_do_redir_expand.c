@@ -16,7 +16,7 @@ static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf,
 {
 	char	*new_fn;
 
-	if (check_special_expansions(s, buf, value) < 0)		
+	if (check_special_expansions(s, buf, value) < 0)
 	{
 		if (*value)
 		{
@@ -121,7 +121,7 @@ static int	_p_do_heredoc_expansion(t_state *s, t_redir_data *r)
  * The string to expand must be more than LEXERKEEP$ char (for '$').
  * Handles heredocs.
  */
-static int	_p_do_red_expansion(t_state *s, void *r)
+int	p_do_red_expansion(t_state *s, void *r)
 {
 	char				*value;
 	const t_redir_data	*r_data = (t_redir_data *)r;
@@ -147,41 +147,6 @@ static int	_p_do_red_expansion(t_state *s, void *r)
 		if (0 != res)
 			return (res);
 		debug_print(DEBUGMSG_DOEXP_RES, value);
-	}
-	return (0);
-}
-
-/* Modifies redirection list in case of expansions.
- * (No need to free orig_fn, command cleanup will get it)
- */
-int	p_do_redir_processing(t_state *s, t_ast_node *a)
-{
-	t_list	*redirs;
-	char	*orig_filen;
-	int		res;
-
-	if (a->type != AST_NODE_CMD)
-		return (ERR_ARGS);
-	res = 0;
-	orig_filen = NULL;
-	redirs = p_get_redirs(a);
-	if (redirs)
-	{
-		debug_print(DEBUGMSG_REDIRP_ANNOUNCE);
-		debug_print(DBGMSG_REDIRP_GOT, a->data.cmd.do_redir_globbing,
-			a->data.cmd.do_redir_expansion);
-		if (true == a->data.cmd.do_redir_expansion)
-			res = lstiter_state(s, redirs, _p_do_red_expansion);
-		if (0 != res)
-			return (res);
-		if (true == a->data.cmd.do_redir_globbing)
-			orig_filen = ft_lstiterstr_mem(get_mem(s), redirs,
-					p_do_globbing_redirs);
-		if (NULL != orig_filen)
-		{
-			print_ambiguous_redirect(((t_redir_data *)orig_filen)->filename);
-			return (ERR_AMBIGUOUS_REDIR);
-		}
 	}
 	return (0);
 }

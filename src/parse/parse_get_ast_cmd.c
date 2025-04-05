@@ -34,7 +34,7 @@ bool	p_get_grouptok(t_ast_node *a)
 {
 	if (p_get_type(a) != AST_NODE_CMD)
 		return (NULL);
-	return (a->data.cmd.has_grouptoks);
+	return (a->data.cmd.has_arggrouptoks);
 }
 
 int	p_get_redc(t_ast_node *a)

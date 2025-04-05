@@ -52,12 +52,17 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 	}
 	tok_fname = advance(p);
 	debug_print(DBGMSG_REDIR_FN, tok_get_raw(tok_fname));
-	if (!(is_filename_token((t_tok *)tok_fname) //TODO: WIP: ensure these detect grp toks eg. ''k
-			|| is_expansion((t_tok *)tok_fname))
-			|| 0 == ft_strcmp(tok_get_raw(tok_fname), ""))
+	if (!(is_filename_token((t_tok *)tok_fname) || is_expansion((t_tok *)tok_fname)) || 0 == ft_strcmp(tok_get_raw(tok_fname), ""))
 	{
 		print_redir_error(p->global_state, tok_get_raw((p->curr_tok)->prev->prev->content), tok_get_pos((p->curr_tok)->prev->prev->content));
 		return (err(EMSG_REDIR_FN_INVALID), ERR_SYNTAX);
+	}
+	if (is_group_token(tok_fname))
+	{
+		red->is_groupred = true;
+		n->data.cmd.has_redgrouptoks = true;
+		red->lst_tokens = ft_lstcopy_tmp(get_mem(p->global_state), tok_get_tlist(tok), copy_token,
+				destroy_token);
 	}
 	red->do_globbing = tok_get_globbing((t_tok *)tok_fname);
 	red->do_expansion = tok_get_expansion((t_tok *)tok_fname);
@@ -74,7 +79,7 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
  * Returns ERR_MEM if malloc fails.
  * Freeing handled by caller.
  */
-static int	_process_heredoc_redir(t_parser *p, t_tok *tok, t_redir_data *red, 
+static int	_process_heredoc_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 		t_ast_node *cmd)
 {
 	if (!red || !tok || !cmd)
@@ -107,7 +112,7 @@ static int	_parse_redir(t_parser *p, t_ast_node *node)
 	while (!is_at_end(p) && is_redir_token(peek(p)))
 	{
 		tok = advance(p);
-		red = init_redir(p->mmgr, node, tok_get_type((t_tok *)tok));
+		red = init_redir(p->mmgr, p, node, tok_get_type(tok));
 		if (false == is_heredoc_token((t_tok *)tok))
 		{
 			if (0 != _process_normal_redir(p, tok, red, node))
