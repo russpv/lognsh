@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex_dquote.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:50:24 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 20:50:39 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lex_int.h"
 
 /* Returns true if closing quote found at l->ptr 
@@ -81,8 +93,6 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 			put_on_buf(lexer);
 		}
 		lexer->input_incomplete = true;
-		//if (0 == ft_strlen(lexer->buf))
-		//	return (NULL);
 		if (false == is_normal_delim(lexer, 0))
 			lexer->is_subtoken = true;
 		token = lex_create_token(get_mem(s), lexer, TOK_WORD);

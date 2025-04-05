@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex_normal_ht.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:51:09 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 20:53:14 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lex_int.h"
 
 /* True if s is in the set of tokens that do not need to be delimited */
@@ -21,7 +33,7 @@ static inline bool	_is_not_delimd(const char *s)
 t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 {
 	struct s_ht_entry	*res;
-	void *elem;
+	void				*elem;
 
 	if (ft_strnlen(lexer->buf, LEX_BUFSZ) == 0)
 		return (NULL);
@@ -38,7 +50,8 @@ t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 			debug_print(_MOD_ ": Creating token...\n");
 			elem = ht_get_payload(res);
 			if (elem)
-				return (lex_create_token(get_mem(s), lexer,((t_ht_data)elem)->type));
+				return (lex_create_token(get_mem(s), \
+					lexer, ((t_ht_data)elem)->type));
 		}
 	}
 	return (NULL);
@@ -67,7 +80,6 @@ struct s_ht_entry	*do_one_char_lookahead(t_lex *lexer, struct s_ht_entry *res)
 	{
 		if (true == is_normal_delim(lexer, 0) || _is_not_delimd(lexer->buf))
 		{
-			debug_print(_MOD_ ": ------ %s found:_%s_\n", __FUNCTION__, lexer->buf);
 			lexer->ptr++;
 			return (test);
 		}

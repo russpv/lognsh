@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex_build_ht.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:50:12 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 11:50:13 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lex_int.h"
 
 static inline int	_insert_builtins(t_mem_mgr *m, t_ht ht)
 {
-	int	i;
-
-	const char *cmd[] = {
+	int			i;
+	const char	*cmd[] = {
 		BI_ECHO,
 		BI_CD,
 		BI_PWD,
@@ -14,6 +25,7 @@ static inline int	_insert_builtins(t_mem_mgr *m, t_ht ht)
 		BI_EXIT,
 		BI_EXEC,
 	};
+
 	i = -1;
 	while (++i < BI_COUNT)
 		if (!ht_install(m, ht, (char *)cmd[i], lex_create_ht_node(m, false,

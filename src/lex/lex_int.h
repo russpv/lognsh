@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex_int.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:51:03 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 20:52:29 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lex.h"
 
 #define _MOD_ "Lexer"
@@ -32,11 +44,14 @@ These are the conditions for tokenizing subtokens
 Delimited by normal delims
 
 Any of the states must stop on the tokenizing delimiters
-All state transitions otherwise signify subtokens unless tokenizing delimiter also follows.
+All state transitions otherwise signify subtokens 
+unless tokenizing delimiter also follows.
 So we can end on quotation marks,
 	and if we were part of a subtoken streak we would have to
-check if characters other than any of these delimiter patterns is present after the transition
-chars. That must be done each call to lex_create_token. Might as well encapsulate in that func.
+check if characters other than any of these delimiter patterns 
+is present after the transition
+chars. That must be done each call to lex_create_token. 
+Might as well encapsulate in that func.
 
 */
 
@@ -188,7 +203,7 @@ typedef struct s_lex
 	int						do_globbing;
 	int						do_heredoc;
 	int						do_heredoc_expansion;
-	bool					do_wordsplit; 
+	bool					do_wordsplit;
 	bool					is_subtoken;
 
 	char					*eof_word;
@@ -214,7 +229,6 @@ typedef struct s_ht_data	*t_ht_data;
 
 /* Forwards */
 extern int					exec_heredoc(t_mem_mgr *m, t_lex *l);
-
 
 t_lex						*create_lexer(t_state *state, int start_state,
 								const char *s);
@@ -270,3 +284,10 @@ bool						is_varnamechar(unsigned char c);
 int							put_on_buf(t_lex *l);
 unsigned char				is_valid_next(t_lex *l, int offset);
 unsigned char				is_valid_prev(t_lex *l, int offset);
+size_t						write_heredoc(int fd, t_lex *l);
+
+bool						_handle_eof_state(t_lex *lexer);
+bool						_handle_quote_state(t_lex *lexer);
+bool						_handle_null_state(t_lex *lexer);
+bool						_handle_heredoc_state(t_lex *lexer);
+bool						_handle_dollar_state(t_lex *lexer);

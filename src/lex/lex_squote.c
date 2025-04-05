@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex_squote.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:51:34 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 20:54:27 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lex_int.h"
 
 /* Loads a char into buf.
@@ -18,8 +30,7 @@ static inline int	_load_buf(t_lex *lexer)
 		if (lexer->buf_idx < LEX_BUFSZ - 1)
 		{
 			if ((unsigned char)OP_NULL == *lexer->ptr)
-				return (debug_print(_MOD_ ": found null before closing quote\n"),
-					1);
+				return (1);
 			lexer->buf[(lexer->buf_idx)] = *lexer->ptr;
 			(lexer->buf_idx)++;
 		}
@@ -49,8 +60,6 @@ int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 		debug_print(_MOD_ ": WARNING: FOUND NULL\n");
 		lexer->input_incomplete = true;
 	}
-	//if (0 == ft_strlen(lexer->buf))
-	//	return (0);
 	if (false == is_normal_delim(lexer, 0))
 		lexer->is_subtoken = true;
 	token = lex_create_token(get_mem(s), lexer, TOK_WORD);

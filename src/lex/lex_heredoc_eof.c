@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex_heredoc_eof.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:50:41 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 20:51:33 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lex_int.h"
 
-#define EMSG_NOEOF _MOD_ ": ERROR: heredoc EOF not found.\n"
+#define EMSG_NOEOF "Exec: ERROR: heredoc EOF not found.\n"
 
 static inline void	_skip_to_next_op(t_lex *l)
 {
@@ -29,7 +41,8 @@ static inline bool	_is_hdoc_eof_char(unsigned char c)
 }
 
 // Determines type of EOF, quoted or not
-// Cannot be an expansion. If any part of the word is quoted, sets processing type.
+// Cannot be an expansion. 
+//If any part of the word is quoted, sets processing type.
 static inline void	_put_eof_in_buf(t_lex *l)
 {
 	while (*l->ptr && *l->ptr != '\n' && !ft_isspace(*l->ptr) \
@@ -53,7 +66,7 @@ static inline void	_put_eof_in_buf(t_lex *l)
 // Sets expansion flags
 int	get_eof_word(t_mem_mgr *m, t_lex *l)
 {
-	if (!l->ptr)	
+	if (!l->ptr)
 		return (ERR_ARGS);
 	if (true == is_too_long(l->ptr))
 		return (ERR_BUFFLOW);
@@ -65,7 +78,7 @@ int	get_eof_word(t_mem_mgr *m, t_lex *l)
 	if (0 == ft_strlen(l->buf))
 	{
 		print_lex_error(l, "<<");
-		return (err(EMSG_NOEOF), ERR_SYNTAX);
+		return (write(STDERR_FILENO, EMSG_NOEOF, 36), ERR_SYNTAX);
 	}
 	l->eof_word = ft_strdup_tmp(m, l->buf);
 	if (!l->eof_word)

@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lex_utils_delim_bools.c                            :+:      :+:    :+:   */
+/*   lex_utils_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/05 11:51:49 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/05 11:51:50 by dayeo            ###   ########.fr       */
+/*   Created: 2025/04/06 01:14:25 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/06 01:14:34 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lex_int.h"
 
-// Checks for '&&'
-bool	is_logicalop(unsigned char c, unsigned char next)
+bool	is_varnamechar(unsigned char c)
 {
-	if ('&' == c)
-	{
-		if (next)
-			if ('&' == next)
-				return (true);
-	}
-	return (false);
+	debug_print(_MOD_ ": %s: (%c)\n", __FUNCTION__, c);
+	return (ft_isalnum((int)c) || '_' == c);
+}
+
+// Checks for any special substition char
+bool	is_specialchar(unsigned char c)
+{
+	debug_print(_MOD_ ": %s: (%c)\n", __FUNCTION__, c);
+	return ('?' == c);
 }

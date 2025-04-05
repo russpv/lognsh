@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test_lexer_EXC.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:52:42 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 11:53:14 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include "lex.h"
-
-int main(void)
+/*
+int	main(void)
 {
-
     const char *inputs[] = {
     // Existing Test Cases
     "(echo \"Hello, world\" > file.txt) && cat file.txt",
@@ -21,7 +32,8 @@ int main(void)
     "echo \"Hello, World!\" # This is a comment",
     "echo \"Hello\" && ls -la || cat file.txt",
     "grep \"Hello\" | awk '{count++} END {print count}' > output.txt",
-    "if [ -f file.txt ]; then echo \"File exists\"; else echo \"File not found\"; fi",
+    "if [ -f file.txt ]; then echo \"File exists\"; \
+    	else echo \"File not found\"; fi",
     "echo \"The current date is $(date)\"",
     "echo $HOME",
     "echo \"The path is \\\"C:\\\\Program Files\\\\\\\"\"",
@@ -57,4 +69,4 @@ int main(void)
     }
 
     return 0;
-}
+}*/

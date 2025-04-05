@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex_utils_tok.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:52:09 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 20:56:32 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lex_int.h"
 
 static int	_add_subtoken(t_mem_mgr *m, t_lex *lexer, t_tok *subtok)
@@ -21,7 +33,6 @@ int	add_grptoken(t_mem_mgr *m, t_lex *lexer)
 /* Adds to llist tail a new token, clears buf */
 int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 {
-	debug_print(_MOD_ ": %s\n", __FUNCTION__);
 	if (token && lexer)
 	{
 		memset(lexer->buf, 0, LEX_BUFSZ);
@@ -30,18 +41,14 @@ int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 		{
 			if (lexer->last_grp_tok)
 			{
-				debug_print(_MOD_ ": %s adding subtoken %s to grp\n",
-					__FUNCTION__, tok_get_raw(token));
 				_add_subtoken(m, lexer, token);
-				debug_print(_MOD_ ": %s checking delimiter, ptr:%c\n",
-					__FUNCTION__, *lexer->ptr);
 				if (is_normal_delim(lexer, 0))
 					add_grptoken(m, lexer);
 			}
 			else
 			{
-				debug_print(_MOD_ ": %s adding token to list\n", __FUNCTION__);
-				if (ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m, token)) > 0)
+				if (ft_lstadd_back(&lexer->token_list, \
+					ft_lstnew_tmp(m, token)) > 0)
 					lexer->tokc++;
 			}
 		}
@@ -57,12 +64,53 @@ int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
  * Looks ahead for normal delim to reset subtoken flag.
  * Note: skip any terminator that is not to be part of token (\")
  */
+static void	_set_token_flags(t_lex *lexer, t_tok *token)
+{
+	if (true == lexer->is_subtoken)
+		tok_set_subtoken(token);
+	if (false == lexer->do_wordsplit)
+		tok_set_dquotes(token);
+	if (true == lexer->do_globbing)
+	{
+		tok_set_globbing(token);
+		tok_set_globbing(lexer->last_grp_tok);
+	}
+	if (true == lexer->do_expansion)
+	{
+		tok_set_expansion(token);
+		tok_set_expansion(lexer->last_grp_tok);
+	}
+	lexer->do_globbing = INITVAL;
+	lexer->do_expansion = INITVAL;
+}
+
 t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 {
 	t_tok	*token;
 	t_tok	*grp_token;
 
-	debug_print(_MOD_ ": %s\n", __FUNCTION__);
+	if (!lexer)
+		return (NULL);
+	if (true == lexer->is_subtoken && NULL == lexer->last_grp_tok)
+	{
+		grp_token = create_token(m, lexer->buf, TOK_GROUP_WORD,
+				(size_t)(lexer->ptr - lexer->raw_string));
+		if (!grp_token)
+			return (write(STDERR_FILENO, EMSG_MALLOC, 8), NULL);
+		lexer->last_grp_tok = grp_token;
+	}
+	token = create_token(m, lexer->buf, type, (size_t)(lexer->ptr
+				- lexer->raw_string));
+	if (token)
+		_set_token_flags(lexer, token);
+	return (token);
+}
+/*
+t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
+{
+	t_tok	*token;
+	t_tok	*grp_token;
+
 	if (!lexer)
 		return (NULL);
 	if (true == lexer->is_subtoken && NULL == lexer->last_grp_tok)
@@ -72,7 +120,6 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 		if (!grp_token)
 			return (err(EMSG_MALLOC), NULL);
 		lexer->last_grp_tok = grp_token;
-		debug_print(_MOD_ ": %s: Created GROUP token\n", __FUNCTION__);
 	}
 	token = create_token(m, lexer->buf, type, (size_t)(lexer->ptr
 				- lexer->raw_string));
@@ -94,7 +141,6 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 		}
 		lexer->do_globbing = INITVAL;
 		lexer->do_expansion = INITVAL;
-		debug_print(_MOD_ ": %s: Created token \n", __FUNCTION__);
 	}
 	return (token);
-}
+}*/
