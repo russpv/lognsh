@@ -34,6 +34,7 @@ t_mem_block	*get_mem_block_from_node(t_mem_node *node_ptr);
 int			mem_insert_block(t_mem_node *head, t_mem_block *new);
 int			mem_add_mem(t_mem_node *head, void *alloc, size_t size);
 t_mem_block	*mem_get_alloc(t_mem_node *head, void *alloc);
+void		dealloc_str(t_state *s, char *str_to_free);
 
 extern void	exit_clean(t_mem_node *head, int exit_status, const char *caller,
 				const char *errmsg);
