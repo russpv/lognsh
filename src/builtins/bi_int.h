@@ -28,7 +28,6 @@ int		bi_cd(t_state *s, char **args, int argc);
 int		bi_exit(t_state *s, char **args, int argc);
 int		bi_exec(t_state *s, char **args, int argc);
 
-// export helper functions (bi_export_do 1 & 2)
 int		process_arg_update_add(t_state *s, const char *arg, char *equal_pos,
 			int *error_occurred);
 int		parse_arg(t_state *s, const char *arg, int *error_occurred);

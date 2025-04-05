@@ -51,7 +51,7 @@ If the command was not begun asynchronously,
 	the shell waits for the command to complete and collects its exit status.
 */
 
-enum							e_exec_context
+enum								e_exec_context
 {
 	CTXT_PROC,
 	CTXT_CMD,
@@ -59,26 +59,26 @@ enum							e_exec_context
 	CTXT_LOG,
 };
 
-typedef struct s_cmd			t_cmd;
-typedef struct s_global_state	t_state;
-typedef struct s_node			t_ast_node;
+typedef struct s_cmd				t_cmd;
+typedef struct s_global_state		t_state;
+typedef struct s_node				t_ast_node;
 
-typedef struct s_command_functions t_cmd_fns;
+typedef struct s_command_functions	t_cmd_fns;
 
-t_cmd_fns	*init_cmd_fns(t_state *s);
+t_cmd_fns							*init_cmd_fns(t_state *s);
 
-char							*c_get_fullpath(t_cmd *c);
-char							**c_get_argv(t_cmd *c);
-t_int_stack						*c_get_ctxtst(t_cmd *c);
-t_ast_node						*c_get_node(t_cmd *c);
-int								c_get_cmdc(const t_cmd *c);
-int								c_get_argvc(const t_cmd *c);
+char								*c_get_fullpath(t_cmd *c);
+char								**c_get_argv(t_cmd *c);
+t_int_stack							*c_get_ctxtst(t_cmd *c);
+t_ast_node							*c_get_node(t_cmd *c);
+int									c_get_cmdc(const t_cmd *c);
+int									c_get_argvc(const t_cmd *c);
 
-const int						**c_get_fildes(const t_cmd *c);
+const int							**c_get_fildes(const t_cmd *c);
 
-int								cmd_execute(t_state *s, t_ast_node *a);
+int									cmd_execute(t_state *s, t_ast_node *a);
 
-int								save_redirs(t_cmd *c);
-int								restore_redirs(t_cmd *c);
+int									save_redirs(t_cmd *c);
+int									restore_redirs(t_cmd *c);
 
 #endif

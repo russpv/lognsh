@@ -28,7 +28,6 @@
 ** including environment, execution state.
 */
 
-struct s_global_state;
 typedef struct s_global_state	t_state;
 
 typedef void					(*t_destroy_fn)(t_mem_mgr *m, void **instance);

@@ -27,11 +27,12 @@
 # define BI_EXIT "exit"
 # define BI_EXEC "exec"
 # define BI_COUNT 8
-/* Forwards */
-typedef struct s_global_state		t_state;
-typedef int							(*t_builtin_fn)(t_state *s, \
-				char **args, int argc);
 
-t_builtin_fn	get_builtin(char *command);
+/* Forwards */
+typedef struct s_global_state	t_state;
+typedef int						(*t_builtin_fn)(t_state *s, char **args,
+							int argc);
+
+t_builtin_fn					get_builtin(char *command);
 
 #endif

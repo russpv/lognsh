@@ -7,9 +7,6 @@
 # include "../lex/lex.h"
 # include "../state/state.h"
 # include "../token/token.h"
-
-//# include "../utils/log.h"
-
 # include <dirent.h>
 # include <sys/types.h>
 
@@ -88,24 +85,5 @@ bool							is_globbing(t_tok *tok);
 
 void							print_ast(t_ast_node *ast, int depth);
 void							debug_print_list(t_list *head);
-
-/*  Expansions */
-// tilde ~ ?
-// $VAR
-// $(...) ?
-
-/* Globbing */
-// * wildcard only
-// OR defer till execution if commands create files
-
-/* delimiter handling */
-// single vs double quotes
-// Parentheses
-// preserve literal strings
-
-/* Error handling */
-// Undefined variables cannot be expanded
-// Invalid globbing pattern
-// Unmatched quotation marks? >> Says throw ERR.
 
 #endif

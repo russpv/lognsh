@@ -15,9 +15,9 @@
 # define TK_ESC '\\'
 
 # define OP_EQUALS '='
-# define OP_HASH '#' // skip everything till newline
+# define OP_HASH '#' 
 # define OP_ANDIF "&&"
-# define OP_FD_REF '&' // redirection
+# define OP_FD_REF '&' 
 # define OP_ORIF "||"
 # define OP_REDOUT '>'
 # define OP_REDIN '<'
@@ -31,12 +31,12 @@
 # define OP_OPTION '-'
 # define OP_OPENP '('
 # define OP_CLOSEDP ')'
-# define OP_DQUOTE \
-	'\"'                   // backslash retained if followed by [$`"\\n],
-							//" requires \ inside ""
-# define OP_DLESSDASH "<<-" // heredoc with opt tab trimming (not implemented)
-# define OP_CLOBBER ">|"    // force overwrite (not implemented)
-# define OP_BACKTICK '`'    //(not implemented)
+# define OP_DQUOTE '\"'
+
+//(not implemented)
+# define OP_DLESSDASH "<<-"
+# define OP_CLOBBER ">|"    
+# define OP_BACKTICK '`'
 
 /* Reserved words */
 # define WD_IF "if"
@@ -54,15 +54,15 @@
 
 enum					e_tok_type
 {
-	TOK_WORD, // command names, built-ins
-				// In the shell command language, a token other than
-				// an operator. In some cases a word is also a portion
-				// of a word token: in the various forms of parameter
-				// expansion, such as ${name-word}, and variable
-				// assignment, such as name=word, the word is the
-				// portion of the token depicted by word. The concept
-				// of a word is no longer applicable following word
-				// expansions-only fields remain.
+	TOK_WORD,       // command names, built-ins
+					// In the shell command language, a token other than
+					// an operator. In some cases a word is also a portion
+					// of a word token: in the various forms of parameter
+					// expansion, such as ${name-word}, and variable
+					// assignment, such as name=word, the word is the
+					// portion of the token depicted by word. The concept
+					// of a word is no longer applicable following word
+					// expansions-only fields remain.
 	TOK_GROUP_WORD, // for metas
 	TOK_NAME,
 	// In the shell command language, a word consisting
@@ -110,7 +110,7 @@ typedef struct s_tok	t_tok;
 t_tok					*create_token(t_mem_mgr *st, const char *s, int type,
 							size_t pos);
 void					*create_tmp_token(t_mem_mgr *mgr, const void *s);
-void	*create_split_token(t_mem_mgr *mgr, const void *s);
+void					*create_split_token(t_mem_mgr *mgr, const void *s);
 void					*copy_token(t_mem_mgr *st, const void *tok);
 void					destroy_token(t_mem_mgr *mgr, void **token);
 
@@ -142,6 +142,7 @@ int						tok_do_expansion(t_state *s, void *c);
 int						tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node,
 							void *c);
 t_list					*split_word(t_mem_mgr *mgr, const char *word);
-int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst, \
-	void *(*createf)(t_mem_mgr *, const void *));
+int						do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos,
+							t_list **ins_lst, void *(*createf)(t_mem_mgr *,
+								const void *));
 #endif

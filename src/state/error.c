@@ -1,7 +1,5 @@
 #include "error.h"
 
-
-
 void	print_bufflow(void)
 {
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));

@@ -41,8 +41,6 @@ struct							s_global_state
 	t_parse_fns					*parse_fns;
 };
 
-typedef struct s_global_state	t_state;
-
 void	init_env_vars(t_state *s);
 
 #endif

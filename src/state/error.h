@@ -4,12 +4,12 @@
 # include "../globals/globals.h"
 # include <errno.h>
 # include <signal.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <unistd.h>
-# include <stdbool.h>
 
 # define MAX_RAW_INPUT_LEN 2056
-# define MAX_ENVVAR_LEN 1024 // length of variable names
+# define MAX_ENVVAR_LEN 1024
 
 # define EXIT_NULLCMD 0
 # define EX_HAPPY 0
@@ -49,33 +49,33 @@
 # define ERR_RL_ABORTED -2
 # define ERR_CMD_GOTSIG -1
 
-# define EMSG_MALLOC SHELL_NAME ": malloc"
-# define EMSG_PIPE SHELL_NAME ": pipe"
-# define EMSG_FORK SHELL_NAME ": fork"
-# define EMSG_EXECVE SHELL_NAME ": execve"
-# define EMSG_SIGACTION SHELL_NAME ": sigaction"
-# define EMSG_ACCESS SHELL_NAME ": "
-# define EMSG_OPEN SHELL_NAME ": open"
-# define EMSG_CLOSE SHELL_NAME ": close"
-# define EMSG_WAIT SHELL_NAME ": wait"
-# define EMSG_WAITPID SHELL_NAME ": waitpid"
-# define EMSG_GETCWD SHELL_NAME ": getcwd"
-# define EMSG_CHDIR SHELL_NAME ": chdir"
-# define EMSG_STAT SHELL_NAME ": stat"
-# define EMSG_LSTAT SHELL_NAME ": lstat"
-# define EMSG_FSTAT SHELL_NAME ": fstat"
-# define EMSG_DUP SHELL_NAME ": dup"
-# define EMSG_DUP2 SHELL_NAME ": dup2"
-# define EMSG_IOCTL SHELL_NAME ": ioctl"
-# define EMSG_TCSETATTR SHELL_NAME ": tcsetattr"
-# define EMSG_TCGETATTR SHELL_NAME ": tcgetattr"
+# define EMSG_MALLOC "malloc"
+# define EMSG_PIPE "pipe"
+# define EMSG_FORK "fork"
+# define EMSG_EXECVE "execve"
+# define EMSG_SIGACTION "sigaction"
+# define EMSG_ACCESS "access"
+# define EMSG_OPEN "open"
+# define EMSG_CLOSE "close"
+# define EMSG_WAIT "wait"
+# define EMSG_WAITPID "waitpid"
+# define EMSG_GETCWD "getcwd"
+# define EMSG_CHDIR "chdir"
+# define EMSG_STAT "stat"
+# define EMSG_LSTAT "lstat"
+# define EMSG_FSTAT "fstat"
+# define EMSG_DUP "dup"
+# define EMSG_DUP2 "dup2"
+# define EMSG_IOCTL "ioctl"
+# define EMSG_TCSETATTR "tcsetattr"
+# define EMSG_TCGETATTR "tcgetattr"
 
 # define LOGMSG_SIGINT "interrupted\n"
 
 // no includes, but redefs, due to circular dependency
 typedef struct s_global_state	t_state;
 struct s_lex;
-typedef struct s_lex	t_lex;
+typedef struct s_lex			t_lex;
 
 /* specific error messages */
 void							print_command_not_found(const char *cmd);
@@ -91,29 +91,30 @@ void							print_custom_err_err(const char *dingus,
 void							print_parse_error(t_state *s, const char *word,
 									size_t pos);
 void							print_lex_error(t_lex *l, char *word);
-void							print_hdoc_error(const char *line, const char *eof);
+void							print_hdoc_error(const char *line,
+									const char *eof);
 void							print_hdoc_eof_error(t_lex *l, char *word);
-void							print_redir_error(t_state *s, const char *word, size_t pos);
-void							print_nocmd_error(t_state *s, const char *word, size_t pos);
-void							print_invalid_name(const char *caller, const char *name);
+void							print_redir_error(t_state *s, const char *word,
+									size_t pos);
+void							print_nocmd_error(t_state *s, const char *word,
+									size_t pos);
+void							print_invalid_name(const char *caller,
+									const char *name);
 
 void							print_bufflow(void);
 void							print_is_dir(char *p);
 
 bool							is_error(int v);
 
-/* To avoid circular includes: */
+/* To avoid circular includes*/
 extern void						set_error(t_state *s, int e);
 extern size_t					ft_strlen(const char *s);
-extern char	*get_input(t_state *s);
-extern char	*lex_get_ptr(t_lex *l);
-extern const char	*lex_get_raw(t_lex *l);
-extern void	ft_putstr_fd(char const *s, int fd);
-extern char	*ft_strchr(const char *s, int c_in);
-extern size_t	ft_strnlen(const char *s, size_t maxlen);
+extern char						*get_input(t_state *s);
+extern char						*lex_get_ptr(t_lex *l);
+extern const char				*lex_get_raw(t_lex *l);
+extern void						ft_putstr_fd(char const *s, int fd);
+extern char						*ft_strchr(const char *s, int c_in);
+extern size_t					ft_strnlen(const char *s, size_t maxlen);
 void							perror(const char *);
-
-
-
 
 #endif
