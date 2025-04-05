@@ -1,13 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_copy.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 09:09:51 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 09:20:32 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "token_int.h"
 
-static void _init_meta(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
+static void	_init_meta(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
 {
 	new_t->class = t->class;
 	new_t->t.meta.pos = t->t.meta.pos;
 	new_t->t.meta.tokc = t->t.meta.tokc;
 	new_t->t.meta.do_expansion = t->t.meta.do_expansion;
 	new_t->t.meta.do_globbing = t->t.meta.do_globbing;
-	new_t->t.meta.tokens = ft_lstcopy_tmp(mgr, t->t.meta.tokens, copy_token, destroy_token);
+	new_t->t.meta.tokens = ft_lstcopy_tmp(mgr, t->t.meta.tokens, \
+		copy_token, destroy_token);
 }
 
 static void	_init_norm(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
@@ -40,7 +53,7 @@ void	*copy_token(t_mem_mgr *mgr, const void *tok)
 		exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	if (GROUP == t->class)
 		_init_meta(mgr, t, new_t);
-	else 
+	else
 		_init_norm(mgr, t, new_t);
 	return (new_t);
 }
