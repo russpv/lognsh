@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_redirect.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/05 11:49:04 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/05 21:03:37 by dayeo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "execute_int.h"
 
-
 #define LOGMSG_EREDIR_DONE "\tRedirect: dup2 from %d to %d\n"
-#define DBGMSG_EREDIR_FD _MOD_ ": %s: fd:%d\n"
+//#define DBGMSG_EREDIR_FD _MOD_ ": %s: fd:%d\n"
 
 /* Does the correct open() and returns new fd
  * If input file can't be read, opens /dev/null/ to allow cmd
@@ -10,8 +21,8 @@
  */
 static inline int	_redirect_logic(char *topath, int from, bool append)
 {
-	int	fd;
-	struct stat statbuf;
+	int			fd;
+	struct stat	statbuf;
 
 	if (from == STDIN_FILENO && access(topath, R_OK) == -1)
 	{
@@ -19,10 +30,10 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 		fd = open("/dev/null", O_RDONLY);
 		errno = EACCES;
 	}
-	else if (access(topath, F_OK) == 0 && stat(topath, &statbuf) == -1) 
+	else if (access(topath, F_OK) == 0 && stat(topath, &statbuf) == -1)
 		return (print_perror("stat"), -ERR_STAT);
 	else if (S_ISDIR(statbuf.st_mode))
-        return (print_is_dir(), -ERR_REDIR);
+		return (print_is_dir(), -ERR_REDIR);
 	else if (from == STDIN_FILENO)
 		fd = open(topath, O_RDONLY | O_CREAT, 0644);
 	else if (from == STDOUT_FILENO && append)
@@ -33,7 +44,6 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 		fd = -1;
 	if (fd < 0)
 		return (perror(EMSG_OPEN), fd);
-	debug_print(DBGMSG_EREDIR_FD, __FUNCTION__, fd);
 	return (fd);
 }
 
