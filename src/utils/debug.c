@@ -90,10 +90,7 @@ bool	test_prev_integrity(t_list *lst)
 
 	current = lst;
 	if (current == NULL)
-	{
-		colored_printf(YELLOW, "List is empty.\n");
-		return (true);
-	}
+		return (colored_printf(YELLOW, "List is empty.\n"), true);
 	previous = NULL;
 	while (current != NULL)
 	{
