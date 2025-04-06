@@ -225,6 +225,13 @@ struct						s_ht_data
 	enum e_tok_type			type;
 };
 
+struct s_op_data
+{
+	char		*name;
+	int			type;
+	int			is_ref;
+};
+
 typedef struct s_ht_data	*t_ht_data;
 
 /* Forwards */
