@@ -40,17 +40,14 @@ void	ft_lstclear_str_tmp(t_mem_mgr *mgr, t_list **lst)
 
 	if (!mgr || !*lst || !lst)
 		return ;
-	debugv_print(DMSG_GOT, __FUNCTION__, (void *)lst, (void *)*lst);
 	tmp = *lst;
 	while (tmp)
 	{
-		debugv_print(DMSG_DEL, __FUNCTION__, (void *)tmp);
 		next = tmp->next;
 		ft_lstdelone_str_tmp(mgr, lst, tmp);
 		tmp = next;
 	}
 	*lst = NULL;
-	debug_print("%s: Lst deleted successfully\n", __FUNCTION__);
 }
 
 /* STRDUP

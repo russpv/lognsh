@@ -6,7 +6,7 @@
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 09:28:03 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/05 09:28:05 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/04/06 14:20:33 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	_init_node(t_mem_mgr *m, t_ht ht, struct s_ht_entry **np,
 /* Makes new entry the head for the hash bucket
  * Returns NULL if name is already present
  */
-struct s_ht_entry	*ht_install(t_mem_mgr *m, t_ht ht, char *name, void *data,
+/*struct s_ht_entry	*ht_install(t_mem_mgr *m, t_ht ht, char *name, void *data,
 		void *(*cpy_data)(t_mem_node *, void *))
 {
 	struct s_ht_entry	*np;
@@ -78,6 +78,31 @@ struct s_ht_entry	*ht_install(t_mem_mgr *m, t_ht ht, char *name, void *data,
 		{
 			m->dealloc(&m->list, np->name);
 			m->dealloc(&m->list, np);
+			return (NULL);
+		}
+	}
+	else
+		return (NULL);
+	return (np);
+}*/
+
+struct s_ht_entry	*ht_install(t_ht_install_args args)
+{
+	struct s_ht_entry	*np;
+
+	if (!args.name)
+		return (NULL);
+	assert(args.ht != NULL);
+	assert(args.name != NULL);
+	np = ht_lookup(args.ht, args.name);
+	if (!np)
+	{
+		if (-1 == _init_node(args.m, args.ht, &np, args.name))
+			return (NULL);
+		if (-1 == _install_data(args.m, &np, args.data, args.cpy_data))
+		{
+			args.m->dealloc(&args.m->list, np->name);
+			args.m->dealloc(&args.m->list, np);
 			return (NULL);
 		}
 	}

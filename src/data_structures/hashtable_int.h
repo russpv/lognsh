@@ -10,7 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "hashtable.h"
+#ifndef HASHTABLE_INT_H
+# define HASHTABLE_INT_H
+
+# include "hashtable.h"
 
 struct					s_ht_entry
 {
@@ -25,3 +28,5 @@ struct					s_ht
 };
 
 unsigned int			hash(const char *s);
+
+#endif
