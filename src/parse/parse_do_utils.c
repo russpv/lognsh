@@ -27,6 +27,7 @@ int	ft_lstiter_state_ins_rwd_tmp(t_state *s, t_list **lst,
 {
 	t_list	*lst_rear;
 	t_list	*tmp;
+	int res;
 
 	if (lst == NULL)
 		return (debug_print("Null arg\n", __FUNCTION__), ERR_ARGS);
@@ -37,8 +38,10 @@ int	ft_lstiter_state_ins_rwd_tmp(t_state *s, t_list **lst,
 		tmp = lst_rear->prev;
 		debugv_print(_MOD_ "%s: %p, content:%p\n", __FUNCTION__, (void *)lst_rear,
 			(void *)lst_rear->content);
-		f(s, &(lst_rear), lst_rear->content);
+		res = f(s, &(lst_rear), lst_rear->content);
 		debugv_print(_MOD_ "%s: Applied f to %p\n", __FUNCTION__, (void *)lst_rear);
+		if (0 != res)
+			return (res);
 		if (NULL == tmp)
 			*lst = lst_rear;
 		lst_rear = tmp;
@@ -77,7 +80,16 @@ int	lstiter_state_rwd_trim(t_state *s, t_list **lst, int (*test)(void *),
 	return (args_removed);
 }
 
-// Called on ist->content; requires tok to be a NORMAL tok
+// Called on lst->content for inserting combined subtokens
+// Requires tok to be a NORMAL tok
+void	*token_to_redir(t_mem_mgr *m, const void *tok)
+{
+	if (!tok)
+		return (NULL);
+	return (create_redir_data_node_deep(m, tok_get_raw((t_tok *)tok)));
+}
+
+// Called on lst->content; requires tok to be a NORMAL tok
 void	*token_to_arg(t_mem_mgr *m, const void *tok)
 {
 	if (!tok)

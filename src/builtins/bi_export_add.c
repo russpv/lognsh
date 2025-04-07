@@ -27,13 +27,13 @@ static int	_extract_key(char key[], const char *arg, char *equal_pos)
 		return (ERR_ARGS);
 	if (!equal_pos)
 	{
-		key_len = ft_strnlen(arg, MAX_RAW_INPUT_LEN);
+		key_len = ft_strnlen(arg, MAX_NAME_LEN);
 		ft_strscpy(key, arg, key_len + 1);
 	}
 	else if (*equal_pos)
 	{
 		key_len = equal_pos - arg;
-		if (key_len < MAX_ENVVAR_LEN)
+		if (key_len < MAX_NAME_LEN)
 			ft_strscpy(key, arg, key_len + 1);
 		else
 			return (E2BIG);
@@ -52,7 +52,7 @@ static void	_reset_value_ptr(char *equal_pos, const char **value_ptr)
 
 static void _update_special_state_vars(t_state *s, char *key, const char *value)
 {
-	if (0 == ft_strncmp(PATH_KEY, key, MAX_ENVVAR_LEN))
+	if (0 == ft_strncmp(PATH_KEY, key, MAX_NAME_LEN))
 		set_path(s, value);
 }
 
@@ -71,16 +71,20 @@ int	process_arg_update_add(t_state *s, const char *arg, char *equal_pos,
 		int *error_occurred)
 {
 	const char	*value;
-	char		key[MAX_ENVVAR_LEN];
+	char		key[MAX_NAME_LEN];
 	int			exit_code;
 
 	if (!s || !arg || !error_occurred || !equal_pos)
 		return (ERR_ARGS);
-	ft_memset(key, 0, MAX_ENVVAR_LEN);
-	_extract_key(key, arg, equal_pos);
-	if (0 == ft_strnlen(key, MAX_ENVVAR_LEN))
+	ft_memset(key, 0, MAX_NAME_LEN);
+	if (0 != _extract_key(key, arg, equal_pos))
+		return (ERR_ARGS);
+	if (0 == ft_strnlen(key, MAX_NAME_LEN))
 		return (ERR_ARGS);
 	_reset_value_ptr(equal_pos, &value);
+	fprintf(stderr, "got len:%ld", ft_strnlen(value, MAX_NAME_LEN));
+	if (MAX_NAME_LEN == ft_strnlen(value, MAX_NAME_LEN))
+		return (ERR_ARGS);
 	exit_code = env_upsert_value(get_mem(s), get_env_list(s), key, value);
 	if (0 != exit_code)
 		*error_occurred = 1;

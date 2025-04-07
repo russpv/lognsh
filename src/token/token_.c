@@ -40,10 +40,10 @@ t_tok	*create_token(t_mem_mgr *mgr, const char *s, int type, size_t pos)
 		}
 		else
 		{
-			token->t.tok.raw_len = ft_strnlen(s, 4096);
+			token->t.tok.raw_len = ft_strnlen(s, MAX_INT_BUFLEN);
 			debug_print(_MOD_": %s: %s_ typ_%d len_%ld\n", __FUNCTION__, s, type, token->t.tok.raw_len);
-			if (token->t.tok.raw_len > MAX_RAW_INPUT_LEN)
-				return (err(_MOD_": raw input buf overflow\n"), mgr->dealloc(&mgr->list, token), NULL);
+			if (token->t.tok.raw_len > MAX_NAME_LEN)
+				return (print_bufflow(), mgr->dealloc(&mgr->list, token), NULL);
 			token->t.tok.raw = ft_strdup_tmp(mgr, s);
 			if (!token->t.tok.raw)
 				exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
@@ -65,8 +65,8 @@ void	*create_tmp_token(t_mem_mgr *mgr, const void *s)
 	if (token)
 	{
 		debug_print(_MOD_": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s, TOK_WORD);
-		if (ft_strnlen(s, 4096) > MAX_RAW_INPUT_LEN)
-			return (err(_MOD_": raw input buf overflow\n"), mgr->dealloc(&mgr->list, token), NULL);
+		if (ft_strnlen(s, MAX_INPUT_SZ) > MAX_NAME_LEN)
+			return (print_bufflow(), mgr->dealloc(&mgr->list, token), NULL);
 		token->t.tok.raw = ft_strdup_tmp(mgr, s);
 		if (!token->t.tok.raw)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
@@ -76,7 +76,7 @@ void	*create_tmp_token(t_mem_mgr *mgr, const void *s)
 	return (token);
 }
 
-// Creates a dummy tokenas as result of expansion
+// Creates a dummy token as result of expansion
 // Signals combiner to combine only token list boundaries
 void	*create_split_token(t_mem_mgr *mgr, const void *s)
 {
@@ -88,8 +88,8 @@ void	*create_split_token(t_mem_mgr *mgr, const void *s)
 	if (token)
 	{
 		debug_print(_MOD_": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s, TOK_WORD);
-		if (ft_strnlen(s, 4096) > MAX_RAW_INPUT_LEN)
-			return (err(_MOD_": raw input buf overflow\n"), mgr->dealloc(&mgr->list, token), NULL);
+		if (ft_strnlen(s, MAX_INPUT_SZ) > MAX_NAME_LEN)
+			return (print_bufflow(), mgr->dealloc(&mgr->list, token), NULL);
 		token->t.tok.raw = ft_strdup_tmp(mgr, s);
 		if (!token->t.tok.raw)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);

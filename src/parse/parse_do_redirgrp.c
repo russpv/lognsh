@@ -1,6 +1,7 @@
 #include "parse_int.h"
+#include <stdio.h>
 
-// Modifies args token list
+// Modifies token list
 static int	_do_expansions(t_state *s, t_redir_data *grpred)
 {
 	int res;
@@ -41,15 +42,15 @@ static int	_do_globbing(t_state *s, t_redir_data *grpred)
 	return (0);
 }
 
-int _print_redir(void *redir)
+int _print_redir_tok(void *redir)
 {
 	t_redir_data *node;
 
 	node = (t_redir_data *)redir;
 	if (node)
 	{
-		if (node->symbol)
-			colored_printf(MAGENTA, "%s", node->symbol);
+		if (node->filename)
+			colored_printf(MAGENTA, "%s", node->filename);
 		else
 			colored_printf(MAGENTA, "(null)");
 	}
@@ -77,45 +78,57 @@ static int	_do_combine(t_state *s, t_redir_data *grpred)
 	return (0);
 }
 
-static void	_do_insert(t_state *s, t_list **this_node)
+// Can only replace/update the grp node with the combined word
+static int	_do_redir_insert(t_state *s, t_list **this_node)
 {
 	t_list **tok_lst;
+	t_redir_data *r;
 
 	tok_lst = get_tmp_tok_list(s);
-	t_list *argl = ft_lstmap_tmp(get_mem(s), *tok_lst, token_to_arg, destroy_arg);
-	ft_lstadd_insert(this_node, argl);
-	ft_lstdelone_tmp(get_mem(s), this_node, *this_node, destroy_arg);
-	ft_lstprinter(*this_node, _print_redir);
+	r = (*this_node)->content;
+	r->filename = tok_get_raw((*tok_lst)->content);
+	ft_lstprinter(*this_node, _print_redir_tok);
 	*tok_lst = NULL;
+	return (0);
 }
 
+// this_red: list of t_redir_data
 int	p_do_grpred_processing(t_state *s, t_list **this_red, void *c)
 {
 	t_redir_data	*grpred;
 	int			res;
+	size_t		orig_pos;
 
 	grpred = (t_redir_data *)c;
+	fprintf(stderr, "c:%p grpred:%d lst-tok:%p \n", c, grpred->is_groupred, grpred->lst_tokens);
 	if (NULL == c || false == grpred->is_groupred || NULL == grpred->lst_tokens)
 		return (0);
+	fprintf(stderr, "haha\n");
 	debug_print(_MOD_ ": %s: got list: %p exp:%d glob:%d\n", __FUNCTION__,\
 		grpred->lst_tokens, grpred->do_expansion, grpred->do_globbing);
+	// TODO save the pos of the last subtoken on list
+	orig_pos = tok_get_pos(ft_lstlast(grpred->lst_tokens)->content);
 	res = _do_expansions(s, grpred);
 	if (0 != res)
 		return res;
-	log_print("Expansions Done.\n");
+	log_print("Redir expansions done; lstsz:%d.\n", ft_lstsize(grpred->lst_tokens));
 	res = _do_wordsplits(s, grpred);
 	if (0 != res)
 		return res;
-	log_print("Wordsplits Done.\n");
+	log_print("Redir wordsplits done; lstsz:%d.\n", ft_lstsize(grpred->lst_tokens));
 	res = _do_combine(s, grpred);
 	if (0 != res)
 		return res;
-	log_print("Combines and Inserts Done.\n");
+	log_print("Redir combines done; lstsz:%d.\n", ft_lstsize(*get_tmp_tok_list(s)));
 	res = _do_globbing(s, grpred);
 	if (0 != res)
 		return res;
-	_do_insert(s, this_red);
-	log_print("Globbing Done.\n");
+	if (ft_lstsize(*get_tmp_tok_list(s)) > 1)
+		return(print_parse_redir_error(s, orig_pos), ERR_REDIR);
+	log_print("Redir globbing done.\n");
+	/* At this point, we have only one filename target to combine/replace the grp */
+	res = _do_redir_insert(s, this_red);
+	log_print("Redir inserts done.\n");
 	debug_print("%s: returning lst_size: %d, %p\n", __FUNCTION__, ft_lstsize(*this_red), *this_red);
 	return (res);
 }

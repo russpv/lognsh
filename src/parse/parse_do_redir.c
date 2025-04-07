@@ -85,21 +85,26 @@ int	p_do_redir_processing(t_state *s, t_ast_node *a)
 		debug_print(DBGMSG_REDIRP_GOT, a->data.cmd.do_redir_globbing,
 			a->data.cmd.do_redir_expansion);
 		if (true == a->data.cmd.has_redgrouptoks)
-			{
-				fprintf(stderr, "doing group toks\n");
-			res = ft_lstiter_state_ins_rwd_tmp(s, redirs, p_do_grparg_processing);
-			}
-		if (true == a->data.cmd.do_redir_expansion)
-			res = lstiter_state(s, *redirs, p_do_red_expansion);
-		if (0 != res)
-			return (res);
-		if (true == a->data.cmd.do_redir_globbing)
-			orig_filen = ft_lstiterstr_mem(get_mem(s), *redirs,
-					p_do_globbing_redirs);
-		if (NULL != orig_filen)
 		{
-			print_ambiguous_redirect(((t_redir_data *)orig_filen)->filename);
-			return (ERR_AMBIGUOUS_REDIR);
+			fprintf(stderr, "doing group toks\n");
+			res = ft_lstiter_state_ins_rwd_tmp(s, redirs, p_do_grpred_processing);
+			if (0 != res)
+				return (res);
+		}
+		else
+		{
+			if (true == a->data.cmd.do_redir_expansion)
+				res = lstiter_state(s, *redirs, p_do_red_expansion);
+			if (0 != res)
+				return (res);
+			if (true == a->data.cmd.do_redir_globbing)
+				orig_filen = ft_lstiterstr_mem(get_mem(s), *redirs,
+						p_do_globbing_redirs);
+			if (NULL != orig_filen)
+			{
+				print_ambiguous_redirect(((t_redir_data *)orig_filen)->filename);
+				return (ERR_AMBIGUOUS_REDIR);
+			}
 		}
 		debug_print("%s: %s: done.\n", _MOD_, __FUNCTION__);
 	}

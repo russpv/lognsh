@@ -8,9 +8,6 @@
 # include <stdio.h>
 # include <unistd.h>
 
-# define MAX_RAW_INPUT_LEN 2056
-# define MAX_ENVVAR_LEN 1024
-
 # define EXIT_NULLCMD 0
 # define EX_HAPPY 0
 # define EX_ERNDM 1
@@ -100,6 +97,7 @@ void							print_nocmd_error(t_state *s, const char *word,
 									size_t pos);
 void							print_invalid_name(const char *caller,
 									const char *name);
+void	print_parse_redir_error(t_state *s, size_t pos);
 
 void							print_bufflow(void);
 void							print_is_dir(char *p);

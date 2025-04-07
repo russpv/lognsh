@@ -26,7 +26,6 @@ static void	_init_norm(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
 }
 
 // Called by parser to deep copy tokens and keep free routines separate
-// Only copies raw string and class.
 void	*copy_token(t_mem_mgr *mgr, const void *tok)
 {
 	t_tok	*t;
@@ -40,7 +39,8 @@ void	*copy_token(t_mem_mgr *mgr, const void *tok)
 		exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	if (GROUP == t->class)
 		_init_meta(mgr, t, new_t);
-	else 
+	else
 		_init_norm(mgr, t, new_t);
+	debug_print(_MOD_ ": %s: Copied token _%s_ @ _%ld_\n", __FUNCTION__, tok_get_raw(new_t), tok_get_pos(new_t));
 	return (new_t);
 }

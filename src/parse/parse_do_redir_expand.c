@@ -40,12 +40,20 @@ static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf,
 	return (0);
 }
 
+//TODO HARDEN THIS
+static int mymax(int one, int two)
+{
+	if (one > two)
+		return (one);
+	return (two);
+}
+
 // Checks envp for key buf, wipes key, inserts value
 static int	_insert_expanded_var(t_state *s, char *buf, char **ptr,
 		t_redir_data *r)
 {
 	char	*new_val;
-	char	new_body[MAX_RAW_INPUT_LEN + 1];
+	char	new_body[MAX_INPUT_SZ];
 	size_t	offset;
 	int		res;
 
@@ -56,13 +64,15 @@ static int	_insert_expanded_var(t_state *s, char *buf, char **ptr,
 		return (res);
 	if (res == 0)
 		new_val = get_env_val(s, buf);
+	if (ft_strnlen(new_val, MAX_INPUT_SZ) > INPUT_BUF_SZ)
+		return (ERR_BUFFLOW);
 	offset = *ptr - r->heredoc_body;
-	if (ft_strlen(r->heredoc_body) + ft_strlen(new_val) > MAX_RAW_INPUT_LEN)
+	if (ft_strnlen(r->heredoc_body, INPUT_BUF_SZ) + ft_strlen(new_val) + 1 > MAX_INPUT_SZ)
 		return (print_bufflow(), ERR_BUFFLOW);
 	ft_strlcpy(new_body, r->heredoc_body, offset);
 	offset += ft_strlen(new_val);
-	ft_strlcat(new_body, new_val, MAX_RAW_INPUT_LEN - offset);
-	ft_strlcat(new_body, *ptr + ft_strlen(buf), MAX_RAW_INPUT_LEN - offset
+	ft_strlcat(new_body, new_val, MAX_INPUT_SZ - offset);
+	ft_strlcat(new_body, *ptr + ft_strlen(buf), MAX_INPUT_SZ - offset
 		- ft_strlen(*ptr + ft_strlen(buf)));
 	get_mem(s)->dealloc(&get_mem(s)->list, r->heredoc_body);
 	r->heredoc_body = ft_strdup_tmp(get_mem(s), new_body);
@@ -75,7 +85,7 @@ static int	_insert_expanded_var(t_state *s, char *buf, char **ptr,
 static int	_p_do_heredoc_expansion(t_state *s, t_redir_data *r)
 {
 	char	*ptr;
-	char	buf[MAX_ENVVAR_LEN];
+	char	buf[MAX_NAME_LEN];
 	int		len;
 
 	ft_memset(buf, 0, sizeof(buf));
@@ -126,7 +136,7 @@ int	p_do_red_expansion(t_state *s, void *r)
 	char				*value;
 	const t_redir_data	*r_data = (t_redir_data *)r;
 	int					res;
-	char				buf[MAX_ENVVAR_LEN];
+	char				buf[MAX_NAME_LEN];
 	size_t				fn_len;
 
 	res = 0;
@@ -135,7 +145,7 @@ int	p_do_red_expansion(t_state *s, void *r)
 		return (ERR_ARGS);
 	if (NULL == r_data->filename)
 		return (_p_do_heredoc_expansion(s, (t_redir_data *)r));
-	fn_len = ft_strnlen(r_data->filename, MAX_ENVVAR_LEN);
+	fn_len = ft_strnlen(r_data->filename, MAX_NAME_LEN);
 	ft_memset(buf, 0, sizeof(buf));
 	debug_print(DEBUGMSG_DOEXP_ANNOUNCE, r_data->filename);
 	if (r_data->do_expansion)

@@ -22,6 +22,7 @@ int	exec_heredoc(t_state *s, t_lex *l)
 		if (SIGINT != g_last_signal && ERR_RL_ABORTED == res)
 		{
 			print_hdoc_error(ft_itoa_mem(&get_mem(s)->list, get_mem(s)->f, 1 + (get_lex_fns(s))->lex_get_lines(l)), (get_lex_fns(s))->lex_get_eof(l));
+			close(STDIN_FILENO);
 			exit_code = ERR_RL_ABORTED;
 		}
 		else if (SIGINT == g_last_signal && ERR_RL_ABORTED == res)

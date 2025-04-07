@@ -16,6 +16,7 @@
 # include "bi.h"
 
 # define _MOD_ "Bi"
+
 # define EMSG_OPT "No options provided. Sorry!"
 # define EMSG_ARGC "No args for you! (Not implemented)"
 

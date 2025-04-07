@@ -8,7 +8,7 @@ char	*_skip_delims_post(char const *s, char const *ref)
 
 	if (!s)
 		return (NULL);
-	len = ft_strnlen((char *)s, MAX_ENVVAR_LEN);
+	len = ft_strnlen((char *)s, MAX_NAME_LEN);
 	if (len < 2)
 		return (NULL);
 	end = (char *)s + len - 1;
@@ -165,7 +165,7 @@ int	do_tok_inserts(t_mem_mgr *mgr, t_list **lst_pos, t_list **ins_lst, \
 
 #define DBGMSG_MATCHES _MOD_ ": %s split %d words, 1st: %s\n"
 
-// Takes list of tokens (lst_pos) and inserts list of split tokens 
+// Takes list of tokens (lst_pos) and inserts list of split tokens
 // at lst_pos node
 int	tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_pos, void *lst_c)
 {

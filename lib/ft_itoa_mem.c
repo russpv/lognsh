@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/libft.h"
+#define MAX_DIGITS 100
 
 /* ITOA
 ** Returns new C-string representing n value
@@ -47,10 +48,10 @@ char	*ft_itoa_mem(t_mem_node *head, t_alloc_fn f, int num)
 
 	ft_memset(&c, '\0', 15);
 	s = load_str(c + 13, num);
-	dest = f(head, sizeof(char) * (ft_strlen(s) + 1));
+	dest = f(head, sizeof(char) * (ft_strnlen(s, MAX_DIGITS) + 1));
 	if (!dest)
 		return (NULL);
-	dest[ft_strlen(s)] = 0;
-	dest = ft_memcpy(dest, s, ft_strlen(s));
+	dest[ft_strnlen(s, MAX_DIGITS)] = 0;
+	dest = ft_memcpy(dest, s, ft_strnlen(s, MAX_DIGITS));
 	return (dest);
 }

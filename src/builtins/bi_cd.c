@@ -21,8 +21,6 @@
 #define EMSG_NOHOME "HOME is not set.\n"
 #define EMSG_BADMALLOC "Memory allocation failed.\n"
 
-#define MAX_BUFSZ 1024
-
 static int	_go_up(char *pwdbuf)
 {
 	size_t	len;
@@ -35,9 +33,9 @@ static int	_go_up(char *pwdbuf)
 	len = (size_t)(marker - pwdbuf);
 	if (0 == len)
 		return (ERR_GENERAL);
-	if (len > MAX_BUFSZ - 1)
+	if (len > INPUT_BUF_SZ - 1)
 		return (ERR_BUFFLOW);
-	del_len = ft_strnlen(pwdbuf, MAX_BUFSZ) - len;
+	del_len = ft_strnlen(pwdbuf, INPUT_BUF_SZ) - len;
 	ft_memset(pwdbuf + len, 0, del_len);
 	return (0);
 }
@@ -46,9 +44,9 @@ static int	_go_up(char *pwdbuf)
 char	*make_absolute(t_state *s, const char *relpath)
 {
 	char	*pwd;
-	char	buf[MAX_BUFSZ];
+	char	buf[INPUT_BUF_SZ];
 
-	ft_memset(buf, 0, MAX_BUFSZ);
+	ft_memset(buf, 0, INPUT_BUF_SZ);
 	pwd = get_env_val(s, PWD_KEY);
 	ft_memmove(buf, pwd, ft_strlen(pwd));
 	while (*relpath && 0 == ft_strncmp(relpath, "..", 2))
@@ -59,7 +57,7 @@ char	*make_absolute(t_state *s, const char *relpath)
 		if (0 == ft_strncmp(relpath, "/", 1))
 			relpath++;
 	}
-	buf[ft_strnlen(buf, MAX_BUFSZ)] = '/';
+	buf[ft_strnlen(buf, INPUT_BUF_SZ)] = '/';
 	return (ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, buf, relpath));
 }
 
@@ -93,7 +91,7 @@ static int	_change_dir(t_state *s, const char *target)
 }
 
 /* Change the current directory to DIR.  The default DIR is the value of the
- * HOME shell variable. If DIR is "-", it is converted to $OLDPWD. 
+ * HOME shell variable. If DIR is "-", it is converted to $OLDPWD.
  * Note: return value becomes exit code.
  */
 int	bi_cd(t_state *s, char **args, int argc)

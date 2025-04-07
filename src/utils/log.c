@@ -6,7 +6,6 @@ void	log_command_info(t_cmd *c, t_ast_node *a)
 {
 	int	i;
 
-	i = -1;
 	if (LOGGING)
 	{
 		if (p_get_cmd(a))
@@ -14,6 +13,7 @@ void	log_command_info(t_cmd *c, t_ast_node *a)
 		else
 			colored_printf(RED, "\tExecuting command: (NULL)\n");
 		colored_printf(YELLOW, "\tArguments:\n");
+		i = -1;
 		if (c_get_argv(c))
 		{
 			while (++i < c_get_argvc(c))
@@ -23,6 +23,22 @@ void	log_command_info(t_cmd *c, t_ast_node *a)
 		if (p_get_argc(a) > 0 && c_get_argv(c)
 			&& c_get_argv(c)[p_get_argc(a)] == NULL)
 			colored_printf(YELLOW, "\t  argv[%d]: (NULL)\n", p_get_argc(a));
+		/* Redirects */
+		i = -1;
+		t_list *redirs = c_get_redirs(c);
+		colored_printf(YELLOW, "\tRedirects:%d\n", c_get_redc(c));
+		if (c_get_redc(c) && redirs)
+		{
+			while (++i < c_get_redc(c))
+			{
+				if (p_get_fn(redirs->content))
+					colored_printf(YELLOW, "\t\t%d: _%s_\n", i,\
+						p_get_fn(redirs->content));
+				else
+					colored_printf(YELLOW, "\t\t%d: (NULL)\n", i);
+				redirs = redirs->next;
+			}
+		}
 	}
 	(void)i;
 }

@@ -36,7 +36,7 @@ int	tok_do_expansion(t_state *s, void *c)
 	char		*value;
 	const t_tok	*content = (t_tok *)c;
 	int			res;
-	char		buf[MAX_ENVVAR_LEN];
+	char		buf[MAX_NAME_LEN];
 	size_t		raw_len;
 
 	res = 0;
@@ -45,7 +45,7 @@ int	tok_do_expansion(t_state *s, void *c)
 		return (0);
 	if (GROUP == content->class)
 		return (0);
-	raw_len = ft_strnlen(content->t.tok.raw, MAX_ENVVAR_LEN);
+	raw_len = ft_strnlen(content->t.tok.raw, MAX_NAME_LEN);
 	ft_memset(buf, 0, sizeof(buf));
 	debug_print(_MOD_ ": %s:  %s\n", __FUNCTION__, content->t.tok.raw);
 	if (content->t.tok.do_expansion)
@@ -61,4 +61,3 @@ int	tok_do_expansion(t_state *s, void *c)
 	}
 	return (0);
 }
-

@@ -20,6 +20,8 @@
  * Marks each name to be passed to child processes in the environment,
  * as long as equal sign is present.
  * Sets error exit code if nothing was exported.
+ * Maximum name length is _
+ * Maximum value length is _
  */
 int	bi_export(t_state *s, char **argv, int argc)
 {

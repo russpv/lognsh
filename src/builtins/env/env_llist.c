@@ -90,7 +90,7 @@ static int	_extract_key_value(const char *env_str, char key[], char value[])
 		return (-1);
 	if (0 == ft_strscpy(key, env_str, (size_t)(equal_pos - env_str) + 1))
 		return (-1);
-	len = ft_strnlen(equal_pos + 1, MAX_RAW_INPUT_LEN);
+	len = ft_strnlen(equal_pos + 1, MAX_NAME_LEN);
 	if (len)
 		if (0 == ft_strscpy(value, equal_pos + 1, len + 1))
 			return (-1);
@@ -101,8 +101,8 @@ static int	_extract_key_value(const char *env_str, char key[], char value[])
 t_env	*copy_envp(t_mem_mgr *m, char **envp)
 {
 	t_env	*env_list;
-	char	key[MAX_ENVVAR_LEN];
-	char	value[MAX_RAW_INPUT_LEN];
+	char	key[MAX_NAME_LEN];
+	char	value[MAX_NAME_LEN];
 	int		i;
 	t_env	*new_node;
 

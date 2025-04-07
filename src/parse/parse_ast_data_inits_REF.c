@@ -75,6 +75,7 @@ t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node,
 
 /* t_arg_data llist copy constructor using a llist of char*.
  * Returns new void *content for llist construction/duplication.
+ * Post processing, t_arg_data member values are no longer useful
  * Copies content.
  */
 void	*create_arg_data_node_deep(t_mem_mgr *mgr, const void *content)
@@ -99,4 +100,36 @@ void	*create_arg_data_node_deep(t_mem_mgr *mgr, const void *content)
 		arg_data->lst_tokens = NULL;
 	}
 	return ((void *)arg_data);
+}
+
+/* t_arg_data llist copy constructor using a llist of char*.
+ * Returns new void *content for llist construction/duplication.
+ * Only the target filename is needed.
+ * Inits t_redir_data dummy values.
+ */
+void	*create_redir_data_node_deep(t_mem_mgr *mgr, const void *content)
+{
+	t_redir_data	*red_data;
+	char		*fn;
+
+	fn = (char *)content;
+	red_data = mgr->f(&mgr->list, sizeof(t_redir_data));
+	if (red_data)
+	{
+		red_data->filename = ft_strdup_tmp(mgr, fn);
+		if (!red_data->filename)
+			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+		red_data->do_expansion = false;
+		red_data->do_globbing = false;
+		red_data->in_dquotes = false;
+		red_data->is_groupred = false;
+		red_data->lst_tokens = NULL;
+		red_data->lst_glob = NULL;
+		red_data->global_state = NULL;
+		red_data->heredoc_body = NULL;
+		red_data->symbol = NULL;
+		red_data->target_ptr = NULL;
+		red_data->type = 0;
+	}
+	return ((void *)red_data);
 }

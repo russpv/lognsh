@@ -33,6 +33,7 @@ static int	_proc_args_redirs(t_state *s, t_ast_node *a, t_cmd *c)
 	c->redc = p_get_redc(a);
 	if (0 != p_do_redir_processing(s, a))
 		return (ERR_REDIR);
+	c->redirs = p_get_redirs(a);
 	assert(c_get_node(c) == a);
 	return (exit_code);
 }

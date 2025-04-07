@@ -20,7 +20,7 @@ static void	print_arg(char *arg, int *first_arg)
 {
 	if (!*first_arg)
 		write(STDOUT_FILENO, " ", 1);
-	write(STDOUT_FILENO, arg, ft_strlen(arg));
+	write(STDOUT_FILENO, arg, ft_strnlen(arg, INPUT_BUF_SZ));
 	*first_arg = 0;
 }
 

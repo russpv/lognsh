@@ -45,6 +45,7 @@ enum							e_ast_node_type
 
 typedef struct s_global_state	t_state;
 typedef struct s_node			t_ast_node;
+typedef struct s_redir			t_redir_data; //Exposed for logging only
 
 t_parse_fns *init_parse_fns(t_state *s);
 
@@ -58,6 +59,8 @@ int								p_get_argc(t_ast_node *a);
 int								p_get_redc(t_ast_node *a);
 bool							p_get_expansion(t_ast_node *a);
 bool							p_get_grouptok(t_ast_node *a);
+
+char							*p_get_fn(const t_redir_data *r);
 
 /* Command getters */
 t_list							*p_get_proc_cmds(t_ast_node *a);

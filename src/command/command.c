@@ -35,8 +35,8 @@ void	destroy_cmd(t_mem_mgr *m, void **c)
 		st_int_destroy(m, cmd->st);
 	//	if (cmd->fullpath)
 	//		free(cmd->fullpath);
-	if (cmd->redirs)
-		ft_lstclear_tmp(m, &cmd->redirs, destroy_redir);
+	//if (cmd->redirs)
+	//	ft_lstclear_tmp(m, &cmd->redirs, destroy_redir);
 	if (cmd->fildes)
 		ft_freearr_mem(&m->list, m->dealloc, (void **)cmd->fildes, -1);
 	if (cmd->argv)

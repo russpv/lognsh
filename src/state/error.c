@@ -88,6 +88,26 @@ void	print_parse_error(t_state *s, const char *word, size_t pos)
 	write(STDERR_FILENO, "^\n", 2);
 }
 
+void	print_parse_redir_error(t_state *s, size_t pos)
+{
+	const char	*input = (const char *)get_input(s);
+	size_t		i;
+
+	if (pos > 100)
+		{
+		printf("POD OUTOF BOUNDS\n");
+		return ;
+		}
+	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+	write(STDERR_FILENO, ": ambiguous redirect in:\n", ft_strlen(": ambiguous redirect in:\n"));
+	ft_putstr_fd(input, STDERR_FILENO);
+	write(STDERR_FILENO, "\n", 1);
+	i = -1;
+	while (++i < pos)
+		write(STDERR_FILENO, "-", 1);
+	write(STDERR_FILENO, "^\n", 2);
+}
+
 void	print_nocmd_error(t_state *s, const char *word, size_t pos)
 {
 	const char	*input = (const char *)get_input(s);

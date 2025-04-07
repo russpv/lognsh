@@ -229,8 +229,6 @@ t_ast_node					*parse_logical(t_state *s, t_parser *p);
 /* Parsing helpers */
 int							process_redir(t_parser *p, t_ast_node *cmd_node);
 void						*create_arg_data_node(void *content);
-void						*create_arg_data_node_deep(t_mem_mgr *mgr,
-								const void *content);
 t_pstack					*create_stack(t_mem_mgr *m);
 void						destroy_stack(t_mem_mgr *m, t_pstack *s);
 int							push(t_pstack *stack);
@@ -248,10 +246,16 @@ int							p_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node,
 int							do_arg_inserts(t_mem_mgr *mgr, t_list **lst_node,
 								t_list **ins_lst, t_arg_data *content);
 void						*token_to_arg(t_mem_mgr *m, const void *tok);
+void						*create_arg_data_node_deep(t_mem_mgr *mgr,
+								const void *content);
 
 /* Redir Expansions */
 int							p_do_red_expansion(t_state *s, void *r);
 int							p_do_globbing_redirs(t_mem_mgr *mgr, void *c);
+int							p_do_grpred_processing(t_state *s, t_list **this_red, void *c);
+void						*create_redir_data_node_deep(t_mem_mgr *mgr, const void *content);
+void	*token_to_redir(t_mem_mgr *m, const void *tok);
+
 
 /* Expansion Utils */
 int							check_special_expansions(t_state *s,

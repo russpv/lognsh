@@ -59,9 +59,11 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 	}
 	if (is_group_token(tok_fname))
 	{
+		fprintf(stderr, "GROUP REDIR\n");
+		debug_print(_MOD_ ": %s: got group redir %p\n", __FUNCTION__, tok_get_tlist(tok_fname));
 		red->is_groupred = true;
 		n->data.cmd.has_redgrouptoks = true;
-		red->lst_tokens = ft_lstcopy_tmp(get_mem(p->global_state), tok_get_tlist(tok), copy_token,
+		red->lst_tokens = ft_lstcopy_tmp(get_mem(p->global_state), tok_get_tlist(tok_fname), copy_token,
 				destroy_token);
 	}
 	red->do_globbing = tok_get_globbing((t_tok *)tok_fname);
@@ -99,6 +101,7 @@ static int	_process_heredoc_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 }
 
 /* Consumes redir tokens and adds them to node (arg 2) linked list
+ * Builds group redirs if the next token is a group token
  * Returns NULL if syntax error
  * Heredocs already turned into TOK_HEREDOC_WORD
  */
