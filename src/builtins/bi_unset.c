@@ -49,7 +49,7 @@ int	bi_unset(t_state *s, char **argv, int argc)
 		}
 		else
 		{
-			if (0 == ft_strncmp(PATH_KEY, argv[i], MAX_ENVVAR_LEN))
+			if (0 == ft_strncmp(PATH_KEY, argv[i], MAX_NAME_LEN))
 				set_path(s, NULL);
 			env_remove_node(get_mem(s), get_env_list_ptr(s), argv[i]);
 		}

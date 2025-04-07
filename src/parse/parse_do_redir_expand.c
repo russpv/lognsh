@@ -71,9 +71,9 @@ static int	_insert_expanded_var(t_state *s, char *buf, char **ptr,
 		return (print_bufflow(), ERR_BUFFLOW);
 	ft_strlcpy(new_body, r->heredoc_body, offset);
 	offset += ft_strlen(new_val);
-	ft_strlcat(new_body, new_val, MAX_INPUT_SZ - offset);
-	ft_strlcat(new_body, *ptr + ft_strlen(buf), MAX_INPUT_SZ - offset
-		- ft_strlen(*ptr + ft_strlen(buf)));
+	ft_strlcat(new_body, new_val, mymax(MAX_INPUT_SZ - offset, 0));
+	ft_strlcat(new_body, *ptr + ft_strlen(buf), mymax(MAX_INPUT_SZ - offset
+		- ft_strlen(*ptr + ft_strlen(buf)), 0));
 	get_mem(s)->dealloc(&get_mem(s)->list, r->heredoc_body);
 	r->heredoc_body = ft_strdup_tmp(get_mem(s), new_body);
 	if (NULL == r->heredoc_body)

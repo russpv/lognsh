@@ -81,7 +81,7 @@ t_env	*create_env_node(t_mem_mgr *m, const char *key, const char *value)
 static int	_extract_key_value(const char *env_str, char key[], char value[])
 {
 	char	*equal_pos;
-	size_t	len;
+	size_t	valuelen;
 
 	equal_pos = ft_strchr(env_str, '=');
 	if (!equal_pos)
@@ -90,9 +90,9 @@ static int	_extract_key_value(const char *env_str, char key[], char value[])
 		return (-1);
 	if (0 == ft_strscpy(key, env_str, (size_t)(equal_pos - env_str) + 1))
 		return (-1);
-	len = ft_strnlen(equal_pos + 1, MAX_NAME_LEN);
-	if (len)
-		if (0 == ft_strscpy(value, equal_pos + 1, len + 1))
+	valuelen = ft_strnlen(equal_pos + 1, MAX_INPUT_SZ);
+	if (valuelen)
+		if (0 == ft_strscpy(value, equal_pos + 1, valuelen + 1))
 			return (-1);
 	return (0);
 }
@@ -102,7 +102,7 @@ t_env	*copy_envp(t_mem_mgr *m, char **envp)
 {
 	t_env	*env_list;
 	char	key[MAX_NAME_LEN];
-	char	value[MAX_NAME_LEN];
+	char	value[MAX_INPUT_SZ];
 	int		i;
 	t_env	*new_node;
 

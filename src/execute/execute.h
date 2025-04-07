@@ -16,6 +16,14 @@ typedef struct s_node	t_ast_node;
 typedef int				(*t_execute_fn)(t_state *s, t_ast_node *node);
 typedef int				(*t_builtin_fn)(t_state *s, char **args, int argc);
 
+typedef struct s_exec {
+	t_execute_fn	executor;
+	int				pids[];
+} 						t_exec;
+
+exec_init(); //TODO
+exec_set_executor(t_exec *e, t_execute_fn x);
+
 int						redirect(int *to, char *topath, int from,
 							bool ifappend);
 int						exec_create_pipes(t_mem_mgr *m, int ***fildes,

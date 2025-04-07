@@ -32,6 +32,7 @@
 	return (0);
 }*/
 
+// Waits for the pid p child.
 int	waitchildpid(int *status, pid_t p)
 {
 	pid_t	child_pid;
@@ -54,6 +55,8 @@ int	waitchildpid(int *status, pid_t p)
 	return (0);
 }
 
+// Indiscriminantly waits for children and passes the last exit
+// code returned.
 int	waitchilds(int *status, int childc)
 {
 	int	i;
@@ -80,6 +83,7 @@ int	waitchilds(int *status, int childc)
 	debug_print(DBGMSG_EXEC_DONE);
 	return (0);
 }
+
 
 /* Interpret waitpid() exit status (signals ignored here) */
 int	exec_get_exit_status(int status)

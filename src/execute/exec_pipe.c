@@ -75,7 +75,8 @@ static int	_close_other_pipe_ends(t_state *s, int i)
 }
 
 /* Child processing for pipe command
- * Forks, redirects to pipe, recursively
+ * Forks, redirects to pipe, recursively.
+ * Returns the child's pid, or negative value if error.
  * calls top level node executor
  * Calling command func will wait for exit status
  * Parent does not wait (until all pipe commands are forked).
@@ -93,7 +94,7 @@ int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,
 	if (pid < 0)
 	{
 		perror(EMSG_FORK);
-		return (ERR_FORK);
+		return (-ERR_FORK);
 	}
 	else if (0 == pid)
 	{
@@ -105,5 +106,5 @@ int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,
 		destroy_state(&s);
 		exit(exit_status);
 	}
-	return (0);
+	return (pid);
 }

@@ -48,14 +48,14 @@ int	p_do_arg_expansion(t_state *s, void *c)
 	char				*value;
 	const t_arg_data	*content = (t_arg_data *)c;
 	int					res;
-	char				buf[MAX_ENVVAR_LEN];
+	char				buf[INPUT_BUF_SZ];
 	size_t				raw_len;
 
 	res = 0;
 	value = NULL;
 	if (NULL == c)
 		return (ERR_ARGS);
-	raw_len = ft_strnlen(content->raw, MAX_ENVVAR_LEN);
+	raw_len = ft_strnlen(content->raw, INPUT_BUF_SZ);
 	ft_memset(buf, 0, sizeof(buf));
 	debug_print(DMSG_IN, __FUNCTION__, content->raw);
 	if (content->do_expansion)
