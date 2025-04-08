@@ -22,7 +22,7 @@ int	cmd_exec_proc(t_state *s, t_ast_node *parent)
 	t_exec			*e;
 
 	cmd_node = NULL;
-	log_print(LOGMSG_CPROC_ANNOUNCE);
+	lgprint(LOGMSG_CPROC_ANNOUNCE);
 	if (p_get_type(parent) != AST_NODE_PROC)
 		return (err("Invalid node type\n"), ERR_INVALID_CMD_TYPE);
 	i = -1;
@@ -32,21 +32,22 @@ int	cmd_exec_proc(t_state *s, t_ast_node *parent)
 	while (++i < p_get_proc_cmdc(parent))
 	{
 		cmd_node = cmd->content;
-		debug_print(DBGMSG_CPROC_GOT, p_get_type(cmd_node));
+		dprint(DBGMSG_CPROC_GOT, p_get_type(cmd_node));
 		assert(p_get_args(parent) == NULL);
 		c = get_cmd(s);
 		e = exec_init(get_mem(s), p_get_proc_cmdc(parent), c, parent);
 		exec_set_executor(e, cmd_execute_full);
 		exit_status = proc_args_redirs(s, parent, c);
 		if (ERR_REDIR == exit_status || NO_CMD == exit_status)
-			return (destroy_exec(get_mem(s), e), destroy_cmd_fns(get_mem(s), cf), exit_status);
+			return (destroy_exec(get_mem(s), e), destroy_cmd_fns(get_mem(s),
+					cf), exit_status);
 		exit_status = exec_fork_redirect_wait(s, cmd_node, e, cf);
 		if (exit_status != 0)
-			debug_print(DBGMSG_CPROC_BADEXEC, exit_status);
+			dprint(DBGMSG_CPROC_BADEXEC, exit_status);
 		cmd = cmd->next;
 	}
 	destroy_exec(get_mem(s), e);
 	destroy_cmd_fns(get_mem(s), cf);
-	log_print(LOGMSG_CPROC_DONE);
+	lgprint(LOGMSG_CPROC_DONE);
 	return (exit_status);
 }

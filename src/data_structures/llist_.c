@@ -1,13 +1,8 @@
 #include "llist_int.h"
 
-#define DEBUGMSG_INSERT_GOT "ft_lstadd_insert got lst = %p, head = %p\n"
-#define DEBUGMSG_INSERT_NULL "NULL input detected: lst = %p, new = %p\n"
-#define DEBUGMSG_INSERT_EMPTY "List is empty. Added new node as the first element:%p\n"
-#define DEBUGMSG_INSERTED "Inserted new node after the first node. new->prev =%p,\
-	(*lst)->next = %p\n"
-#define DEBUGMSG_INSERT_0 "ft_lstadd_insert completed successfully.\n"
-#define DEBUGMSG_CLR_DEL "ft_lstclear deleting node = %p\n"
-#define DEBUGMSG_CLR_GOT "ft_lstclear got lst = %p, head = %p\n"
+#define MSG_EMPT "%s: List is empty. Added new node as the first element:%p\n"
+#define MSG_INS \
+	"%s: inserted new node after first. new->prev=%p, (*lst)->next= %p\n"
 
 /* LSTADD_BACK
 ** Returns single node for empty list, or adds new to end of
@@ -62,25 +57,26 @@ void	ft_lstadd_insert(t_list **lst, t_list *new)
 
 	save_next = NULL;
 	last_new_node = NULL;
-	debugv_print(DEBUGMSG_INSERT_GOT, (void *)lst, (void *)*lst);
+	dvprint("%s: got lst:%p (head:%p)\n", (void *)lst, (void *)*lst);
 	if (!lst || !new)
-		return (debug_print(DEBUGMSG_INSERT_NULL, (void *)lst, (void *)new));
+		return (dvprint("%s: null input lst:%p, new:%p\n", __FUNCTION__,
+				(void *)lst, (void *)new));
 	if (*lst == NULL)
 	{
 		*lst = new;
 		new->prev = NULL;
-		return (debug_print(DEBUGMSG_INSERT_EMPTY, (void *)new));
+		return (dvprint(MSG_EMPT, __FUNCTION__, (void *)new));
 	}
 	last_new_node = ft_lstlast(new);
 	if ((*lst)->next)
 		save_next = (*lst)->next;
 	(*lst)->next = new;
 	new->prev = *lst;
-	debugv_print(DEBUGMSG_INSERTED, (void *)new->prev, (void *)(*lst)->next);
+	dvprint(MSG_INS, __FUNCTION__, (void *)new->prev, (void *)(*lst)->next);
 	last_new_node->next = save_next;
 	if (save_next)
 		save_next->prev = last_new_node;
-	debug_print(DEBUGMSG_INSERT_0);
+	dprint("%s: insert done.\n", __FUNCTION__);
 }
 
 /* LSTCLEAR
@@ -95,11 +91,10 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 
 	if (!*lst || !del || !lst)
 		return ;
-	debug_print(DEBUGMSG_CLR_GOT, (void *)lst, (void *)*lst);
 	tmp = *lst;
 	while (tmp)
 	{
-		debug_print(DEBUGMSG_CLR_DEL, (void *)tmp);
+		dvprint("%s: deleting node:%p\n", __FUNCTION__, (void *)tmp);
 		next = tmp->next;
 		ft_lstdelone(lst, tmp, del);
 		tmp = next;

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   bi_unset.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 09:27:21 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/13 13:13:01 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "bi_int.h"
 
 #define _CMD_NAME_ "unset"
@@ -37,9 +25,9 @@ int	bi_unset(t_state *s, char **argv, int argc)
 		return (1);
 	if (argc == 1)
 		return (0);
-	i = 1;
+	i = 0;
 	ret = 0;
-	while (argv[i])
+	while (argv[++i])
 	{
 		ret = 0;
 		if (false == _is_valid_var_name(argv[i]))
@@ -53,7 +41,6 @@ int	bi_unset(t_state *s, char **argv, int argc)
 				set_path(s, NULL);
 			env_remove_node(get_mem(s), get_env_list_ptr(s), argv[i]);
 		}
-		i++;
 	}
 	return (ret);
 }

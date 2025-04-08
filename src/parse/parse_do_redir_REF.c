@@ -2,16 +2,8 @@
 
 #define EMSG_REDIR_HANDLER "Redirection handler issue\n"
 #define EMSG_REDIR_NULLNODE "ERR no node given\n"
-#define DBGMSG_REDIR_ANNOUNCE2 _MOD_ ": _p_do_redirection iterating...\n"
-#define DBGMSG_REDIR_GOTNULL _MOD_ ": _p_do_redirection got NULL\n"
-#define DBGMSG_REDIR_GOT _MOD_ ": _p_do_redirection got redir, executing...\n"
-#define DBGMSG_REDIR_ANNOUNCE _MOD_ ": p_do_redirections, doing redirs...\n"
-#define EMSG_PATH_MALLOC "Allocation for path value failed.\n"
-#define EMSG_NULL_EXPAN "Null expansion variable.\n"
-#define DEBUGMSG_REDIRP_ANNOUNCE _MOD_ ": p_do_redir_processing...\n"
 #define DBGMSG_REDIRP_GOT _MOD_ ": p_do_redir_processing got: type:%d glob_%d exp_%d grp_%d\n"
-#define DEBUGMSG_DOEXP_ANNOUNCE _MOD_ ": p_do_expansion got: %s\n"
-#define DEBUGMSG_DOEXP_RES _MOD_ ": p_do_expansion found: %s\n"
+
 
 /* Executes redirection of t_redir_data llist
  * Accepts a t_redir_data.
@@ -28,10 +20,9 @@ static int	_p_do_redirection(void *content)
 
 	if (NULL == content)
 		return (ERR_ARGS);
-	debug_print(DBGMSG_REDIR_ANNOUNCE2);
 	if (!redir->type)
-		return (debug_print(DBGMSG_REDIR_GOTNULL), ERR_ARGS);
-	debug_print(DBGMSG_REDIR_GOT);
+		return (dprint("%s: %s: got null\n", _MOD_, __FUNCTION__), ERR_ARGS);
+	dprint("%s: %s: iterating...\n", _MOD_, __FUNCTION__);
 	if (handlers[redir->type])
 	{
 		if (0 != handlers[redir->type](redir))
@@ -61,7 +52,7 @@ int	p_do_redirections(t_ast_node *a)
 		return (err("Redirs: invalid cmd type\n"), EINVAL);
 	if (false == node_has_redirects(a))
 		return (0);
-	debug_print(DBGMSG_REDIR_ANNOUNCE);
+	dprint("%s: %s: doing redirections...\n", _MOD_, __FUNCTION__);
 	if (a->type == AST_NODE_CMD)
 		if (0 != ft_lstiter(a->data.cmd.redirs, _p_do_redirection))
 			return (ERR_REDIR);
@@ -86,11 +77,13 @@ int	p_do_redir_processing(t_state *s, t_ast_node *a)
 	redirs = p_get_redirs_ptr(a);
 	if (redirs)
 	{
-		debug_print(DBGMSG_REDIRP_GOT, p_get_type(a), p_get_do_redir_globbing(a),
-			p_get_do_redir_expansion(a), p_get_has_redgrouptoks(a));
+		dprint(DBGMSG_REDIRP_GOT, p_get_type(a),
+			p_get_do_redir_globbing(a), p_get_do_redir_expansion(a),
+			p_get_has_redgrouptoks(a));
 		if (true == p_get_has_redgrouptoks(a))
 		{
-			res = ft_lstiter_state_ins_rwd_tmp(s, redirs, p_do_grpred_processing);
+			res = ft_lstiter_state_ins_rwd_tmp(s, redirs,
+					p_do_grpred_processing);
 			if (0 != res)
 				return (res);
 		}
@@ -109,7 +102,7 @@ int	p_do_redir_processing(t_state *s, t_ast_node *a)
 				return (ERR_AMBIGUOUS_REDIR);
 			}
 		}
-		debug_print("%s: %s: done.\n", _MOD_, __FUNCTION__);
+		dprint("%s: %s: done.\n", _MOD_, __FUNCTION__);
 	}
 	return (0);
 }

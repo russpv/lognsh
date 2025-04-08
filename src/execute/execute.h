@@ -1,4 +1,3 @@
-// Low-level implementation of forking, piping, redirects
 #ifndef EXECUTE_H
 # define EXECUTE_H
 
@@ -10,24 +9,38 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
+/*
+** EXECUTE
+** Low-level implementation of forking, piping, redirects
+**
+** 1) If no command given, first word resulting from expansion is
+** 	taken as the command name, remaining are args.
+** 2) Redirections are performed. A redirection error causes the
+** 	command to exit with a non-zero status.
+**
+** Note: Exit status is that of the last command in the input
+*/
+
 /* Duplicate declares */
 typedef struct s_node	t_ast_node;
 
 typedef int				(*t_execute_fn)(t_state *s, t_ast_node *node);
 typedef int				(*t_builtin_fn)(t_state *s, char **args, int argc);
 
-typedef struct s_exec {
-	int				cmdc;
-	t_execute_fn	executor;
-	t_cmd			*proc_cmd;
-	t_ast_node		*proc;
-	pid_t			*pids;
-	int				*exit_codes;
-} 						t_exec;
+typedef struct s_exec
+{
+	int					cmdc;
+	t_execute_fn		executor;
+	t_cmd				*proc_cmd;
+	t_ast_node			*proc;
+	pid_t				*pids;
+	int					*exit_codes;
+}						t_exec;
 
-t_exec	*exec_init(t_mem_mgr *m, int cmdc, t_cmd *c, t_ast_node *a);
-void	exec_set_executor(t_exec *e, t_execute_fn x);
-void	destroy_exec(t_mem_mgr *m, t_exec *e);
+t_exec					*exec_init(t_mem_mgr *m, int cmdc, t_cmd *c,
+							t_ast_node *a);
+void					exec_set_executor(t_exec *e, t_execute_fn x);
+void					destroy_exec(t_mem_mgr *m, t_exec *e);
 
 int						redirect(int *to, char *topath, int from,
 							bool ifappend);

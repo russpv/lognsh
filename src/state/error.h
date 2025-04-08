@@ -101,7 +101,7 @@ void	print_parse_redir_error(t_state *s, size_t pos);
 void	print_dne(const char *path);
 
 
-void							print_bufflow(const char *s);
+void							pbufflow(const char *s);
 void							print_is_dir(char *p);
 
 bool							is_error(int v);

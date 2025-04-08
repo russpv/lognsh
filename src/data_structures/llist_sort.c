@@ -26,7 +26,7 @@ static t_list	*_get_midptr(t_list *lst, t_list *end)
 	assert(tmp->next->next != NULL);
 	if (NULL == tmp || NULL == tmp->next)
 		return (lst);
-	if (NULL == tmp->next->next) // don't want the last node of a pair to be mid
+	if (NULL == tmp->next->next)
 		return (end);
 	while ((tmp != NULL && tmp->next != NULL) && (tmp != end
 			&& tmp->next != end))
@@ -48,18 +48,18 @@ static void	_solve(t_list **lst, t_list **beg, t_list **end)
 	{
 		if (AMORETHANB == compare((*beg), (*end)))
 			_swap((*beg), (*end));
-		return (debug_print("_solve: compare/swapped two nodes.\n"));
+		return (dprint("_solve: compare/swapped two nodes.\n"));
 	}
 	mid = _get_midptr(*beg, *end);
 	if (*beg != mid)
 	{
-		debug_print(RED "Splitting first half: b:%s m:%s\n" RESET,
+		dprint(RED "Splitting first half: b:%s m:%s\n" RESET,
 			(*beg)->content, mid->content);
 		_solve(lst, beg, &mid);
 	}
 	if (mid->next != *end)
 	{
-		debug_print(RED "Splitting latter half: b:%s m:%s\n" RESET,
+		dprint(RED "Splitting latter half: b:%s m:%s\n" RESET,
 			mid->next->content, (*end)->content);
 		_solve(lst, &(mid->next), end);
 	}
@@ -78,10 +78,10 @@ t_list	*ft_lstsort(t_list **lst)
 	if (!*lst)
 		return ((t_list *)-1);
 	last = ft_lstlast(*lst);
-	debug_print("%s: got: ", __FUNCTION__);
+	dprint("%s: got: ", __FUNCTION__);
 	ft_lstprint(*lst);
 	_solve(lst, lst, &last);
-	debug_print("%s: returning: ", __FUNCTION__);
+	dprint("%s: returning: ", __FUNCTION__);
 	ft_lstprint(*lst);
 	return (*lst);
 }

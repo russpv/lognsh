@@ -78,6 +78,7 @@ void	_terminate_ends(t_list **lst, struct s_merge *m)
  * Critical that list segment boundary ptrs are updated for subsequent
  * recursive calls as stack unwinds, or segments may be skipped.
  */
+
 void	merge(t_list **lst, t_list **beg, t_list *mid, t_list **end)
 {
 	struct s_merge	m;
@@ -85,7 +86,7 @@ void	merge(t_list **lst, t_list **beg, t_list *mid, t_list **end)
 	init_merge(&m, beg, end, mid);
 	print_diagnostics_input(lst, &m);
 	if (ALESSTHANB == compare(mid, mid->next))
-		return (debug_print("already sorted.\n"));
+		return (dvprint("%s: already sorted.\n", __FUNCTION__));
 	while ((NULL != m.l && NULL != m.r) && (mid->next != m.l
 			&& (*end)->next != m.r) && (++m.i <= m.nodec))
 	{
@@ -93,7 +94,7 @@ void	merge(t_list **lst, t_list **beg, t_list *mid, t_list **end)
 		_do_swap(lst, &m);
 		m.tmp = *m.tail;
 		m.tail = &((*m.tail)->next);
-		debug_print_tail_info(&m);
+		dprint_tail_info(&m);
 	}
 	_add_remainder(&m);
 	_adv_and_reconnect(&m);

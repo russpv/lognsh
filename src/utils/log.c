@@ -1,6 +1,28 @@
-#include "../parse/parse.h"
 #include "../command/command.h"
+#include "../parse/parse.h"
 #include "log.h"
+
+static void	_print_redirs(t_cmd *c)
+{
+	t_list	*redirs;
+	int		i;
+
+	i = -1;
+	redirs = c_get_redirs(c);
+	cprintf(YELLOW, "\tRedirects:%d\n", c_get_redc(c));
+	if (c_get_redc(c) && redirs)
+	{
+		while (++i < c_get_redc(c))
+		{
+			if (p_get_fn(redirs->content))
+				cprintf(YELLOW, "\t\t%d: _%s_\n", i,
+					p_get_fn(redirs->content));
+			else
+				cprintf(YELLOW, "\t\t%d: (NULL)\n", i);
+			redirs = redirs->next;
+		}
+	}
+}
 
 void	log_command_info(t_cmd *c, t_ast_node *a)
 {
@@ -9,41 +31,26 @@ void	log_command_info(t_cmd *c, t_ast_node *a)
 	if (LOGGING)
 	{
 		if (p_get_cmd(a))
-			colored_printf(YELLOW, "\tExecuting command: %s\n", p_get_cmd(a));
+			cprintf(YELLOW, "\tExecuting command: %s\n", p_get_cmd(a));
 		else
-			colored_printf(RED, "\tExecuting command: (NULL)\n");
-		colored_printf(YELLOW, "\tArguments:\n");
+			cprintf(RED, "\tExecuting command: (NULL)\n");
+		cprintf(YELLOW, "\tArguments:\n");
 		i = -1;
 		if (c_get_argv(c))
 		{
 			while (++i < c_get_argvc(c))
-				colored_printf(YELLOW, "\t  argv[%d]: _%s_\n", i,
+				cprintf(YELLOW, "\t  argv[%d]: _%s_\n", i,
 					c_get_argv(c)[i]);
 		}
 		if (p_get_argc(a) > 0 && c_get_argv(c)
 			&& c_get_argv(c)[p_get_argc(a)] == NULL)
-			colored_printf(YELLOW, "\t  argv[%d]: (NULL)\n", p_get_argc(a));
-		/* Redirects */
-		i = -1;
-		t_list *redirs = c_get_redirs(c);
-		colored_printf(YELLOW, "\tRedirects:%d\n", c_get_redc(c));
-		if (c_get_redc(c) && redirs)
-		{
-			while (++i < c_get_redc(c))
-			{
-				if (p_get_fn(redirs->content))
-					colored_printf(YELLOW, "\t\t%d: _%s_\n", i,\
-						p_get_fn(redirs->content));
-				else
-					colored_printf(YELLOW, "\t\t%d: (NULL)\n", i);
-				redirs = redirs->next;
-			}
-		}
+			cprintf(YELLOW, "\t  argv[%d]: (NULL)\n", p_get_argc(a));
+		_print_redirs(c);
 	}
 	(void)i;
 }
 
-void	log_print(const char *s, ...)
+void	lgprint(const char *s, ...)
 {
 	va_list	args;
 
@@ -58,7 +65,7 @@ void	log_print(const char *s, ...)
 	}
 }
 
-void	colored_printf(const char *color, const char *format, ...)
+void	cprintf(const char *color, const char *format, ...)
 {
 	va_list	args;
 
@@ -73,7 +80,6 @@ void	colored_printf(const char *color, const char *format, ...)
 	}
 }
 
-// alternate debug message format
 void	err(const char *s)
 {
 	if (LOGGING)

@@ -13,7 +13,7 @@ int	exec_fork_run(t_state *s, t_ast_node *node, int i, t_execute_fn executor)
 	pid_t	pid;
 	int		exit_status;
 
-	debug_print(DBGMSG_ELOGI_ANNOUNCE, i);
+	dprint(DBGMSG_ELOGI_ANNOUNCE, i);
 	pid = fork();
 	if (pid < 0)
 	{

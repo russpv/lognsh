@@ -1,6 +1,6 @@
 #include "error.h"
 
-void	print_bufflow(const char *msg)
+void	pbufflow(const char *msg)
 {
 	const int fd = STDERR_FILENO;
 

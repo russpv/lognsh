@@ -78,7 +78,7 @@ int	get_eof_word(t_mem_mgr *m, t_lex *l)
 	l->eof_word = ft_strdup_tmp(m, l->buf);
 	if (!l->eof_word)
 		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
-	debug_print(_MOD_ ": captured heredoc delimiter: %s\n", l->eof_word);
+	dprint(_MOD_ ": captured heredoc delimiter: %s\n", l->eof_word);
 	ft_memset(l->buf, 0, LEX_BUFSZ);
 	l->buf_idx = 0;
 	return (0);

@@ -8,7 +8,7 @@ void	destroy_redir(t_mem_mgr *m, void **in)
 	redir = (t_redir_data *)(*in);
 	if (NULL == redir)
 		return ;
-	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
+	dprint(_MOD_ ": %s...\n", __FUNCTION__);
 	if (redir->symbol)
 		m->dealloc(&m->list, redir->symbol);
 	if (redir->filename)
@@ -31,7 +31,7 @@ void	destroy_arg(t_mem_mgr *mgr, void **in)
 	if (!in || !mgr)
 		return ;
 	arg = (t_arg_data *)(*in);
-	debug_print(_MOD_ ":   %s...\n", __FUNCTION__);
+	dprint(_MOD_ ":   %s...\n", __FUNCTION__);
 	if (arg->lst_tokens)
 		ft_lstclear_tmp(mgr, &arg->lst_tokens, destroy_token);
 	if (arg->raw)

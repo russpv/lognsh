@@ -1,9 +1,7 @@
 #include "execute_int.h"
 #include <fcntl.h>
 
-
 #define LOGMSG_EREDIR_DONE "\tRedirect: dup2 from %d to %d\n"
-#define DBGMSG_EREDIR_FD _MOD_ ": %s: fd:%d\n"
 
 /* Does the correct open() and returns new fd
  * or negative error codes.
@@ -11,14 +9,16 @@
  *   Inputs -- throws no error only if no perms
  *   Outputs -- throws error
  * If DNE or no perms: throws error
- * [Deprecated] if input file can't be read, opens /dev/null/ to allow cmd to run
+ * [Deprecated] if input file can't be read, opens
+ *	/dev/null/ to allow cmd to run
  */
 static inline int	_redirect_logic(char *topath, int from, bool append)
 {
-	int	fd;
-	struct stat statbuf;
+	int			fd;
+	struct stat	statbuf;
 
-	log_print(_MOD_ ":%s got path:%s, from:%d app:%d\n", __FUNCTION__, topath, from, append);
+	lgprint(_MOD_ ":%s got path:%s, from:%d app:%d\n", __FUNCTION__, topath,
+		from, append);
 	if (from == STDIN_FILENO && access(topath, F_OK) == -1)
 	{
 		print_redirect_warning(topath);
@@ -28,10 +28,12 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 	}
 	else if (access(topath, F_OK) == 0 && stat(topath, &statbuf) == -1)
 		return (print_perror("stat"), -ERR_STAT);
-	else if (from != STDIN_FILENO && access(topath, F_OK) == 0 && S_ISDIR(statbuf.st_mode))
-        return (print_is_dir(topath), -ERR_REDIR);
-    else if (from == STDIN_FILENO && access(topath, F_OK) == 0 && S_ISDIR(statbuf.st_mode))
-    	fd = open(topath, O_RDONLY | O_DIRECTORY);
+	else if (from != STDIN_FILENO && access(topath, F_OK) == 0
+		&& S_ISDIR(statbuf.st_mode))
+		return (print_is_dir(topath), -ERR_REDIR);
+	else if (from == STDIN_FILENO && access(topath, F_OK) == 0
+		&& S_ISDIR(statbuf.st_mode))
+		fd = open(topath, O_RDONLY | O_DIRECTORY);
 	else if (from == STDIN_FILENO)
 		fd = open(topath, O_RDONLY | O_CREAT, 0644);
 	else if (from != STDIN_FILENO && append)
@@ -42,7 +44,7 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 		fd = -1;
 	if (fd < 0)
 		return (print_redirect_warning(topath), perror(EMSG_OPEN), fd);
-	debug_print(DBGMSG_EREDIR_FD, __FUNCTION__, fd);
+	dprint("%s: %s: fd:%d\n", _MOD_, __FUNCTION__, fd);
 	return (fd);
 }
 
@@ -73,7 +75,7 @@ int	redirect(int *to, char *topath, int from, bool ifappend)
 	}
 	else
 		fd = *to;
-	colored_printf(GREEN, LOGMSG_EREDIR_DONE, from, fd);
+	cprintf(GREEN, LOGMSG_EREDIR_DONE, from, fd);
 	if (dup2(fd, from) == -1)
 		return (perror(EMSG_DUP2), ERR_DUP2);
 	if (0 != close(fd))

@@ -2,10 +2,7 @@
 
 #define EMSG_PPIPE_MALLOC "Memory allocation error while creating pipe's command node\n"
 #define EMSG_PPIPE_SYNTAX "Failed to parse command after pipe operator\n"
-#define DBGMSG_PPIPE_NEXT _MOD_ ": parsing pipeline: getting next cmd...\n"
-#define DBGMSG_PPIPE_GOT _MOD_ ": parse_pipeline tok: %s\n"
-#define EMSG_PPIPE_GEN _MOD_ ": pipeline parsing error\n"
-#define DBGMSG_PPIPE_DONE _MOD_ ": parsed pipeline of %d cmds\n"
+#define EMSG_PPIPE_GEN "Pipeline parsing error\n"
 
 static t_ast_node	*_init_pipe(t_mem_mgr *m)
 {
@@ -45,7 +42,8 @@ static int	_process_pipe(t_state *s, t_parser *p, t_ast_node *pipe_node)
 		return (ERR_ARGS);
 	if (NULL == p->last_node || TOK_PIPE == tok_get_type(previous(p)))
 	{
-		print_parse_error(s, tok_get_raw((p->curr_tok)->content), tok_get_pos((p->curr_tok)->content));
+		print_parse_error(s, tok_get_raw((p->curr_tok)->content),
+			tok_get_pos((p->curr_tok)->content));
 		return (p->parse_error = true, ERR_SYNTAX);
 	}
 	if (0 != _process_cmd(p, pipe_node))
@@ -53,10 +51,11 @@ static int	_process_pipe(t_state *s, t_parser *p, t_ast_node *pipe_node)
 	while (!is_at_end(p) && is_pipe_token(peek(p)))
 	{
 		advance(p);
-		debug_print(DBGMSG_PPIPE_NEXT);
-		if (NULL == parse_full_cmd(s, p)) 
+		dprint("%s: %s: getting next cmd...", _MOD_, __FUNCTION__);
+		if (NULL == parse_full_cmd(s, p))
 		{
-			print_parse_error(s, tok_get_raw((p->curr_tok)->prev->content), tok_get_pos((p->curr_tok)->content));
+			print_parse_error(s, tok_get_raw((p->curr_tok)->prev->content),
+				tok_get_pos((p->curr_tok)->content));
 			return (err(EMSG_PPIPE_SYNTAX), p->parse_error = true, ERR_SYNTAX);
 		}
 		if (0 != _process_cmd(p, pipe_node))
@@ -74,7 +73,7 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 	if (!p || !p->last_node)
 		return (NULL);
 	st_int_push(p->st, AST_NODE_PIPELINE);
-	debug_print(DBGMSG_PPIPE_GOT, tok_get_raw(peek(p)));
+	dprint("%s: %s: tok: %s\n", _MOD_, __FUNCTION__, tok_get_raw(peek(p)));
 	ast_node = _init_pipe(p->mmgr);
 	if (NULL == ast_node)
 		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_PPIPE_MALLOC);
@@ -83,10 +82,9 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 	{
 		set_error(s, res);
 		destroy_ast_node(get_mem(s), (void **)&ast_node);
-		err(EMSG_PPIPE_GEN);
-		return (NULL);
+		return (err(EMSG_PPIPE_GEN), NULL);
 	}
-	debug_print(DBGMSG_PPIPE_DONE, ast_node->data.pipe.cmdc);
+	dprint("%s: %s: parsed %d cmds\n", _MOD_, __FUNCTION__, ast_node->data.pipe.cmdc);
 	p->last_node = ast_node;
 	st_int_pop(p->st);
 	return (ast_node);

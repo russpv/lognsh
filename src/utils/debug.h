@@ -14,7 +14,6 @@
 #  define DEBUG 0
 # endif
 
-
 # ifdef DEBUGVMODE
 #  define DEBUGVERBOSE 1
 # else
@@ -23,13 +22,12 @@
 
 typedef struct s_list	t_list;
 
-void					debug_print(const char *format, ...);
-void					debugv_print(const char *format, ...);
-void					log_print(const char *s, ...);
+void					dprint(const char *format, ...);
+void					dvprint(const char *format, ...);
+void					lgprint(const char *s, ...);
 
 void					err(const char *s);
-void					colored_printf(const char *color, const char *format,
-							...);
+void					cprintf(const char *color, const char *format, ...);
 void					debug_detect_cycle(t_list *head);
 
 void					print_array(char *arr[]);

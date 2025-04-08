@@ -10,7 +10,7 @@ int	save_redirs(t_cmd *c)
 		return (err(EMSG_REDIRSV_NULLARG), ERR_ARGS);
 	if (c->redc > 0)
 	{
-		log_print(DBGMSG_REDIRRS_ANNOUNCE);
+		lgprint(DBGMSG_REDIRRS_ANNOUNCE);
 		c->saved_stderr = dup(STDERR_FILENO);
 		if (-1 == c->saved_stderr)
 			return (perror(EMSG_DUP), ERR_DUP);

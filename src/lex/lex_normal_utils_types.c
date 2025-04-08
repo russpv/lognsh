@@ -29,21 +29,21 @@ bool	is_dollar_question(t_lex *lexer)
 // returns TOK_WORD if alphanumeric or underscore, else TOK_NAME
 int	word_or_name(const char *s)
 {
-	debug_print(_MOD_ ": -------- %s:_%s_", __FUNCTION__, s);
+	dprint(_MOD_ ": -------- %s:_%s_", __FUNCTION__, s);
 	if (!*s)
 	{
-		debug_print(" ERR\n");
+		dprint(" ERR\n");
 		return (TOK_ERR);
 	}
 	while (*s)
 	{
 		if (!(ft_isalnum(*s) || '_' == *s))
 		{
-			debug_print(" WORD\n");
+			dprint(" WORD\n");
 			return (TOK_WORD);
 		}
 		s++;
 	}
-	debug_print(" NAME\n");
+	dprint(" NAME\n");
 	return (TOK_NAME);
 }

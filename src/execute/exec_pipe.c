@@ -1,6 +1,5 @@
 #include "execute_int.h"
 
-#define NO_APND false
 #define DBGMSG_EPIPE_ANNOUNCE "Exec: exec_fork_run: got %dth\n"
 #define DBGMSG_EPIPE_ANNOUNCE2 "Exec: _close_other_pipe_ends on %dth cmd.\n"
 #define DBGMSG_EPIPE_CLOSED "Exec: Child %d: closed %d pipe ends (%d cmds)\n"
@@ -13,9 +12,9 @@
 // ith - 1 pipe for read ends, ith for write ends
 static int	_redirect_pipes(t_state *s, int i)
 {
-	const t_cmd *c = get_cmd(s);
-	int	**fildes;
-	int	r;
+	const t_cmd	*c = get_cmd(s);
+	int			**fildes;
+	int			r;
 
 	fildes = (int **)(get_cmd_fns(s))->c_get_fildes(c);
 	r = -1;
@@ -47,30 +46,27 @@ static int	_redirect_pipes(t_state *s, int i)
 static int	_close_other_pipe_ends(t_state *s, int i)
 {
 	int			pipe;
-	int			counter;
-	const t_cmd *c = get_cmd(s);
+	const t_cmd	*c = get_cmd(s);
 	const int	**fildes = (get_cmd_fns(s))->c_get_fildes(c);
 
-	debug_print(DBGMSG_EPIPE_ANNOUNCE2, i);
+	dprint(DBGMSG_EPIPE_ANNOUNCE2, i);
 	pipe = -1;
-	counter = 0;
 	while (++pipe < (get_cmd_fns(s))->c_get_cmdc(c) - 1)
 	{
 		if (pipe != i)
 		{
 			if (0 != close(fildes[pipe][1]))
 				return (perror(EMSG_CLOSE), ERR_CLOSE);
-			counter++;
 		}
 		if (pipe != i - 1)
 		{
 			if (0 != close(fildes[pipe][0]))
 				return (perror(EMSG_CLOSE), ERR_CLOSE);
-			counter++;
 		}
 	}
 	if (DEBUG)
-		debug_print(DBGMSG_EPIPE_CLOSED, getpid(), counter, (get_cmd_fns(s))->c_get_cmdc(c));
+		dprint(DBGMSG_EPIPE_CLOSED, getpid(), pipe + 1,
+			(get_cmd_fns(s))->c_get_cmdc(c));
 	return (1);
 }
 
@@ -81,13 +77,12 @@ static int	_close_other_pipe_ends(t_state *s, int i)
  * Calling command func will wait for exit status
  * Parent does not wait (until all pipe commands are forked).
  */
-int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,
-		t_exec *e)
+int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i, t_exec *e)
 {
 	pid_t	pid;
 	int		exit_status;
 
-	debug_print(DBGMSG_EPIPE_ANNOUNCE, i);
+	dprint(DBGMSG_EPIPE_ANNOUNCE, i);
 	if (SIGINT == g_last_signal)
 		return (SIGINT_BEFORE_FORK);
 	pid = fork();

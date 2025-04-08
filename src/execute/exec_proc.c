@@ -3,10 +3,10 @@
 /* Forks child and runs executor for
  * higher-level AST nodes.
  */
-int	exec_fork_redirect_wait(t_state *s, t_ast_node *node, t_exec *e, t_cmd_fns *cf)
+int	exec_fork_redirect_wait(t_state *s, t_ast_node *node, t_exec *e,
+		t_cmd_fns *cf)
 {
 	pid_t	pid;
-	int		status;
 	int		exit_status;
 
 	exit_status = 0;
@@ -14,10 +14,7 @@ int	exec_fork_redirect_wait(t_state *s, t_ast_node *node, t_exec *e, t_cmd_fns *
 		return (SIGINT_BEFORE_FORK);
 	pid = fork();
 	if (pid < 0)
-	{
-		err(EMSG_FORK);
-		return (ERR_FORK);
-	}
+		return (err(EMSG_FORK), ERR_FORK);
 	else if (0 == pid)
 	{
 		sig_reset_handlers();
@@ -30,8 +27,8 @@ int	exec_fork_redirect_wait(t_state *s, t_ast_node *node, t_exec *e, t_cmd_fns *
 		exit_status = e->executor(s, node);
 		exit_clean(&get_mem(s)->list, exit_status, __FUNCTION__, NULL);
 	}
-	waitchilds(&status, 1);
-	set_exit_status(s, status);
+	waitchilds(&exit_status, 1);
+	set_exit_status(s, exit_status);
 	sig_set_handlers(INT_DFL);
-	return (exec_get_exit_status(status));
+	return (exec_get_exit_status(exit_status));
 }

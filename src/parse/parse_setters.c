@@ -26,6 +26,7 @@ int	p_update_redc(t_ast_node *a, int amt)
 	}
 	return (ERR_ARGS);
 }
+
 // Adds amt to argument count for command node type
 int	p_update_argc(t_ast_node *a, int amt)
 {

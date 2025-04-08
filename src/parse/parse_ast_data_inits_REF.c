@@ -4,7 +4,7 @@
 
 // Called on redir tokens, which only have the symbol info.
 t_redir_data	*init_redir(t_mem_mgr *m, t_parser *p, t_ast_node *target,
-	enum e_tok_type type)
+		enum e_tok_type type)
 {
 	t_redir_data	*red;
 
@@ -62,13 +62,13 @@ t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node,
 		cmd_node->data.cmd.do_expansion |= arg->do_expansion;
 		cmd_node->data.cmd.do_globbing |= arg->do_globbing;
 		cmd_node->data.cmd.has_arggrouptoks |= arg->is_grouparg;
-/*
-		if (true == arg->do_expansion)
-			cmd_node->data.cmd.do_expansion = true;
-		if (true == arg->do_globbing)
-			cmd_node->data.cmd.do_globbing = true;
-		if (true == arg->is_grouparg)
-			cmd_node->data.cmd.has_arggrouptoks = true; */
+		/*
+				if (true == arg->do_expansion)
+					cmd_node->data.cmd.do_expansion = true;
+				if (true == arg->do_globbing)
+					cmd_node->data.cmd.do_globbing = true;
+				if (true == arg->is_grouparg)
+					cmd_node->data.cmd.has_arggrouptoks = true; */
 	}
 	return (arg);
 }
@@ -110,7 +110,7 @@ void	*create_arg_data_node_deep(t_mem_mgr *mgr, const void *content)
 void	*create_redir_data_node_deep(t_mem_mgr *mgr, const void *content)
 {
 	t_redir_data	*red_data;
-	char		*fn;
+	char			*fn;
 
 	fn = (char *)content;
 	red_data = mgr->f(&mgr->list, sizeof(t_redir_data));

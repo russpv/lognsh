@@ -2,8 +2,8 @@
 
 t_parse_fns	*init_parse_fns(t_state *s)
 {
-	const t_mem_mgr *m = get_mem(s);
-	t_parse_fns *fns;
+	const t_mem_mgr	*m = get_mem(s);
+	t_parse_fns		*fns;
 
 	fns = m->f(&((t_mem_mgr *)m)->list, sizeof(t_parse_fns));
 	if (!fns)
@@ -40,7 +40,7 @@ t_parser	*create_parser(t_state *s, t_list *tokens)
 			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		p->curr_tok = tokens;
 		p->token_count = ft_lstsize(tokens);
-		debug_print("p->tokc=%d\n", p->token_count);
+		dprint("p->tokc=%d\n", p->token_count);
 		_init_parser(s, p);
 		p->st = st_int_create(get_mem(s));
 		if (!p->st)
@@ -56,7 +56,7 @@ void	destroy_parser(t_mem_mgr *m, void **instance)
 	p = (t_parser *)(*instance);
 	if (!p)
 		return ;
-	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
+	dprint(_MOD_ ": %s...\n", __FUNCTION__);
 	if (p->ast)
 	{
 		destroy_ast_node(m, (void **)&p->ast);
@@ -64,7 +64,7 @@ void	destroy_parser(t_mem_mgr *m, void **instance)
 	}
 	if (p->tokens)
 	{
-		debug_print(_MOD_ ": %s: destroying p->tokens...\n", __FUNCTION__);
+		dprint(_MOD_ ": %s: destroying p->tokens...\n", __FUNCTION__);
 		ft_lstclear_tmp(m, &p->tokens, destroy_token);
 		p->tokens = NULL;
 	}

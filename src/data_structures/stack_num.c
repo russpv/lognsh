@@ -25,7 +25,7 @@ int	st_int_push(t_int_stack *s, int thing)
 {
 	if (s->depth >= MAX_ST_DEPTH)
 	{
-		debug_print(DBGMSG_STPUSH_OVERFLOW);
+		dprint(DBGMSG_STPUSH_OVERFLOW);
 		return (1);
 	}
 	s->st[s->depth] = thing;
@@ -39,7 +39,7 @@ int	st_int_pop(t_int_stack *s)
 
 	if (s->depth == 0)
 	{
-		debug_print(DBGMSG_STPOP_UNDERFL);
+		dprint(DBGMSG_STPOP_UNDERFL);
 		return (-1);
 	}
 	tmp = s->st[s->depth - 1];

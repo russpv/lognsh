@@ -50,23 +50,23 @@ bool	is_transition_delim(t_lex *lexer)
 		return (true);
 	c = lexer->ptr[0];
 	next = is_valid_next(lexer, 0);
-	debug_print(_MOD_ ": -------- %s:_%c_", __FUNCTION__, c);
+	dprint(_MOD_ ": -------- %s:_%c_", __FUNCTION__, c);
 	if (!*lexer->ptr)
-		return (debug_print(" YES-NULL\n"), true);
+		return (dprint(" YES-NULL\n"), true);
 	if (ft_strchr(NORMALTRANSITIONS, c))
 	{
 		if (c == '<')
 		{
 			if (next)
 				if ('<' == next)
-					return (debug_print(" YES, <<\n"), true);
+					return (dprint(" YES, <<\n"), true);
 		}
 		else if (is_dollar_delim(lexer))
-			return (debug_print(" YES, $_\n"), true);
+			return (dprint(" YES, $_\n"), true);
 		else if ('$' != c)
-			return (debug_print(" YES\n"), true);
+			return (dprint(" YES\n"), true);
 	}
-	debug_print(" NO\n");
+	dprint(" NO\n");
 	return (false);
 }
 
@@ -95,16 +95,16 @@ bool	is_normal_delim(t_lex *lexer, int offset)
 	c = *lexer->ptr + offset;
 	next = is_valid_next(lexer, offset);
 	if (c && next)
-		debug_print(_MOD_ ": -------- %s:_%c%c_", __FUNCTION__, c, next);
+		dprint(_MOD_ ": -------- %s:_%c%c_", __FUNCTION__, c, next);
 	else if (c)
-		debug_print(_MOD_ ": -------- %s:_%c__", __FUNCTION__, c);
+		dprint(_MOD_ ": -------- %s:_%c__", __FUNCTION__, c);
 	if (ft_strchr(NORMALDELIMS, c))
 	{
 		if (true == is_logicalop(c, next))
-			return (debug_print(" YES\n"), true);
+			return (dprint(" YES\n"), true);
 		else if (c == '&')
-	 		return (debug_print(" NO\n"), false);
-		return (debug_print(" YES\n"), true);
+	 		return (dprint(" NO\n"), false);
+		return (dprint(" YES\n"), true);
 	}
-	return (debug_print(" NO\n"), false);
+	return (dprint(" NO\n"), false);
 }

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   env_set.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/09 08:59:52 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/03 11:30:20 by dayeo            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "env_int.h"
 
 void	env_set_node_next(t_env *node, t_env *next)
@@ -88,13 +76,13 @@ int	env_upsert_value(t_mem_mgr *m, t_env *env_list, const char *key,
 	node = env_find_node(env_list, key);
 	if (node)
 	{
-		debug_print("%s: found key:%s\n", __FUNCTION__, key);
+		dprint("%s: found key:%s\n", __FUNCTION__, key);
 		if (!_update_existing_var(m, node, value))
 			return (ERR_GENERAL);
 	}
 	else
 	{
-		debug_print("%s: inserting key:%s\n", __FUNCTION__, key);
+		dprint("%s: inserting key:%s\n", __FUNCTION__, key);
 		node = create_env_node(m, key, value);
 		if (!node)
 			return (ERR_MEM);

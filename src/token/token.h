@@ -24,7 +24,7 @@
 # define OP_DGREAT ">>"
 # define OP_DLESS "<<"
 # define OP_PIPE '|'
-# define OP_ENV '$' // this plus underscore or alphanumeric, an env_var
+# define OP_ENV '$'
 # define OP_STAR '*'
 # define OP_SQUOTE '\''
 # define OP_NULL '\0'
@@ -54,7 +54,7 @@
 
 enum					e_tok_type
 {
-	TOK_WORD,       // command names, built-ins
+	TOK_WORD,		// command names, built-ins
 					// In the shell command language, a token other than
 					// an operator. In some cases a word is also a portion
 					// of a word token: in the various forms of parameter
@@ -69,9 +69,9 @@ enum					e_tok_type
 	// solely of underscores, digits, and alphabetics
 	// from the portable character set. The first character
 	// of a name is not a digit.
-	TOK_NEWLINE,   // (non-functional)
-	TOK_IO_NUMBER, // REDOUT/REDIN plus digits
-	TOK_OP_REF,    // "&" for stdio
+	TOK_NEWLINE,	// (non-functional)
+	TOK_IO_NUMBER,	// REDOUT/REDIN plus digits
+	TOK_OP_REF,		// "&" for stdio
 	TOK_REDIRECT_IN,
 	TOK_REDIRECT_OUT,
 	TOK_REDIRECT_APPEND,
@@ -82,29 +82,29 @@ enum					e_tok_type
 	TOK_ORIF,
 	TOK_OPEN_PAREN,
 	TOK_CLOSE_PAREN,
-	TOK_SINGLE_QUOTE, // (non-functional)
-	TOK_DOUBLE_QUOTE, // (non-functional)
-	TOK_ENV_VAR,      //$
-	TOK_EXIT_STATUS,  //$?
-	TOK_BI,           // Builtin command
-	TOK_IF,           // Reserved word "if"
-	TOK_THEN,         // Reserved word "then"
-	TOK_ELSE,         // Reserved word "else"
-	TOK_FI,           // Reserved word "fi"
-	TOK_DO,           // Reserved word "do"
-	TOK_DONE,         // Reserved word "done"
-	TOK_CASE,         // Reserved word "case"
-	TOK_ESAC,         // Reserved word "esac"
-	TOK_WHILE,        // Reserved word "while"
-	TOK_UNTIL,        // Reserved word "until"
-	TOK_FOR,          // Reserved word "for"
-	TOK_IN,           // Reserved word "in"
+	TOK_SINGLE_QUOTE,	//(non-functional)
+	TOK_DOUBLE_QUOTE,	//(non-functional)
+	TOK_ENV_VAR,		//$
+	TOK_EXIT_STATUS,	//$?
+	TOK_BI,				// Builtin command
+	TOK_IF,				// Reserved word "if"
+	TOK_THEN,			// Reserved word "then"
+	TOK_ELSE,			// Reserved word "else"
+	TOK_FI,				// Reserved word "fi"
+	TOK_DO,				// Reserved word "do"
+	TOK_DONE,			// Reserved word "done"
+	TOK_CASE,			// Reserved word "case"
+	TOK_ESAC,			// Reserved word "esac"
+	TOK_WHILE,			// Reserved word "while"
+	TOK_UNTIL,			// Reserved word "until"
+	TOK_FOR,			// Reserved word "for"
+	TOK_IN,				// Reserved word "in"
 	TOK_EOF,
 	TOK_UNKNOWN,
 	TOK_ERR
 };
 
-struct s_tok;
+struct					s_tok;
 typedef struct s_tok	t_tok;
 
 t_tok					*create_token(t_mem_mgr *st, const char *s, int type,

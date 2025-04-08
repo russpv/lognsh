@@ -3,8 +3,8 @@
 /* void star star due to linked list destroy method */
 void	destroy_token(t_mem_mgr *mgr, void **token)
 {
-	t_tok *t;
-	
+	t_tok	*t;
+
 	if (!token)
 		return ;
 	if (!(*token))
@@ -15,7 +15,7 @@ void	destroy_token(t_mem_mgr *mgr, void **token)
 	else
 	{
 		if (t->t.tok.raw)
-			mgr->dealloc(&mgr->list, t->t.tok.raw);	
+			mgr->dealloc(&mgr->list, t->t.tok.raw);
 	}
 	mgr->dealloc(&mgr->list, t);
 	*token = NULL;

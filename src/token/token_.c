@@ -1,5 +1,7 @@
 #include "token_int.h"
 
+#define DMSG_CT ": %s: %s_ typ_%d len_%ld\n"
+
 static void	_init_group_token(t_tok *token, size_t pos)
 {
 	token->class = GROUP;
@@ -28,22 +30,22 @@ t_tok	*create_token(t_mem_mgr *mgr, const char *s, int type, size_t pos)
 {
 	t_tok	*token;
 
-	if (!s)
+	if (!s || !mgr)
 		return (NULL);
 	token = mgr->f(&mgr->list, sizeof(t_tok));
 	if (token)
 	{
 		if (type == TOK_GROUP_WORD)
 		{
-			debug_print(_MOD_": %s: (grp) typ_%d \n", __FUNCTION__, type);
+			dprint(_MOD_ ": %s: (grp) typ_%d \n", __FUNCTION__, type);
 			_init_group_token(token, pos);
 		}
 		else
 		{
 			token->t.tok.raw_len = ft_strnlen(s, MAX_INPUT_SZ);
-			debug_print(_MOD_": %s: %s_ typ_%d len_%ld\n", __FUNCTION__, s, type, token->t.tok.raw_len);
+			dprint(_MOD_ DMSG_CT, __FUNCTION__, s, type, token->t.tok.raw_len);
 			if (token->t.tok.raw_len > MAX_INT_BUFLEN)
-				return (print_bufflow(s), mgr->dealloc(&mgr->list, token), NULL);
+				return (pbufflow(s), mgr->dealloc(&mgr->list, token), NULL);
 			token->t.tok.raw = ft_strdup_tmp(mgr, s);
 			if (!token->t.tok.raw)
 				exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
@@ -64,9 +66,10 @@ void	*create_tmp_token(t_mem_mgr *mgr, const void *s)
 	token = mgr->f(&mgr->list, sizeof(t_tok));
 	if (token)
 	{
-		debug_print(_MOD_": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s, TOK_WORD);
+		dprint(_MOD_ ": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s,
+			TOK_WORD);
 		if (ft_strnlen(s, MAX_INPUT_SZ) > MAX_INT_BUFLEN)
-			return (print_bufflow(s), mgr->dealloc(&mgr->list, token), NULL);
+			return (pbufflow(s), mgr->dealloc(&mgr->list, token), NULL);
 		token->t.tok.raw = ft_strdup_tmp(mgr, s);
 		if (!token->t.tok.raw)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
@@ -87,9 +90,10 @@ void	*create_split_token(t_mem_mgr *mgr, const void *s)
 	token = mgr->f(&mgr->list, sizeof(t_tok));
 	if (token)
 	{
-		debug_print(_MOD_": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s, TOK_WORD);
+		dprint(_MOD_ ": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s,
+			TOK_WORD);
 		if (ft_strnlen(s, MAX_INPUT_SZ) > MAX_INT_BUFLEN)
-			return (print_bufflow(s), mgr->dealloc(&mgr->list, token), NULL);
+			return (pbufflow(s), mgr->dealloc(&mgr->list, token), NULL);
 		token->t.tok.raw = ft_strdup_tmp(mgr, s);
 		if (!token->t.tok.raw)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);

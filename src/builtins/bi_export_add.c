@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   bi_export_add.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/16 10:47:28 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/03 11:33:16 by dayeo            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "bi_int.h"
 
 #define CMD_NAME "export"
@@ -50,20 +38,11 @@ static void	_reset_value_ptr(char *equal_pos, const char **value_ptr)
 		*value_ptr = NULL;
 }
 
-static void _update_special_state_vars(t_state *s, char *key, const char *value)
+static void	_update_special_state_vars(t_state *s, char *key, const char *value)
 {
 	if (0 == ft_strncmp(PATH_KEY, key, MAX_NAME_LEN))
 		set_path(s, value);
 }
-
-/*
-static int	_update_or_add_env(t_state *s, t_env *existing_node, const char *key,
-		const char *value)
-{
-	if (existing_node)
-		return (update_existing_var(get_mem(s), existing_node, value));
-	return (_add_new_var(get_mem(s), get_env_list_ptr(s), key, value));
-}*/
 
 // updates or adds key-value pair in s->sh_env_list
 // assumes equal_pos is within arg

@@ -3,7 +3,7 @@
 // Modifies args token list
 static int	_do_expansions(t_state *s, t_arg_data *grparg)
 {
-	int res;
+	int	res;
 
 	if (!grparg || !s)
 		return (ERR_ARGS);
@@ -23,7 +23,8 @@ static int	_do_wordsplits(t_state *s, t_arg_data *grparg)
 	if (!grparg || !s)
 		return (ERR_ARGS);
 	if (grparg->do_expansion && !grparg->in_dquotes)
-		ft_lstiter_ins_rwd_tmp(get_mem(s), &grparg->lst_tokens, tok_do_wordsplits); 
+		ft_lstiter_ins_rwd_tmp(get_mem(s), &grparg->lst_tokens,
+			tok_do_wordsplits);
 	tok_print_list(grparg->lst_tokens);
 	return (0);
 }
@@ -31,7 +32,7 @@ static int	_do_wordsplits(t_state *s, t_arg_data *grparg)
 // Saves list in state
 static int	_do_globbing(t_state *s, t_arg_data *grparg)
 {
-	t_list		**saved_lst;
+	t_list	**saved_lst;
 
 	if (!grparg || !s)
 		return (ERR_ARGS);
@@ -43,27 +44,27 @@ static int	_do_globbing(t_state *s, t_arg_data *grparg)
 	return (0);
 }
 
-int _print_arg(void *arg)
+int	_print_arg(void *arg)
 {
-	t_arg_data *node;
+	t_arg_data	*node;
 
 	node = (t_arg_data *)arg;
 	if (node)
 	{
 		if (node->raw)
-			colored_printf(MAGENTA, "%s", node->raw);
-		else 
-			colored_printf(MAGENTA, "(null)");
+			cprintf(MAGENTA, "%s", node->raw);
+		else
+			cprintf(MAGENTA, "(null)");
 	}
 	return (0);
 }
 
-//Saves modified token list in state cache
+// Saves modified token list in state cache
 static int	_do_combine(t_state *s, t_arg_data *grparg)
 {
-	int res;
-	char *str;
-	t_list **tok_lst;
+	int		res;
+	char	*str;
+	t_list	**tok_lst;
 
 	res = lstiter_state(s, grparg->lst_tokens, tok_do_grp_combine);
 	if (0 != res)
@@ -73,7 +74,8 @@ static int	_do_combine(t_state *s, t_arg_data *grparg)
 	if (str)
 	{
 		if (*str)
-			ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s), create_tmp_token(get_mem(s), str)));
+			ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s),
+					create_tmp_token(get_mem(s), str)));
 	}
 	tok_print_list(*tok_lst);
 	return (0);
@@ -81,11 +83,12 @@ static int	_do_combine(t_state *s, t_arg_data *grparg)
 
 static void	_do_insert(t_state *s, t_list **this_node)
 {
-	t_list **tok_lst;
+	t_list	**tok_lst;
+	t_list	*argl;
 
 	tok_lst = get_tmp_tok_list(s);
-	t_list *argl = ft_lstmap_tmp(get_mem(s), *tok_lst, token_to_arg, destroy_arg);
-	ft_lstadd_insert(this_node, argl); 
+	argl = ft_lstmap_tmp(get_mem(s), *tok_lst, token_to_arg, destroy_arg);
+	ft_lstadd_insert(this_node, argl);
 	ft_lstdelone_tmp(get_mem(s), this_node, *this_node, destroy_arg);
 	ft_lstprinter(*this_node, _print_arg);
 	*tok_lst = NULL;
@@ -95,8 +98,8 @@ static void	_do_insert(t_state *s, t_list **this_node)
  * If (null) results, still returns empty heap string,
  * since a grouparg implies non-null word.
  * Ignores all (null) token raws.
- * Inserts into arg llist as needed. 
- * expand > split > glob > combine > insert 
+ * Inserts into arg llist as needed.
+ * expand > split > glob > combine > insert
  * // Explicit empty strings retained as empty strings.
 // Unquoted nulls resulting from expansions are removed.
 // Quoted nulls resulting from expansions are retained as empty strings,
@@ -111,25 +114,26 @@ int	p_do_grparg_processing(t_state *s, t_list **this_arg, void *c)
 	grparg = (t_arg_data *)c;
 	if (NULL == c || false == grparg->is_grouparg || NULL == grparg->lst_tokens)
 		return (0);
-	debug_print(_MOD_ ": %s: got list: %p exp:%d glob:%d\n", __FUNCTION__,\
+	dprint(_MOD_ ": %s: got list: %p exp:%d glob:%d\n", __FUNCTION__,
 		grparg->lst_tokens, grparg->do_expansion, grparg->do_globbing);
 	res = _do_expansions(s, grparg);
 	if (0 != res)
-		return res;
-	log_print("Expansions Done.\n");
+		return (res);
+	lgprint("Expansions Done.\n");
 	res = _do_wordsplits(s, grparg);
 	if (0 != res)
-		return res;
-	log_print("Wordsplits Done.\n");
+		return (res);
+	lgprint("Wordsplits Done.\n");
 	res = _do_combine(s, grparg);
 	if (0 != res)
-		return res;
-	log_print("Combines and Inserts Done.\n");
+		return (res);
+	lgprint("Combines and Inserts Done.\n");
 	res = _do_globbing(s, grparg);
 	if (0 != res)
-		return res;
+		return (res);
 	_do_insert(s, this_arg);
-	log_print("Globbing Done.\n");
-	debug_print("%s: returning lst_size: %d, %p\n", __FUNCTION__, ft_lstsize(*this_arg), *this_arg);
+	lgprint("Globbing Done.\n");
+	dprint("%s: returning lst_size: %d, %p\n", __FUNCTION__,
+		ft_lstsize(*this_arg), *this_arg);
 	return (res);
 }

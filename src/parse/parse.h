@@ -12,7 +12,7 @@
 
 /* PARSE
  * Converts user input into an AST
- * Tokenizes input, Expands variables, Does globbing(?)
+ * Tokenizes input, Expands variables, Does globbing
  *
  * cmd: echo $HOME/ *.c | grep foo && echo "done"
  *
@@ -28,12 +28,6 @@
  * └── CMD [echo, done]
  */
 
-// Notes: Parse will access State for expansions
-
-// Builds the AST (Composite Pattern) where commands are leaf
-// nodes; pipes, conditionals and args are elsewhere
-// Command module interprets (processes) AST
-
 enum							e_ast_node_type
 {
 	NONE,
@@ -45,9 +39,9 @@ enum							e_ast_node_type
 
 typedef struct s_global_state	t_state;
 typedef struct s_node			t_ast_node;
-typedef struct s_redir			t_redir_data; //Exposed for logging only
+typedef struct s_redir			t_redir_data;
 
-t_parse_fns *init_parse_fns(t_state *s);
+t_parse_fns						*init_parse_fns(t_state *s);
 
 t_ast_node						*parse(t_state *s, char *input);
 
@@ -59,7 +53,7 @@ int								p_get_argc(t_ast_node *a);
 int								p_get_redc(t_ast_node *a);
 bool							p_get_expansion(t_ast_node *a);
 bool							p_get_grouptok(t_ast_node *a);
-bool						p_get_has_redgrouptoks(t_ast_node *n);
+bool							p_get_has_redgrouptoks(t_ast_node *n);
 
 char							*p_get_fn(const t_redir_data *r);
 
@@ -88,6 +82,6 @@ void							destroy_redir(t_mem_mgr *m, void **in);
 bool							is_globbing(t_tok *tok);
 
 void							print_ast(t_ast_node *ast, int depth);
-void							debug_print_list(t_list *head);
+void							dprint_arglist(t_list *head);
 
 #endif

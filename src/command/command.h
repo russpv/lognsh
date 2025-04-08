@@ -13,42 +13,16 @@
  */
 
 /*
-Bash Manual
-
-If the command name contains no slashes,
-	the shell attempts to locate it. If there exists a shell
-	function by that name, that function is invoked as described
-		in Shell Functions.
-If the name does not match a function,
-	the shell searches for it in the list of shell builtins.
-	If a match is found, that builtin is invoked.
-If the name is neither a shell function nor a builtin, and
-	contains no slashes, Bash searches each element of $PATH for
-		a directory containing an executable file by that name.
-		Bash uses a hash table to remember the full pathnames of
-	executable files to avoid multiple PATH searches
-	(see the description of hash in Bourne Shell Builtins).
-	A full search of the directories in $PATH is performed
-	only if the command is not found in the hash table.
-	If the search is unsuccessful, the shell searches for
-		a defined shell function named command_not_found_handle.
-	If that function exists, it is invoked in a separate
-	execution environment with the original command and the
-	original command’s arguments as its arguments,
-	and the function’s exit status becomes the exit status
-	of that subshell. If that function is not defined, the
-	shell prints an error message and returns an exit status of 127.
-If the search is successful,
-	or if the command name contains one or more slashes,
-	the shell executes the named program in a separate execution environment.
-	Argument 0 is set to the name given, and the remaining arguments to the
-	command are set to the arguments supplied, if any.
-If this execution fails because the file is not in executable format,
-	and the file is not a directory,
-	it is assumed to be a shell script and the shell executes it as
-	described in Shell Scripts.
-If the command was not begun asynchronously,
-	the shell waits for the command to complete and collects its exit status.
+** 1) If name has no slashes, searches built-ins, or path
+** 2) If search unsuccessful, returns code 127.
+** 3) If search successful, or has slashes, executes in a child
+** 4) Arg 0 is set to the command name
+** 5) Waits for child to exit and keeps exit status.
+**
+** Note: searches built-ins first before path. Does not cache
+** search results in hashtable. Does not invoke
+** command_not_found_handle function (returns 127).
+** Does not execute shell scripts.
 */
 
 enum								e_exec_context
@@ -66,8 +40,7 @@ typedef struct s_node				t_ast_node;
 typedef struct s_command_functions	t_cmd_fns;
 
 t_cmd_fns							*init_cmd_fns(t_state *s);
-void	destroy_cmd_fns(t_mem_mgr *m, t_cmd_fns *f);
-
+void								destroy_cmd_fns(t_mem_mgr *m, t_cmd_fns *f);
 
 char								*c_get_fullpath(t_cmd *c);
 char								**c_get_argv(t_cmd *c);

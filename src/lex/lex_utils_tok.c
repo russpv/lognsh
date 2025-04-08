@@ -10,7 +10,7 @@ static int	_add_subtoken(t_mem_mgr *m, t_lex *lexer, t_tok *subtok)
 
 int	add_grptoken(t_mem_mgr *m, t_lex *lexer)
 {
-	debug_print(_MOD_ ": %s adding token (grp) to list\n", __FUNCTION__);
+	dprint(_MOD_ ": %s adding token (grp) to list\n", __FUNCTION__);
 	ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m, lexer->last_grp_tok));
 	lexer->is_subtoken = false;
 	lexer->last_grp_tok = NULL;
@@ -21,7 +21,7 @@ int	add_grptoken(t_mem_mgr *m, t_lex *lexer)
 /* Adds to llist tail a new token, clears buf */
 int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 {
-	debug_print(_MOD_ ": %s\n", __FUNCTION__);
+	dprint(_MOD_ ": %s\n", __FUNCTION__);
 	if (token && lexer)
 	{
 		memset(lexer->buf, 0, LEX_BUFSZ);
@@ -30,17 +30,17 @@ int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 		{
 			if (lexer->last_grp_tok)
 			{
-				debug_print(_MOD_ ": %s adding subtoken %s to grp\n",
+				dprint(_MOD_ ": %s adding subtoken %s to grp\n",
 					__FUNCTION__, tok_get_raw(token));
 				_add_subtoken(m, lexer, token);
-				debug_print(_MOD_ ": %s checking delimiter, ptr:%c\n",
+				dprint(_MOD_ ": %s checking delimiter, ptr:%c\n",
 					__FUNCTION__, *lexer->ptr);
 				if (is_normal_delim(lexer, 0))
 					add_grptoken(m, lexer);
 			}
 			else
 			{
-				debug_print(_MOD_ ": %s adding token to list\n", __FUNCTION__);
+				dprint(_MOD_ ": %s adding token to list\n", __FUNCTION__);
 				if (ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m, token)) > 0)
 					lexer->tokc++;
 			}
@@ -63,7 +63,7 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 	t_tok	*token;
 	t_tok	*grp_token;
 
-	debug_print(_MOD_ ": %s\n", __FUNCTION__);
+	dprint(_MOD_ ": %s\n", __FUNCTION__);
 	if (!lexer)
 		return (NULL);
 	if (true == lexer->is_subtoken && NULL == lexer->last_grp_tok)
@@ -73,7 +73,7 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 		if (!grp_token)
 			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		lexer->last_grp_tok = grp_token;
-		debug_print(_MOD_ ": %s: Created GROUP token\n", __FUNCTION__);
+		dprint(_MOD_ ": %s: Created GROUP token\n", __FUNCTION__);
 	}
 	if (0 == ft_strlen(lexer->buf))
 		return (NULL);
@@ -97,7 +97,7 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 		}
 		lexer->do_globbing = INITVAL;
 		lexer->do_expansion = INITVAL;
-		debug_print(_MOD_ ": %s: Created token \n", __FUNCTION__);
+		dprint(_MOD_ ": %s: Created token \n", __FUNCTION__);
 	}
 	return (token);
 }

@@ -7,7 +7,7 @@ int	tok_set_globbing(t_tok *token)
 	if (GROUP == token->class)
 		return (ERR_ARGS);
 	token->t.tok.do_globbing = true;
-	debug_print(_MOD_ ": %s: %s_ glob_%d \n", __FUNCTION__, tok_get_raw(token),
+	dprint(_MOD_ ": %s: %s_ glob_%d \n", __FUNCTION__, tok_get_raw(token),
 		tok_get_globbing(token));
 	return (0);
 }
@@ -23,7 +23,6 @@ int	tok_set_expansion(t_tok *token)
 	return (0);
 }
 
-// Toggles to true
 int	tok_set_dquotes(t_tok *token)
 {
 	if (!token)
@@ -51,13 +50,5 @@ int	tok_incr_tokc(t_tok *token)
 	if (GROUP != token->class)
 		return (ERR_ARGS);
 	token->t.meta.tokc++;
-	return (0);
-}
-
-int	tok_add_subtok(t_mem_mgr *mgr, t_tok *grp, t_tok *sub)
-{
-	if (!grp || !sub)
-		return (ERR_ARGS);
-	ft_lstadd_back(&grp->t.meta.tokens, ft_lstnew_tmp(mgr, sub));
 	return (0);
 }

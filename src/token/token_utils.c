@@ -9,22 +9,22 @@ int	tok_print(void *content)
 	{
 		if (GROUP == tok->class)
 		{
-			log_print(_MOD_ ": Grp_tok:(grp) Exp:- Glb:- Sub:- tokc:%d \n",
+			lgprint(_MOD_ ": Grp_tok:(grp) Exp:- Glb:- Sub:- tokc:%d \n",
 				tok->t.meta.tokc);
-			if (0 != ft_lstiter(tok->t.meta.tokens, tok_print))
-				err("LSTITER");
+			ft_lstiter(tok->t.meta.tokens, tok_print);
 		}
 		else if (tok_get_issubtoken(tok))
-			log_print(_MOD_ ": Sub_tok:%02d Exp:%d Glb:%d Sub:%d Dq:%d +:%d Val:(%s)\
-				 \n",
-						tok->t.tok.type,tok->t.tok.do_expansion,
-						tok->t.tok.do_globbing,tok->t.tok.is_subtoken,
-						tok->t.tok.in_dquotes,tok->t.tok.is_combinable,tok->t.tok.raw);
+			lgprint(_MOD_": Stok:%02d Exp:%d Glb:%d Sub:%d Dq:%d +:%d Val:(%s)\
+				 \n", tok->t.tok.type, tok->t.tok.do_expansion,
+				tok->t.tok.do_globbing, tok->t.tok.is_subtoken,
+				tok->t.tok.in_dquotes, tok->t.tok.is_combinable,
+				tok->t.tok.raw);
 		else
-			log_print(_MOD_ ": Token:%02d Exp:%d Glb:%d Sub:%d Dq:%d +:%d Val:(%s)\
+			lgprint(_MOD_": Tok:%02d Exp:%d Glb:%d Sub:%d Dq:%d +:%d Val:(%s)\
 				\n", tok->t.tok.type, tok->t.tok.do_expansion,
 				tok->t.tok.do_globbing, tok->t.tok.is_subtoken,
-				tok->t.tok.in_dquotes, tok->t.tok.is_combinable, tok->t.tok.raw);
+				tok->t.tok.in_dquotes, tok->t.tok.is_combinable,
+				tok->t.tok.raw);
 	}
 	return (0);
 }
@@ -40,11 +40,11 @@ void	tok_print_list(t_list *head)
 	{
 		while (current)
 		{
-			debug_print("Node %d:\n", i);
+			dprint("Node %d:\n", i);
 			tok_print(current->content);
 			current = current->next;
 			i++;
 		}
-		debug_print("List printed.\n");
+		dprint("List printed.\n");
 	}
 }

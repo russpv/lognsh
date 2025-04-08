@@ -1,8 +1,8 @@
 #include "parse_int.h"
 
 #define EMSG_OPENDIR "ERR opendir()\n"
-#define DBGMSG_GOTPATTERN _MOD_ ": match_glob got pattern: %s\n"
-#define DBGMSG_GLOBMATCH _MOD_ ": match_glob matched: %s\n"
+#define DBGMSG_GOTPATTERN  "%s: match_glob got pattern: %s\n"
+#define DBGMSG_GLOBMATCH  "%s: match_glob matched: %s\n"
 
 /* Matches char for char until '*', then until the
  * char after, or returns true if nothing after.
@@ -57,7 +57,7 @@ static struct dirent	*_glob_readdir(DIR *dir)
 	while (0 == ft_strncmp(res->d_name, ".", 1) || 0 == ft_strncmp(res->d_name,
 			"..", 2))
 	{
-		log_print(YELLOW "glob_readdir skipping %s\n" RESET, res->d_name);
+		lgprint(YELLOW "glob_readdir skipping %s\n" RESET, res->d_name);
 		res = readdir(dir);
 	}
 	return (res);
@@ -79,7 +79,7 @@ t_list	*match_glob(t_mem_mgr *m, const char *pattern)
 
 	lst = NULL;
 	got = NULL;
-	debug_print(DBGMSG_GOTPATTERN, pattern);
+	dprint(DBGMSG_GOTPATTERN, _MOD_, pattern);
 	dir = opendir(".");
 	if (!dir)
 		return (perror(SHELL_NAME), NULL);
@@ -88,7 +88,7 @@ t_list	*match_glob(t_mem_mgr *m, const char *pattern)
 	{
 		if (true == _matches_pattern(res->d_name, pattern))
 		{
-			debug_print(DBGMSG_GLOBMATCH, res->d_name);
+			dprint(DBGMSG_GLOBMATCH, _MOD_, res->d_name);
 			name = ft_strdup_tmp(m, res->d_name);
 			new = ft_lstnew_tmp(m, name);
 			if (NULL == new || NULL == name)

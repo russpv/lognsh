@@ -1,12 +1,5 @@
 #include "parse_int.h"
 
-#define LMSG_IN _MOD_ ": \t###### %s ####### \n"
-#define DMSG_GOT _MOD_ ": %s: got tok of %s \n"
-#define DBGMSG_PNODE_STOP _MOD_ ": reached end of tokens\n"
-#define DBGMSG_PNODE_NOTPROC _MOD_ ": not a proc...\n"
-#define DBGMSG_PNODE_NOTCMD _MOD_ ": not a cmd...\n"
-#define DBGMSG_PNODE_NOTPIPE _MOD_ ": not a pipe...\n"
-
 /* Returns AST node.
  * Validates token type, parses args into list
  * For commands, checks for redirect operator(s) before or after
@@ -21,26 +14,27 @@
  */
 t_ast_node	*parse_full_cmd(t_state *s, t_parser *p)
 {
-	log_print(LMSG_IN, __FUNCTION__);
-	debug_print(DMSG_GOT, __FUNCTION__, tok_get_raw(peek(p)));
+	lgprint(LMSG_IN, _MOD_, __FUNCTION__);
+	dprint(PDMSG_GOT, _MOD_, __FUNCTION__, tok_get_raw(peek(p)));
 	if (is_at_end(p))
 	{
-		log_print(DBGMSG_PNODE_STOP);
+		lgprint("%s: %s: at last token.\n", _MOD_, __FUNCTION__);
 		return (NULL);
 	}
 	if (is_open_paren(peek(p)))
 		return (parse_proc(s, p));
-	debug_print(DBGMSG_PNODE_NOTPROC);
+	dprint("%s: %s: not a proc...\n", _MOD_, __FUNCTION__);
 	if ((is_cmd_token(peek(p)) || is_redir_token(peek(p)))
 		&& (st_int_peek(p->st) > 0 || !p->last_node))
 		return (parse_cmd(s, p));
-	debug_print(DBGMSG_PNODE_NOTCMD);
+	dprint("%s: %s: not a cmd...\n", _MOD_, __FUNCTION__);
 	if (p->last_node && is_pipe_token(peek(p)))
 		return (parse_pipeline(s, p));
-	debug_print(DBGMSG_PNODE_NOTPIPE);
+	dprint("%s: %s: not a pipe...\n", _MOD_, __FUNCTION__);
 	if (p->last_node && is_log_token(peek(p)))
 		return (parse_logical(s, p));
-	print_parse_error(s, tok_get_raw(peek(p)), tok_get_pos(peek(p)) - tok_get_len(peek(p)));
+	print_parse_error(s, tok_get_raw(peek(p)), tok_get_pos(peek(p))
+		- tok_get_len(peek(p)));
 	p->parse_error = true;
 	set_exit_status(s, EX_EINVAL);
 	return (NULL);
@@ -70,7 +64,7 @@ t_ast_node	*parse(t_state *s, char *input)
 		return (set_error(s, ERR_TOKEN), NULL);
 	tokens = lex_get_tokens(lexer);
 	parser = create_parser(s, tokens);
-	log_print(LMSG_IN, __FUNCTION__);
+	lgprint(LMSG_IN, __FUNCTION__);
 	while (!is_at_end(parser) && !parser->parse_error)
 		ast = parse_full_cmd(s, parser);
 	parser->ast = ast;

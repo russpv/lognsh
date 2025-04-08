@@ -24,7 +24,8 @@ int	handle_heredoc(const t_redir_data *node)
 		return (err("No heredoc for input redirection.\n"), ERR_ARGS);
 	if (pipe(fildes) < 0)
 		return (perror(EMSG_PIPE), ERR_PIPE);
-	write(fildes[1], node->heredoc_body, ft_strnlen(node->heredoc_body, MAX_OUTPUT_SZ));
+	write(fildes[1], node->heredoc_body, ft_strnlen(node->heredoc_body,
+			MAX_OUTPUT_SZ));
 	if (0 != close(fildes[1]))
 		return (perror(EMSG_CLOSE), ERR_CLOSE);
 	if (0 != redirect(&fildes[0], NULL, STDIN_FILENO, append))

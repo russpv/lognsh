@@ -3,8 +3,6 @@
 
 /* DOUBLY LINKED LIST */
 
-//# include "../utils/debug.h"
-
 # include "../../include/libft.h"
 # include <stddef.h>
 # include <stdio.h>
@@ -35,11 +33,15 @@ char					*ft_lstiterstr(t_list *lst, int (*f)(void *));
 t_list					*ft_lstlast(t_list *lst);
 t_list					*ft_lstfirst(t_list *lst);
 
+/*
 t_list					*ft_lstmap(t_list *lst, void *(*f)(void *),
 							void (*del)(void *));
 t_list					*ft_lstnew(void *content);
 t_list					*ft_lstnew_copystr(void *content,
 							char *(*f)(const char *));
+*/
+void					ft_lstadd_insert(t_list **lst, t_list *node);
+
 
 int						ft_lstsize(t_list *lst);
 t_list					*ft_lstcopy(t_list *orig, void *(*f)(const void *),
@@ -49,7 +51,6 @@ t_list					*ft_lstcopy_node(const t_list *orig,
 
 void					ft_lstiter_ins_rwd(t_list **lst, int (*f)(t_list **,
 								void *));
-void					ft_lstadd_insert(t_list **lst, t_list *node);
 void					ft_lstdelone_rwd(t_list **lst, t_list **node,
 							void (*del)(void *));
 

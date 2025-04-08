@@ -95,13 +95,13 @@ int	match_heredoc(t_mem_mgr *m, t_lex *l)
 		line = readline(HDOC_PROMPT);
 		if (NULL == line)
 		{
-			debug_print(LOGMSG_SIG);
+			dprint(LOGMSG_SIG);
 			free(line);
 			return (ERR_RL_ABORTED);
 		}
 		if (true == _line_is_eof(l, line))
 		{
-			debug_print(DBGMSG_FOUNDDEL);
+			dprint(DBGMSG_FOUNDDEL);
 			free(line);
 			return (0);
 		}
@@ -119,7 +119,7 @@ int	tokenize_heredoc(t_state *s, t_lex *lexer)
 	t_tok	*token;
 	int		res;
 
-	debug_print(DBGMSG_ANNOUNCE);
+	dprint(DBGMSG_ANNOUNCE);
 	res = get_eof_word(get_mem(s), lexer);
 	if (0 != res)
 		return (res);
@@ -128,8 +128,8 @@ int	tokenize_heredoc(t_state *s, t_lex *lexer)
 		return (res);
 	get_mem(s)->dealloc(&get_mem(s)->list, lexer->eof_word);
 	lexer->eof_word = NULL;
-	debug_print("Received doc:%s lines:%d\n", lexer->buf, lexer->lines);
-	debug_print(DBGMSG_PTRAT, *lexer->ptr);
+	dprint("Received doc:%s lines:%d\n", lexer->buf, lexer->lines);
+	dprint(DBGMSG_PTRAT, *lexer->ptr);
 	token = lex_create_token(get_mem(s), lexer, TOK_HEREDOC_WORD);
 	if (token)
 	{

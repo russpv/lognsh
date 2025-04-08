@@ -46,12 +46,12 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
 		new = ft_lstnew_tmp(p->mmgr, arg);
 		if (NULL == new)
 			exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
-		debug_print(_MOD_ ": %s: adding arg:%s\n", __FUNCTION__, arg->raw);
+		dprint(_MOD_ ": %s: adding arg:%s\n", __FUNCTION__, arg->raw);
 		ft_lstadd_back(&cmd_node->data.cmd.args, new);
 		test_prev_integrity(cmd_node->data.cmd.args);
 		cmd_node->data.cmd.argc++;
 	}
-	debug_print(_MOD_ ": %s: done on %d arg(s)\n", __FUNCTION__,
+	dprint(_MOD_ ": %s: done on %d arg(s)\n", __FUNCTION__,
 		cmd_node->data.cmd.argc);
 	if (cmd_node->data.cmd.argc > initval)
 		return (0);
@@ -67,8 +67,8 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
  */
 static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 {
-	int res2;
-	int res;
+	int	res2;
+	int	res;
 
 	if (!p || !cmd_node)
 		return (ERR_ARGS);
@@ -118,7 +118,7 @@ t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 	int			res;
 
 	st_int_push(p->st, AST_NODE_CMD);
-	debug_print(_MOD_ ": %s: tok: %s\n", __FUNCTION__, tok_get_raw(peek(p)));
+	dprint(_MOD_ ": %s: tok: %s\n", __FUNCTION__, tok_get_raw(peek(p)));
 	ast_node = _init_cmd_node(p->mmgr);
 	if (NULL == ast_node)
 		return (err(EMSG_MALLOC), NULL);
@@ -128,15 +128,13 @@ t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 		set_error(s, res);
 		if (get_status(s) == EX_HAPPY)
 			set_exit_status(s, EX_ERNDM);
-		//else
-	//		set_exit_status(s, EX_EINVAL);
 		destroy_ast_node(get_mem(s), (void **)&ast_node);
 		return (NULL);
 	}
 	p->last_node = ast_node;
 	st_int_pop(p->st);
-	debug_print(_MOD_ ": %s: node args @ %p\n", __FUNCTION__,
+	dprint(_MOD_ ": %s: node args @ %p\n", __FUNCTION__,
 		p_get_args(ast_node));
-	debug_print(_MOD_ ": %s: %s done\n", __FUNCTION__, ast_node->data.cmd.name);
+	dprint(_MOD_ ": %s: %s done\n", __FUNCTION__, ast_node->data.cmd.name);
 	return (ast_node);
 }

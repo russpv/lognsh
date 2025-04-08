@@ -5,7 +5,7 @@ void	destroy_cmd_node(t_mem_mgr *mgr, void **n)
 	t_ast_node	*node;
 
 	node = (t_ast_node *)(*n);
-	debug_print(_MOD_ ":  destroy_cmd_node...\n");
+	dprint(_MOD_ ":  destroy_cmd_node...\n");
 	if (NULL == node)
 		return ;
 	if (node->type != AST_NODE_CMD)
@@ -17,7 +17,7 @@ void	destroy_cmd_node(t_mem_mgr *mgr, void **n)
 	if (node->data.cmd.redirs)
 		ft_lstclear_tmp(mgr, &node->data.cmd.redirs, destroy_redir);
 	mgr->dealloc(&mgr->list, node);
-	debug_print(_MOD_ ":  destroy_cmd_node...DONE\n");
+	dprint(_MOD_ ":  destroy_cmd_node...DONE\n");
 	*n = NULL;
 }
 
@@ -26,7 +26,7 @@ void	destroy_proc_node(t_mem_mgr *mgr, void **n)
 	t_ast_node	*node;
 
 	node = (t_ast_node *)(*n);
-	debug_print(_MOD_ ":  destroy_proc_node...\n");
+	dprint(_MOD_ ":  destroy_proc_node...\n");
 	if (NULL == node)
 		return ;
 	if (AST_NODE_PROC != node->type)
@@ -36,7 +36,7 @@ void	destroy_proc_node(t_mem_mgr *mgr, void **n)
 	if (node->data.proc.cmds)
 		ft_lstclear_tmp(mgr, &node->data.proc.cmds, destroy_ast_node);
 	mgr->dealloc(&mgr->list, node);
-	debug_print(_MOD_ ":  destroy_proc_node...DONE\n");
+	dprint(_MOD_ ":  destroy_proc_node...DONE\n");
 	*n = NULL;
 }
 
@@ -46,7 +46,7 @@ void	destroy_log_node(t_mem_mgr *mgr, void **n)
 	t_ast_node	*node;
 
 	node = (t_ast_node *)(*n);
-	debug_print(_MOD_ ":  destroy_log_node...\n");
+	dprint(_MOD_ ":  destroy_log_node...\n");
 	if (NULL == node)
 		return ;
 	if (AST_NODE_LOG != node->type)
@@ -56,7 +56,7 @@ void	destroy_log_node(t_mem_mgr *mgr, void **n)
 	if (node->data.log.cmds)
 		ft_lstclear_tmp(mgr, &node->data.log.cmds, destroy_ast_node);
 	mgr->dealloc(&mgr->list, node);
-	debug_print(_MOD_ ":  destroy_log_node...DONE\n");
+	dprint(_MOD_ ":  destroy_log_node...DONE\n");
 	*n = NULL;
 }
 
@@ -65,7 +65,7 @@ void	destroy_pipe_node(t_mem_mgr *mgr, void **n)
 	t_ast_node	*node;
 
 	node = (t_ast_node *)(*n);
-	debug_print(_MOD_ ":  destroy_pipe_node...\n");
+	dprint(_MOD_ ":  destroy_pipe_node...\n");
 	if (NULL == node)
 		return ;
 	if (AST_NODE_PIPELINE != node->type)
@@ -73,7 +73,7 @@ void	destroy_pipe_node(t_mem_mgr *mgr, void **n)
 	if (node->data.pipe.cmds)
 		ft_lstclear_tmp(mgr, &node->data.pipe.cmds, destroy_ast_node);
 	mgr->dealloc(&mgr->list, node);
-	debug_print(_MOD_ ":  destroy_pipe_node...DONE\n");
+	dprint(_MOD_ ":  destroy_pipe_node...DONE\n");
 	*n = NULL;
 }
 
@@ -85,7 +85,7 @@ void	destroy_ast_node(t_mem_mgr *mgr, void **node)
 	t_ast_node	*ast;
 
 	ast = (t_ast_node *)(*node);
-	debug_print(_MOD_ ":  destroy_ast...\n");
+	dprint(_MOD_ ":  destroy_ast...\n");
 	if (NULL == ast)
 		return ;
 	if (AST_NODE_PROC == ast->type)
@@ -96,6 +96,6 @@ void	destroy_ast_node(t_mem_mgr *mgr, void **node)
 		destroy_pipe_node(mgr, (void **)&ast);
 	else
 		destroy_log_node(mgr, (void **)&ast);
-	debug_print(_MOD_ ":  destroy_ast...DONE\n");
+	dprint(_MOD_ ":  destroy_ast...DONE\n");
 	*node = NULL;
 }

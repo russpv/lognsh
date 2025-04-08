@@ -4,6 +4,8 @@
 # include "../data_structures/i_llist.h"
 # include <errno.h>
 
+# define MSG_FAIL "Memory allocation failed.\n"
+
 t_mem_block	*mem_init_block(void);
 void		mem_init(t_mem_node *head);
 void		mem_mgr_init(t_mem_mgr *m);

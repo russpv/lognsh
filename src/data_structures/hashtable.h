@@ -14,8 +14,8 @@
 # define HASHSIZE 101
 
 /* Forward declaration */
-struct s_ht_entry;
-struct s_ht;
+struct				s_ht_entry;
+struct				s_ht;
 
 typedef struct s_ht	*t_ht;
 

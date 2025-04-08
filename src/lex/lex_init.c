@@ -59,7 +59,7 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 {
 	t_lex	*lexer;
 
-	debug_print(_MOD_ ": %s\n", __FUNCTION__);
+	dprint(_MOD_ ": %s\n", __FUNCTION__);
 	lexer = myalloc(&(get_mem(state)->list), sizeof(t_lex));
 	if (lexer)
 	{
@@ -72,7 +72,7 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 		lexer->lines = 0;
 		lexer->last_grp_tok = NULL;
 		lexer->tokc = 0;
-		lexer->keep_dollar = LEXERKEEP$;
+		lexer->keep_dollar = LEXERKEEPDOLLAR;
 		lexer->global_state = state;
 		register_lexer_destroy(state, destroy_lexer);
 		register_token_destroy(state, destroy_token);
@@ -91,7 +91,7 @@ void	destroy_lexer(t_mem_mgr *m, void **instance)
 	t_lex		*lexer;
 
 	lexer = (t_lex *)(*instance);
-	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
+	dprint(_MOD_ ": %s...\n", __FUNCTION__);
 	if (!lexer)
 		return ;
 	if (lexer->buf)

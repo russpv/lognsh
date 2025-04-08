@@ -1,8 +1,6 @@
 #include "llist_int.h"
 
-#define DEBUGMSG_DRWD_ANNOUNCE "lstdelone_rwd: Deleting node: %p (content:\
-	%p) (head: %p)\n"
-#define DEBUGMSG_DRWD_SUCCESS "lstdelone_rwd: Node deleted successfully\n"
+#define MSG_IN "%s: deleting node: %p (content:%p head: %p)\n"
 
 /* LSTDELONE
 ** Removes passed node in doubly linked list
@@ -41,8 +39,8 @@ void	ft_lstdelone_rwd(t_list **lst, t_list **node, void (*del)(void *))
 
 	if (!lst || !node || !(*node) || !del)
 		return ;
-	debug_print(DEBUGMSG_DRWD_ANNOUNCE, (void *)(*node),
-		(void *)((*node)->content), (void *)lst);
+	dprint(MSG_IN, __FUNCTION__, (void *)(*node), (void *)((*node)->content),
+		(void *)lst);
 	tmp = (*node)->prev;
 	if ((*node)->prev)
 		(*node)->prev->next = (*node)->next;
@@ -54,5 +52,5 @@ void	ft_lstdelone_rwd(t_list **lst, t_list **node, void (*del)(void *))
 	*node = NULL;
 	if (*lst == *node)
 		*lst = tmp;
-	debug_print(DEBUGMSG_DRWD_SUCCESS);
+	dprint("%s: node deleted.\n", __FUNCTION__);
 }

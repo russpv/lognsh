@@ -27,24 +27,24 @@ static void _announce(const char *caller, char *raw, char *str, int msg)
 	if (SAYGOT == msg)
 	{
 		if (str)
-			debug_print(_MOD_ ": %s: got _%s_, _%s_(cache)\n", caller, raw, str);
+			dprint(_MOD_ ": %s: got _%s_, _%s_(cache)\n", caller, raw, str);
 		else
-			debug_print(_MOD_ ": %s: got _%s_\n", caller, raw);
+			dprint(_MOD_ ": %s: got _%s_\n", caller, raw);
 	}
 	else if (SAYDONE == msg)
-		debug_print(_MOD_ ": %s: returning _%s_(cache)\n", caller, str);
+		dprint(_MOD_ ": %s: returning _%s_(cache)\n", caller, str);
 	else if (SAYCANCOMB == msg)
-		debug_print(_MOD_ ": %s: got combinable _%s_\n", caller, raw);
+		dprint(_MOD_ ": %s: got combinable _%s_\n", caller, raw);
 	else if (SAYCANNOTCOMB == msg)
-		debug_print(_MOD_ ": %s: got uncombinable %s, committing cached _%s_\n", caller, raw, str);
+		dprint(_MOD_ ": %s: got uncombinable %s, committing cached _%s_\n", caller, raw, str);
 	else if (SAYCOMBINE == msg)
-		debug_print(_MOD_ ": %s: combining _%s_ + _%s_(cache)\n", caller, raw, str);
+		dprint(_MOD_ ": %s: combining _%s_ + _%s_(cache)\n", caller, raw, str);
 	else if (SAYTRIMMED == msg)
-		debug_print(_MOD_ ": %s: only trimmed front _%s_, and rear _%s_\n", caller, raw, str);
+		dprint(_MOD_ ": %s: only trimmed front _%s_, and rear _%s_\n", caller, raw, str);
 	else if (SAYCACHEONLY == msg)
-		debug_print(_MOD_ ": %s: only caching _%s_, can't combine _%s_(cache)\n", caller, raw, str);
+		dprint(_MOD_ ": %s: only caching _%s_, can't combine _%s_(cache)\n", caller, raw, str);
 	else
-		debug_print(_MOD_ ": %s: got NULL\n", caller);
+		dprint(_MOD_ ": %s: got NULL\n", caller);
 }
 
 static char	*_do_join(t_state *s, char *left, char *right)
@@ -134,7 +134,7 @@ static int	_put_str_on_toklst(t_state *s, char **str)
 	if (!s || !str)
 		return (ERR_ARGS);
 	tok_lst = get_tmp_tok_list(s);
-	debug_print(_MOD_ ": %s: _%s_\n", __FUNCTION__, *str);	
+	dprint(_MOD_ ": %s: _%s_\n", __FUNCTION__, *str);	
 	if (UNQUOTED == get_tmp_flag(s))
 		*str = _do_trim(s, *str, IFS, BACK);
 	tmp = ft_strdup_tmp(get_mem(s), *str);
@@ -211,7 +211,7 @@ static int _load_str_expanded(t_state *s, char *raw, char **str)
 		set_tmp_flag(s, UNQUOTED);
 		_announce(__FUNCTION__, raw, NULL, SAYCACHEONLY);
 	}
-	debug_print(_MOD_ ": %s: loaded _%s_\n", *str);
+	dprint(_MOD_ ": %s: loaded _%s_\n", *str);
 	return (0);
 }
 

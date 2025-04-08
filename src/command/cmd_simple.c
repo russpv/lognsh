@@ -1,8 +1,5 @@
 #include "command_int.h"
 
-#define LMSG_IN _MOD_ ": \t### %s ###\n"
-#define LMSG_OUT _MOD_ ": \tFinished %s exit: %d.\n"
-
 static int	_handle_no_command(t_ast_node *a)
 {
 	if (p_get_type(a) != AST_NODE_CMD)
@@ -60,7 +57,7 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	t_cmd_fns		*cf;
 
 	c = get_cmd(s);
-	log_print(LMSG_IN, __FUNCTION__);
+	lgprint("%s: \t### %s ###\n", _MOD_, __FUNCTION__);
 	if (!c || !a)
 		return (ERR_ARGS);
 	if (p_get_type(a) != AST_NODE_CMD)
@@ -69,14 +66,14 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	if (ERR_REDIR == exit_code || NO_CMD == exit_code)
 		return (exit_code);
 	log_command_info((t_cmd *)c, a);
-	assert(c_get_node(c) == a); //TODO remove
+	assert(c_get_node(c) == a);
 	cf = init_cmd_fns(s);
 	bi = get_builtin(p_get_cmd(a));
 	if (bi)
 		exit_code = exec_bi_call(s, bi, cf);
 	else
 		exit_code = run_cmd(s, a);
-	log_print(LMSG_OUT, __FUNCTION__, exit_code);
+	lgprint("%s: \t%s exit code: %d.\n", _MOD_, __FUNCTION__, exit_code);
 	destroy_cmd_fns(get_mem(s), cf);
 	return (exit_code);
 }

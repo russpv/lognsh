@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   env_llist.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/09 09:00:07 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/14 13:58:34 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "env_int.h"
 
 // Adds node to back of llist
@@ -108,7 +96,7 @@ t_env	*copy_envp(t_mem_mgr *m, char **envp)
 
 	env_list = NULL;
 	i = 0;
-	debug_print(_MOD_ ": copying envp\n");
+	dprint(_MOD_ ": copying envp\n");
 	while (envp[i] != NULL)
 	{
 		ft_memset(key, 0, sizeof(key));

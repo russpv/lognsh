@@ -2,88 +2,35 @@
 # define PARSE_INT_H
 
 # include "parse.h"
-#include <stdbool.h>
+# include <stdbool.h>
+# include <stdio.h>
 
 # define _MOD_ "Parser"
 # define MAX_CMD_ARGS 10
-# define DMSG_IN _MOD_ ": %s: got: %s\n"
-# define DMSG_OUT _MOD_ ": %s: found: %s\n"
+# define MAX_STACK_DEPTH 100
+# define PDMSG_IN "%s: %s: got: %s\n"
+# define PDMSG_OUT  "%s: %s: found: %s\n"
+# define LMSG_IN "%s: \t###### %s ####### \n"
+# define PDMSG_GOT "%s: %s: got tok of %s \n" 
 
-/*
-From Bash Manual:
-These (expansion) operations are performed in this order:
-
-1) Parameter expansion: $VAR is replaced with its ENV value. No fancy stuff. Also,
-	$0 and $? do their thing.
-(excluded) Command substition: $(command) replaces command with its output. If this appears in double quotes,
-	word splitting and filename expansion are not performed on output.
-2) Word splitting: checks results of expansions to split words
-3) Filename expansion: if word has unquoted ‘*’,
-	it is replaced with alphabetically sorted
-	list of matching (case sensitive) filenames in pwd. If no matches,
-		the word is left
-	unchanged, or removed,
-		or error thrown. Starting dots must be matched explicitly.
-(excluded) Pattern matching: * Matches any string, including the null string
-4) Quote removal: any [\ ' "], not resulting from an expansion,
-	and outside of quotes, is removed
-
-Execution:
-- Expansions (see above) on words other than redirections. If any,
-	first word is taken as the command
-		name, remaining are args.
-- Redirections are performed.
-- If no command name results, redirections are performed,
-	but do not affect the current
-	shell environment. A redirection error causes the command to exit with a non-zero status.
-- If one of the expansions contained a command substitution,
-	the exit status of the command
-	is the exit status of the last command substitution performed. If there were no command
-		substitutions, the command exits with a status of zero.
-
-See Noyce, Robert. Crafting Interpreters.
-
-full_command	→ logical_command*
-logical_command	→ (proc | simple | pipeline) [operator (proc | simple | pipeline)]*
-pipeline		→ (proc | simple) ['|' (proc | simple) ]*
-simple_command	→ (redirects)* command_name args* (redirects)* (command_name optional,
-		bash just does nothing)
-
-proc			→ '(' full_command ')'
-
-redirect  		→ [('<' | '>' | '>>' | '<<')][proc | literal]) (no space)
-
-args → (flags)* word*
-word → literal | variable | command_substitution
-	// note: no command_substitution now
-variable → '$' (alphanumeric | '_')+
-
-command_substitution → '$(' full_command ')'
-
-
-Attempting a hand-written LL(1) recursive descent parser.
-
-"redirection operators may precede or appear anywhere within a simple
-command or may follow a command. Redirections are processed in the
- order they appear, from left to right."
-if you redirect multiple times, all the redirections are performed,
- but only the last redirection will take effect (assuming none of
- the earlier redirections cause error)
-
- 3.6.2 Redirecting Output
-
-Redirection of output causes the file whose name results from the
-expansion of word to be opened for writing on file descriptor n,
-	or the standard output (file descriptor 1) if n is not specified.
-	If the file does not exist it is created; if it does exist it is truncated to zero size.
-
- Expansions
- Precedence:
- $(command) Command substitions Note: not implemented.
- ${parameter:=word} Note: not implemented.
- filename matching Note: not implemented.
-
-Note: any split words on an expansion of a redirection fd results in an error
+/* Grammar
+** 
+** See Noyce, Robert. Crafting Interpreters.
+** Attempting a hand-written LL(1) recursive descent parser.
+**
+** full_command		→ logical_command*
+** logical_command	→ (proc | simple | pipeline) [operator (proc | simple | pipeline)]*
+** pipeline			→ (proc | simple) ['|' (proc | simple) ]*
+** simple_command	→ (redirects)* command_name (args* | redirects)* 
+** 
+** proc				→ '(' full_command ')'
+** redirect  		→ [('<' | '>' | '>>' | '<<')][proc | literal]) (no space)
+** args 			→ (flags)* word*
+** word 			→ literal | variable | command_substitution
+** variable 		→ '$' (alphanumeric | '_')+
+** 
+** Output redirections cause the file to be created or truncated.
+** Any split words resulting from a filename expansion throw an error
 */
 
 typedef struct
@@ -108,15 +55,6 @@ typedef struct s_cmd
 	bool					has_redgrouptoks;
 }							t_ast_node_cmd;
 
-// TODO, add heredoc flags for:
-// dquoted heredoc "EOF" (no globs, do expansions, escapes)
-// squoted heredoc 'EOF' (no globs, no expansions, no escapes)
-// ensure quotes removed from eof token prior to input
-// ensure eof token is never expanded itself, and $ is literal
-
-// normal flags for:
-// dquoted <"$fn" (no word splitting on expansion)
-// squoted <'$fn' (no expansion on fn)
 typedef struct s_redir
 {
 	char					*symbol;
@@ -149,17 +87,13 @@ typedef struct s_arg
 	t_list					*lst_tokens;
 }							t_arg_data;
 
-/* Next refactor, remove the t_list since
- * this can only be a wrapper for one cmd
- * cmds is a llist vehicle for ast nodes
- */
 typedef struct s_proc
 {
 	t_list					*cmds;
 	int						cmdc;
 	t_list					*redirs;
 	int						redc;
-	
+
 	bool					has_redgrouptoks;
 	bool					do_redir_globbing;
 	bool					do_redir_expansion;
@@ -212,8 +146,8 @@ typedef struct s_parser
 t_parser					*create_parser(t_state *s, t_list *tokens);
 void						destroy_parser(t_mem_mgr *m, void **instance);
 t_ast_node					*init_log(t_mem_mgr *m);
-t_redir_data				*init_redir(t_mem_mgr *m, t_parser *p, t_ast_node *t,
-								enum e_tok_type typ);
+t_redir_data				*init_redir(t_mem_mgr *m, t_parser *p,
+								t_ast_node *t, enum e_tok_type typ);
 t_arg_data					*init_arg(t_mem_mgr *m, t_parser *p,
 								t_ast_node *cmd_node, t_tok *tok);
 
@@ -249,9 +183,10 @@ bool						p_get_do_redir_globbing(t_ast_node *n);
 int							p_do_arg_expansion(t_state *s, void *c);
 int							p_do_globbing_args(t_mem_mgr *mgr,
 								t_list **lst_node, void *lst_c);
-int							p_do_grparg_processing(t_state *s, t_list **this_node,
-								void *c);
-int							p_do_globbing_toks(t_mem_mgr *mgr, t_list **lst_node, void *lst_c);
+int							p_do_grparg_processing(t_state *s,
+								t_list **this_node, void *c);
+int							p_do_globbing_toks(t_mem_mgr *mgr,
+								t_list **lst_node, void *lst_c);
 int							p_do_wordsplits(t_mem_mgr *mgr, t_list **lst_node,
 								void *lst_c);
 int							do_arg_inserts(t_mem_mgr *mgr, t_list **lst_node,
@@ -263,10 +198,11 @@ void						*create_arg_data_node_deep(t_mem_mgr *mgr,
 /* Redir Expansions */
 int							p_do_red_expansion(t_state *s, void *r);
 int							p_do_globbing_redirs(t_mem_mgr *mgr, void *c);
-int							p_do_grpred_processing(t_state *s, t_list **this_red, void *c);
-void						*create_redir_data_node_deep(t_mem_mgr *mgr, const void *content);
-void	*token_to_redir(t_mem_mgr *m, const void *tok);
-
+int							p_do_grpred_processing(t_state *s,
+								t_list **this_red, void *c);
+void						*create_redir_data_node_deep(t_mem_mgr *mgr,
+								const void *content);
+void						*token_to_redir(t_mem_mgr *m, const void *tok);
 
 /* Expansion Utils */
 int							check_special_expansions(t_state *s,

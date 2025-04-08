@@ -26,7 +26,7 @@ int	process_special_operators(t_lex *lexer)
 		prev = is_valid_prev(lexer, 0);
 		if (' ' == prev)
 		{
-			debug_print(_MOD_ ": -------- %s got ' #', skipping...\n",
+			dprint(_MOD_ ": -------- %s got ' #', skipping...\n",
 				__FUNCTION__);
 			lexer->escape_mode = false;
 			while (*lexer->ptr && *lexer->ptr != TK_NEWL

@@ -3,9 +3,6 @@
 #define EMSG_PATH_MALLOC "Allocation for path value failed.\n"
 #define EMSG_NULL_EXPAN "Null expansion variable.\n"
 
-#define DEBUGMSG_ARGP_PRE_G _MOD_ ": Pre-glob headp: %p, 1st node: %p\n"
-#define DEBUGMSG_ARGP_POST_G _MOD_ ": Post-glob headp: %p, 1st node: %p\n"
-
 /* Looks for env values of key loaded in buf */
 static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
 		char **value)
@@ -41,7 +38,7 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
  * If flag set, looks for expansion values in shell envp
  * by passing a buffer loaded with the key and replaces
  * t_arg_data.raw string, omitting any '$'.
- * The string to expand must be more than LEXERKEEP$ char (for '$').
+ * The string to expand must be more than LEXERKEEPDOLLAR char (for '$').
  */
 int	p_do_arg_expansion(t_state *s, void *c)
 {
@@ -57,16 +54,16 @@ int	p_do_arg_expansion(t_state *s, void *c)
 		return (ERR_ARGS);
 	raw_len = ft_strnlen(content->raw, INPUT_BUF_SZ);
 	ft_memset(buf, 0, sizeof(buf));
-	debug_print(DMSG_IN, __FUNCTION__, content->raw);
+	dprint(PDMSG_IN, _MOD_, __FUNCTION__, content->raw);
 	if (content->do_expansion)
 	{
-		if (raw_len <= LEXERKEEP$)
+		if (raw_len <= LEXERKEEPDOLLAR)
 			return (err(EMSG_NULL_EXPAN), ERR_ARGS);
-		ft_memcpy(buf, content->raw + LEXERKEEP$, raw_len - LEXERKEEP$);
+		ft_memcpy(buf, content->raw + LEXERKEEPDOLLAR, raw_len - LEXERKEEPDOLLAR);
 		res = _do_arg_ops(s, content, buf, &value);
 		if (res != 0)
 			return (res);
-		debug_print(DMSG_OUT, __FUNCTION__, value);
+		dprint(PDMSG_OUT, _MOD_, __FUNCTION__, value);
 	}
 	return (0);
 }

@@ -8,7 +8,7 @@
 # include "../token/token.h"
 # include <stdbool.h>
 
-# define LEXERKEEP$ 1 // 1 for keeping '$' in expansions
+# define LEXERKEEPDOLLAR 1 // 1 for keeping '$' in expansions
 
 struct s_lex;
 typedef struct s_lex	t_lex;

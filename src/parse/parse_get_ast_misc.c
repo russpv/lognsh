@@ -12,12 +12,12 @@ t_list	*p_get_redirs(t_ast_node *a)
 {
 	if (a->type == AST_NODE_CMD)
 	{
-		debug_print(_MOD_ ": p_get_redirs got: _%s_\n", a->data.cmd.name);
+		dprint(_MOD_ ": p_get_redirs got: _%s_\n", a->data.cmd.name);
 		return (a->data.cmd.redirs);
 	}
 	else if (a->type == AST_NODE_PROC)
 	{
-		debug_print(_MOD_ ": p_get_redirs got a proc\n");
+		dprint(_MOD_ ": p_get_redirs got a proc\n");
 		return (a->data.proc.redirs);
 	}
 	return (NULL);
@@ -28,12 +28,13 @@ t_list	**p_get_redirs_ptr(t_ast_node *a)
 {
 	if (a->type == AST_NODE_CMD)
 	{
-		debug_print(_MOD_ ": p_get_redirs_ptr got cmd: _%s_\n", a->data.cmd.name);
+		dprint(_MOD_ ": p_get_redirs_ptr got cmd: _%s_\n",
+			a->data.cmd.name);
 		return (&a->data.cmd.redirs);
 	}
 	else if (a->type == AST_NODE_PROC)
 	{
-		debug_print(_MOD_ ": p_get_redirs_ptr got a proc\n");
+		dprint(_MOD_ ": p_get_redirs_ptr got a proc\n");
 		return (&a->data.proc.redirs);
 	}
 	return (NULL);

@@ -5,7 +5,7 @@
 # include "i_llist.h"
 # include <stdlib.h>
 
-struct s_int_stack;
+struct						s_int_stack;
 typedef struct s_int_stack	t_int_stack;
 
 t_int_stack					*st_int_create(t_mem_mgr *m);
@@ -14,7 +14,7 @@ int							st_int_push(t_int_stack *s, int thing);
 int							st_int_pop(t_int_stack *s);
 int							st_int_peek(t_int_stack *s);
 
-struct s_ptr_stack;
+struct						s_ptr_stack;
 typedef struct s_ptr_stack	t_ptr_stack;
 
 t_ptr_stack					*st_ptr_create(t_mem_mgr *m);

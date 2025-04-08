@@ -1,13 +1,14 @@
 #include "token_int.h"
 
-static void _init_meta(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
+static void	_init_meta(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
 {
 	new_t->class = t->class;
 	new_t->t.meta.pos = t->t.meta.pos;
 	new_t->t.meta.tokc = t->t.meta.tokc;
 	new_t->t.meta.do_expansion = t->t.meta.do_expansion;
 	new_t->t.meta.do_globbing = t->t.meta.do_globbing;
-	new_t->t.meta.tokens = ft_lstcopy_tmp(mgr, t->t.meta.tokens, copy_token, destroy_token);
+	new_t->t.meta.tokens = ft_lstcopy_tmp(mgr, t->t.meta.tokens, copy_token,
+			destroy_token);
 }
 
 static void	_init_norm(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
@@ -41,6 +42,7 @@ void	*copy_token(t_mem_mgr *mgr, const void *tok)
 		_init_meta(mgr, t, new_t);
 	else
 		_init_norm(mgr, t, new_t);
-	debug_print(_MOD_ ": %s: Copied token _%s_ @ _%ld_\n", __FUNCTION__, tok_get_raw(new_t), tok_get_pos(new_t));
+	dprint(_MOD_ ": %s: Copied token _%s_ @ _%ld_\n", __FUNCTION__,
+		tok_get_raw(new_t), tok_get_pos(new_t));
 	return (new_t);
 }

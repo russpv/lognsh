@@ -20,6 +20,7 @@ static inline void	_init_state_ptrs(t_state *s)
 	s->path = NULL;
 }
 
+/* Note: fns structs are destroyed by allocator */
 t_state	*init_state(char **envp)
 {
 	t_state	*s;

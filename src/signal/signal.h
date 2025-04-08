@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   signal.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/03 17:02:00 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/27 17:40:49 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef SIGNAL_H
 # define SIGNAL_H
 
@@ -23,7 +11,6 @@
 # define INT_KCHILD 0
 # define INT_DFL 1
 # define INT_KRL 2
-
 
 /* Global signal variable is checked periodically
  * through execution chain, and triggers appropriate

@@ -3,6 +3,7 @@
 
 # include "../utils/debug.h"
 # include "llist.h"
+# include <stdio.h>
 
 # define ALESSTHANB -1
 # define AMORETHANB 1
@@ -13,8 +14,8 @@ struct		s_merge
 	t_list	*l;
 	t_list	*r;
 	t_list	**tail;
-	t_list *tmp;  // need this to set node->prev
-	t_list *tmp2; // need this to reconnect segment with rest of list
+	t_list	*tmp; // need this to set node->prev
+	t_list	*tmp2; // need this to reconnect segment with rest of list
 	t_list	*mid;
 	t_list	**beg;
 	t_list	**end;
@@ -27,6 +28,7 @@ void		init_merge(struct s_merge *m, t_list **beg, t_list **end,
 
 void		merge(t_list **lst, t_list **beg, t_list *mid, t_list **end);
 int			compare(t_list *beg, t_list *end);
+void		get_root(char *buf, void *s);
 
 void		print_addremainder_post(struct s_merge *m);
 void		print_tailadvance_post(struct s_merge *m);
@@ -36,9 +38,10 @@ void		print_prev_pre(struct s_merge *m);
 void		print_prev_post(struct s_merge *m);
 void		print_diagnostics_end(t_list **lst, struct s_merge *m);
 void		print_diagnostics_input(t_list **lst, struct s_merge *m);
-void		debug_print_tail_info(struct s_merge *m);
+void		dprint_tail_info(struct s_merge *m);
 
 bool		str_hasalnum(const char *s);
 bool		str_isalnum(const char *s);
+
 
 #endif

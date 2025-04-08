@@ -18,8 +18,8 @@ typedef struct s_cmd	t_cmd;
 typedef struct s_node	t_ast_node;
 
 void					log_command_info(t_cmd *c, t_ast_node *a);
-void					log_print(const char *s, ...);
-void					colored_printf(const char *color, const char *format,
+void					lgprint(const char *s, ...);
+void					cprintf(const char *color, const char *format,
 							...);
 void					err(const char *s);
 

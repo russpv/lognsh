@@ -29,8 +29,8 @@ bool	is_filename_token(t_tok *tok)
 /* Returns tree if is a command node with redc > 0 */
 bool	node_has_redirects(t_ast_node *n)
 {
-	if ((n->type == AST_NODE_CMD && n->data.cmd.redc > 0) ||
-		(n->type == AST_NODE_PROC && n->data.proc.redc > 0))
+	if ((n->type == AST_NODE_CMD && n->data.cmd.redc > 0)
+		|| (n->type == AST_NODE_PROC && n->data.proc.redc > 0))
 		return (true);
 	return (false);
 }

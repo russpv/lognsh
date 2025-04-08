@@ -1,17 +1,19 @@
 #include "llist_int.h"
-#include <stdio.h>
 
 void	print_tailnext_post(struct s_merge *m)
 {
 	if (*m->tail && m->tmp2)
-		debug_print("rejoined to rest of list %s->%s\n", (*m->tail)->content,
+		dvprint("rejoined to rest of list %s->%s\n", (*m->tail)->content,
 			(m->tmp2)->content);
 	if (*m->tail && (*m->end)->next && m->tmp2)
-		debug_print(BLUE "status: end->next %s, tail:%s tail->next: %s,"
-			"tmp2:%s\n" RESET, (*m->end)->next->content, (*m->tail)->content,
-			(*m->tail)->next->content, (m->tmp2)->content);
+		dvprint(BLUE "status: end->next %s, tail:%s tail->next: %s,"
+			"tmp2:%s\n" RESET,
+			(*m->end)->next->content,
+			(*m->tail)->content,
+			(*m->tail)->next->content,
+			(m->tmp2)->content);
 	if (*m->tail)
-		debug_print("%s (remainder, " MAGENTA "prev:%s->%s) -> " RESET,
+		dvprint("%s (remainder, " MAGENTA "prev:%s->%s) -> " RESET,
 			(*m->tail)->content, (*m->tail)->prev->content,
 			(*m->tail)->prev->next->content);
 }
@@ -19,18 +21,22 @@ void	print_tailnext_post(struct s_merge *m)
 void	print_tailadvance_post(struct s_merge *m)
 {
 	if (*m->tail && (*m->tail)->next && (*m->end)->content && m->tmp2)
-		debug_print(BLUE "status: end->next %s, tail:%s tail->next: %s,"
-			"tmp2: (%s)\n" RESET, 
-			(*m->end)->next->content, (*m->tail)->content,
-			(*m->tail)->next->content, (m->tmp2)->content);
+		dvprint(BLUE "status: end->next %s, tail:%s tail->next: %s,"
+			"tmp2: (%s)\n" RESET,
+			(*m->end)->next->content,
+			(*m->tail)->content,
+			(*m->tail)->next->content,
+			(m->tmp2)->content);
 }
 
 void	print_addremainder_post(struct s_merge *m)
 {
 	if ((*m->tail) && (*m->end) && ((*m->tail)->next && (*m->end)->next)
 		&& m->tmp2)
-		debug_print(BLUE "status:end->next %s, tail:%s tail->next: %s,"
-			"tmp2:%s\n" RESET, 
-			(*m->end)->next->content, (*m->tail)->content,
-			(*m->tail)->next->content, (m->tmp2)->content);
+		dvprint(BLUE "status:end->next %s, tail:%s tail->next: %s,"
+			"tmp2:%s\n" RESET,
+			(*m->end)->next->content,
+			(*m->tail)->content,
+			(*m->tail)->next->content,
+			(m->tmp2)->content);
 }

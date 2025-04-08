@@ -6,29 +6,29 @@
 */
 static bool	_is_dquote_transition_delim(t_lex *l)
 {
-	debug_print(_MOD_ ": -------- %s:_%c_", __FUNCTION__, *l->ptr);
+	dprint(_MOD_ ": -------- %s:_%c_", __FUNCTION__, *l->ptr);
 	if (*l->ptr == OP_NULL)
 	{
 		st_int_pop(l->stack);
 		l->state = ON_EOF;
-		return (debug_print(" YES-NULL\n"), true);
+		return (dprint(" YES-NULL\n"), true);
 	}
 	if (ft_strchr(NORMALTRANSITIONS, *l->ptr))
 	{
 		if (OP_DQUOTE == *l->ptr)
 		{
-			debug_print(" FOUND CLOSING QUOTE\n");
+			dprint(" FOUND CLOSING QUOTE\n");
 			st_int_pop(l->stack);
 			l->ptr++;
-			return (debug_print(" YES\n"), true);
+			return (dprint(" YES\n"), true);
 		}
 		else if (l->ptr != NULL && OP_NULL != *l->ptr)
 		{
 			if (is_dollar_delim(l))
-				return (debug_print(" YES\n"), true);
+				return (dprint(" YES\n"), true);
 		}
 	}
-	debug_print(" NO\n");
+	dprint(" NO\n");
 	return (false);
 }
 
@@ -66,7 +66,7 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print(_MOD_ ": %s: _%c_\n", __FUNCTION__, *lexer->ptr);
+	dprint(_MOD_ ": %s: _%c_\n", __FUNCTION__, *lexer->ptr);
 	token = NULL;
 	if (lexer->ptr)
 	{
@@ -77,7 +77,7 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 			lexer->escape_mode = false;
 			if (token)
 				return (token);
-			debug_print(_MOD_ ":     Got:_%c_\n", *lexer->ptr);
+			dprint(_MOD_ ":     Got:_%c_\n", *lexer->ptr);
 			put_on_buf(lexer);
 		}
 		lexer->input_incomplete = true;
@@ -103,7 +103,7 @@ int	tokenize_double_quotes(t_state *s, t_lex *lexer)
 {
 	t_tok	*token;
 
-	debug_print(_MOD_ YELLOW ": STATE: %s, ptr:_%c_\n" RESET, __FUNCTION__,
+	dprint(_MOD_ YELLOW ": STATE: %s, ptr:_%c_\n" RESET, __FUNCTION__,
 		*lexer->ptr);
 	if (lexer)
 	{
@@ -112,7 +112,7 @@ int	tokenize_double_quotes(t_state *s, t_lex *lexer)
 		{
 			return (0);
 		}
-		debug_print(_MOD_ ": ptr at _%c_\n", *lexer->ptr);
+		dprint(_MOD_ ": ptr at _%c_\n", *lexer->ptr);
 		if (0 != add_token(get_mem(s), lexer, token))
 			return (ERR_GENERAL);
 	}

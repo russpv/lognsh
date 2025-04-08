@@ -1,7 +1,5 @@
 #include "parse_int.h"
 
-#define MAX_STACK_DEPTH 100
-
 t_pstack	*create_stack(t_mem_mgr *m)
 {
 	t_pstack	*s;
@@ -27,7 +25,7 @@ int	push(t_pstack *stack)
 	}
 	else
 	{
-		debug_print(_MOD_ ": ERROR: Exceeded maximum parentheses.\n");
+		dprint(_MOD_ ": ERROR: Exceeded maximum parentheses.\n");
 		return (1);
 	}
 }
@@ -36,7 +34,7 @@ int	pop(t_pstack *stack)
 {
 	if (--stack->depth < 0)
 	{
-		debug_print(_MOD_ ": ERROR: Unmatched parentheses.\n");
+		dprint(_MOD_ ": ERROR: Unmatched parentheses.\n");
 		return (1);
 	}
 	return (0);

@@ -1,20 +1,5 @@
 #include "llist_int.h"
 
-static void	_get_root(char *buf, void *s)
-{
-	char	*str;
-	size_t	buf_idx;
-
-	str = (char *)s;
-	buf_idx = 0;
-	while (*str && buf_idx < MAX_BUF)
-	{
-		if (ft_isalnum(*str))
-			buf[buf_idx++] = *str;
-		str++;
-	}
-}
-
 static const char	*_strip_prespecials(void *s)
 {
 	char	*str;
@@ -64,7 +49,7 @@ static int	_check_one_alphanumeric(const char *str1, const char *str2,
 			return (ALESSTHANB);
 		if ('$' != *str1 && '$' == *str2)
 			return (ALESSTHANB);
-		if (str_isalnum(str2)) // neither have '$' ? vs 0 <haha
+		if (str_isalnum(str2))
 			return (ALESSTHANB);
 		return (ft_strcmp_casefold(str1, body2));
 	}
@@ -91,6 +76,9 @@ static int	_check_both_specials(const char *str1, const char *str2)
 	return (ft_strcmp(str1, str2));
 }
 
+// Ranks special chars ahead of alphanums; and $-prefixed strings
+// higher than varname strings
+// +haha and (haha appear ahead of haha but after foo
 int	compare(t_list *beg, t_list *end)
 {
 	const char	*body1 = _strip_prespecials(beg->content);
@@ -101,14 +89,19 @@ int	compare(t_list *beg, t_list *end)
 
 	ft_memset(root1, 0, MAX_BUF);
 	ft_memset(root2, 0, MAX_BUF);
-	_get_root(root1, beg->content);
-	_get_root(root2, end->content);
+	get_root(root1, beg->content);
+	get_root(root2, end->content);
 	res = _check_both_alphanumeric(beg->content, end->content, root1, root2);
 	if (res == 0)
 		res = _check_one_alphanumeric(beg->content, end->content, body1, body2);
 	if (res == 0)
 		res = _check_both_specials(beg->content, end->content);
-	if (res != 0)
-		return (res > 0 ? AMORETHANB : ALESSTHANB);
+	if (res >= 0)
+	{
+		if (res > 0)
+			return (AMORETHANB);
+		else
+			return (ALESSTHANB);
+	}
 	return (0);
 }

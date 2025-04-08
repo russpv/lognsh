@@ -81,7 +81,7 @@ static int	_process_log(t_state *s, t_parser *p, t_ast_node *log_node)
 		if (0 != _process_op(p, log_node))
 			return (ERR_GENERAL);
 		advance(p);
-		debug_print(_MOD_ ": parsing logical: getting next cmd...\n");
+		dprint(_MOD_ ": parsing logical: getting next cmd...\n");
 		res = _do_ops(s, p, log_node);
 		if (0 != res)
 			return (res);
@@ -90,7 +90,6 @@ static int	_process_log(t_state *s, t_parser *p, t_ast_node *log_node)
 }
 
 /* PARSE LOGICAL
- *
  */
 t_ast_node	*parse_logical(t_state *s, t_parser *p)
 {
@@ -98,20 +97,21 @@ t_ast_node	*parse_logical(t_state *s, t_parser *p)
 	int			res;
 
 	st_int_push(p->st, AST_NODE_LOG);
-	debug_print(_MOD_ ": parse_logical tok: %s\n", tok_get_raw(peek(p)));
+	dprint(_MOD_ ": parse_logical tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = init_log(p->mmgr);
 	if (NULL == ast_node)
 		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LOGI_NODE_MALLOC);
 	res = _process_log(s, p, ast_node);
 	if (0 != res)
 	{
-		print_parse_error(s, tok_get_raw((p->curr_tok)->prev->content), tok_get_pos((p->curr_tok)->prev->content));
+		print_parse_error(s, tok_get_raw((p->curr_tok)->prev->content),
+			tok_get_pos((p->curr_tok)->prev->content));
 		destroy_ast_node(get_mem(s), (void **)&ast_node);
 		set_error(s, res);
 		return (NULL);
 	}
 	p->last_node = ast_node;
 	st_int_pop(p->st);
-	debug_print(_MOD_ ": parsed logical of %d cmds\n", ast_node->data.log.cmdc);
+	dprint(_MOD_ ": parsed logical of %d cmds\n", ast_node->data.log.cmdc);
 	return (ast_node);
 }

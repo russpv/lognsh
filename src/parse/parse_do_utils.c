@@ -22,31 +22,32 @@ int	lstiter_state(t_state *s, t_list *lst, int (*f)(t_state *, void *))
 }
 
 /* Iterates BACKWARDS and applies insertion func f */
-int	ft_lstiter_state_ins_rwd_tmp(t_state *s, t_list **lst,
-	int (*f)(t_state *, t_list **, void *))
+int	ft_lstiter_state_ins_rwd_tmp(t_state *s, t_list **lst, int (*f)(t_state *,
+			t_list **, void *))
 {
 	t_list	*lst_rear;
 	t_list	*tmp;
-	int res;
+	int		res;
 
 	if (lst == NULL)
-		return (debug_print("Null arg\n", __FUNCTION__), ERR_ARGS);
+		return (dprint("Null arg\n", __FUNCTION__), ERR_ARGS);
 	lst_rear = ft_lstlast(*lst);
-	debugv_print(_MOD_ ": %s: %p\n", __FUNCTION__, (void *)lst_rear);
+	dvprint(_MOD_ ": %s: %p\n", __FUNCTION__, (void *)lst_rear);
 	while (lst_rear)
 	{
 		tmp = lst_rear->prev;
-		debugv_print(_MOD_ "%s: %p, content:%p\n", __FUNCTION__, (void *)lst_rear,
-			(void *)lst_rear->content);
+		dvprint(_MOD_ "%s: %p, content:%p\n", __FUNCTION__,
+			(void *)lst_rear, (void *)lst_rear->content);
 		res = f(s, &(lst_rear), lst_rear->content);
-		debugv_print(_MOD_ "%s: Applied f to %p\n", __FUNCTION__, (void *)lst_rear);
+		dvprint(_MOD_ "%s: Applied f to %p\n", __FUNCTION__,
+			(void *)lst_rear);
 		if (0 != res)
 			return (res);
 		if (NULL == tmp)
 			*lst = lst_rear;
 		lst_rear = tmp;
 	}
-	debug_print(_MOD_ ": %s: Inserts done successfully.\n", __FUNCTION__);
+	dprint(_MOD_ ": %s: Inserts done successfully.\n", __FUNCTION__);
 	return (0);
 }
 
@@ -54,10 +55,10 @@ int	ft_lstiter_state_ins_rwd_tmp(t_state *s, t_list **lst,
 int	lstiter_state_rwd_trim(t_state *s, t_list **lst, int (*test)(void *),
 		void (*del)(t_mem_mgr *, void **))
 {
-	int			res;
-	t_list		*lst_rear;
-	t_list		*tmp;
-	int			args_removed;
+	int		res;
+	t_list	*lst_rear;
+	t_list	*tmp;
+	int		args_removed;
 
 	args_removed = 0;
 	if (lst == NULL)
@@ -123,7 +124,7 @@ int	check_special_expansions(t_state *s, const char *buf, char **value)
 
 	if (!buf || !value)
 		return (ERR_ARGS);
-	debug_print(DMSG_IN, __FUNCTION__, buf);
+	dprint(PDMSG_IN, _MOD_, __FUNCTION__, buf);
 	if (ft_strcmp(buf, "?") == 0)
 	{
 		if (status == NULL)
@@ -132,7 +133,7 @@ int	check_special_expansions(t_state *s, const char *buf, char **value)
 			*value = ft_itoa_mem(&get_mem(s)->list, myalloc, *status);
 		if (*value == NULL)
 			return (ERR_MEM);
-		debug_print(DMSG_OUT, __FUNCTION__, *value);
+		dprint(PDMSG_OUT, _MOD_, __FUNCTION__, *value);
 		return (-1);
 	}
 	return (0);

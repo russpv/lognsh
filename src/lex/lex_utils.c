@@ -6,7 +6,7 @@ inline bool	is_too_long(const char *input)
 		return (true);
 	if (ft_strlen(input) >= LEX_BUFSZ)
 	{
-		debug_print(_MOD_ ": ERROR: Input exceeds buf size.\n");
+		dprint(_MOD_ ": ERROR: Input exceeds buf size.\n");
 		return (true);
 	}
 	return (false);
@@ -28,14 +28,14 @@ t_list	*lex_get_tokens(t_lex *lexer)
 
 bool	is_varnamechar(unsigned char c)
 {
-	debug_print(_MOD_ ": %s: (%c)\n", __FUNCTION__, c);
+	dprint(_MOD_ ": %s: (%c)\n", __FUNCTION__, c);
 	return (ft_isalnum((int)c) || '_' == c);
 }
 
 // Checks for any special substition char
 bool	is_specialchar(unsigned char c)
 {
-	debug_print(_MOD_ ": %s: (%c)\n", __FUNCTION__, c);
+	dprint(_MOD_ ": %s: (%c)\n", __FUNCTION__, c);
 	return ('?' == c);
 }
 
@@ -62,7 +62,7 @@ size_t	ft_varnamelen(const char *c)
 /* Puts single input char on buf, and increments idx and ptr */
 int	put_on_buf(t_lex *l)
 {
-	debug_print(_MOD_ ": %s: _%c_\n", __FUNCTION__, *l->ptr);
+	dprint(_MOD_ ": %s: _%c_\n", __FUNCTION__, *l->ptr);
 	if (l->buf_idx < LEX_BUFSZ - 1)
 		l->buf[(l->buf_idx)++] = *l->ptr++;
 	else

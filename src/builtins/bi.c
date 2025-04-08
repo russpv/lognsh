@@ -1,21 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   bi.c                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 09:17:24 by dayeo             #+#    #+#             */
-/*   Updated: 2025/03/13 14:13:41 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "bi_int.h"
 
 // Fn to map command names to corresponding built-ins
 t_builtin_fn	get_builtin(char *command)
 {
-	debug_print(_MOD_ ": %s...\n", __FUNCTION__);
+	dprint(_MOD_ ": %s...\n", __FUNCTION__);
 	if (NULL != command)
 	{
 		if (ft_strcmp(command, BI_ECHO) == 0)
@@ -35,7 +23,7 @@ t_builtin_fn	get_builtin(char *command)
 		if (ft_strcmp(command, BI_EXPORT) == 0)
 			return (&bi_export);
 	}
-	debug_print(_MOD_ ": %s found nothing\n", __FUNCTION__);
+	dprint(_MOD_ ": %s found nothing\n", __FUNCTION__);
 	return (NULL);
 }
 

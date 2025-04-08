@@ -62,12 +62,12 @@ int	cmd_exec_pipe(t_state *s, t_ast_node *pipe)
 	int		res;
 	t_exec	*e;
 
-	log_print(LOGMSG_CPIPE_ANNOUNCE);
+	lgprint(LOGMSG_CPIPE_ANNOUNCE);
 	cmd = get_cmd(s);
 	if (!cmd)
 		return (ERR_ARGS);
 	cmd->curr_cmdc = p_get_pipe_cmdc(pipe);
-	debug_print(DBGMSG_CPIPE_GOT, cmd->curr_cmdc);
+	dprint(DBGMSG_CPIPE_GOT, cmd->curr_cmdc);
 	if (cmd->curr_cmdc < 2)
 		return (ERR_INSUFFICIENT_CMDS);
 	e = exec_init(get_mem(s), cmd->curr_cmdc, NULL, NULL);

@@ -1,7 +1,7 @@
 #include "../data_structures/llist.h"
 #include "debug.h"
 
-void	debug_print(const char *format, ...)
+void	dprint(const char *format, ...)
 {
 	va_list	args;
 
@@ -16,7 +16,7 @@ void	debug_print(const char *format, ...)
 	}
 }
 
-void	debugv_print(const char *format, ...)
+void	dvprint(const char *format, ...)
 {
 	va_list	args;
 
@@ -52,7 +52,7 @@ void	debug_detect_cycle(t_list *head)
 				return ;
 			}
 		}
-		debug_print("No cycle detected in the linked list\n");
+		dprint("No cycle detected in the linked list\n");
 	}
 }
 
@@ -73,39 +73,25 @@ void	print_array(char *arr[])
 
 bool	test_prev_integrity(t_list *lst)
 {
-	t_list *current = lst;
+	t_list	*current;
+	t_list	*previous;
 
-	// If the list is empty, there's nothing to test
+	current = lst;
 	if (current == NULL)
-	{
-		colored_printf(YELLOW, "List is empty.\n");
-		return (true);
-	}
-
-	t_list *previous = NULL; // To track the previous node
+		return (dvprint(YELLOW, "List is empty.\n"), true);
+	previous = NULL;
 	while (current != NULL)
 	{
-		// Check that the current node's prev points to the previous node
 		if (current->prev != previous)
-		{
-			colored_printf(YELLOW,"Integrity check failed: Node at\
-				%p's prev pointer is incorrect.\n", current);
-			return (false);
-		}
-
-		// Check that the previous node's next points to the current node
+			return (cprintf(YELLOW,
+					"Check fail: Node at %p->prev is incorrect.\n", current),
+				false);
 		if (previous != NULL && previous->next != current)
-		{
-			colored_printf(YELLOW,"Integrity check failed: Node at\
-				%p's next pointer is incorrect.\n", previous);
-			return (false);
-		}
-
-		// Move to the next node
+			return (cprintf(YELLOW,
+					"Check fail: Node at %p->next is incorrect.\n", previous),
+				false);
 		previous = current;
 		current = current->next;
 	}
-
-	colored_printf(YELLOW,"Integrity check passed.\n");
-	return (true);
+	return (dvprint(YELLOW, "Integrity check passed.\n"), true);
 }

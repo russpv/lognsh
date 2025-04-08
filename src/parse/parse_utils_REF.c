@@ -41,32 +41,61 @@ char	**list_to_array(t_mem_mgr *m, t_list *args, int argc)
 	return (array);
 }
 
+static void	_print_bool(bool val)
+{
+	if (val)
+		printf("true\n");
+	else
+		printf("false\n");
+}
+
+static void	_print_rest(t_arg_data *data)
+{
+	printf("  lst: ");
+	if (data->lst_tokens)
+		printf("%p\n", data->lst_tokens);
+	else
+		printf("0x0\n");
+	printf("  option: ");
+	_print_bool(data->option);
+	printf("  do_globbing: ");
+	_print_bool(data->do_globbing);
+	printf("  do_expansion: ");
+	_print_bool(data->do_expansion);
+	printf("  in_dquotes: ");
+	_print_bool(data->in_dquotes);
+}
+
 static void	_print_arg_data(t_arg_data *data)
 {
+	int	i;
+
 	if (DEBUG && isatty(STDOUT_FILENO))
 	{
 		if (!data)
 			return ((void)printf("  t_arg_data is NULL\n"));
-		printf("  raw: _%s_\n", data->raw ? data->raw : "(null)");
+		printf("  raw: _");
+		if (data->raw)
+			printf("%s_\n", data->raw);
+		else
+			printf("(null)_\n");
 		printf("  tmp: ");
 		if (data->tmp)
 		{
-			for (int i = 0; data->tmp[i] != NULL; i++)
+			i = -1;
+			while (data->tmp[++i] != NULL)
 				printf("%s ", data->tmp[i]);
 			printf("\n");
 		}
 		else
 			printf("(null)\n");
-		printf("  grouparg: %s\n", data->is_grouparg ? "true" : "false");
-		printf("  lst: %p\n", data->lst_tokens ? data->lst_tokens : 0x0);
-		printf("  option: %s\n", data->option ? "true" : "false");
-		printf("  do_globbing: %s\n", data->do_globbing ? "true" : "false");
-		printf("  do_expansion: %s\n", data->do_expansion ? "true" : "false");
-		printf("  in_dquotes: %s\n", data->in_dquotes ? "true" : "false");
+		printf("  grouparg: ");
+		_print_bool(data->is_grouparg);
+		_print_rest(data);
 	}
 }
 
-void	debug_print_list(t_list *head)
+void	dprint_arglist(t_list *head)
 {
 	t_list	*current;
 	int		i;
@@ -77,11 +106,11 @@ void	debug_print_list(t_list *head)
 	{
 		while (current)
 		{
-			debug_print("Node %d:\n", i);
+			dprint("Node %d:\n", i);
 			_print_arg_data((t_arg_data *)current->content);
 			current = current->next;
 			i++;
 		}
-		debug_print("List printed.\n");
+		dprint("List printed.\n");
 	}
 }

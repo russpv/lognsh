@@ -36,7 +36,7 @@ static int	_do_loop(t_state *s)
 	ast = parse(s, get_input(s));
 	if (ast)
 		set_exit_status(s, cmd_execute(s, ast));
-	colored_printf(MAGENTA, "Exit code set: %d\n", *get_status(s));
+	cprintf(MAGENTA, "Exit code set: %d\n", *get_status(s));
 	s_free_cmd_lex_parse(s);
 	return (*get_status(s));
 }
