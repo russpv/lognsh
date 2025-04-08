@@ -59,10 +59,9 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 	}
 	if (is_group_token(tok_fname))
 	{
-		fprintf(stderr, "GROUP REDIR\n");
-		debug_print(_MOD_ ": %s: got group redir %p\n", __FUNCTION__, tok_get_tlist(tok_fname));
+		debug_print(_MOD_ ": %s: got group redir %p, node %p\n", __FUNCTION__, tok_get_tlist(tok_fname), n);
 		red->is_groupred = true;
-		p_set_has_redgrouptoks(n, true);
+		p_set_has_redgrouptoks(n, 1);
 		red->lst_tokens = ft_lstcopy_tmp(get_mem(p->global_state), tok_get_tlist(tok_fname), copy_token,
 				destroy_token);
 	}

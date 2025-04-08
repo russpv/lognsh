@@ -9,7 +9,7 @@
 #define EMSG_PATH_MALLOC "Allocation for path value failed.\n"
 #define EMSG_NULL_EXPAN "Null expansion variable.\n"
 #define DEBUGMSG_REDIRP_ANNOUNCE _MOD_ ": p_do_redir_processing...\n"
-#define DBGMSG_REDIRP_GOT _MOD_ ": p_do_redir_processing got: glob_%d exp_%d grp_%d\n"
+#define DBGMSG_REDIRP_GOT _MOD_ ": p_do_redir_processing got: type:%d glob_%d exp_%d grp_%d\n"
 #define DEBUGMSG_DOEXP_ANNOUNCE _MOD_ ": p_do_expansion got: %s\n"
 #define DEBUGMSG_DOEXP_RES _MOD_ ": p_do_expansion found: %s\n"
 
@@ -86,11 +86,10 @@ int	p_do_redir_processing(t_state *s, t_ast_node *a)
 	redirs = p_get_redirs_ptr(a);
 	if (redirs)
 	{
-		debug_print(DBGMSG_REDIRP_GOT, p_get_do_redir_globbing(a),
+		debug_print(DBGMSG_REDIRP_GOT, p_get_type(a), p_get_do_redir_globbing(a),
 			p_get_do_redir_expansion(a), p_get_has_redgrouptoks(a));
 		if (true == p_get_has_redgrouptoks(a))
 		{
-			log_print("doing group toks\n");
 			res = ft_lstiter_state_ins_rwd_tmp(s, redirs, p_do_grpred_processing);
 			if (0 != res)
 				return (res);

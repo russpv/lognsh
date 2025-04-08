@@ -99,12 +99,12 @@ typedef struct s_cmd
 	t_list					*redirs;
 	int						redc;
 
+	bool					has_arggrouptoks;
 	bool					do_globbing;
 	bool					do_expansion;
 	bool					do_wordsplit;
 	bool					do_redir_globbing;
 	bool					do_redir_expansion;
-	bool					has_arggrouptoks;
 	bool					has_redgrouptoks;
 }							t_ast_node_cmd;
 
@@ -159,6 +159,7 @@ typedef struct s_proc
 	int						cmdc;
 	t_list					*redirs;
 	int						redc;
+	
 	bool					has_redgrouptoks;
 	bool					do_redir_globbing;
 	bool					do_redir_expansion;
@@ -241,7 +242,6 @@ int							pop(t_pstack *stack);
 void						p_set_has_redgrouptoks(t_ast_node *n, bool val);
 void						p_set_do_redir_expansion(t_ast_node *n, bool val);
 void						p_set_do_redir_globbing(t_ast_node *n, bool val);
-bool						p_get_has_redgrouptoks(t_ast_node *n);
 bool						p_get_do_redir_expansion(t_ast_node *n);
 bool						p_get_do_redir_globbing(t_ast_node *n);
 

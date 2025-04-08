@@ -100,10 +100,8 @@ int	p_do_grpred_processing(t_state *s, t_list **this_red, void *c)
 	size_t		orig_pos;
 
 	grpred = (t_redir_data *)c;
-	fprintf(stderr, "c:%p grpred:%d lst-tok:%p \n", c, grpred->is_groupred, grpred->lst_tokens);
 	if (NULL == c || false == grpred->is_groupred || NULL == grpred->lst_tokens)
 		return (0);
-	fprintf(stderr, "haha\n");
 	debug_print(_MOD_ ": %s: got list: %p exp:%d glob:%d\n", __FUNCTION__,\
 		grpred->lst_tokens, grpred->do_expansion, grpred->do_globbing);
 	// TODO save the pos of the last subtoken on list

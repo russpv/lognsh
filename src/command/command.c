@@ -116,7 +116,7 @@ int	cmd_execute_full(t_state *s, t_ast_node *a)
 int	cmd_execute(t_state *s, t_ast_node *a)
 {
 	if (NULL == init_cmd(s, a))
-		return (ERR_MEM);
+		exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	print_ast(a, 10);
 	return (cmd_execute_full(s, a));
 }
