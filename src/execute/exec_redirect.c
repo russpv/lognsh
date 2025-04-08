@@ -18,6 +18,7 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 	int	fd;
 	struct stat statbuf;
 
+	log_print(_MOD_ ":%s got path:%s, from:%d app:%d\n", __FUNCTION__, topath, from, append);
 	if (from == STDIN_FILENO && access(topath, F_OK) == -1)
 	{
 		print_redirect_warning(topath);

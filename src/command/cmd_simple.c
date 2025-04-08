@@ -5,6 +5,8 @@
 
 static int	_handle_no_command(t_ast_node *a)
 {
+	if (p_get_type(a) != AST_NODE_CMD)
+		return (0);
 	if (NULL == p_get_cmd(a))
 		if (false == p_get_expansion(a) && false == p_get_grouptok(a))
 			return (NO_CMD);
@@ -29,7 +31,8 @@ int	proc_args_redirs(t_state *s, t_ast_node *a, t_cmd *c)
 	exit_code = _handle_no_command(a);
 	if (NO_CMD == exit_code)
 		return (exit_code);
-	c_argstoargv(s, c, a, args);
+	if (p_get_type(a) == AST_NODE_CMD)
+		c_argstoargv(s, c, a, args);
 	c->redc = p_get_redc(a);
 	if (0 != p_do_redir_processing(s, a))
 		return (ERR_REDIR);

@@ -18,7 +18,7 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 	int		res;
 
 	res = 0;
-	if (a->type != AST_NODE_PROC)
+	if (a->type == AST_NODE_PROC)
 		return (0);
 	if (a->type != AST_NODE_CMD)
 		return (err("Invalid node type"), ERR_INVALID_CMD_TYPE);
