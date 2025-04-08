@@ -1,6 +1,5 @@
 #include "command_int.h"
 
-#define NO_CMD -10
 #define LMSG_IN _MOD_ ": \t### %s ###\n"
 #define LMSG_OUT _MOD_ ": \tFinished %s exit: %d.\n"
 
@@ -14,8 +13,9 @@ static int	_handle_no_command(t_ast_node *a)
 
 /* Processes args and redirs. Stores several command parameters.
  * Puts node a into cmd c
+ * Used by Proc and Simple.
  */
-static int	_proc_args_redirs(t_state *s, t_ast_node *a, t_cmd *c)
+int	proc_args_redirs(t_state *s, t_ast_node *a, t_cmd *c)
 {
 	char	**args;
 	int		exit_code;
@@ -62,18 +62,18 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 		return (ERR_ARGS);
 	if (p_get_type(a) != AST_NODE_CMD)
 		return (ERR_INVALID_CMD_TYPE);
-	cf = init_cmd_fns(s);
-	exit_code = _proc_args_redirs(s, a, c);
+	exit_code = proc_args_redirs(s, a, c);
 	if (ERR_REDIR == exit_code || NO_CMD == exit_code)
 		return (exit_code);
 	log_command_info((t_cmd *)c, a);
 	assert(c_get_node(c) == a); //TODO remove
+	cf = init_cmd_fns(s);
 	bi = get_builtin(p_get_cmd(a));
 	if (bi)
 		exit_code = exec_bi_call(s, bi, cf);
 	else
 		exit_code = run_cmd(s, a);
 	log_print(LMSG_OUT, __FUNCTION__, exit_code);
-	get_mem(s)->dealloc(&get_mem(s)->list, cf);
+	destroy_cmd_fns(get_mem(s), cf);
 	return (exit_code);
 }

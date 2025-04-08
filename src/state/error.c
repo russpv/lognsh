@@ -1,10 +1,19 @@
 #include "error.h"
 
-void	print_bufflow(void)
+void	print_bufflow(const char *msg)
 {
-	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
-	write(STDERR_FILENO, ": ", ft_strlen(": "));
-	write(STDERR_FILENO, "Input exceeds limits.\n", ft_strlen("Input exceeds limits.\n"));
+	const int fd = STDERR_FILENO;
+
+	write(fd, SHELL_NAME, ft_strlen(SHELL_NAME));
+	write(fd, ": ", ft_strlen(": "));
+	if (NULL == msg)
+		ft_putstr_fd("Input exceeds limits.\n", fd);
+	else
+	{
+		ft_putstr_fd("Input exceeds limits:\n", fd);
+		ft_putstr_fd(msg, fd);
+		write(fd, "\n", 1);
+	}
 }
 
 /* Prints errno err for 'dingus' */

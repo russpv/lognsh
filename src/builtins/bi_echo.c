@@ -27,6 +27,7 @@ static void	print_arg(char *arg, int *first_arg)
 int	bi_echo(t_state *s, char **argv, int argc)
 {
 	int	i;
+	int j;
 	int	first_arg;
 	int	suppress_newline;
 
@@ -34,9 +35,15 @@ int	bi_echo(t_state *s, char **argv, int argc)
 	i = 1;
 	suppress_newline = 0;
 	first_arg = 1;
-	while (i < argc && argv[i][0] == '-' && argv[i][1] == 'n' && argv[i][2] == ' ')
+	while (i < argc && argv[i][0] == '-')
 	{
-		suppress_newline = 1;
+		j = 1;
+		while (argv[i] && argv[i][j] == 'n')
+			j++;
+		if (argv[i][j] == '\0')
+			suppress_newline = 1;
+		else
+			break ;
 		i++;
 	}
 	while (i < argc)

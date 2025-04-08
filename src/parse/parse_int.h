@@ -2,6 +2,7 @@
 # define PARSE_INT_H
 
 # include "parse.h"
+#include <stdbool.h>
 
 # define _MOD_ "Parser"
 # define MAX_CMD_ARGS 10
@@ -158,6 +159,9 @@ typedef struct s_proc
 	int						cmdc;
 	t_list					*redirs;
 	int						redc;
+	bool					has_redgrouptoks;
+	bool					do_redir_globbing;
+	bool					do_redir_expansion;
 }							t_ast_node_proc;
 
 typedef struct s_op
@@ -233,6 +237,13 @@ t_pstack					*create_stack(t_mem_mgr *m);
 void						destroy_stack(t_mem_mgr *m, t_pstack *s);
 int							push(t_pstack *stack);
 int							pop(t_pstack *stack);
+
+void						p_set_has_redgrouptoks(t_ast_node *n, bool val);
+void						p_set_do_redir_expansion(t_ast_node *n, bool val);
+void						p_set_do_redir_globbing(t_ast_node *n, bool val);
+bool						p_get_has_redgrouptoks(t_ast_node *n);
+bool						p_get_do_redir_expansion(t_ast_node *n);
+bool						p_get_do_redir_globbing(t_ast_node *n);
 
 /* Arg Expansions */
 int							p_do_arg_expansion(t_state *s, void *c);

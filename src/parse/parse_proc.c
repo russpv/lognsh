@@ -14,6 +14,9 @@ static t_ast_node	*_init_proc(t_mem_mgr *m)
 	proc_node->data.proc.cmdc = 0;
 	proc_node->data.proc.redirs = NULL;
 	proc_node->data.proc.redc = 0;
+	proc_node->data.proc.has_redgrouptoks = false;
+	proc_node->data.proc.do_redir_globbing = false;
+	proc_node->data.proc.do_redir_expansion = false;
 	return (proc_node);
 }
 

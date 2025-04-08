@@ -62,7 +62,7 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 		fprintf(stderr, "GROUP REDIR\n");
 		debug_print(_MOD_ ": %s: got group redir %p\n", __FUNCTION__, tok_get_tlist(tok_fname));
 		red->is_groupred = true;
-		n->data.cmd.has_redgrouptoks = true;
+		p_set_has_redgrouptoks(n, true);
 		red->lst_tokens = ft_lstcopy_tmp(get_mem(p->global_state), tok_get_tlist(tok_fname), copy_token,
 				destroy_token);
 	}
@@ -70,8 +70,8 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 	red->do_expansion = tok_get_expansion((t_tok *)tok_fname);
 	red->filename = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok_fname));
 	red->target_ptr = n;
-	n->data.cmd.do_redir_expansion |= red->do_expansion;
-	n->data.cmd.do_redir_globbing |= red->do_globbing;
+	p_set_do_redir_expansion(n, red->do_expansion);
+	p_set_do_redir_globbing(n, red->do_globbing);
 	if (!red->filename)
 		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_REDIR_FN);
 	return (0);
@@ -82,17 +82,17 @@ static int	_process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
  * Freeing handled by caller.
  */
 static int	_process_heredoc_redir(t_parser *p, t_tok *tok, t_redir_data *red,
-		t_ast_node *cmd)
+		t_ast_node *n)
 {
-	if (!red || !tok || !cmd)
+	if (!red || !tok || !n)
 		return (ERR_ARGS);
-	if (p_get_type(cmd) != AST_NODE_CMD)
+	if (p_get_type(n) != AST_NODE_CMD)
 		return (ERR_ARGS);
 	debug_print(_MOD_ ": Got here document\n");
 	red->symbol = NULL;
 	red->filename = NULL;
 	red->do_expansion = tok_get_expansion(tok);
-	cmd->data.cmd.do_redir_expansion = red->do_expansion;
+	p_set_do_redir_expansion(n, red->do_expansion);
 	red->do_globbing = false;
 	red->heredoc_body = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok));
 	if (!red->heredoc_body)

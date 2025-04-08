@@ -19,8 +19,8 @@ void	set_input(t_state *s, char *input)
 		return ;
 	s->input = input;
 	if (NULL != input)
-		len = ft_strnlen(input, MAX_RAW_INPUT_LEN + 1);
-	if (len == MAX_RAW_INPUT_LEN + 1)
+		len = ft_strnlen(input, MAX_INPUT_SZ);
+	if (len == MAX_INPUT_SZ)
 		return ;
 	mem_add_mem(&s->mem_mgr.list, input, len + 1);
 }

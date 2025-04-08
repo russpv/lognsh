@@ -10,6 +10,7 @@
  * filename expansions (glob*) as needed.
  * Then converts to array and returns that array via args ptr.
  * Note: we traverse llists backwards to avoid inserted nodes
+ * Note: procs return early, since no args.
  */
 int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 {
@@ -17,8 +18,10 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 	int		res;
 
 	res = 0;
+	if (a->type != AST_NODE_PROC)
+		return (0);
 	if (a->type != AST_NODE_CMD)
-		return (ERR_INVALID_CMD_TYPE);
+		return (err("Invalid node type"), ERR_INVALID_CMD_TYPE);
 	argl = p_get_args(a);
 	if (*argl)
 	{

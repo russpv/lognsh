@@ -49,8 +49,12 @@ void	print_swap_post(t_list **lst, struct s_merge *m)
 {
 	if ((*m->tail) == *lst)
 	{
-		debug_print(CYAN "%s (head) " GREEN "(prev: %p, next: %s), -> \n" RESET,
-			(*m->tail)->content, (*m->tail)->prev, (*m->tail)->next->content);
+		if ((*m->tail)->next)
+			debug_print(CYAN "%s (head) " GREEN "(prev: %p, next: %s), -> \n" RESET,
+				(*m->tail)->content, (*m->tail)->prev, (*m->tail)->next->content);
+		else
+			debug_print(CYAN "%s (head) " GREEN "(prev: %p, next: (?)), -> \n" RESET, //%s
+				(*m->tail)->content, (*m->tail)->prev); // , (*m->tail)->next->content);
 	}
 	else if ((*m->tail)->next)
 		debug_print(CYAN "%s " GREEN "(prev: %s, next: %s), -> \n" RESET,

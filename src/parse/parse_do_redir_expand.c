@@ -68,7 +68,7 @@ static int	_insert_expanded_var(t_state *s, char *buf, char **ptr,
 		return (ERR_BUFFLOW);
 	offset = *ptr - r->heredoc_body;
 	if (ft_strnlen(r->heredoc_body, INPUT_BUF_SZ) + ft_strlen(new_val) + 1 > MAX_INPUT_SZ)
-		return (print_bufflow(), ERR_BUFFLOW);
+		return (print_bufflow(NULL), ERR_BUFFLOW);
 	ft_strlcpy(new_body, r->heredoc_body, offset);
 	offset += ft_strlen(new_val);
 	ft_strlcat(new_body, new_val, mymax(MAX_INPUT_SZ - offset, 0));

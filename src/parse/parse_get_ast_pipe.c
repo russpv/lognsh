@@ -1,3 +1,4 @@
+#include "parse.h"
 #include "parse_int.h"
 
 int	p_get_pipe_cmdc(t_ast_node *a)

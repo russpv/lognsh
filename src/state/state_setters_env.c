@@ -82,8 +82,11 @@ void	set_path(t_state *s, const char *value)
 	debug_print(_MOD_ ": setting path\n");
 	if (NULL != s->path)
 		ft_freearr_mem(mem.head, mem.u, (void**)s->path, -1);
-	debug_print("Got path:%s\n", value);
-	s->path = ft_split_mem(&mem, value, ':');
+	debug_print(_MOD_ ": got path:%s\n", value);
+	if (value)
+		s->path = ft_split_mem(&mem, value, ':');
+	else
+		s->path = NULL;
 }
 
 void	init_env_vars(t_state *s)

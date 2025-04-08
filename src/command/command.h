@@ -66,6 +66,8 @@ typedef struct s_node				t_ast_node;
 typedef struct s_command_functions	t_cmd_fns;
 
 t_cmd_fns							*init_cmd_fns(t_state *s);
+void	destroy_cmd_fns(t_mem_mgr *m, t_cmd_fns *f);
+
 
 char								*c_get_fullpath(t_cmd *c);
 char								**c_get_argv(t_cmd *c);

@@ -6,6 +6,12 @@
 #define DMSG_CEXEC_NOTPIP _MOD_ ": node not a pipe...\n"
 #define EMSG_CEXEC_UNK _MOD_ ": ERR unknown node...\n"
 
+void	destroy_cmd_fns(t_mem_mgr *m, t_cmd_fns *f)
+{
+	if (f && m)
+		m->dealloc(&m->list, f);
+}
+
 t_cmd_fns	*init_cmd_fns(t_state *s)
 {
 	const t_mem_mgr *m = get_mem(s);

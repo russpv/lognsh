@@ -79,7 +79,8 @@ static bool	_is_valid_offset(t_lex *l, int offset)
 	return (true);
 }
 
-// If (2-)char sequence matches any NORMALDELIMS
+// True if (2-)char sequence delimits a token
+// Some delimeters are 1-char only (NOTDELIMITED)
 // Looks ahead for any doubles, '&&'
 // Returns true if ptr on \0 EOF
 bool	is_normal_delim(t_lex *lexer, int offset)
@@ -89,7 +90,7 @@ bool	is_normal_delim(t_lex *lexer, int offset)
 
 	if ('\0' == *lexer->ptr)
 		return (true);
-	if (!_is_valid_offset(lexer, offset))
+	if (false == _is_valid_offset(lexer, offset))
 		return (true);
 	c = *lexer->ptr + offset;
 	next = is_valid_next(lexer, offset);
@@ -101,8 +102,9 @@ bool	is_normal_delim(t_lex *lexer, int offset)
 	{
 		if (true == is_logicalop(c, next))
 			return (debug_print(" YES\n"), true);
+		else if (c == '&')
+	 		return (debug_print(" NO\n"), false);
 		return (debug_print(" YES\n"), true);
 	}
-	debug_print(" NO\n");
-	return (false);
+	return (debug_print(" NO\n"), false);
 }

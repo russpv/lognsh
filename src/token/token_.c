@@ -40,10 +40,10 @@ t_tok	*create_token(t_mem_mgr *mgr, const char *s, int type, size_t pos)
 		}
 		else
 		{
-			token->t.tok.raw_len = ft_strnlen(s, MAX_INT_BUFLEN);
+			token->t.tok.raw_len = ft_strnlen(s, MAX_INPUT_SZ);
 			debug_print(_MOD_": %s: %s_ typ_%d len_%ld\n", __FUNCTION__, s, type, token->t.tok.raw_len);
-			if (token->t.tok.raw_len > MAX_NAME_LEN)
-				return (print_bufflow(), mgr->dealloc(&mgr->list, token), NULL);
+			if (token->t.tok.raw_len > MAX_INT_BUFLEN)
+				return (print_bufflow(s), mgr->dealloc(&mgr->list, token), NULL);
 			token->t.tok.raw = ft_strdup_tmp(mgr, s);
 			if (!token->t.tok.raw)
 				exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
@@ -65,8 +65,8 @@ void	*create_tmp_token(t_mem_mgr *mgr, const void *s)
 	if (token)
 	{
 		debug_print(_MOD_": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s, TOK_WORD);
-		if (ft_strnlen(s, MAX_INPUT_SZ) > MAX_NAME_LEN)
-			return (print_bufflow(), mgr->dealloc(&mgr->list, token), NULL);
+		if (ft_strnlen(s, MAX_INPUT_SZ) > MAX_INT_BUFLEN)
+			return (print_bufflow(s), mgr->dealloc(&mgr->list, token), NULL);
 		token->t.tok.raw = ft_strdup_tmp(mgr, s);
 		if (!token->t.tok.raw)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
@@ -88,8 +88,8 @@ void	*create_split_token(t_mem_mgr *mgr, const void *s)
 	if (token)
 	{
 		debug_print(_MOD_": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s, TOK_WORD);
-		if (ft_strnlen(s, MAX_INPUT_SZ) > MAX_NAME_LEN)
-			return (print_bufflow(), mgr->dealloc(&mgr->list, token), NULL);
+		if (ft_strnlen(s, MAX_INPUT_SZ) > MAX_INT_BUFLEN)
+			return (print_bufflow(s), mgr->dealloc(&mgr->list, token), NULL);
 		token->t.tok.raw = ft_strdup_tmp(mgr, s);
 		if (!token->t.tok.raw)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);

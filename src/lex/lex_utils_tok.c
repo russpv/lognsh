@@ -53,6 +53,7 @@ int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 }
 
 /* Creates token based on current buf and ptr, does not add to llist
+ * If buf is empty, creates grp token only.
  * Resets buf and buf_idx and tokenizing flags.
  * Looks ahead for normal delim to reset subtoken flag.
  * Note: skip any terminator that is not to be part of token (\")
@@ -70,10 +71,12 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 		grp_token = create_token(m, lexer->buf, TOK_GROUP_WORD,
 				(size_t)(lexer->ptr - lexer->raw_string));
 		if (!grp_token)
-			return (err(EMSG_MALLOC), NULL);
+			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		lexer->last_grp_tok = grp_token;
 		debug_print(_MOD_ ": %s: Created GROUP token\n", __FUNCTION__);
 	}
+	if (0 == ft_strlen(lexer->buf))
+		return (NULL);
 	token = create_token(m, lexer->buf, type, (size_t)(lexer->ptr
 				- lexer->raw_string));
 	if (token)

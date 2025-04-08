@@ -19,17 +19,17 @@ static int	_setup_pipes(t_mem_mgr *m, t_cmd *c)
  * waits for all pipeline children,
  * then sets and returns exit status of
  * last pipeline command.
+ * destroys t_exec
  */
-static int	_wait_all(t_state *s, t_cmd *c, int pid)
+static int	_wait_all(t_state *s, t_cmd *c, t_exec *e)
 {
 	int	status;
 
 	exec_close_pipes(c->fildes, c->curr_cmdc);
-	if (0 != waitchilds(&status, c->curr_cmdc - 1))	
-		return (ERR_WAITPID);
-	if (0 != waitchildpid(&status, (pid_t)pid))
+	if (0 != waitchildspid(&status, e))
 		return (ERR_WAITPID);
 	set_exit_status(s, status);
+	destroy_exec(get_mem(s), e);
 	return (status);
 }
 
@@ -39,17 +39,14 @@ static int	_do_pipe_commands(t_state *s, t_list *cmds, t_cmd *c, t_exec *e)
 	int			i;
 	int			res;
 
-
 	i = -1;
 	exec_set_executor(e, cmd_execute_full);
 	while (cmds && ++i < c->curr_cmdc)
 	{
 		a = (t_ast_node *)cmds->content;
-		// TODO pass an execute struct here to extract all pids
 		res = exec_pipe_fork_redirect_run(s, a, i, e);
 		if (res < 0)
 			return (res);
-		
 		cmds = cmds->next;
 	}
 	return (res);
@@ -63,21 +60,20 @@ int	cmd_exec_pipe(t_state *s, t_ast_node *pipe)
 {
 	t_cmd	*cmd;
 	int		res;
-	t_exec	e;
+	t_exec	*e;
 
 	log_print(LOGMSG_CPIPE_ANNOUNCE);
 	cmd = get_cmd(s);
 	if (!cmd)
 		return (ERR_ARGS);
-	exec_init(&e);
 	cmd->curr_cmdc = p_get_pipe_cmdc(pipe);
 	debug_print(DBGMSG_CPIPE_GOT, cmd->curr_cmdc);
 	if (cmd->curr_cmdc < 2)
 		return (ERR_INSUFFICIENT_CMDS);
+	e = exec_init(get_mem(s), cmd->curr_cmdc, NULL, NULL);
 	res = _setup_pipes(get_mem(s), cmd);
 	if (0 != res)
 		return (res);
-	if (0 != do_pipe_commands(s, p_get_pipe_cmds(pipe), cmd, &e))
-		return (res);
-	return (_wait_all(s, cmd, &e));
+	_do_pipe_commands(s, p_get_pipe_cmds(pipe), cmd, e);
+	return (_wait_all(s, cmd, e));
 }

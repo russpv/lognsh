@@ -3,6 +3,7 @@
 
 # include "command.h"
 # define _MOD_ "Command"
+#define NO_CMD -10
 
 /* Holds context for current command */
 struct					s_cmd
@@ -55,6 +56,7 @@ int						cmd_exec_pipe(t_state *s, t_ast_node *pipe);
 int						cmd_exec_log(t_state *s, t_ast_node *a);
 int						cmd_exec_proc(t_state *s, t_ast_node *a);
 
+int	proc_args_redirs(t_state *s, t_ast_node *a, t_cmd *c);
 int						find_and_validate_cmd(t_state *s, const char *name,
 							char **fullpath);
 

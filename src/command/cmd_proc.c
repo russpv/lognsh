@@ -1,3 +1,4 @@
+#include "command.h"
 #include "command_int.h"
 
 #define LOGMSG_CPROC_ANNOUNCE "Cmd: \t### cmd_exec_proc ###\n"
@@ -12,26 +13,42 @@
  */
 int	cmd_exec_proc(t_state *s, t_ast_node *a)
 {
-	const int		cmdc = p_get_proc_cmdc(a);
 	const t_list	*cmd = p_get_proc_cmds(a);
-	t_ast_node		*node;
+	t_ast_node		*cmd_node;
+	t_cmd			*c;
 	int				i;
 	int				exit_status;
+	t_cmd_fns		*cf;
+	t_exec			*e;
 
-	node = NULL;
+	cmd_node = NULL;
 	log_print(LOGMSG_CPROC_ANNOUNCE);
+	if (p_get_type(a) != AST_NODE_PROC)
+		return (ERR_INVALID_CMD_TYPE);
 	i = -1;
-	if (0 == cmdc || NULL == cmd)
+	if (0 == p_get_proc_cmdc(a) || NULL == cmd)
 		return (0);
-	while (++i < cmdc)
+	cf = init_cmd_fns(s);
+	while (++i < p_get_proc_cmdc(a))
 	{
-		node = cmd->content;
-		debug_print(DBGMSG_CPROC_GOT, p_get_type(node));
-		exit_status = exec_fork_wait(s, node, cmd_execute_full);
+		cmd_node = cmd->content;
+		debug_print(DBGMSG_CPROC_GOT, p_get_type(cmd_node));
+		assert(p_get_args(a) == NULL);
+		c = get_cmd(s);
+		e = exec_init(get_mem(s), p_get_proc_cmdc(a), c, a);
+		exec_set_executor(e, cmd_execute_full);
+		fprintf(stderr, "we process'ng\n");
+		exit_status = proc_args_redirs(s, a, c);
+		if (ERR_REDIR == exit_status || NO_CMD == exit_status)
+			return (destroy_exec(get_mem(s), e), destroy_cmd_fns(get_mem(s), cf), exit_status);
+		fprintf(stderr, "we exec'ng\n");
+		exit_status = exec_fork_redirect_wait(s, cmd_node, e, cf);
 		if (exit_status != 0)
 			debug_print(DBGMSG_CPROC_BADEXEC, exit_status);
 		cmd = cmd->next;
 	}
+	destroy_exec(get_mem(s), e);
+	destroy_cmd_fns(get_mem(s), cf);
 	log_print(LOGMSG_CPROC_DONE);
 	return (exit_status);
 }

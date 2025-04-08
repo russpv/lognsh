@@ -1,38 +1,46 @@
 #include "execute_int.h"
+#include <fcntl.h>
 
 
 #define LOGMSG_EREDIR_DONE "\tRedirect: dup2 from %d to %d\n"
 #define DBGMSG_EREDIR_FD _MOD_ ": %s: fd:%d\n"
 
 /* Does the correct open() and returns new fd
- * If input file can't be read, opens /dev/null/ to allow cmd
- * to run otherwise and prints warning as fish does
+ * or negative error codes.
+ * If a directory:
+ *   Inputs -- throws no error only if no perms
+ *   Outputs -- throws error
+ * If DNE or no perms: throws error
+ * [Deprecated] if input file can't be read, opens /dev/null/ to allow cmd to run
  */
 static inline int	_redirect_logic(char *topath, int from, bool append)
 {
 	int	fd;
 	struct stat statbuf;
 
-	if (from == STDIN_FILENO && access(topath, R_OK) == -1)
+	if (from == STDIN_FILENO && access(topath, F_OK) == -1)
 	{
 		print_redirect_warning(topath);
-		fd = open("/dev/null", O_RDONLY);
+		print_dne(topath);
 		errno = EACCES;
+		return (-ERR_REDIR);
 	}
 	else if (access(topath, F_OK) == 0 && stat(topath, &statbuf) == -1)
 		return (print_perror("stat"), -ERR_STAT);
-	else if (access(topath, F_OK) == 0 && S_ISDIR(statbuf.st_mode))
+	else if (from != STDIN_FILENO && access(topath, F_OK) == 0 && S_ISDIR(statbuf.st_mode))
         return (print_is_dir(topath), -ERR_REDIR);
+    else if (from == STDIN_FILENO && access(topath, F_OK) == 0 && S_ISDIR(statbuf.st_mode))
+    	fd = open(topath, O_RDONLY | O_DIRECTORY);
 	else if (from == STDIN_FILENO)
 		fd = open(topath, O_RDONLY | O_CREAT, 0644);
-	else if (from == STDOUT_FILENO && append)
+	else if (from != STDIN_FILENO && append)
 		fd = open(topath, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else if (from == STDOUT_FILENO)
+	else if (from != STDIN_FILENO)
 		fd = open(topath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
 		fd = -1;
 	if (fd < 0)
-		return (perror(EMSG_OPEN), fd);
+		return (print_redirect_warning(topath), perror(EMSG_OPEN), fd);
 	debug_print(DBGMSG_EREDIR_FD, __FUNCTION__, fd);
 	return (fd);
 }
@@ -51,7 +59,6 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
  * topath: output fd file path
  * from: input fd
  * append: for opt <</>> here_doc
- * from file is only ever stdin or stdout
  */
 int	redirect(int *to, char *topath, int from, bool ifappend)
 {

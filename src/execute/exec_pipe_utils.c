@@ -21,7 +21,7 @@ int	exec_create_pipes(t_mem_mgr *m, int ***fildes, int cmd_count)
 
 	i = 0;
 	if (cmd_count < 2)
-		return (ERR_INSUFFICIENT_CMDS);
+		return (err("Insufficient cmds\n"), ERR_INSUFFICIENT_CMDS);
 	*fildes = (int **)m->f(&m->list, (sizeof(int *)) * (size_t)(cmd_count));
 	if (!(*fildes))
 		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);

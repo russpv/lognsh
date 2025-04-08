@@ -82,7 +82,7 @@ static int	_close_other_pipe_ends(t_state *s, int i)
  * Parent does not wait (until all pipe commands are forked).
  */
 int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,
-		t_execute_fn executor)
+		t_exec *e)
 {
 	pid_t	pid;
 	int		exit_status;
@@ -101,10 +101,11 @@ int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i,
 		sig_reset_handlers();
 		_close_other_pipe_ends(s, i);
 		_redirect_pipes(s, i);
-		exit_status = executor(s, node);
+		exit_status = e->executor(s, node);
 		exit_status = handle_exit(s, exit_status);
 		destroy_state(&s);
 		exit(exit_status);
 	}
+	e->pids[i] = pid;
 	return (pid);
 }

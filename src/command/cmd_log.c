@@ -27,7 +27,7 @@ static int	_do_more_ops(const t_list *ops, int exit_status)
 }
 
 /* Evaluates logical operators for conditional
- * execution and returns the last exit status
+ * sequential execution and returns the last exit status
  */
 static int	_do_log_commands(t_state *s, t_list *cmds, t_cmd *c)
 {

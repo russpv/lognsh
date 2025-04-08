@@ -79,8 +79,8 @@ void	print_ast(t_ast_node *ast, int depth)
 				}
 				break ;
 			case AST_NODE_PROC:
-				colored_printf(CYAN, "Proc () with %d commands:\n",
-					ast->data.proc.cmdc);
+				colored_printf(CYAN, "Proc () with %d commands %d redirs:\n",
+					ast->data.proc.cmdc, ast->data.proc.redc);
 				for (t_list *cmd_node = ast->data.proc.cmds; cmd_node != NULL; cmd_node = cmd_node->next)
 				{
 					print_ast(cmd_node->content, depth + 1);

@@ -1,10 +1,15 @@
 #include "error.h"
 
+void	print_dne(const char *path)
+{
+	ft_putstr_fd("warning: Path '", STDERR_FILENO);
+	ft_putstr_fd(path, STDERR_FILENO);
+	ft_putstr_fd("' does not exist\n", STDERR_FILENO);
+}
+
 // Don't like the unix error msg
 void	print_redirect_warning(char *topath)
 {
-	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
-	write(STDERR_FILENO, ": ", 2);
 	write(STDERR_FILENO, "warning: An error occurred while redirecting file '",
 		ft_strlen("warning: An error occurred while redirecting file '"));
 	write(STDERR_FILENO, topath, ft_strlen(topath));

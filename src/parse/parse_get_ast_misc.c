@@ -28,7 +28,7 @@ t_list	**p_get_redirs_ptr(t_ast_node *a)
 {
 	if (a->type == AST_NODE_CMD)
 	{
-		debug_print(_MOD_ ": p_get_redirs_ptr got: _%s_\n", a->data.cmd.name);
+		debug_print(_MOD_ ": p_get_redirs_ptr got cmd: _%s_\n", a->data.cmd.name);
 		return (&a->data.cmd.redirs);
 	}
 	else if (a->type == AST_NODE_PROC)

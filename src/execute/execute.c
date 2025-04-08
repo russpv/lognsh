@@ -3,6 +3,7 @@
 #define DBGMSG_EXEC_EXITCODE _MOD_ ": Child %d exited w/ stat:%d\n"
 #define DBGMSG_EXEC_EXITSIG _MOD_ ": Child %d exited by sig:%d\n"
 #define DBGMSG_EXEC_DONE _MOD_ ": All child processes have terminated\n"
+#define DBGMSG_EXEC_WAITPID_ERROR "%s: Waitpid failed on child:%d error:%d\n"
 
 /* This wait()'s for all child processes; called by parent
  * Note: assuming waitpid() behaves irrespective of actual
@@ -52,6 +53,23 @@ int	waitchildpid(int *status, pid_t p)
 	else if (child_pid < 0)
 		return (perror(EMSG_WAITPID), ERR_WAITPID);
 	debug_print(DBGMSG_EXEC_DONE);
+	return (0);
+}
+
+int	waitchildspid(int *status, t_exec *e)
+{
+	int i;
+	int res;
+
+	i = -1;
+	while (++i < e->cmdc)
+	{
+		assert(e->pids[i] > 0);
+		res = waitchildpid(status, e->pids[i]);
+		if (0 != res)
+			debug_print(DBGMSG_EXEC_WAITPID_ERROR, e->pids[i], res);;
+		e->exit_codes[i] = *status;
+	}
 	return (0);
 }
 

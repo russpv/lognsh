@@ -65,7 +65,7 @@ void	print_array(char *arr[])
 	{
 		while (arr[i] != NULL)
 		{
-			printf("%s\n", arr[i]);
+			fprintf(stderr, "%s\n", arr[i]);
 			i++;
 		}
 	}

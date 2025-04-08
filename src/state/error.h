@@ -98,8 +98,10 @@ void							print_nocmd_error(t_state *s, const char *word,
 void							print_invalid_name(const char *caller,
 									const char *name);
 void	print_parse_redir_error(t_state *s, size_t pos);
+void	print_dne(const char *path);
 
-void							print_bufflow(void);
+
+void							print_bufflow(const char *s);
 void							print_is_dir(char *p);
 
 bool							is_error(int v);

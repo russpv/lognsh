@@ -9,7 +9,7 @@
 #define EMSG_PATH_MALLOC "Allocation for path value failed.\n"
 #define EMSG_NULL_EXPAN "Null expansion variable.\n"
 #define DEBUGMSG_REDIRP_ANNOUNCE _MOD_ ": p_do_redir_processing...\n"
-#define DBGMSG_REDIRP_GOT _MOD_ ": p_do_redir_processing got: glob_%d exp_%d\n"
+#define DBGMSG_REDIRP_GOT _MOD_ ": p_do_redir_processing got: glob_%d exp_%d grp_%d\n"
 #define DEBUGMSG_DOEXP_ANNOUNCE _MOD_ ": p_do_expansion got: %s\n"
 #define DEBUGMSG_DOEXP_RES _MOD_ ": p_do_expansion found: %s\n"
 
@@ -44,26 +44,30 @@ static int	_p_do_redirection(void *content)
 	return (0);
 }
 
-/* Executes redirections of a cmd node in order.
+/* Executes redirections of a node in order.
  * If no redirections to do, returns ...
  * Expansions and globbing are to have been done earlier.
  * If error during redirection due to...
  * 	- multiple filenames, aborts command only
  *  - nonexistent input file, aborts command only
  *  - nonexistent output file, creates file and proceeds (no error)
- *  - file is a directory, ...?
+ *  - output is a dir, aborts command only
  */
 int	p_do_redirections(t_ast_node *a)
 {
 	if (!a)
 		return (err(EMSG_REDIR_NULLNODE), ERR_ARGS);
-	if (a->type != AST_NODE_CMD)
-		return (EINVAL);
+	if (a->type != AST_NODE_CMD && a->type != AST_NODE_PROC)
+		return (err("Redirs: invalid cmd type\n"), EINVAL);
 	if (false == node_has_redirects(a))
 		return (0);
 	debug_print(DBGMSG_REDIR_ANNOUNCE);
-	if (0 != ft_lstiter(a->data.cmd.redirs, _p_do_redirection))
-		return (ERR_REDIR);
+	if (a->type == AST_NODE_CMD)
+		if (0 != ft_lstiter(a->data.cmd.redirs, _p_do_redirection))
+			return (ERR_REDIR);
+	if (a->type == AST_NODE_PROC)
+		if (0 != ft_lstiter(a->data.proc.redirs, _p_do_redirection))
+			return (ERR_REDIR);
 	return (0);
 }
 
@@ -75,29 +79,29 @@ int	p_do_redir_processing(t_state *s, t_ast_node *a)
 	char	*orig_filen;
 	int		res;
 
-	if (a->type != AST_NODE_CMD)
-		return (ERR_ARGS);
+	if (a->type != AST_NODE_CMD && a->type != AST_NODE_PROC)
+		return (err("Invalid node type\n"), ERR_ARGS);
 	res = 0;
 	orig_filen = NULL;
 	redirs = p_get_redirs_ptr(a);
 	if (redirs)
 	{
-		debug_print(DBGMSG_REDIRP_GOT, a->data.cmd.do_redir_globbing,
-			a->data.cmd.do_redir_expansion);
-		if (true == a->data.cmd.has_redgrouptoks)
+		debug_print(DBGMSG_REDIRP_GOT, p_get_do_redir_globbing(a),
+			p_get_do_redir_expansion(a), p_get_has_redgrouptoks(a));
+		if (true == p_get_has_redgrouptoks(a))
 		{
-			fprintf(stderr, "doing group toks\n");
+			log_print("doing group toks\n");
 			res = ft_lstiter_state_ins_rwd_tmp(s, redirs, p_do_grpred_processing);
 			if (0 != res)
 				return (res);
 		}
 		else
 		{
-			if (true == a->data.cmd.do_redir_expansion)
+			if (true == p_get_do_redir_expansion(a))
 				res = lstiter_state(s, *redirs, p_do_red_expansion);
 			if (0 != res)
 				return (res);
-			if (true == a->data.cmd.do_redir_globbing)
+			if (true == p_get_do_redir_globbing(a))
 				orig_filen = ft_lstiterstr_mem(get_mem(s), *redirs,
 						p_do_globbing_redirs);
 			if (NULL != orig_filen)
