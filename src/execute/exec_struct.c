@@ -6,6 +6,7 @@ void	destroy_exec(t_mem_mgr *m, t_exec *e)
 		m->dealloc(&m->list, e);
 }
 
+// Allocates and inits a t_exec
 t_exec	*exec_init(t_mem_mgr *m, int cmdc, t_cmd *proc_cmd, t_ast_node *proc)
 {
 	t_exec	*e;

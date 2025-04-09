@@ -75,3 +75,9 @@ int	ht_destroy(t_mem_mgr *m, t_ht hasht, void (*del)(t_mem_node *, void *))
 	m->dealloc(&m->list, hasht);
 	return (0);
 }
+
+void	ht_init_utils(t_ht_utils *u, t_ht h, t_cpy_fn f)
+{
+	u->cpy_data = f;
+	u->ht = h;
+}

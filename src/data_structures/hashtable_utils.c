@@ -48,21 +48,21 @@ static int	_init_node(t_mem_mgr *m, t_ht ht, struct s_ht_entry **np,
 /* Makes new entry the head for the hash bucket
  * Returns NULL if name is already present
  */
-struct s_ht_entry	*ht_install(t_mem_mgr *m, t_ht ht, char *name, void *data,
-		void *(*cpy_data)(t_mem_node *, void *))
+struct s_ht_entry	*ht_install(t_mem_mgr *m, t_ht_utils *u, char *name,
+		void *data)
 {
 	struct s_ht_entry	*np;
 
 	if (NULL == name)
 		return (NULL);
-	assert(NULL != ht);
+	assert(NULL != u);
 	assert(NULL != name);
-	np = ht_lookup(ht, name);
+	np = ht_lookup(u->ht, name);
 	if (NULL == np)
 	{
-		if (-1 == _init_node(m, ht, &np, name))
+		if (-1 == _init_node(m, u->ht, &np, name))
 			return (NULL);
-		if (-1 == _install_data(m, &np, data, cpy_data))
+		if (-1 == _install_data(m, &np, data, u->cpy_data))
 		{
 			m->dealloc(&m->list, np->name);
 			m->dealloc(&m->list, np);

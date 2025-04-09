@@ -5,88 +5,19 @@
 #define LOGMSG_RUNC_GOT "Cmd: Found command! at %s\n"
 #define LOGMSG_RUNC_SIGINT "Cmd: Received SIGINT before fork\n"
 
-/* Note: command not found is thrown in caller */
-// Checks permissions on path and also if a dir
-static int	_check_access(const char *path)
+static int	_locate_cmd(t_state *s, t_ast_node *a, t_cmd *c)
 {
-	struct stat	info;
+	int	exit_status;
 
-	if (0 == access(path, F_OK))
-	{
-		if (0 != access(path, X_OK))
-			return (print_perror(path), ERR_CMD_NOT_EXEC);
-		if (0 == stat(path, &info))
-			if (S_ISDIR(info.st_mode))
-				return (print_is_dir((char *)path), ERR_CMD_IS_A_DIR);
-		return (0);
-	}
-	return (ERR_CMD_NOT_FOUND);
+	exit_status = find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath);
+	if (0 != exit_status)
+		return (s_free_cmd(s), exit_status);
+	if (c->fullpath)
+		lgprint(LOGMSG_RUNC_GOT, c->fullpath);
+	return (0);
 }
 
-/* Returns 0 if absolute fullpath is found
- * All heap allocs are temporary within this scope
- */
-static int	_search_path(t_state *s, const char *cmd, char **fullpath)
-{
-	char	**paths;
-	char	*tmp;
-	int		i;
-
-	i = -1;
-	paths = get_path(s);
-	if (NULL == paths)
-		return (ERR_GENERAL);
-	while (paths[++i])
-	{
-		tmp = ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, paths[i], "/");
-		if (NULL == tmp)
-			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
-		*fullpath = ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, tmp, cmd);
-		if (!*fullpath)
-			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
-		(get_mem(s))->dealloc(&get_mem(s)->list, tmp);
-		if (0 == _check_access(*fullpath))
-			return (0);
-		(get_mem(s))->dealloc(&get_mem(s)->list, *fullpath);
-		*fullpath = NULL;
-	}
-	return (ERR_CMD_NOT_FOUND);
-}
-
-/* Stores command path in fullpath, if valid.
- * Checks PATH, or absolute path if slash is in the name */
-int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
-{
-	int	res;
-
-	res = ERR_CMD_NOT_FOUND;
-	if (NULL != name && '\0' != name[0])
-	{
-		if (ft_strchr(name, '/'))
-		{
-			res = _check_access(name);
-			if (0 == res)
-			{
-				*fullpath = (char *)name;
-				return (0);
-			}
-		}
-		else
-		{
-			if (0 == _search_path(s, name, fullpath))
-			{
-				res = _check_access(*fullpath);
-				if (0 == res)
-					return (res);
-			}
-		}
-	}
-	if (ERR_CMD_NOT_FOUND == res)
-		print_command_not_found(name);
-	return (res);
-}
-
-static int	_locate_cmd(t_state *s, t_cmd *c)
+static int	_execute(t_state *s, t_cmd *c)
 {
 	int	exit_status;
 
@@ -106,18 +37,6 @@ static int	_locate_cmd(t_state *s, t_cmd *c)
 	return (0);
 }
 
-static int	_execute(t_state *s, t_ast_node *a, t_cmd *c)
-{
-	int	exit_status;
-
-	exit_status = find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath);
-	if (0 != exit_status)
-		return (s_free_cmd(s), exit_status);
-	if (c->fullpath)
-		lgprint(LOGMSG_RUNC_GOT, c->fullpath);
-	return (0);
-}
-
 /* Forks depending on execution context
  * In the context of a proc or pipeline, forking would already
  * be done and be in a child process.
@@ -134,10 +53,11 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	if (NULL == p_get_cmd(a))
 		return (EXIT_NULLCMD);
 	c = get_cmd(s);
-	exit_status = _locate_cmd(s, c);
+	exit_status = _locate_cmd(s, a, c);
+	assert(c_get_fullpath(c) != NULL);
 	if (0 != exit_status)
 		return (s_free_cmd(s), exit_status);
 	dprint(_MOD_ ": %s: exec'g\n", __FUNCTION__);
-	exit_status = _execute(s, a, c);
+	exit_status = _execute(s, c);
 	return (s_free_cmd(s), exit_status);
 }
