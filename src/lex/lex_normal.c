@@ -31,12 +31,6 @@ static t_tok	*_match_normal_op(t_state *s, t_lex *lexer)
 static t_tok	*_match_word_or_name_or_exception(t_state *s, t_lex *lexer)
 {
 	dprint(_MOD_ ": ---- %s: got %s\n", __FUNCTION__, lexer->buf);
-	/*
-		if (true == is_dollar_question(lexer))
-		{
-			lexer->buf[(lexer->buf_idx)++] = *lexer->ptr++;
-			return (lex_create_token(get_mem(s), lexer, TOK_EXIT_STATUS));
-		}*/
 	if (true == is_normal_delim(lexer, 0) && ft_strlen(lexer->buf) > 0)
 	{
 		return (lex_create_token(get_mem(s), lexer, word_or_name(lexer->buf)));
@@ -65,7 +59,6 @@ static t_tok	*_match_reserved_token(t_state *s, t_lex *lexer)
 	{
 		process_escape_sequence(lexer);
 		if (SKIPREST == process_special_operators(lexer))
-			// remove env var stuff
 			continue ;
 		lexer->buf[(lexer->buf_idx)++] = *lexer->ptr++;
 		dprint(_MOD_ ": ------ Buf: '%s' idx:%d_\n", lexer->buf,
@@ -89,7 +82,7 @@ static t_tok	*_match_normal(t_state *s, t_lex *lexer)
 
 	dprint(_MOD_ ": ---- %s\n", __FUNCTION__);
 	res = NULL;
-	while (' ' == *lexer->ptr || '\t' == *lexer->ptr) // skip discard delims
+	while (' ' == *lexer->ptr || '\t' == *lexer->ptr)
 		lexer->ptr++;
 	if (true == is_transition_delim(lexer))
 		return (NULL);

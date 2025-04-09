@@ -58,6 +58,28 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
 	return (-1);
 }
 
+static int	_loop_arg_redir(t_parser *p, t_ast_node *cmd_node)
+{
+	int	res;
+	int	res2;
+
+	res = 0;
+	res2 = 0;
+	while (res > -2)
+	{
+		res = 0;
+		res = _parse_args(p, cmd_node);
+		if (res > 0)
+			return (ERR_GENERAL);
+		res2 = process_redir(p, cmd_node);
+		if (is_error(res2))
+			return (res2);
+		if (-1 == res2)
+			res--;
+	}
+	return (0);
+}
+
 /* This helper consumes any redirection tokens,
 	before or after the command name,
  * and its following arguments, if any.
@@ -67,7 +89,6 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
  */
 static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 {
-	int	res2;
 	int	res;
 
 	if (!p || !cmd_node)
@@ -92,20 +113,7 @@ static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 		if (NULL == cmd_node->data.cmd.name)
 			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
-	res = 0;
-	while (res > -2)
-	{
-		res = 0;
-		res = _parse_args(p, cmd_node);
-		if (res > 0)
-			return (ERR_GENERAL);
-		res2 = process_redir(p, cmd_node);
-		if (is_error(res2))
-			return (res2);
-		if (-1 == res2)
-			res--;
-	}
-	return (0);
+	return (_loop_arg_redir(p, cmd_node));
 }
 
 /* PARSE_CMD

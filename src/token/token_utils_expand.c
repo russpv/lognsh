@@ -51,8 +51,8 @@ static int	_do_expansion(t_state *s, const t_tok *content, char *value,
 		if (0 != res)
 			return (res);
 		dprint(_MOD_ ": %s: expanded var: %s\n", __FUNCTION__, value);
-		return (res);
 	}
+	return (res);
 }
 
 int	tok_do_expansion(t_state *s, void *c)

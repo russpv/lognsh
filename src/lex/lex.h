@@ -8,9 +8,9 @@
 # include "../token/token.h"
 # include <stdbool.h>
 
-# define LEXERKEEPDOLLAR 1 // 1 for keeping '$' in expansions
+# define LEXKEEPDOLLR 1 // 1 for keeping '$' in expansions
 
-struct s_lex;
+struct					s_lex;
 typedef struct s_lex	t_lex;
 
 t_lex					*tokenize(t_state *s, const char *input);
@@ -21,7 +21,7 @@ t_list					*lex_get_tokens(t_lex *lexer);
 unsigned int			lex_get_keepd(t_lex *lexer);
 const char				*lex_get_raw(t_lex *lexer);
 char					*lex_get_ptr(t_lex *lexer);
-char 					*lex_get_eof(t_lex *lexer);
+char					*lex_get_eof(t_lex *lexer);
 int						lex_get_lines(t_lex *lexer);
 
 size_t					ft_varnamelen(const char *c);

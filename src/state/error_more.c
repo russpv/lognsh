@@ -34,7 +34,7 @@ void	print_invalid_name(const char *caller, const char *name)
 	write(STDERR_FILENO, caller, ft_strnlen(caller, MAX_NAME_LEN));
 	write(STDERR_FILENO, ": ", 2);
 	write(STDERR_FILENO, name, ft_strnlen(name, MAX_NAME_LEN));
-	write(STDERR_FILENO, ": invalid parameter name\n", \
+	write(STDERR_FILENO, ": invalid parameter name\n",
 		ft_strlen(": invalid parameter name\n"));
 }
 

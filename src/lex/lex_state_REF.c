@@ -1,5 +1,43 @@
 #include "lex_int.h"
 
+/* The State Machine
+ * General states:
+ * START: Beginning of input or start of a new token.
+ * IN_WORD: Collecting characters in a word token.
+ * IN_OPERATOR: Collecting characters in an operator token.
+ * IN_QUOTE: Processing quoted text.
+ * IN_SUBSTITUTION: Processing parameter, command, or arithmetic substitution.
+ * IN_COMMENT: Discarding characters in a comment.
+ * IN_HEREDOC:
+ * END: End of input.
+ *
+ * Use token buffer and token list
+ *
+ * Traverse input ONCE
+ *
+ * Handle these rules
+ * Hash - Ignore everything till newline
+ * Whitespace - discard unquoted space and finalize current token
+ * Start char - start a new token
+ * Quotes - track ' " or \ and collect until closing symbol found
+ * Operators - look ahead one char for double char ops
+ * Null term - finalize current token
+ * (distinguish reserved words)
+ * (remove escape chars)
+ *
+ * Tokens
+ * TOKEN: WORD, ASSIGNMENT_WORD, NAME, (reserved word)
+ * OPERATOR: (below)
+ * NEWLINE
+ * IO_NUMBER e.g. &2>1
+ *
+ * AND_IF
+ * OR_IF
+ * DLESS
+ * DGREAT
+ */
+
+ 
 // Stops tokenizer loop from running
 // ON_EOF can be set only after NULL token is added
 static inline bool	_handle_eof_state(t_lex *lexer)

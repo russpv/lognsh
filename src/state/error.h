@@ -71,14 +71,14 @@
 
 // no includes, but redefs, due to circular dependency
 typedef struct s_global_state	t_state;
-struct s_lex;
+struct							s_lex;
 typedef struct s_lex			t_lex;
 
 /* specific error messages */
 void							print_command_not_found(const char *cmd);
 void							print_perror(const char *dingus);
 void							print_lex_buffer_overflow(void);
-void							print_ambiguous_redirect(const char *orig_fn);
+void							print_ambig_redir(const char *orig_fn);
 void							print_too_many_args(const char *caller);
 void							print_redirect_warning(char *topath);
 void							print_custom_err(const char *dingus,
@@ -97,9 +97,8 @@ void							print_nocmd_error(t_state *s, const char *word,
 									size_t pos);
 void							print_invalid_name(const char *caller,
 									const char *name);
-void	print_parse_redir_error(t_state *s, size_t pos);
-void	print_dne(const char *path);
-
+void							print_parse_redir_error(t_state *s, size_t pos);
+void							print_dne(const char *path);
 
 void							pbufflow(const char *s);
 void							print_is_dir(char *p);
@@ -115,6 +114,6 @@ extern const char				*lex_get_raw(t_lex *l);
 extern void						ft_putstr_fd(char const *s, int fd);
 extern char						*ft_strchr(const char *s, int c_in);
 extern size_t					ft_strnlen(const char *s, size_t maxlen);
-void							perror(const char *);
+//void							perror(const char *);
 
 #endif

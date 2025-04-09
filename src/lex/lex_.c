@@ -1,6 +1,27 @@
 #include "lex_int.h"
 
-// assumes non-empty string
+/*
+** These are the conditions for exiting DOLLAR mode
+** ... (end of valid name)
+** 
+** These are the conditions for tokenizing full tokens
+** ...&& not ...&
+** ...|[|] 
+** ...<* ...>* 
+** ...( or )  
+** ...\n or \t or ' ' 
+** 
+** These are the conditions for tokenizing subtokens
+** ...\' ...\'
+** ...\" ...\"
+** ...$?
+** ...$[varname]
+** 
+** Any of the states must stop on the tokenizing delimiters
+** All state transitions otherwise signify subtokens unless 
+** a tokenizing delimiter also follows.
+*/
+
 t_lex	*tokenize(t_state *s, const char *input)
 {
 	enum e_lex_state	state;
@@ -19,7 +40,7 @@ t_lex	*tokenize(t_state *s, const char *input)
 		{
 			if (0 != lexer->tokenizer(s, lexer))
 			{
-				destroy_lexer(get_mem(s), (void**)&lexer);
+				destroy_lexer(get_mem(s), (void **)&lexer);
 				return (dprint(_MOD_ ": ERR\n"), NULL);
 			}
 			do_state_transition(lexer);

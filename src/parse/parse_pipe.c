@@ -1,6 +1,7 @@
 #include "parse_int.h"
 
-#define EMSG_PPIPE_MALLOC "Memory allocation error while creating pipe's command node\n"
+#define EMSG_PPIPE_MALLOC \
+	"Memory allocation error while creating pipe's command node\n"
 #define EMSG_PPIPE_SYNTAX "Failed to parse command after pipe operator\n"
 #define EMSG_PPIPE_GEN "Pipeline parsing error\n"
 
@@ -84,7 +85,8 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 		destroy_ast_node(get_mem(s), (void **)&ast_node);
 		return (err(EMSG_PPIPE_GEN), NULL);
 	}
-	dprint("%s: %s: parsed %d cmds\n", _MOD_, __FUNCTION__, ast_node->data.pipe.cmdc);
+	dprint("%s: %s: parsed %d cmds\n", _MOD_, __FUNCTION__,
+		ast_node->data.pipe.cmdc);
 	p->last_node = ast_node;
 	st_int_pop(p->st);
 	return (ast_node);

@@ -81,8 +81,6 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 			put_on_buf(lexer);
 		}
 		lexer->input_incomplete = true;
-		//if (0 == ft_strlen(lexer->buf))
-		//	return (NULL);
 		if (false == is_normal_delim(lexer, 0))
 			lexer->is_subtoken = true;
 		token = lex_create_token(get_mem(s), lexer, TOK_WORD);

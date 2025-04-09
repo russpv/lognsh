@@ -14,6 +14,7 @@ static int	_do_expansions(t_state *s, t_arg_data *grparg)
 			return (res);
 		tok_print_list(grparg->lst_tokens);
 	}
+	lgprint("Expansions Done.\n");
 	return (0);
 }
 
@@ -26,6 +27,7 @@ static int	_do_wordsplits(t_state *s, t_arg_data *grparg)
 		ft_lstiter_ins_rwd_tmp(get_mem(s), &grparg->lst_tokens,
 			tok_do_wordsplits);
 	tok_print_list(grparg->lst_tokens);
+	lgprint("Wordsplits Done.\n");
 	return (0);
 }
 
@@ -41,21 +43,7 @@ static int	_do_globbing(t_state *s, t_arg_data *grparg)
 	{
 		ft_lstiter_ins_rwd_tmp(get_mem(s), saved_lst, p_do_globbing_toks);
 	}
-	return (0);
-}
-
-int	_print_arg(void *arg)
-{
-	t_arg_data	*node;
-
-	node = (t_arg_data *)arg;
-	if (node)
-	{
-		if (node->raw)
-			cprintf(MAGENTA, "%s", node->raw);
-		else
-			cprintf(MAGENTA, "(null)");
-	}
+	lgprint("Globbing Done.\n");
 	return (0);
 }
 
@@ -78,20 +66,8 @@ static int	_do_combine(t_state *s, t_arg_data *grparg)
 					create_tmp_token(get_mem(s), str)));
 	}
 	tok_print_list(*tok_lst);
+	lgprint("Combines and Inserts Done.\n");
 	return (0);
-}
-
-static void	_do_insert(t_state *s, t_list **this_node)
-{
-	t_list	**tok_lst;
-	t_list	*argl;
-
-	tok_lst = get_tmp_tok_list(s);
-	argl = ft_lstmap_tmp(get_mem(s), *tok_lst, token_to_arg, destroy_arg);
-	ft_lstadd_insert(this_node, argl);
-	ft_lstdelone_tmp(get_mem(s), this_node, *this_node, destroy_arg);
-	ft_lstprinter(*this_node, _print_arg);
-	*tok_lst = NULL;
 }
 
 /* Passed to arg llist iterator to iterate any group arg's token llist.
@@ -119,20 +95,16 @@ int	p_do_grparg_processing(t_state *s, t_list **this_arg, void *c)
 	res = _do_expansions(s, grparg);
 	if (0 != res)
 		return (res);
-	lgprint("Expansions Done.\n");
 	res = _do_wordsplits(s, grparg);
 	if (0 != res)
 		return (res);
-	lgprint("Wordsplits Done.\n");
 	res = _do_combine(s, grparg);
 	if (0 != res)
 		return (res);
-	lgprint("Combines and Inserts Done.\n");
 	res = _do_globbing(s, grparg);
 	if (0 != res)
 		return (res);
-	_do_insert(s, this_arg);
-	lgprint("Globbing Done.\n");
+	do_grparg_inserts(s, this_arg);
 	dprint("%s: returning lst_size: %d, %p\n", __FUNCTION__,
 		ft_lstsize(*this_arg), *this_arg);
 	return (res);

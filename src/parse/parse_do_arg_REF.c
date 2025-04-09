@@ -24,7 +24,7 @@ int	p_do_arg_processing(t_state *s, t_ast_node *a, char ***args)
 	{
 		dprint_arglist(*argl);
 		if (a->data.cmd.has_arggrouptoks)
-			res = ft_lstiter_state_ins_rwd_tmp(s, argl, p_do_grparg_processing);
+			res = ft_lstiter_state_ins_rwd_mem(s, argl, p_do_grparg_processing);
 		else
 		{
 			if (a->data.cmd.do_expansion)

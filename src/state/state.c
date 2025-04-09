@@ -52,17 +52,17 @@ t_state	*init_state(char **envp)
  */
 void	destroy_state(t_state **state)
 {
-	t_mem_mgr *m;
-	t_state *s;
+	t_mem_mgr	*m;
+	t_state		*s;
 
 	s = *state;
 	m = get_mem(s);
 	if (s->current_parser)
-		s->destroy_parser(m, (void**)&s->current_parser);
+		s->destroy_parser(m, (void **)&s->current_parser);
 	if (s->current_lexer)
-		s->destroy_lexer(m, (void**)&s->current_lexer);
+		s->destroy_lexer(m, (void **)&s->current_lexer);
 	if (s->current_cmd)
-		s->destroy_command(m, (void**)&s->current_cmd);
+		s->destroy_command(m, (void **)&s->current_cmd);
 	if (s->input)
 		m->dealloc(&m->list, s->input);
 	if (s->sh_env_list)

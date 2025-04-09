@@ -1,6 +1,6 @@
 #include "parse_int.h"
 
-bool	p_get_has_redgrouptoks(t_ast_node *n)
+bool	p_get_has_redgrptok(t_ast_node *n)
 {
 	if (!n)
 		return (false);
@@ -15,7 +15,7 @@ bool	p_get_has_redgrouptoks(t_ast_node *n)
 	return (false);
 }
 
-bool	p_get_do_redir_expansion(t_ast_node *n)
+bool	p_get_do_redir_exp(t_ast_node *n)
 {
 	if (!n)
 		return (false);
@@ -26,7 +26,7 @@ bool	p_get_do_redir_expansion(t_ast_node *n)
 	return (false);
 }
 
-bool	p_get_do_redir_globbing(t_ast_node *n)
+bool	p_get_do_redir_glob(t_ast_node *n)
 {
 	if (!n)
 		return (false);

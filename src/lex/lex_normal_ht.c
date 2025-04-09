@@ -21,7 +21,7 @@ static inline bool	_is_not_delimd(const char *s)
 t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 {
 	struct s_ht_entry	*res;
-	void *elem;
+	void				*elem;
 
 	if (ft_strnlen(lexer->buf, LEX_BUFSZ) == 0)
 		return (NULL);
@@ -38,7 +38,8 @@ t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 			dprint(_MOD_ ": Creating token...\n");
 			elem = ht_get_payload(res);
 			if (elem)
-				return (lex_create_token(get_mem(s), lexer,((t_ht_data)elem)->type));
+				return (lex_create_token(get_mem(s), lexer,
+						((t_ht_data)elem)->type));
 		}
 	}
 	return (NULL);

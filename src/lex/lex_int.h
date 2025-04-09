@@ -7,38 +7,30 @@
 #define FAIL_TOKEN 10
 #define LEX_MAX_TOKC 1000
 
-/* Space is not a reliable delimiter. Assume no space. */
-// Capture operators in NORMAL mode.
-// Capture subtokens in ENVVAR mode. Simplifies NORMAL.
-// Capture literal in SQUOTE.
-// Capture reduced processed tokens in DQUOTE.
-// How do I know I'm done with a subtoken streak?
-/*
-
-These are the conditions for exiting DOLLAR mode
-... (end of valid name) +
-These are the conditions for tokenizing full tokens
-...&& not ...&
-...|[|] is_normal_delim
-...<* ...>* is_normal_delim
-...( or )  is_normal_delim
-...\n or \t or ' ' is_normal_delim
-
-These are the conditions for tokenizing subtokens
-...\' ...\'
-...\" ...\"
-...$?
-...$[varname]
-Delimited by normal delims
-
-Any of the states must stop on the tokenizing delimiters
-All state transitions otherwise signify subtokens unless tokenizing delimiter also follows.
-So we can end on quotation marks,
-	and if we were part of a subtoken streak we would have to
-check if characters other than any of these delimiter patterns is present after the transition
-chars. That must be done each call to lex_create_token. Might as well encapsulate in that func.
-
-*/
+/* LEX
+ *
+ * Selectively loads input string into buf, marking
+ * current section with processing properties
+ * until a delimiter is found, then creates a token
+ * and resets buf.
+ *
+ * Does these rules:
+ * - white space skipped outside of quotes
+ * - single quotes protect string literal
+ * - double quotes allow shell var expansion
+ * - escape sequences also validate inside double quotes
+ * - tokenizes group/subtokens if a transition is reached
+ * 		in dollar or double quote modes
+ *
+ * On separators:
+ * "A cornerstone of UNIX wisdom is that “plaintext is the
+ * universal interface.” Hence, it is not strongly typed;
+ * it’s stringly typed."
+ * - a grumpy programmer
+ *
+ * Note: no multi-line commands, so no line continuation or
+ * unclosed quotes are recognized.
+ */
 
 /* chars that need to be quoted if meant literally */
 #define NORMALDELIMS "()|<>\n\t &\0"
@@ -50,111 +42,20 @@ chars. That must be done each call to lex_create_token. Might as well encapsulat
 // $, \, # do not delimit tokens, and are skipped
 // Removed '*' so that it is included in token raws
 // and '?'?
+
+/* ops that have no following delims */
 #define NOTDELIMITED "()<>|"
-// ops that have no following delims
+
 #define NORMALTRANSITIONS "$\'\"<\0"
 // the '\0' isn't tested, keep at end,
 //	< for heredoc
 // # handled in NORMAL
 // $ must be followed by alphanum or _ to delim a (sub)token
+
 #define LEX_BUFSZ 1024
 #define MAX_HDOCSZ LEX_BUFSZ
-#define INITVAL 0 // Lexer default flag value
+#define INITVAL 0
 #define MOD "Lexer"
-
-/* LEX
- *
- * Selectively loads input string into buf, marking
- * current section with processing properties
- * until a delimiter is found, then creates a token
- * and resets buf.
- *
- * Does these rules:
- * white space skipped outside of quotes
- * single quotes are closed, and protect string literal
- * double quotes allow var expansion
- * escape sequences validated, even inside double quotes
- * looks ahead a few chars to identify multi-char operators
- * tokenizes group tokens if, in the course of normal state,
- * single or double quote state is encountered.
- */
-
-/* Finite State Machine rules
- * an operator cannot be followed by a flag, must be followed by a word
- * a cmd cannot be followed by a cmd
- * an arg cannot be followed by a cmd (unless the arg is complex)
- */
-
-/* States
- * inside single quotes
- * inside double quotes
- * inside escape sequence
- * operator parsing
- */
-
-// Improvements:
-// Could use a stack to handle missing closing delimiter of a pair
-// Could lex multi-line commands
-
-/* On separators
- *
- * "A cornerstone of UNIX wisdom is that “plaintext is the
- * universal interface.” Hence, it is not strongly typed; it’s stringly typed."
- * - a grumpy programmer
- */
-
-// Notes: These bash separators must be lexed properly
-// line-separator \n (treated as separate commands) vs continuation '\'
-// but continuation char not needed for pipes
-// continuation expected for heredocs
-// continuation is equivalent of ';'
-//
-// Be careful of spaces var="name with space" will expand to a list,
-// not a string
-// bash doesn't allow this to expand to two arguments: var='a "b c"',
-// just 1 or 3
-//
-// Colon
-// Could be in a dir or filename, but for simplicity will treat as a char, or
-// the PATH delimiter
-//
-
-/* The State Machine
- * General states:
- * START: Beginning of input or start of a new token.
- * IN_WORD: Collecting characters in a word token.
- * IN_OPERATOR: Collecting characters in an operator token.
- * IN_QUOTE: Processing quoted text.
- * IN_SUBSTITUTION: Processing parameter, command, or arithmetic substitution.
- * IN_COMMENT: Discarding characters in a comment.
- * IN_HEREDOC:
- * END: End of input.
- *
- * Use token buffer and token list
- *
- * Traverse input ONCE
- *
- * Handle these rules
- * Hash - Ignore everything till newline
- * Whitespace - discard unquoted space and finalize current token
- * Start char - start a new token
- * Quotes - track ' " or \ and collect until closing symbol found
- * Operators - look ahead one char for double char ops
- * Null term - finalize current token
- * (distinguish reserved words)
- * (remove escape chars)
- *
- * Tokens
- * TOKEN: WORD, ASSIGNMENT_WORD, NAME, (reserved word)
- * OPERATOR: (below)
- * NEWLINE
- * IO_NUMBER e.g. &2>1
- *
- * AND_IF
- * OR_IF
- * DLESS
- * DGREAT
- */
 
 enum						e_lex_state
 {
@@ -213,7 +114,6 @@ struct						s_ht_data
 /* Forwards */
 typedef struct s_ht_data	*t_ht_data;
 extern int					exec_heredoc(t_state *s, t_lex *l);
-
 
 t_lex						*create_lexer(t_state *state, int start_state,
 								const char *s);

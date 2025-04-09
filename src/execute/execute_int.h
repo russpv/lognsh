@@ -13,4 +13,3 @@ extern size_t	read_heredoc(int fd, t_lex *l);
 int				handle_exit(t_state *s, int code);
 
 #endif
-q

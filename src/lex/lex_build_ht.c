@@ -2,9 +2,8 @@
 
 static inline int	_insert_builtins(t_mem_mgr *m, t_ht ht)
 {
-	int	i;
-
-	const char *cmd[] = {
+	int			i;
+	const char	*cmd[] = {
 		BI_ECHO,
 		BI_CD,
 		BI_PWD,
@@ -14,6 +13,7 @@ static inline int	_insert_builtins(t_mem_mgr *m, t_ht ht)
 		BI_EXIT,
 		BI_EXEC,
 	};
+
 	i = -1;
 	while (++i < BI_COUNT)
 		if (!ht_install(m, ht, (char *)cmd[i], lex_create_ht_node(m, false,
@@ -22,23 +22,6 @@ static inline int	_insert_builtins(t_mem_mgr *m, t_ht ht)
 	return (0);
 }
 
-/* Currently not used. */
-/*
-static inline void	_insert_reserved_words(t_mem_mgr *m, t_ht ht)
-{
-	ht_install(m, ht, WD_IF, lex_create_ht_node(m, false, TOK_IF), NULL);
-	ht_install(m, ht, WD_THEN, lex_create_ht_node(m, false, TOK_THEN), NULL);
-	ht_install(m, ht, WD_ELSE, lex_create_ht_node(m, false, TOK_ELSE), NULL);
-	ht_install(m, ht, WD_FI, lex_create_ht_node(m, false, TOK_FI), NULL);
-	ht_install(m, ht, WD_DO, lex_create_ht_node(m, false, TOK_DO), NULL);
-	ht_install(m, ht, WD_DONE, lex_create_ht_node(m, false, TOK_DONE), NULL);
-	ht_install(m, ht, WD_CASE, lex_create_ht_node(m, false, TOK_CASE), NULL);
-	ht_install(m, ht, WD_ESAC, lex_create_ht_node(m, false, TOK_ESAC), NULL);
-	ht_install(m, ht, WD_WHIL, lex_create_ht_node(m, false, TOK_WHILE), NULL);
-	ht_install(m, ht, WD_UNTL, lex_create_ht_node(m, false, TOK_UNTIL), NULL);
-	ht_install(m, ht, WD_FOR, lex_create_ht_node(m, false, TOK_FOR), NULL);
-	ht_install(m, ht, WD_IN, lex_create_ht_node(m, false, TOK_IN), NULL);
-}*/
 static inline void	_insert_operators(t_mem_mgr *m, t_ht ht)
 {
 	ht_install(m, ht, "(", lex_create_ht_node(m, false, TOK_OPEN_PAREN), NULL);

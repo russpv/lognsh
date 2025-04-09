@@ -2,8 +2,10 @@
 
 #define EMSG_LOGI_PARSE "Failed to parse command after logical op\n"
 #define EMSG_LOGI_NODE_MALLOC "Allocation failed for logical node\n"
-#define EMSG_LOGI_CMD_MALLOC "Memory allocation error while creating logical's command node\n"
-#define EMSG_LOGI_OP_MALLOC "Memory allocation error while creating operator node\n"
+#define EMSG_LOGI_CMD_MALLOC \
+	"Memory allocation error while creating logical's command node\n"
+#define EMSG_LOGI_OP_MALLOC \
+	"Memory allocation error while creating operator node\n"
 
 /* Stores command. Assumes parser is on
  * correct token.

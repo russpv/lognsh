@@ -1,6 +1,6 @@
 #include "lex_int.h"
 
-#define EMSG_NOEOF _MOD_ ": ERROR: heredoc EOF not found.\n"
+#define EMSG_NOEOF "ERR heredoc EOF not found.\n"
 
 // This should skip whitespace only
 // Readline allows ' ' only
@@ -31,13 +31,13 @@ static inline bool	_is_hdoc_eof_char(unsigned char c)
 }
 
 // Determines type of EOF, quoted or not
-// Cannot be an expansion. If any part of the word is quoted, sets processing type.
-// Accepts any chars within matching quotes
+// Cannot be an expansion. If any part of the word is quoted,
+// sets processing type. Accepts any chars within matching quotes
 static inline void	_put_eof_in_buf(t_lex *l)
 {
-	char quote;
+	char	quote;
 
-	while (*l->ptr && *l->ptr != '\n' && !ft_isspace(*l->ptr) \
+	while (*l->ptr && *l->ptr != '\n' && !ft_isspace(*l->ptr)
 		&& _is_hdoc_eof_char(*l->ptr))
 	{
 		if ('\'' == *l->ptr || '\"' == *l->ptr)

@@ -14,7 +14,7 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
 	{
 		if (*value)
 		{
-			get_mem(s)->dealloc(&get_mem(s)->list, c->raw);
+			(get_mem(s))->dealloc(&get_mem(s)->list, c->raw);
 			((t_arg_data *)c)->raw = *value;
 		}
 	}
@@ -28,7 +28,7 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
 				exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__,
 					EMSG_PATH_MALLOC);
 		}
-		get_mem(s)->dealloc(&get_mem(s)->list, c->raw);
+		(get_mem(s))->dealloc(&get_mem(s)->list, c->raw);
 		((t_arg_data *)c)->raw = new_raw;
 	}
 	return (0);
@@ -38,7 +38,7 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
  * If flag set, looks for expansion values in shell envp
  * by passing a buffer loaded with the key and replaces
  * t_arg_data.raw string, omitting any '$'.
- * The string to expand must be more than LEXERKEEPDOLLAR char (for '$').
+ * The string to expand must be more than LEXKEEPDOLLR char (for '$').
  */
 int	p_do_arg_expansion(t_state *s, void *c)
 {
@@ -57,9 +57,9 @@ int	p_do_arg_expansion(t_state *s, void *c)
 	dprint(PDMSG_IN, _MOD_, __FUNCTION__, content->raw);
 	if (content->do_expansion)
 	{
-		if (raw_len <= LEXERKEEPDOLLAR)
+		if (raw_len <= LEXKEEPDOLLR)
 			return (err(EMSG_NULL_EXPAN), ERR_ARGS);
-		ft_memcpy(buf, content->raw + LEXERKEEPDOLLAR, raw_len - LEXERKEEPDOLLAR);
+		ft_memcpy(buf, content->raw + LEXKEEPDOLLR, raw_len - LEXKEEPDOLLR);
 		res = _do_arg_ops(s, content, buf, &value);
 		if (res != 0)
 			return (res);

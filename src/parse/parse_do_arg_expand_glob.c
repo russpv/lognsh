@@ -1,7 +1,7 @@
 #include "parse_int.h"
 
 #define DBGMSG_GOTARGS "%s: %s - arg: %s, lst:%p\n"
-#define DBGMSG_MATCHES "%s: %s found %d matches, 1st: %s\n"
+#define DBGMSG_MATCHES "Parse: p_do_globbing_toks found %d matches, 1st: %s\n"
 
 // Tests whether globstar is preceded with escape char
 static bool	_has_globbing(const char *raw)
@@ -38,8 +38,7 @@ int	p_do_globbing_toks(t_mem_mgr *mgr, t_list **lst_node, void *lst_c)
 		lst = match_glob(mgr, tok_get_raw(tok));
 		if (lst)
 		{
-			dprint(DBGMSG_MATCHES, _MOD_, __FUNCTION__, ft_lstsize(lst),
-				lst->content);
+			dprint(DBGMSG_MATCHES, ft_lstsize(lst), lst->content);
 			res = do_tok_inserts(mgr, lst_node, &lst, create_tmp_token);
 			if (0 != res)
 				return (res);

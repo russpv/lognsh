@@ -30,18 +30,19 @@ int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 		{
 			if (lexer->last_grp_tok)
 			{
-				dprint(_MOD_ ": %s adding subtoken %s to grp\n",
-					__FUNCTION__, tok_get_raw(token));
+				dprint(_MOD_ ": %s adding subtoken %s to grp\n", __FUNCTION__,
+					tok_get_raw(token));
 				_add_subtoken(m, lexer, token);
-				dprint(_MOD_ ": %s checking delimiter, ptr:%c\n",
-					__FUNCTION__, *lexer->ptr);
+				dprint(_MOD_ ": %s checking delimiter, ptr:%c\n", __FUNCTION__,
+					*lexer->ptr);
 				if (is_normal_delim(lexer, 0))
 					add_grptoken(m, lexer);
 			}
 			else
 			{
 				dprint(_MOD_ ": %s adding token to list\n", __FUNCTION__);
-				if (ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m, token)) > 0)
+				if (ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m,
+							token)) > 0)
 					lexer->tokc++;
 			}
 		}

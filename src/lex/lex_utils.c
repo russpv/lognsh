@@ -12,33 +12,6 @@ inline bool	is_too_long(const char *input)
 	return (false);
 }
 
-bool	lex_get_incomplete(t_lex *lexer)
-{
-	if (!lexer)
-		return (false);
-	return (lexer->input_incomplete);
-}
-
-t_list	*lex_get_tokens(t_lex *lexer)
-{
-	if (!lexer)
-		return (NULL);
-	return (lexer->token_list);
-}
-
-bool	is_varnamechar(unsigned char c)
-{
-	dprint(_MOD_ ": %s: (%c)\n", __FUNCTION__, c);
-	return (ft_isalnum((int)c) || '_' == c);
-}
-
-// Checks for any special substition char
-bool	is_specialchar(unsigned char c)
-{
-	dprint(_MOD_ ": %s: (%c)\n", __FUNCTION__, c);
-	return ('?' == c);
-}
-
 /* VARNAMELEN
 ** This returns length of the string pointed to by 'c'
 ** As long as it is a shell variable name

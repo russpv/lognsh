@@ -53,7 +53,7 @@ int								p_get_argc(t_ast_node *a);
 int								p_get_redc(t_ast_node *a);
 bool							p_get_expansion(t_ast_node *a);
 bool							p_get_grouptok(t_ast_node *a);
-bool							p_get_has_redgrouptoks(t_ast_node *n);
+bool							p_get_has_redgrptok(t_ast_node *n);
 
 char							*p_get_fn(const t_redir_data *r);
 

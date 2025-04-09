@@ -28,6 +28,17 @@ t_redir_data	*init_redir(t_mem_mgr *m, t_parser *p, t_ast_node *target,
 	return (red);
 }
 
+static void	_init_arg_helper(t_arg_data *arg, t_parser *p, t_tok *tok)
+{
+	arg->global_state = p->global_state;
+	arg->tmp = NULL;
+	arg->option = is_option(tok);
+	arg->do_globbing = tok_get_globbing(tok);
+	arg->do_expansion = tok_get_expansion(tok);
+	arg->in_dquotes = tok_get_dquotes(tok);
+	arg->is_grouparg = tok_isgrouptoken(tok);
+}
+
 /* Must deep copy token strings to decouple token-list/ast.
  */
 t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node,
@@ -48,27 +59,14 @@ t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node,
 		}
 		else
 			arg->raw = NULL;
-		arg->option = is_option(tok);
-		arg->do_globbing = tok_get_globbing(tok);
-		arg->do_expansion = tok_get_expansion(tok);
-		arg->in_dquotes = tok_get_dquotes(tok);
-		arg->is_grouparg = tok_isgrouptoken(tok);
-		arg->tmp = NULL;
+		_init_arg_helper(arg, p, tok);
 		arg->lst_tokens = ft_lstcopy_tmp(m, tok_get_tlist(tok), copy_token,
 				destroy_token);
-		arg->global_state = p->global_state;
 		if (false == arg->in_dquotes)
 			cmd_node->data.cmd.do_wordsplit = true;
 		cmd_node->data.cmd.do_expansion |= arg->do_expansion;
 		cmd_node->data.cmd.do_globbing |= arg->do_globbing;
 		cmd_node->data.cmd.has_arggrouptoks |= arg->is_grouparg;
-		/*
-				if (true == arg->do_expansion)
-					cmd_node->data.cmd.do_expansion = true;
-				if (true == arg->do_globbing)
-					cmd_node->data.cmd.do_globbing = true;
-				if (true == arg->is_grouparg)
-					cmd_node->data.cmd.has_arggrouptoks = true; */
 	}
 	return (arg);
 }

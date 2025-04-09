@@ -22,7 +22,6 @@
 #  define TESTFLAG 0
 # endif
 
-
 /* STATE ADT
 ** A centralized singleton-like pattern for tracking global state
 ** including environment, execution state.
@@ -42,62 +41,61 @@ typedef struct s_env			t_env;
 /* For dependency injections */
 
 /* Command injector */
-typedef char					*(*c_get_fullpath_fn)(t_cmd *c);
-typedef char					**(*c_get_argv_fn)(t_cmd *c);
-typedef t_int_stack				*(*c_get_ctxtst_fn)(t_cmd *c);
-typedef t_ast_node				*(*c_get_node_fn)(t_cmd *c);
-typedef int						(*c_get_cmdc_fn)(const t_cmd *c);
-typedef int						(*c_get_argvc_fn)(const t_cmd *c);
-typedef const int				**(*c_get_fildes_fn)(const t_cmd *c);
-typedef int						(*save_redirs_fn)(t_cmd *c);
-typedef int						(*restore_redirs_fn)(t_cmd *c);
+typedef char					*(*t_c_get_fullpath_fn)(t_cmd *c);
+typedef char					**(*t_c_get_argv_fn)(t_cmd *c);
+typedef t_int_stack				*(*t_c_get_ctxtst_fn)(t_cmd *c);
+typedef t_ast_node				*(*t_c_get_node_fn)(t_cmd *c);
+typedef int						(*t_c_get_cmdc_fn)(const t_cmd *c);
+typedef int						(*t_c_get_argvc_fn)(const t_cmd *c);
+typedef const int				**(*t_c_get_fildes_fn)(const t_cmd *c);
+typedef int						(*t_save_redirs_fn)(t_cmd *c);
+typedef int						(*t_restore_redirs_fn)(t_cmd *c);
 
 typedef struct s_command_functions
 {
-	c_get_argv_fn				c_get_argv;
-	c_get_argvc_fn				c_get_argvc;
-	c_get_cmdc_fn				c_get_cmdc;
-	c_get_node_fn				c_get_node;
-	c_get_fullpath_fn			c_get_fullpath;
-	c_get_ctxtst_fn				c_get_ctxtst;
-	c_get_fildes_fn				c_get_fildes;
-	save_redirs_fn				save_redirs;
-	restore_redirs_fn			restore_redirs;
+	t_c_get_argv_fn				c_get_argv;
+	t_c_get_argvc_fn			c_get_argvc;
+	t_c_get_cmdc_fn				c_get_cmdc;
+	t_c_get_node_fn				c_get_node;
+	t_c_get_fullpath_fn			c_get_fullpath;
+	t_c_get_ctxtst_fn			c_get_ctxtst;
+	t_c_get_fildes_fn			c_get_fildes;
+	t_save_redirs_fn			save_redirs;
+	t_restore_redirs_fn			restore_redirs;
 }								t_cmd_fns;
 
 t_cmd_fns						*get_cmd_fns(t_state *s);
 t_cmd_fns						*init_cmd_fns(t_state *s);
 
 /* Lexer injector */
-typedef char					*(*lex_get_eof_fn)(t_lex *lexer);
-typedef int						(*lex_get_lines_fn)(t_lex *lexer);
-typedef int						(*match_heredoc_fn)(t_mem_mgr *m, t_lex *l);
-typedef size_t					(*write_heredoc_fn)(int fd, t_lex *l);
-typedef size_t					(*read_heredoc_fn)(int fd, t_lex *l);
+typedef char					*(*t_lex_get_eof_fn)(t_lex *lexer);
+typedef int						(*t_lex_get_lines_fn)(t_lex *lexer);
+typedef int						(*t_match_heredoc_fn)(t_mem_mgr *m, t_lex *l);
+typedef size_t					(*t_write_heredoc_fn)(int fd, t_lex *l);
+typedef size_t					(*t_read_heredoc_fn)(int fd, t_lex *l);
 
 typedef struct s_lexer_functions
 {
-	lex_get_eof_fn				lex_get_eof;
-	lex_get_lines_fn			lex_get_lines;
-	match_heredoc_fn			lex_match_heredoc;
-	write_heredoc_fn			write_heredoc;
-	read_heredoc_fn				read_heredoc;
+	t_lex_get_eof_fn			lex_get_eof;
+	t_lex_get_lines_fn			lex_get_lines;
+	t_match_heredoc_fn			lex_match_heredoc;
+	t_write_heredoc_fn			write_heredoc;
+	t_read_heredoc_fn			read_heredoc;
 }								t_lex_fns;
 
 t_lex_fns						*get_lex_fns(t_state *s);
 t_lex_fns						*init_lex_fns(t_state *s);
 
 /* Parse injector */
-typedef int						(*p_do_redirections_fn)(t_ast_node *a);
+typedef int						(*t_p_do_redirections_fn)(t_ast_node *a);
 
 typedef struct s_parse_functions
 {
-	p_do_redirections_fn		p_do_redirections;
+	t_p_do_redirections_fn		p_do_redirections;
 }								t_parse_fns;
 
 t_parse_fns						*get_parse_fns(t_state *s);
 t_parse_fns						*init_parse_fns(t_state *s);
-
 
 /* Methods */
 t_state							*init_state(char **envp);

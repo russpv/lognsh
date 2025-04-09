@@ -2,8 +2,8 @@
 
 t_lex_fns	*init_lex_fns(t_state *s)
 {
-	const t_mem_mgr *m = get_mem(s);
-	t_lex_fns *fns;
+	const t_mem_mgr	*m = get_mem(s);
+	t_lex_fns		*fns;
 
 	fns = m->f(&((t_mem_mgr *)m)->list, sizeof(t_lex_fns));
 	if (!fns)
@@ -16,8 +16,10 @@ t_lex_fns	*init_lex_fns(t_state *s)
 	return (fns);
 }
 
-static inline void	_init_lexer_state(t_lex *lexer, int start_state)
+static inline void	_init_lexer_state(t_state *state, t_lex *lexer,
+		int start_state)
 {
+	lexer->global_state = state;
 	if (NORMAL == start_state)
 		lexer->tokenizer = tokenize_normal;
 	if (IN_SINGLE_QUOTES == start_state)
@@ -72,36 +74,14 @@ t_lex	*create_lexer(t_state *state, int start_state, const char *s)
 		lexer->lines = 0;
 		lexer->last_grp_tok = NULL;
 		lexer->tokc = 0;
-		lexer->keep_dollar = LEXERKEEPDOLLAR;
-		lexer->global_state = state;
+		lexer->keep_dollar = LEXKEEPDOLLR;
 		register_lexer_destroy(state, destroy_lexer);
 		register_token_destroy(state, destroy_token);
 		if (false == _allocate_buf_and_hasht(get_mem(state), lexer))
 			exit_clean(&get_mem(state)->list, ENOMEM, __FUNCTION__,
 				EMSG_MALLOC);
 		build_hasht(get_mem(state), lexer);
-		_init_lexer_state(lexer, start_state);
+		_init_lexer_state(state, lexer, start_state);
 	}
 	return (lexer);
-}
-
-/* Doesn't free raw_string */
-void	destroy_lexer(t_mem_mgr *m, void **instance)
-{
-	t_lex		*lexer;
-
-	lexer = (t_lex *)(*instance);
-	dprint(_MOD_ ": %s...\n", __FUNCTION__);
-	if (!lexer)
-		return ;
-	if (lexer->buf)
-		m->dealloc(&m->list, lexer->buf);
-	if (lexer->eof_word)
-		m->dealloc(&m->list, lexer->eof_word);
-	if (lexer->hasht)
-		ht_destroy(m, lexer->hasht, lex_destroy_ht_node);
-	if (lexer->token_list)
-		ft_lstclear_tmp(m, &lexer->token_list, destroy_token);
-	m->dealloc(&m->list, lexer);
-	*instance = NULL;
 }

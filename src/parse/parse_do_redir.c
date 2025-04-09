@@ -2,8 +2,8 @@
 
 #define EMSG_REDIR_HANDLER "Redirection handler issue\n"
 #define EMSG_REDIR_NULLNODE "ERR no node given\n"
-#define DBGMSG_REDIRP_GOT _MOD_ ": p_do_redir_processing got: type:%d glob_%d exp_%d grp_%d\n"
-
+#define DBGMSG_REDIRP_GOT \
+	"%s: p_do_redir_processing got: type:%d glob_%d exp_%d grp_%d\n"
 
 /* Executes redirection of t_redir_data llist
  * Accepts a t_redir_data.
@@ -14,9 +14,9 @@ static int	_p_do_redirection(void *content)
 {
 	const t_redir_data	*redir = (t_redir_data *)content;
 	const t_redir_fn	handlers[] = {[TOK_REDIRECT_IN] = handle_redirect_in,
-			[TOK_REDIRECT_OUT] = handle_redirect_out,
-			[TOK_REDIRECT_APPEND] = handle_redirect_append,
-			[TOK_HEREDOC_WORD] = handle_heredoc};
+	[TOK_REDIRECT_OUT] = handle_redirect_out,
+	[TOK_REDIRECT_APPEND] = handle_redirect_append,
+	[TOK_HEREDOC_WORD] = handle_heredoc};
 
 	if (NULL == content)
 		return (ERR_ARGS);
@@ -62,45 +62,59 @@ int	p_do_redirections(t_ast_node *a)
 	return (0);
 }
 
+static void	_dprint(t_ast_node *a)
+{
+	dprint(DBGMSG_REDIRP_GOT, _MOD_, p_get_type(a),
+		p_get_do_redir_glob(a), p_get_do_redir_exp(a),
+		p_get_has_redgrptok(a));
+}
+
+static int	_do_normal(t_state *s, t_ast_node *a, t_list **redirs)
+{
+	char	*orig_filen;
+	int		res;
+
+	res = 0;
+	orig_filen = NULL;
+	if (true == p_get_do_redir_exp(a))
+		res = lstiter_state(s, *redirs, p_do_red_expansion);
+	if (0 != res)
+		return (res);
+	if (true == p_get_do_redir_glob(a))
+		orig_filen = ft_lstiterstr_mem(get_mem(s), *redirs,
+				p_do_globbing_redirs);
+	if (NULL != orig_filen)
+	{
+		print_ambig_redir(((t_redir_data *)orig_filen)->filename);
+		return (ERR_AMBIGUOUS_REDIR);
+	}
+	return (0);
+}
+
 /* Modifies redirection list in case of expansions.
  */
 int	p_do_redir_processing(t_state *s, t_ast_node *a)
 {
-	t_list	**redirs;
-	char	*orig_filen;
-	int		res;
+	t_list **const	redirs = p_get_redirs_ptr(a);
+	int				res;
 
 	if (a->type != AST_NODE_CMD && a->type != AST_NODE_PROC)
 		return (err("Invalid node type\n"), ERR_ARGS);
-	res = 0;
-	orig_filen = NULL;
-	redirs = p_get_redirs_ptr(a);
 	if (redirs)
 	{
-		dprint(DBGMSG_REDIRP_GOT, p_get_type(a),
-			p_get_do_redir_globbing(a), p_get_do_redir_expansion(a),
-			p_get_has_redgrouptoks(a));
-		if (true == p_get_has_redgrouptoks(a))
+		_dprint(a);
+		if (true == p_get_has_redgrptok(a))
 		{
-			res = ft_lstiter_state_ins_rwd_tmp(s, redirs,
+			res = ft_lstiter_state_ins_rwd_mem(s, redirs,
 					p_do_grpred_processing);
 			if (0 != res)
 				return (res);
 		}
 		else
 		{
-			if (true == p_get_do_redir_expansion(a))
-				res = lstiter_state(s, *redirs, p_do_red_expansion);
+			res = _do_normal(s, a, redirs);
 			if (0 != res)
 				return (res);
-			if (true == p_get_do_redir_globbing(a))
-				orig_filen = ft_lstiterstr_mem(get_mem(s), *redirs,
-						p_do_globbing_redirs);
-			if (NULL != orig_filen)
-			{
-				print_ambiguous_redirect(((t_redir_data *)orig_filen)->filename);
-				return (ERR_AMBIGUOUS_REDIR);
-			}
 		}
 		dprint("%s: %s: done.\n", _MOD_, __FUNCTION__);
 	}
