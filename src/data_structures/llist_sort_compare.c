@@ -96,7 +96,7 @@ int	compare(t_list *beg, t_list *end)
 		res = _check_one_alphanumeric(beg->content, end->content, body1, body2);
 	if (res == 0)
 		res = _check_both_specials(beg->content, end->content);
-	if (res >= 0)
+	if (res != 0)
 	{
 		if (res > 0)
 			return (AMORETHANB);

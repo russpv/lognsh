@@ -1,7 +1,7 @@
 #include "parse_int.h"
 
 #define DBGMSG_GOTARGS "%s: %s - arg: %s, lst:%p\n"
-#define DBGMSG_MATCHES "Parse: p_do_globbing_toks found %d matches, 1st: %s\n"
+#define DBGMSG_MATCHES "Parse: %s found %d matches, 1st: %s\n"
 
 // Tests whether globstar is preceded with escape char
 static bool	_has_globbing(const char *raw)

@@ -64,7 +64,7 @@ static struct dirent	*_glob_readdir(DIR *dir)
 }
 
 static void	_add_readdir_globs(DIR *dir, t_mem_mgr *m, const char *pattern,
-		t_list *lst)
+		t_list **lst)
 {
 	t_list			*new;
 	struct dirent	*dres;
@@ -80,7 +80,7 @@ static void	_add_readdir_globs(DIR *dir, t_mem_mgr *m, const char *pattern,
 			new = ft_lstnew_tmp(m, name);
 			if (NULL == new || NULL == name)
 				exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
-			ft_lstadd_back(&lst, new);
+			ft_lstadd_back(lst, new);
 		}
 		dres = _glob_readdir(dir);
 	}
@@ -103,7 +103,7 @@ t_list	*match_glob(t_mem_mgr *m, const char *pattern)
 	dir = opendir(".");
 	if (!dir)
 		return (perror(SHELL_NAME), NULL);
-	_add_readdir_globs(dir, m, pattern, lst);
+	_add_readdir_globs(dir, m, pattern, &lst);
 	closedir(dir);
 	if (lst)
 	{

@@ -31,7 +31,7 @@ void	destroy_arg(t_mem_mgr *mgr, void **in)
 	if (!in || !mgr)
 		return ;
 	arg = (t_arg_data *)(*in);
-	dprint(_MOD_ ":   %s...\n", __FUNCTION__);
+	dvprint(_MOD_ ":   %s...\n", __FUNCTION__);
 	if (arg->lst_tokens)
 		ft_lstclear_tmp(mgr, &arg->lst_tokens, destroy_token);
 	if (arg->raw)
