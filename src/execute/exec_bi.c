@@ -9,9 +9,9 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi, t_cmd_fns *cf)
 	const int			argvc = (const int)cf->c_get_argvc((t_cmd *)c);
 	const t_ast_node	*a = (const t_ast_node *)cf->c_get_node((t_cmd *)c);
 
-	dprint("Exec: %s got cmd:%s node:%p\n", __FUNCTION__, argv[0], a);
 	if (!argv || !bi || !c || !a)
 		return (err("ERR null input.\n"), ERR_ARGS);
+	dprint("Exec: %s got cmd:%s node:%p\n", __FUNCTION__, argv[0], a);
 	cf->save_redirs((t_cmd *)c);
 	if (0 != (get_parse_fns(s))->p_do_redirections((t_ast_node *)a))
 	{

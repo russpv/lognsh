@@ -34,3 +34,21 @@ void	print_command_not_found(const char *cmd)
 		write(STDERR_FILENO, "(null)", ft_strlen("(null)"));
 	write(STDERR_FILENO, ": command not found\n", 20);
 }
+
+int	get_wincols(void)
+{
+	struct winsize ws;
+
+	if (-1 == ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws)) 
+	{
+		perror("ioctl");
+		return (ERR_GENERAL);
+	}
+	return (ws.ws_row);
+}
+
+void print_inv_cmd(void)
+{
+	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+	ft_putstr_fd(": Invalid command.\n", STDERR_FILENO);
+}

@@ -30,7 +30,8 @@ int	bi_export(t_state *s, char **argv, int argc)
 			i++;
 			continue ;
 		}
-		parse_arg(s, argv[i], &error_occurred);
+		if (0 != parse_arg(s, argv[i], &error_occurred))
+			return (ERR_GENERAL);
 		i++;
 	}
 	if (error_occurred)

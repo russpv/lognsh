@@ -2,14 +2,12 @@
 
 void	print_parse_redir_error(t_state *s, size_t pos)
 {
-	const char	*input = (const char *)get_input(s);
-	size_t		i;
+	const char		*input = (const char *)get_input(s);
+	size_t			i;
+	const size_t	cols = (size_t)get_wincols();
 
-	if (pos > 100)
-	{
-		printf("POD OUTOF BOUNDS\n");
-		return ;
-	}
+	if (pos > cols)
+		pos = pos % cols;
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	write(STDERR_FILENO, ": ambiguous redirect in:\n",
 		ft_strlen(": ambiguous redirect in:\n"));

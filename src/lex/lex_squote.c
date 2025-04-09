@@ -1,5 +1,7 @@
 #include "lex_int.h"
 
+# define STOP 1
+
 /* Loads a char into buf.
  * Checks for the closing single quote. advances ptr and Returns 1 if found
  * without incrementing ptr.
@@ -11,7 +13,7 @@ static inline int	_load_buf(t_lex *lexer)
 	if ((unsigned char)OP_SQUOTE == *lexer->ptr)
 	{
 		lexer->ptr++;
-		return (dprint(_MOD_ ": found closing quote\n"), 1);
+		return (dprint(_MOD_ ": found closing quote\n"), STOP);
 	}
 	else
 	{
@@ -19,7 +21,7 @@ static inline int	_load_buf(t_lex *lexer)
 		{
 			if ((unsigned char)OP_NULL == *lexer->ptr)
 				return (dprint(_MOD_ ": found null before closing quote\n"),
-					1);
+					STOP);
 			lexer->buf[(lexer->buf_idx)] = *lexer->ptr;
 			(lexer->buf_idx)++;
 		}
@@ -33,6 +35,7 @@ static inline int	_load_buf(t_lex *lexer)
  * Assumes ptr is on the first single quote
  * If '\'' not found, flags incomplete only
  * Ignores missing closing quote.
+ * Returns success if token wasn't created (null input)
  * Creates token only if normal delims found (really?)
  */
 int	tokenize_single_quotes(t_state *s, t_lex *lexer)
@@ -42,7 +45,7 @@ int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 	dprint(_MOD_ YELLOW ": STATE: %s, ptr:_%c_\n" RESET, __FUNCTION__,
 		*lexer->ptr);
 	while (++lexer->ptr)
-		if (1 == _load_buf(lexer))
+		if (STOP == _load_buf(lexer))
 			break ;
 	if ((unsigned char)OP_NULL == *lexer->ptr)
 	{
@@ -53,7 +56,7 @@ int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 		lexer->is_subtoken = true;
 	token = lex_create_token(get_mem(s), lexer, TOK_WORD);
 	if (NULL == token)
-		return (ERR_GENERAL);
+		return (0);
 	if (0 != add_token(get_mem(s), lexer, token))
 		return (ERR_GENERAL);
 	return (0);

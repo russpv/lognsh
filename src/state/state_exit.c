@@ -7,7 +7,7 @@ void	exit_clean(t_mem_node *head, int exit_status, const char *caller,
 	if (errmsg)
 		print_custom_err_err(SHELL_NAME, caller, errmsg);
 	mem_free_all(head);
-	if (exit_status)
+	if (exit_status != ENOMEM)
 		exit(exit_status);
 	exit(ENOMEM);
 }

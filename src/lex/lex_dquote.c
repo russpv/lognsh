@@ -61,6 +61,8 @@ static inline t_tok	*_process_dquote_logic(t_state *s, t_lex *lexer)
  * if bs\, skip it IF next char is bs\, $, double quote
  * if normal loop doesn't find closing ", flags incomplete
  * if nothing on buf at transition exit, tokenizes null raw TOK_WORD
+ * Note: if transitioning back to this state, does not advance ptr,
+ * since the prior state has possibly already done so.
  */
 static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 {
@@ -70,7 +72,8 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 	token = NULL;
 	if (lexer->ptr)
 	{
-		lexer->ptr++;
+		if ((unsigned char)OP_DQUOTE == *lexer->ptr)
+			lexer->ptr++;
 		while (*lexer->ptr && !_is_dquote_transition_delim(lexer))
 		{
 			token = _process_dquote_logic(s, lexer);

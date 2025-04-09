@@ -62,7 +62,7 @@ int	process_arg_update_add(t_state *s, const char *arg, char *equal_pos,
 		return (ERR_ARGS);
 	_reset_value_ptr(equal_pos, &value);
 	if (MAX_NAME_LEN == ft_strnlen(value, MAX_NAME_LEN))
-		return (ERR_ARGS);
+		return (print_value_toolong(), ERR_ARGS);
 	exit_code = env_upsert_value(get_mem(s), get_env_list(s), key, value);
 	if (0 != exit_code)
 		*error_occurred = 1;

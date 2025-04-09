@@ -7,6 +7,7 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <sys/ioctl.h>
 
 # define EXIT_NULLCMD 0
 # define EX_HAPPY 0
@@ -19,14 +20,14 @@
 # define ERR_SYNTAX 2
 # define ERR_ARGS 3
 # define ERR_TOKEN 4
-# define ERR_MEM 5
+# define ERR_DUP 5
 # define ERR_FILE_NOT_FOUND 6
 # define ERR_INVALID_CMD_TYPE 7
 # define ERR_FORK 8
 # define ERR_INSUFFICIENT_CMDS 9
 # define ERR_PIPE 10
 # define ERR_ACCESS 11
-# define ERR_DUP 12
+# define ERR_MEM 12
 # define ERR_CLOSE 13
 # define ERR_WAITPID 14
 # define ERR_GETCWD 15
@@ -99,11 +100,14 @@ void							print_invalid_name(const char *caller,
 									const char *name);
 void							print_parse_redir_error(t_state *s, size_t pos);
 void							print_dne(const char *path);
+void							print_value_toolong(void);
 
 void							pbufflow(const char *s);
 void							print_is_dir(char *p);
+void 							print_inv_cmd(void);
 
 bool							is_error(int v);
+int								get_wincols(void);
 
 /* To avoid circular includes*/
 extern void						set_error(t_state *s, int e);

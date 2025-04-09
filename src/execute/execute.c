@@ -9,11 +9,16 @@ int	exec_get_exit_status(int status)
 	exit_status = 0;
 	signal_number = 0;
 	if (WIFEXITED(status))
+	{
 		exit_status = WEXITSTATUS(status);
+		return (exit_status);
+	}
 	else if (WIFSIGNALED(status))
+	{
 		signal_number = WTERMSIG(status);
-	(void)signal_number;
-	return (exit_status);
+		return (signal_number);
+	}
+	return (-1);
 }
 
 int	handle_exit(t_state *s, int code)

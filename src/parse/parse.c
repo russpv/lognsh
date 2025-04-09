@@ -65,6 +65,8 @@ t_ast_node	*parse(t_state *s, char *input)
 	tokens = lex_get_tokens(lexer);
 	parser = create_parser(s, tokens);
 	lgprint(LMSG_IN, _MOD_, __FUNCTION__);
+	if (is_at_end(parser))
+		return (set_exit_status(s, ERR_GENERAL), print_inv_cmd(), ast);
 	while (!is_at_end(parser) && !parser->parse_error)
 		ast = parse_full_cmd(s, parser);
 	parser->ast = ast;
