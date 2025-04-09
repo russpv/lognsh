@@ -4,13 +4,13 @@
  * derived from code echo.c in Bash.
  * Option -n defeats newline print
  */
-static void	_print_args(char *arg, int *first_arg, int argc, int i)
+static void	_print_args(char **argv, int *first_arg, int argc, int i)
 {
 	while (i < argc)
 	{
 		if (!*first_arg)
 			write(STDOUT_FILENO, " ", 1);
-		write(STDOUT_FILENO, arg, ft_strnlen(arg, INPUT_BUF_SZ));
+		write(STDOUT_FILENO, argv[i], ft_strnlen(argv[i], INPUT_BUF_SZ));
 		*first_arg = 0;
 		i++;
 	}
@@ -38,7 +38,7 @@ int	bi_echo(t_state *s, char **argv, int argc)
 			break ;
 		i++;
 	}
-	_print_args(argv[i], &first_arg, argc, i);
+	_print_args(argv, &first_arg, argc, i);
 	if (!suppress_newline && (argc == 1 || !first_arg))
 		write(STDOUT_FILENO, "\n", 1);
 	return (0);

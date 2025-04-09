@@ -1,7 +1,6 @@
 #include "parse_int.h"
 
-#define EMSG_PPIPE_MALLOC \
-	"Memory allocation error while creating pipe's command node\n"
+#define EM_PP_M "Memory allocation error while creating pipe's command node\n"
 #define EMSG_PPIPE_SYNTAX "Failed to parse command after pipe operator\n"
 #define EMSG_PPIPE_GEN "Pipeline parsing error\n"
 
@@ -30,7 +29,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *pipe_node)
 		pipe_node->data.pipe.cmdc++;
 	}
 	else
-		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_PPIPE_MALLOC);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EM_PP_M);
 	return (0);
 }
 
@@ -77,7 +76,7 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 	dprint("%s: %s: tok: %s\n", _MOD_, __FUNCTION__, tok_get_raw(peek(p)));
 	ast_node = _init_pipe(p->mmgr);
 	if (NULL == ast_node)
-		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_PPIPE_MALLOC);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EM_PP_M);
 	res = _process_pipe(s, p, ast_node);
 	if (0 != res)
 	{

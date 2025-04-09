@@ -9,7 +9,7 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi, t_cmd_fns *cf)
 	const int			argvc = (const int)cf->c_get_argvc((t_cmd *)c);
 	const t_ast_node	*a = (const t_ast_node *)cf->c_get_node((t_cmd *)c);
 
-	dprint("Exec: %s got cmd:%s node:%p", __FUNCTION__, argv[0], a);
+	dprint("Exec: %s got cmd:%s node:%p\n", __FUNCTION__, argv[0], a);
 	if (!argv || !bi || !c || !a)
 		return (err("ERR null input.\n"), ERR_ARGS);
 	cf->save_redirs((t_cmd *)c);
@@ -18,6 +18,7 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi, t_cmd_fns *cf)
 		cf->restore_redirs((t_cmd *)c);
 		return (EX_EREDIR);
 	}
+	print_array((char **)argv);
 	dprint("Exec: %s: Exec'g builtin\n", __FUNCTION__);
 	exit_code = bi(s, (char **)argv, argvc);
 	if (0 != exit_code)

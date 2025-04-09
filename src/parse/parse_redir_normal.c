@@ -1,10 +1,8 @@
 #include "parse_int.h"
 
 #define EMSG_REDIR_SYM_MALLOC "Allocation for redirection symbol failed\n"
-#define EMSG_REDIR_FN_EOF \
-	"Expected a filename after redirection operator, found EOF\n"
-#define EMSG_REDIR_FN_INVALID \
-	"Expected a valid filename after redirection operator\n"
+#define MSG_EOF "Expected a filename after redirection operator, got EOF\n"
+#define MSG_INV "Expected a valid filename after redirection operator\n"
 #define EMSG_REDIR_FN "Allocation for redirection filename failed\n"
 
 static void	_set_tok(t_parser *p, t_redir_data *red, t_ast_node *n,
@@ -44,7 +42,7 @@ static int	_test_tok(t_parser *p, t_tok *tok_fname)
 		print_redir_error(p->global_state,
 			tok_get_raw((p->curr_tok)->prev->prev->content),
 			tok_get_pos((p->curr_tok)->prev->prev->content));
-		return (err(EMSG_REDIR_FN_INVALID), ERR_SYNTAX);
+		return (err(MSG_INV), ERR_SYNTAX);
 	}
 	return (0);
 }
@@ -70,7 +68,7 @@ int	process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 		print_parse_error(p->global_state,
 			tok_get_raw((p->curr_tok)->prev->content),
 			tok_get_pos((p->curr_tok)->content));
-		return (err(EMSG_REDIR_FN_EOF), ERR_SYNTAX);
+		return (err(MSG_EOF), ERR_SYNTAX);
 	}
 	tok_fname = advance(p);
 	if (0 != _test_tok(p, tok_fname))

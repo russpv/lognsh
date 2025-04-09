@@ -1,7 +1,10 @@
-#include "stack.h"
+#ifndef STACK_INT_H
+# define STACK_INT_H
 
-#define MAX_ST_DEPTH 10
-#include "../utils/debug.h"
+# include "stack.h"
+
+# define MAX_ST_DEPTH 10
+# include "../utils/debug.h"
 
 struct						s_int_stack
 {
@@ -18,3 +21,5 @@ struct						s_ptr_stack
 };
 
 typedef struct s_ptr_stack	t_ptr_stack;
+
+#endif

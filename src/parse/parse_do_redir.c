@@ -2,8 +2,7 @@
 
 #define EMSG_REDIR_HANDLER "Redirection handler issue\n"
 #define EMSG_REDIR_NULLNODE "ERR no node given\n"
-#define DBGMSG_REDIRP_GOT \
-	"%s: p_do_redir_processing got: type:%d glob_%d exp_%d grp_%d\n"
+#define DM_R_G "%s: p_do_redir_processing got: type:%d glob_%d exp_%d grp_%d\n"
 
 /* Executes redirection of t_redir_data llist
  * Accepts a t_redir_data.
@@ -64,7 +63,7 @@ int	p_do_redirections(t_ast_node *a)
 
 static void	_dprint(t_ast_node *a)
 {
-	dprint(DBGMSG_REDIRP_GOT, _MOD_, p_get_type(a),
+	dprint(DM_R_G, _MOD_, p_get_type(a),
 		p_get_do_redir_glob(a), p_get_do_redir_exp(a),
 		p_get_has_redgrptok(a));
 }

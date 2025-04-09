@@ -54,24 +54,12 @@
 
 enum					e_tok_type
 {
-	TOK_WORD,		// command names, built-ins
-					// In the shell command language, a token other than
-					// an operator. In some cases a word is also a portion
-					// of a word token: in the various forms of parameter
-					// expansion, such as ${name-word}, and variable
-					// assignment, such as name=word, the word is the
-					// portion of the token depicted by word. The concept
-					// of a word is no longer applicable following word
-					// expansions-only fields remain.
-	TOK_GROUP_WORD, // for metas
+	TOK_WORD,
+	TOK_GROUP_WORD,
 	TOK_NAME,
-	// In the shell command language, a word consisting
-	// solely of underscores, digits, and alphabetics
-	// from the portable character set. The first character
-	// of a name is not a digit.
-	TOK_NEWLINE,	// (non-functional)
-	TOK_IO_NUMBER,	// REDOUT/REDIN plus digits
-	TOK_OP_REF,		// "&" for stdio
+	TOK_NEWLINE,	
+	TOK_IO_NUMBER,
+	TOK_OP_REF,		
 	TOK_REDIRECT_IN,
 	TOK_REDIRECT_OUT,
 	TOK_REDIRECT_APPEND,
@@ -82,27 +70,44 @@ enum					e_tok_type
 	TOK_ORIF,
 	TOK_OPEN_PAREN,
 	TOK_CLOSE_PAREN,
-	TOK_SINGLE_QUOTE,	//(non-functional)
-	TOK_DOUBLE_QUOTE,	//(non-functional)
-	TOK_ENV_VAR,		//$
-	TOK_EXIT_STATUS,	//$?
-	TOK_BI,				// Builtin command
-	TOK_IF,				// Reserved word "if"
-	TOK_THEN,			// Reserved word "then"
-	TOK_ELSE,			// Reserved word "else"
-	TOK_FI,				// Reserved word "fi"
-	TOK_DO,				// Reserved word "do"
-	TOK_DONE,			// Reserved word "done"
-	TOK_CASE,			// Reserved word "case"
-	TOK_ESAC,			// Reserved word "esac"
-	TOK_WHILE,			// Reserved word "while"
-	TOK_UNTIL,			// Reserved word "until"
-	TOK_FOR,			// Reserved word "for"
-	TOK_IN,				// Reserved word "in"
+	TOK_SINGLE_QUOTE,	
+	TOK_DOUBLE_QUOTE,	
+	TOK_ENV_VAR,		
+	TOK_EXIT_STATUS,	
+	TOK_BI,				
+	TOK_IF,				
+	TOK_THEN,		
+	TOK_ELSE,		
+	TOK_FI,				
+	TOK_DO,			
+	TOK_DONE,			
+	TOK_CASE,		
+	TOK_ESAC,	
+	TOK_WHILE,			
+	TOK_UNTIL,			
+	TOK_FOR,			
+	TOK_IN,				
 	TOK_EOF,
 	TOK_UNKNOWN,
 	TOK_ERR
 };
+
+/* Notes on tokens */
+// TOK_WORD
+// In the shell command language, a token other than
+// an operator. In some cases a word is also a portion
+// of a word token: in the various forms of parameter
+// expansion, such as ${name-word}, and variable
+// assignment, such as name=word, the word is the
+// portion of the token depicted by word. The concept
+// of a word is no longer applicable following word
+// expansions-only fields remain.
+
+// TOK_NAME
+// In the shell command language, a word consisting
+// solely of underscores, digits, and alphabetics
+// from the portable character set. The first character
+// of a name is not a digit.
 
 struct					s_tok;
 typedef struct s_tok	t_tok;

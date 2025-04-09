@@ -23,7 +23,7 @@ TESTDIR = test
 
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g  -DDEBUGMODE -DLOGMODE #-fsanitize=address # -DTESTMODE #-fsanitize=address  #
+CFLAGS = -Wall -Wextra -Werror -g -DTESTMODE #-DDEBUGMODE -DLOGMODE #-fsanitize=address #  #-fsanitize=address  #
 TEST_CFLAGS = -Wall  -g -DTESTMODE  # -Werror -Wextra
 EXT_CFLAGS = -DEXTENDEDFUNC
 LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses #-fsanitize=address #

@@ -2,10 +2,8 @@
 
 #define EMSG_LOGI_PARSE "Failed to parse command after logical op\n"
 #define EMSG_LOGI_NODE_MALLOC "Allocation failed for logical node\n"
-#define EMSG_LOGI_CMD_MALLOC \
-	"Memory allocation error while creating logical's command node\n"
-#define EMSG_LOGI_OP_MALLOC \
-	"Memory allocation error while creating operator node\n"
+#define EMSG_LMEM "Malloc error while creating logical's command node\n"
+#define EMSG_LMEMO "Malloc error while creating operator node\n"
 
 /* Stores command. Assumes parser is on
  * correct token.
@@ -23,7 +21,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *log_node)
 		log_node->data.log.cmdc++;
 	}
 	else
-		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LOGI_CMD_MALLOC);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LMEM);
 	return (0);
 }
 
@@ -40,7 +38,7 @@ static int	_process_op(t_parser *p, t_ast_node *log_node)
 	if (op)
 		ft_lstadd_back(&log_node->data.log.operators, op);
 	else
-		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LOGI_OP_MALLOC);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LMEMO);
 	return (0);
 }
 

@@ -8,9 +8,11 @@
 
 typedef struct s_signal_manager
 {
-	struct sigaction	sa_int; // SIGINT (Ctrl-C)
-	struct sigaction	sa_quit; // SIGQUIT (Ctrl-\)
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 }		t_signal_mgr;
+
+/* Handles SIGINT (Ctrl-C) and SIGQUIT (Ctrl-\)(defeats)*/
 
 void	sigint_handler(int signo);
 void	sigquit_handler(int signo);

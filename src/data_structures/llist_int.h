@@ -14,8 +14,8 @@ struct		s_merge
 	t_list	*l;
 	t_list	*r;
 	t_list	**tail;
-	t_list	*tmp; // need this to set node->prev
-	t_list	*tmp2; // need this to reconnect segment with rest of list
+	t_list	*tmp;
+	t_list	*tmp2;
 	t_list	*mid;
 	t_list	**beg;
 	t_list	**end;

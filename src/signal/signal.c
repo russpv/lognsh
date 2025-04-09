@@ -3,10 +3,7 @@
 void	clear_current_line(void)
 {
 	rl_on_new_line();
-#ifndef MACOS // TODO REMOVE
 	rl_replace_line("", RETAIN_HIST);
-	// Replace the current line with an empty string
-#endif
 	rl_redisplay();
 }
 

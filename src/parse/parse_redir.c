@@ -1,8 +1,7 @@
 #include "parse_int.h"
 
-#define EMSG_HEREDOC_MALLOC "Memory allocation failed for redirection heredoc\n"
-#define EMSG_REDIR_NODE_MALLOC \
-	"Failed to create execution node for redirection\n"
+#define EM_HDC_M "Memory allocation failed for redirection heredoc\n"
+#define EM_RDR_M "Failed to create execution node for redirection\n"
 #define EMSG_REDIR_FAIL "Failed to parse redirection\n"
 
 /* Creates new redir node and adds to t_list.
@@ -16,7 +15,7 @@ static int	_add_redir(t_mem_mgr *m, t_ast_node *node, t_redir_data *red)
 		return (ERR_ARGS);
 	new = ft_lstnew_tmp(m, red);
 	if (!new)
-		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_REDIR_NODE_MALLOC);
+		exit_clean(&m->list, ENOMEM, __FUNCTION__, EM_RDR_M);
 	dprint(_MOD_ ": Adding redirection: (%s %s | doc:%s glob:%d exp:%d)\n",
 		red->symbol, red->filename, red->heredoc_body, red->do_globbing,
 		red->do_expansion);
@@ -44,7 +43,7 @@ static int	_process_heredoc_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 	red->do_globbing = false;
 	red->heredoc_body = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok));
 	if (!red->heredoc_body)
-		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_HEREDOC_MALLOC);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EM_HDC_M);
 	return (0);
 }
 

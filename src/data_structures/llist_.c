@@ -1,8 +1,7 @@
 #include "llist_int.h"
 
-#define MSG_EMPT "%s: List is empty. Added new node as the first element:%p\n"
-#define MSG_INS \
-	"%s: inserted new node after first. new->prev=%p, (*lst)->next= %p\n"
+#define MSG_EMPT "%s: List is empty. Added new node as the first el:%p\n"
+#define MSG_INS "%s: ins new node after 1st, new->prev=%p, *lst->next=%p\n"
 
 /* LSTADD_BACK
 ** Returns single node for empty list, or adds new to end of

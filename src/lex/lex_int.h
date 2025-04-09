@@ -1,11 +1,14 @@
-#include "lex.h"
+#ifndef LEX_INT_H
+# define LEX_INT_H
 
-#define _MOD_ "Lexer"
-#define SKIPREST 1
-#define NOGLOB 1
-#define NOEXPD 1
-#define FAIL_TOKEN 10
-#define LEX_MAX_TOKC 1000
+# include "lex.h"
+
+# define _MOD_ "Lexer"
+# define SKIPREST 1
+# define NOGLOB 1
+# define NOEXPD 1
+# define FAIL_TOKEN 10
+# define LEX_MAX_TOKC 1000
 
 /* LEX
  *
@@ -33,7 +36,7 @@
  */
 
 /* chars that need to be quoted if meant literally */
-#define NORMALDELIMS "()|<>\n\t &\0"
+# define NORMALDELIMS "()|<>\n\t &\0"
 // no space needed to split singles: "()|<> \n\t"
 // no space needed to split doubles: "<<,>>,&&,||"
 // space needed to split (hence addressed above) "[ \'],[ \"]"
@@ -44,18 +47,18 @@
 // and '?'?
 
 /* ops that have no following delims */
-#define NOTDELIMITED "()<>|"
+# define NOTDELIMITED "()<>|"
 
-#define NORMALTRANSITIONS "$\'\"<\0"
+# define NORMALTRANSITIONS "$\'\"<\0"
 // the '\0' isn't tested, keep at end,
 //	< for heredoc
 // # handled in NORMAL
 // $ must be followed by alphanum or _ to delim a (sub)token
 
-#define LEX_BUFSZ 1024
-#define MAX_HDOCSZ LEX_BUFSZ
-#define INITVAL 0
-#define MOD "Lexer"
+# define LEX_BUFSZ 1024
+# define MAX_HDOCSZ LEX_BUFSZ
+# define INITVAL 0
+# define MOD "Lexer"
 
 enum						e_lex_state
 {
@@ -170,3 +173,5 @@ bool						is_varnamechar(unsigned char c);
 int							put_on_buf(t_lex *l);
 unsigned char				is_valid_next(t_lex *l, int offset);
 unsigned char				is_valid_prev(t_lex *l, int offset);
+
+#endif

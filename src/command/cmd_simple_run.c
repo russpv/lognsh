@@ -8,7 +8,7 @@
 static int	_locate_cmd(t_state *s, t_ast_node *a, t_cmd *c)
 {
 	int	exit_status;
-
+	
 	exit_status = find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath);
 	if (0 != exit_status)
 		return (s_free_cmd(s), exit_status);
@@ -54,7 +54,6 @@ int	run_cmd(t_state *s, t_ast_node *a)
 		return (EXIT_NULLCMD);
 	c = get_cmd(s);
 	exit_status = _locate_cmd(s, a, c);
-	assert(c_get_fullpath(c) != NULL);
 	if (0 != exit_status)
 		return (s_free_cmd(s), exit_status);
 	dprint(_MOD_ ": %s: exec'g\n", __FUNCTION__);

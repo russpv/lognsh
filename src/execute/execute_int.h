@@ -2,8 +2,9 @@
 # define EXECUTE_INT_H
 
 # include "execute.h"
+
 # define _MOD_ "Exec"
-# define NO_APND false
+# define NO_APND 0
 
 /* Forwards */
 

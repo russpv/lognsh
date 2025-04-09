@@ -64,7 +64,8 @@ static int	_do_search(t_state *s, const char *name, char **fullpath)
 	}
 	else
 	{
-		if (0 == _search_path(s, name, fullpath))
+		res = _search_path(s, name, fullpath);
+		if (0 == res)
 		{
 			res = _check_access(*fullpath);
 			if (0 == res)

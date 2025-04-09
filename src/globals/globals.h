@@ -17,6 +17,6 @@
 # define MAX_INT_BUFLEN 1024 // token raw len
 # define IFS " \t\n"
 
-volatile sig_atomic_t	g_last_signal;
+extern volatile sig_atomic_t	g_last_signal;
 
 #endif
