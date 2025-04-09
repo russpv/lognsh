@@ -43,5 +43,4 @@ void		dprint_tail_info(struct s_merge *m);
 bool		str_hasalnum(const char *s);
 bool		str_isalnum(const char *s);
 
-
 #endif

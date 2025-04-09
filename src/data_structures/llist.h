@@ -42,7 +42,6 @@ t_list					*ft_lstnew_copystr(void *content,
 */
 void					ft_lstadd_insert(t_list **lst, t_list *node);
 
-
 int						ft_lstsize(t_list *lst);
 t_list					*ft_lstcopy(t_list *orig, void *(*f)(const void *),
 							void (*d)(void *));

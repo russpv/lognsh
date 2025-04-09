@@ -70,11 +70,9 @@ static int	_helper(t_state *s, const t_redir_data	*r_data, char *buf, \
 int	p_do_red_expansion(t_state *s, void *r)
 {
 	const t_redir_data	*r_data = (t_redir_data *)r;
-	int					res;
 	char				buf[MAX_NAME_LEN];
 	size_t				fn_len;
 
-	res = 0;
 	if (NULL == r || NULL == s)
 		return (ERR_ARGS);
 	if (NULL == r_data->filename)

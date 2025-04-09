@@ -9,7 +9,7 @@
 // Checks permissions on path and also if a dir
 static int	_check_access(const char *path)
 {
-	struct stat info;
+	struct stat	info;
 
 	if (0 == access(path, F_OK))
 	{
@@ -17,7 +17,7 @@ static int	_check_access(const char *path)
 			return (print_perror(path), ERR_CMD_NOT_EXEC);
 		if (0 == stat(path, &info))
 			if (S_ISDIR(info.st_mode))
-				return (print_is_dir((char*)path), ERR_CMD_IS_A_DIR);
+				return (print_is_dir((char *)path), ERR_CMD_IS_A_DIR);
 		return (0);
 	}
 	return (ERR_CMD_NOT_FOUND);
@@ -44,10 +44,10 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 		*fullpath = ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, tmp, cmd);
 		if (!*fullpath)
 			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
-		get_mem(s)->dealloc(&get_mem(s)->list, tmp);
+		(get_mem(s))->dealloc(&get_mem(s)->list, tmp);
 		if (0 == _check_access(*fullpath))
 			return (0);
-		get_mem(s)->dealloc(&get_mem(s)->list, *fullpath);
+		(get_mem(s))->dealloc(&get_mem(s)->list, *fullpath);
 		*fullpath = NULL;
 	}
 	return (ERR_CMD_NOT_FOUND);
@@ -57,7 +57,7 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
  * Checks PATH, or absolute path if slash is in the name */
 int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 {
-	int res;
+	int	res;
 
 	res = ERR_CMD_NOT_FOUND;
 	if (NULL != name && '\0' != name[0])
@@ -86,29 +86,10 @@ int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 	return (res);
 }
 
-/* Forks depending on execution context
- * In the context of a proc or pipeline, forking would already
- * be done and be in a child process.
- * A null cmd name is valid, nothing runs.
- * Execute module handles redirects and forking in exec_fork_execve()
- */
-int	run_cmd(t_state *s, t_ast_node *a)
+static int	_locate_cmd(t_state *s, t_cmd *c)
 {
-	t_cmd	*c;
-	int		exit_status;
+	int	exit_status;
 
-	c = get_cmd(s);
-	dprint(_MOD_ ": %s: preparing to exec...\n", __FUNCTION__);
-	if (p_get_type(a) != AST_NODE_CMD)
-		return (EINVAL);
-	if (NULL == p_get_cmd(a))
-		return (EXIT_NULLCMD);
-	exit_status = find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath);
-	if (0 != exit_status)
-		return (s_free_cmd(s), exit_status);
-	if (c->fullpath)
-		lgprint(LOGMSG_RUNC_GOT, c->fullpath);
-	dprint(_MOD_ ": %s: exec'g\n", __FUNCTION__);
 	if (CTXT_PIPELINE == st_int_peek(get_cmd(s)->st)
 		|| CTXT_PROC == st_int_peek(get_cmd(s)->st))
 	{
@@ -120,9 +101,43 @@ int	run_cmd(t_state *s, t_ast_node *a)
 		exit_status = exec_fork_execve(s);
 		if (SIGINT_BEFORE_FORK == exit_status)
 			lgprint(LOGMSG_RUNC_SIGINT);
-		s_free_cmd(s);
 		return (exit_status);
 	}
-	s_free_cmd(s);
 	return (0);
+}
+
+static int	_execute(t_state *s, t_ast_node *a, t_cmd *c)
+{
+	int	exit_status;
+
+	exit_status = find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath);
+	if (0 != exit_status)
+		return (s_free_cmd(s), exit_status);
+	if (c->fullpath)
+		lgprint(LOGMSG_RUNC_GOT, c->fullpath);
+	return (0);
+}
+
+/* Forks depending on execution context
+ * In the context of a proc or pipeline, forking would already
+ * be done and be in a child process.
+ * A null cmd name is valid, nothing runs.
+ * Execute module handles redirects and forking in exec_fork_execve()
+ */
+int	run_cmd(t_state *s, t_ast_node *a)
+{
+	t_cmd	*c;
+	int		exit_status;
+
+	if (p_get_type(a) != AST_NODE_CMD)
+		return (EINVAL);
+	if (NULL == p_get_cmd(a))
+		return (EXIT_NULLCMD);
+	c = get_cmd(s);
+	exit_status = _locate_cmd(s, c);
+	if (0 != exit_status)
+		return (s_free_cmd(s), exit_status);
+	dprint(_MOD_ ": %s: exec'g\n", __FUNCTION__);
+	exit_status = _execute(s, a, c);
+	return (s_free_cmd(s), exit_status);
 }

@@ -17,7 +17,7 @@ static int	_get_new_val(t_state *s, char *buf, char **new_val)
 
 	if (!s || !buf || !new_val)
 		return (ERR_ARGS);
-	res = check_special_expansions(s, buf, &new_val);
+	res = check_special_expansions(s, buf, new_val);
 	if (res > 0)
 		return (res);
 	else if (res == 0)
@@ -83,7 +83,6 @@ int	p_do_heredoc_expansion(t_state *s, t_redir_data *r)
 	char	*ptr;
 	char	buf[MAX_NAME_LEN];
 	int		res;
-	int		res2;
 
 	ft_memset(buf, 0, sizeof(buf));
 	if (NULL == r)

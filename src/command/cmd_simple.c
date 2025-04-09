@@ -22,7 +22,7 @@ int	proc_args_redirs(t_state *s, t_ast_node *a, t_cmd *c)
 
 	c->curr_node = a;
 	args = NULL;
-	res = p_do_arg_processing(s, a, &args);
+	res = p_process_args(s, a, &args);
 	if (0 != res)
 		return (res);
 	exit_code = _handle_no_command(a);

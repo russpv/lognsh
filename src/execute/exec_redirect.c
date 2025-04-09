@@ -1,7 +1,29 @@
 #include "execute_int.h"
-#include <fcntl.h>
 
 #define LOGMSG_EREDIR_DONE "\tRedirect: dup2 from %d to %d\n"
+
+static int	_do_open(char *topath, int from, bool append, int *fd)
+{
+	struct stat	statbuf;
+
+	if (access(topath, F_OK) == 0 && stat(topath, &statbuf) == -1)
+		return (print_perror("stat"), -ERR_STAT);
+	else if (from != STDIN_FILENO && access(topath, F_OK) == 0
+		&& S_ISDIR(statbuf.st_mode))
+		return (print_is_dir(topath), -ERR_REDIR);
+	else if (from == STDIN_FILENO && access(topath, F_OK) == 0
+		&& S_ISDIR(statbuf.st_mode))
+		*fd = open(topath, O_RDONLY | O_DIRECTORY);
+	else if (from == STDIN_FILENO)
+		*fd = open(topath, O_RDONLY | O_CREAT, 0644);
+	else if (from != STDIN_FILENO && append)
+		*fd = open(topath, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else if (from != STDIN_FILENO)
+		*fd = open(topath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else
+		*fd = -1;
+	return (0);
+}
 
 /* Does the correct open() and returns new fd
  * or negative error codes.
@@ -14,9 +36,10 @@
  */
 static inline int	_redirect_logic(char *topath, int from, bool append)
 {
+	int			res;
 	int			fd;
-	struct stat	statbuf;
 
+	fd = 0;
 	lgprint(_MOD_ ":%s got path:%s, from:%d app:%d\n", __FUNCTION__, topath,
 		from, append);
 	if (from == STDIN_FILENO && access(topath, F_OK) == -1)
@@ -26,22 +49,12 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 		errno = EACCES;
 		return (-ERR_REDIR);
 	}
-	else if (access(topath, F_OK) == 0 && stat(topath, &statbuf) == -1)
-		return (print_perror("stat"), -ERR_STAT);
-	else if (from != STDIN_FILENO && access(topath, F_OK) == 0
-		&& S_ISDIR(statbuf.st_mode))
-		return (print_is_dir(topath), -ERR_REDIR);
-	else if (from == STDIN_FILENO && access(topath, F_OK) == 0
-		&& S_ISDIR(statbuf.st_mode))
-		fd = open(topath, O_RDONLY | O_DIRECTORY);
-	else if (from == STDIN_FILENO)
-		fd = open(topath, O_RDONLY | O_CREAT, 0644);
-	else if (from != STDIN_FILENO && append)
-		fd = open(topath, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else if (from != STDIN_FILENO)
-		fd = open(topath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
-		fd = -1;
+	{
+		res = _do_open(topath, from, append, &fd);
+		if (0 != res)
+			return (res);
+	}
 	if (fd < 0)
 		return (print_redirect_warning(topath), perror(EMSG_OPEN), fd);
 	dprint("%s: %s: fd:%d\n", _MOD_, __FUNCTION__, fd);

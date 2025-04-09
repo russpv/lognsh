@@ -37,7 +37,6 @@
  * DGREAT
  */
 
- 
 // Stops tokenizer loop from running
 // ON_EOF can be set only after NULL token is added
 static inline bool	_handle_eof_state(t_lex *lexer)
@@ -46,40 +45,6 @@ static inline bool	_handle_eof_state(t_lex *lexer)
 	{
 		dprint(_MOD_ ": %s: Transitioning to DONE state\n", __FUNCTION__);
 		lexer->state = DONE;
-		return (true);
-	}
-	return (false);
-}
-
-static inline bool	_handle_quote_state(t_lex *lexer)
-{
-	if ((unsigned char)*lexer->ptr == OP_DQUOTE
-		|| IN_DOUBLE_QUOTES == st_int_peek(lexer->stack))
-	{
-		if ((unsigned char)*lexer->ptr == OP_DQUOTE
-			&& IN_DOUBLE_QUOTES == st_int_peek(lexer->stack))
-		{
-			dprint(_MOD_ ": %s: Popping stack and transitioning\n", __FUNCTION__);
-			st_int_pop(lexer->stack);
-			lexer->do_wordsplit = true;
-			lexer->ptr++;
-			return (false);
-		}
-		dprint(_MOD_ ": %s: Transitioning to IN_DOUBLE_QUOTES state\n",
-			__FUNCTION__);
-		if (IN_DOUBLE_QUOTES != st_int_peek(lexer->stack))
-			st_int_push(lexer->stack, IN_DOUBLE_QUOTES);
-		lexer->state = IN_DOUBLE_QUOTES;
-		lexer->do_wordsplit = false;
-		lexer->tokenizer = tokenize_double_quotes;
-		return (true);
-	}
-	if ((unsigned char)*lexer->ptr == OP_SQUOTE)
-	{
-		dprint(_MOD_ ": %s: Transitioning to IN_SINGLE_QUOTES state\n",
-			__FUNCTION__);
-		lexer->state = IN_SINGLE_QUOTES;
-		lexer->tokenizer = tokenize_single_quotes;
 		return (true);
 	}
 	return (false);
@@ -151,7 +116,7 @@ int	do_state_transition(t_lex *lexer)
 		return (0);
 	if (_handle_dollar_state(lexer))
 		return (0);
-	if (_handle_quote_state(lexer))
+	if (handle_quote_state(lexer))
 		return (0);
 	lexer->state = NORMAL;
 	lexer->tokenizer = tokenize_normal;
