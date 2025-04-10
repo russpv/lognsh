@@ -5,7 +5,7 @@ static int	_handle_rl_errs_and_write(t_state *s, t_lex *l, int *fildes)
 	int	rl_res;
 
 	rl_res = (get_lex_fns(s))->lex_match_heredoc(get_mem(s), l);
-	if (SIGINT != g_last_signal && ERR_RL_ABORTED == rl_res)
+	if (SH_SIGINT != g_last_signal && ERR_RL_ABORTED == rl_res)
 	{
 		print_hdoc_error(ft_itoa_mem(&get_mem(s)->list, get_mem(s)->f, 1
 				+ (get_lex_fns(s))->lex_get_lines(l)),
@@ -13,8 +13,8 @@ static int	_handle_rl_errs_and_write(t_state *s, t_lex *l, int *fildes)
 		close(STDIN_FILENO);
 		rl_res = ERR_RL_ABORTED;
 	}
-	else if (SIGINT == g_last_signal && ERR_RL_ABORTED == rl_res)
-		rl_res = SIGINT;
+	else if (SH_SIGINT == g_last_signal && ERR_RL_ABORTED == rl_res)
+		rl_res = SH_SIGINT;
 	if (ERR_RL_ABORTED == rl_res)
 	{
 		close(STDOUT_FILENO);
@@ -32,7 +32,7 @@ static int	_wait_and_read(t_lex *l, int *fildes)
 	int	status;
 
 	waitchilds(&status, 1);
-	if (SIGINT == status)
+	if (SH_SIGINT == status)
 		write(STDOUT_FILENO, HDOC_PROMPT "^C\n", ft_strlen(HDOC_PROMPT) + 3);
 	read_heredoc(fildes[0], l);
 	close(fildes[0]);

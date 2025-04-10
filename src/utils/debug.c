@@ -63,6 +63,8 @@ void	print_array(char *arr[])
 	i = 0;
 	if (DEBUG)
 	{
+		if (!arr)
+			return ;
 		while (arr[i] != NULL)
 		{
 			fprintf(stderr, "%s\n", arr[i]);

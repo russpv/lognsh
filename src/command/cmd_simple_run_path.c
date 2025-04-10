@@ -30,7 +30,7 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 	i = -1;
 	paths = get_path(s);
 	if (NULL == paths)
-		return (ERR_GENERAL);
+		return (ERR_CMD_NOT_FOUND);
 	while (paths[++i])
 	{
 		tmp = ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, paths[i], "/");

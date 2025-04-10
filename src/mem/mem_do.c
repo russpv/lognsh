@@ -27,7 +27,7 @@ int	mem_add_mem(t_mem_node *head, void *alloc, size_t size)
 	if (!head || !alloc || !size)
 		return (-1);
 	new = mem_init_block();
-	if (new)
+	if (NULL != new)
 	{
 		new->payload = alloc;
 		new->size = size;
@@ -35,6 +35,7 @@ int	mem_add_mem(t_mem_node *head, void *alloc, size_t size)
 		_assign(new, first, head);
 		return (0);
 	}
+	exit_clean(head, ENOMEM, __FUNCTION__, "Malloc");
 	return (ENOMEM);
 }
 

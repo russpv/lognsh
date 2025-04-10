@@ -52,6 +52,7 @@ int	run_cmd(t_state *s, t_ast_node *a)
 		return (EINVAL);
 	if (NULL == p_get_cmd(a))
 		return (EXIT_NULLCMD);
+	dprint(_MOD_ ": %s: preparing to exec\n", __FUNCTION__);
 	c = get_cmd(s);
 	exit_status = _locate_cmd(s, a, c);
 	if (0 != exit_status)

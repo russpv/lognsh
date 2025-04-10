@@ -12,7 +12,7 @@ void	sigint_handler(int signo)
 {
 	if (signo == SIGINT)
 	{
-		g_last_signal = SIGINT;
+		g_last_signal = SH_SIGINT;
 		dprint(_MOD_ ": I got this SIGINT.");
 		write(STDOUT_FILENO, "\n", 1);
 		clear_current_line();
@@ -23,7 +23,7 @@ void	sigint_killchild(int signo)
 {
 	if (signo == SIGINT)
 	{
-		g_last_signal = SIGINT;
+		g_last_signal = SH_SIGINT;
 	}
 }
 
@@ -32,7 +32,7 @@ void	sigint_killrl(int signo)
 {
 	if (signo == SIGINT)
 	{
-		g_last_signal = SIGINT;
+		g_last_signal = SH_SIGINT;
 		close(STDIN_FILENO);
 	}
 }
@@ -44,6 +44,6 @@ void	sigquit_handler(int signo)
 	{
 		if (isatty(STDIN_FILENO))
 			return ;
-		g_last_signal = SIGQUIT;
+		g_last_signal = SH_SIGQUIT;
 	}
 }

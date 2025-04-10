@@ -22,12 +22,13 @@ void	set_input(t_state *s, char *input)
 	len = 0;
 	if (!s)
 		return ;
-	s->input = input;
 	if (NULL != input)
 		len = ft_strnlen(input, MAX_INPUT_SZ);
 	if (len == MAX_INPUT_SZ)
 		return ;
-	mem_add_mem(&s->mem_mgr.list, input, len + 1);
+	s->input = input;
+	if (NULL != input)
+		mem_add_mem(&s->mem_mgr.list, input, len + 1);
 }
 
 void	set_got_heredoc(t_state *s)

@@ -83,7 +83,7 @@ int	exec_pipe_fork_redirect_run(t_state *s, t_ast_node *node, int i, t_exec *e)
 	int		exit_status;
 
 	dprint(DBGMSG_EPIPE_ANNOUNCE, i);
-	if (SIGINT == g_last_signal)
+	if (SH_SIGINT == g_last_signal)
 		return (SIGINT_BEFORE_FORK);
 	pid = fork();
 	if (pid < 0)

@@ -10,7 +10,7 @@ int	exec_fork_redirect_wait(t_state *s, t_ast_node *node, t_exec *e,
 	int		exit_status;
 
 	exit_status = 0;
-	if (SIGINT == g_last_signal)
+	if (SH_SIGINT == g_last_signal)
 		return (SIGINT_BEFORE_FORK);
 	pid = fork();
 	if (pid < 0)

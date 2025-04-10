@@ -8,6 +8,8 @@
 
 # define SIGINT_BEFORE_FORK -130
 # define SIGEOF_AT_INPUT 300
+# define SH_SIGINT 130
+# define SH_SIGQUIT 303
 # define INT_KCHILD 0
 # define INT_DFL 1
 # define INT_KRL 2

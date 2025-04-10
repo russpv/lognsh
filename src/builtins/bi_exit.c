@@ -2,26 +2,37 @@
 
 #define CMD_NAME "exit"
 #define EMSG_NONNUM "numeric argument required"
+#define EMSG_CHEEKY "definitely not a valid integer\n"
 #define MAX_ARGSZ 20
+#define MAX_INTSTRLEN 10
 #define NOARG 1
 #define NONNUM 2
 
 static int	_load_buf(char buf[], const char *str)
 {
 	int	i;
+	int j;
 	int	buf_idx;
 
 	buf_idx = 0;
-	i = -1;
+	i = 0;
+	j = 0;
 	if (str[0] == '-' || str[0] == '+')
 		buf[buf_idx++] = str[++i];
-	while (str[++i] && buf_idx < MAX_ARGSZ)
+	while (str[i] && str[i] == '0')
+		i++;
+	while (str[i] && buf_idx < MAX_ARGSZ - 1)
 	{
 		if (str[i] != '\"' && (str[i] < '0' || str[i] > '9'))
 			return (-1);
 		if (str[i] != '\"')
-			buf[buf_idx++] = str[i];
+		{
+			buf[buf_idx++] = str[i++];
+			j++;
+		}
 	}
+	if (j >= MAX_INTSTRLEN)
+		return (print_custom_err(CMD_NAME, EMSG_CHEEKY), -1);
 	return (0);
 }
 
@@ -83,8 +94,8 @@ int	bi_exit(t_state *s, char **argv, int argc)
 		write(STDOUT_FILENO, "exit\n", 5);
 	if (argc < 2)
 		_exit_arg_cond(s, NOARG);
-	if ((ft_strlen(argv[1]) > 19))
-		_exit_arg_cond(s, NONNUM);
+	//if (ft_strnlen(argv[1], MAX_INT_BUFLEN) >= MAX_ARGSZ)
+	//	_exit_arg_cond(s, NONNUM);
 	arg = get_numeric(s, argv[1]);
 	if (NULL == arg)
 		_exit_arg_cond(s, NONNUM);

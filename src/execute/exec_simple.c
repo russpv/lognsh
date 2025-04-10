@@ -44,7 +44,7 @@ int	exec_fork_execve(t_state *s)
 	pid_t	p;
 	int		exit_code;
 
-	if (SIGINT == g_last_signal)
+	if (SH_SIGINT == g_last_signal)
 		return (SIGINT_BEFORE_FORK);
 	sig_ignore();
 	p = fork();
@@ -58,7 +58,7 @@ int	exec_fork_execve(t_state *s)
 	else if (p < 0)
 		return (perror(EMSG_FORK), ERR_FORK);
 	waitchildpid(&exit_code, p);
-	if (SIGINT == exit_code)
+	if (SH_SIGINT == exit_code)
 		write(STDOUT_FILENO, "\n", 1);
 	exit_code = handle_exit(s, exit_code);
 	s_free_cmd(s);
