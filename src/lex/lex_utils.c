@@ -47,7 +47,7 @@ size_t	ft_varnamelen(const char *c)
 /* Puts single input char on buf, and increments idx and ptr */
 int	put_on_buf(t_lex *l)
 {
-	dprint(_MOD_ ": %s: _%c_\n", __FUNCTION__, *l->ptr);
+	dvprint(_MOD_ ": %s: _%c_\n", __FUNCTION__, *l->ptr);
 	if (l->buf_idx < LEX_BUFSZ - 1)
 		l->buf[(l->buf_idx)++] = *l->ptr++;
 	else

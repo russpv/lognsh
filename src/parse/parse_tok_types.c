@@ -21,7 +21,7 @@ bool	is_at_end(t_parser *p)
 }
 
 /* Returns true if TOK_WORD, TOK_NAME, TOK_BI, TOK_ENV_VAR
- * or any reserved word
+ * or any reserved word, or TOK_EMPTY (for appropriate exec err)
  */
 bool	is_cmd_token(t_tok *tok)
 {
@@ -32,7 +32,7 @@ bool	is_cmd_token(t_tok *tok)
 		|| type == TOK_DO || type == TOK_DONE || type == TOK_ELSE
 		|| type == TOK_ESAC || type == TOK_FI || type == TOK_IN
 		|| type == TOK_BI || type == TOK_THEN || type == TOK_WHILE
-		|| type == TOK_UNTIL);
+		|| type == TOK_UNTIL || type == TOK_EMPTY);
 }
 
 /* Returns true if TOK_ANDIF or TOK_ORIF */

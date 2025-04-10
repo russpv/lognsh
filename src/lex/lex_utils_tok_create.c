@@ -30,7 +30,7 @@ static void	_init_token(t_lex *lexer, t_tok *token)
 	}
 	lexer->do_globbing = INITVAL;
 	lexer->do_expansion = INITVAL;
-	dprint(_MOD_ ": %s: Created token \n", __FUNCTION__);
+	dvprint(_MOD_ ": %s: Created token \n", __FUNCTION__);
 }
 
 /* Creates token based on current buf and ptr, does not add to llist
@@ -44,7 +44,7 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 	t_tok	*token;
 	t_tok	*grp_token;
 
-	dprint(_MOD_ ": %s\n", __FUNCTION__);
+	dvprint(_MOD_ ": %s\n", __FUNCTION__);
 	if (!lexer)
 		return (NULL);
 	if (true == lexer->is_subtoken && NULL == lexer->last_grp_tok)
@@ -56,8 +56,8 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 		lexer->last_grp_tok = grp_token;
 		dprint(_MOD_ ": %s: Created GROUP token\n", __FUNCTION__);
 	}
-	if (0 == ft_strlen(lexer->buf))
-		return (NULL);
+	if (0 == ft_strlen(lexer->buf))//TEST THAT THIS NULL TOKEN WORKS INSTEAD OF return (NULL);
+		;
 	token = create_token(m, lexer->buf, type, (size_t)(lexer->ptr
 				- lexer->raw_string));
 	if (token)

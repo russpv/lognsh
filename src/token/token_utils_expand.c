@@ -17,7 +17,7 @@ static void	_check_envp(t_state *s, const t_tok *c, char *buf, char **value)
 	char	*new_raw;
 
 	new_raw = NULL;
-	dprint(_MOD_ ": checking envp value\n");
+	dvprint(_MOD_ ": checking envp value\n");
 	*value = get_env_val(s, buf);
 	if (*value)
 	{

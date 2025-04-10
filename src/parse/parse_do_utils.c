@@ -38,7 +38,7 @@ int	check_special_expansions(t_state *s, const char *buf, char **value)
 
 	if (!buf || !value)
 		return (ERR_ARGS);
-	dprint(PDMSG_IN, _MOD_, __FUNCTION__, buf);
+	dvprint(PDMSG_IN, _MOD_, __FUNCTION__, buf);
 	if (ft_strcmp(buf, "?") == 0)
 	{
 		if (status == NULL)

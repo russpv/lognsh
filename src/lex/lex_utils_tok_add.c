@@ -53,7 +53,7 @@ static void	_commit_token_or_subtoken(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 /* Adds to llist tail a new token, clears buf */
 int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 {
-	dprint(_MOD_ ": %s\n", __FUNCTION__);
+	dvprint(_MOD_ ": %s\n", __FUNCTION__);
 	if (token && lexer)
 	{
 		ft_memset(lexer->buf, 0, LEX_BUFSZ);

@@ -41,6 +41,7 @@ void	lex_print(t_lex *lexer)
 	if (NULL == lexer->token_list)
 		return ;
 	ft_lstiter(lexer->token_list, tok_print);
+	dprintdiv("\n--- Input Lexing Finished ---\n\n");
 }
 
 /* for ht_install this will return a new copy of the argument

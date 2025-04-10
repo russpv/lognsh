@@ -18,7 +18,7 @@ static void	_insert_token(t_mem_mgr *mgr, t_list **const lst_pos,
 	t_tok	*new_tok;
 
 	new_tok = NULL;
-	dprint(_MOD_ ": %s: Inserting single tok _%s_\n", __FUNCTION__,
+	dvprint(_MOD_ ": %s: Inserting single tok _%s_\n", __FUNCTION__,
 		(*ins_lst)->content);
 	new_tok = createf(mgr, (*ins_lst)->content);
 	if (!new_tok)
@@ -38,7 +38,7 @@ static void	_insert_toklst(t_mem_mgr *mgr, t_list **const lst_pos,
 
 	reattach_head = false;
 	new_lst = NULL;
-	dprint(_MOD_ ": %s: Inserting lst %p\n", __FUNCTION__, *ins_lst);
+	dvprint(_MOD_ ": %s: Inserting lst %p\n", __FUNCTION__, *ins_lst);
 	new_lst = ft_lstmap_tmp(mgr, *ins_lst, createf, destroy_token);
 	((t_tok *)((ft_lstfirst(new_lst))->content))->t.tok.is_combinable = true;
 	ft_lstadd_insert(lst_pos, new_lst);
@@ -85,21 +85,20 @@ int	tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_pos, void *lst_c)
 	const t_tok	*tok = (t_tok *)lst_c;
 
 	str_lst = NULL;
-	dprint(_MOD_ ": %s: Got _%s_\n", __FUNCTION__, tok->t.tok.raw);
-	tok_print_list(*lst_pos);
+	dvprint(_MOD_ ": %s: Got _%s_\n", __FUNCTION__, tok->t.tok.raw);
 	if (false == tok->t.tok.in_dquotes)
 	{
 		str_lst = split_word(mgr, tok->t.tok.raw);
 		if (str_lst)
 		{
-			dprint(DBGMSG_MATCHES, _MOD_, __FUNCTION__, ft_lstsize(str_lst),
+			dvprint(DBGMSG_MATCHES, _MOD_, __FUNCTION__, ft_lstsize(str_lst),
 				str_lst->content);
 			do_tok_inserts(mgr, lst_pos, &str_lst, create_split_token);
 			ft_lstclear_str_tmp(mgr, &str_lst);
-			dprint(_MOD_ ": %s: Done.\n", __FUNCTION__);
+			dvprint(_MOD_ ": %s: Done.\n", __FUNCTION__);
 		}
 		else
-			dprint(_MOD_ ": %s: Nothing split or inserted.\n", __FUNCTION__);
+			dvprint(_MOD_ ": %s: Nothing split or inserted.\n", __FUNCTION__);
 	}
 	return (0);
 }

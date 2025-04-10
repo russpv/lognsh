@@ -75,7 +75,7 @@ void	ft_lstclear_tmp(t_mem_mgr *mgr, t_list **lst, void (*del)(t_mem_mgr *m,
 		ft_lstdelone_tmp(mgr, lst, tmp, del);
 		tmp = next;
 	}
-	dprint("%s: Lst deleted successfully\n", __FUNCTION__);
+	dvprint("%s: Lst deleted successfully\n", __FUNCTION__);
 	*lst = NULL;
 }
 

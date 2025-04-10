@@ -32,11 +32,14 @@
 #  define DEBUGVERBOSE 0
 # endif
 
+# define DEBUG_BUF_SIZE 80
+
 typedef struct s_list	t_list;
 
 void					dprint(const char *format, ...);
 void					dvprint(const char *format, ...);
 void					lgprint(const char *s, ...);
+void					dprintdiv(const char *format, ...);
 
 void					err(const char *s);
 void					cprintf(const char *color, const char *format, ...);

@@ -96,7 +96,7 @@ void	ft_lstiter_ins_rwd_tmp(t_mem_mgr *mgr, t_list **lst,
 			*lst = lst_rear;
 		lst_rear = tmp;
 	}
-	dprint("%s: inserts done.\n", __FUNCTION__);
+	dvprint("%s: inserts done.\n", __FUNCTION__);
 }
 
 /* LSTITERSTR

@@ -13,36 +13,6 @@
 #include "../data_structures/llist.h"
 #include "debug.h"
 
-void	dprint(const char *format, ...)
-{
-	va_list	args;
-
-	if (DEBUG && isatty(STDERR_FILENO))
-	{
-		va_start(args, format);
-		fprintf(stderr, BLUE "[PID %d] [DEBUG] ", getpid());
-		vfprintf(stderr, format, args);
-		fprintf(stderr, RESET);
-		va_end(args);
-		fflush(stderr);
-	}
-}
-
-void	dvprint(const char *format, ...)
-{
-	va_list	args;
-
-	if (DEBUGVERBOSE && isatty(STDERR_FILENO))
-	{
-		va_start(args, format);
-		fprintf(stderr, BLUE "[PID %d] [DEBUG] ", getpid());
-		vfprintf(stderr, format, args);
-		fprintf(stderr, RESET);
-		va_end(args);
-		fflush(stderr);
-	}
-}
-
 void	debug_detect_cycle(t_list *head)
 {
 	t_list	*slow;
@@ -64,7 +34,7 @@ void	debug_detect_cycle(t_list *head)
 				return ;
 			}
 		}
-		dprint("No cycle detected in the linked list\n");
+		dvprint("No cycle detected in the linked list\n");
 	}
 }
 
@@ -73,7 +43,7 @@ void	print_array(char *arr[])
 	int	i;
 
 	i = 0;
-	if (DEBUG)
+	if (DEBUGVERBOSE)
 	{
 		if (!arr)
 			return ;

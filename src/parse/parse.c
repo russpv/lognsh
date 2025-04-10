@@ -35,14 +35,14 @@ t_ast_node	*parse_full_cmd(t_state *s, t_parser *p)
 	}
 	if (is_open_paren(peek(p)))
 		return (parse_proc(s, p));
-	dprint("%s: %s: not a proc...\n", _MOD_, __FUNCTION__);
+	dvprint("%s: %s: not a proc...\n", _MOD_, __FUNCTION__);
 	if ((is_cmd_token(peek(p)) || is_redir_token(peek(p)))
 		&& (st_int_peek(p->st) > 0 || !p->last_node))
 		return (parse_cmd(s, p));
-	dprint("%s: %s: not a cmd...\n", _MOD_, __FUNCTION__);
+	dvprint("%s: %s: not a cmd...\n", _MOD_, __FUNCTION__);
 	if (p->last_node && is_pipe_token(peek(p)))
 		return (parse_pipeline(s, p));
-	dprint("%s: %s: not a pipe...\n", _MOD_, __FUNCTION__);
+	dvprint("%s: %s: not a pipe...\n", _MOD_, __FUNCTION__);
 	if (p->last_node && is_log_token(peek(p)))
 		return (parse_logical(s, p));
 	print_parse_error(s, tok_get_raw(peek(p)), tok_get_pos(peek(p))
@@ -81,6 +81,7 @@ t_ast_node	*parse(t_state *s, char *input)
 		return (set_exit_status(s, ERR_GENERAL), print_inv_cmd(), ast);
 	while (!is_at_end(parser) && !parser->parse_error)
 		ast = parse_full_cmd(s, parser);
+	dprintdiv("\n--- Token Parsing Finished ---\n\n");
 	parser->ast = ast;
 	set_parser(s, parser);
 	set_lexer(s, lexer);

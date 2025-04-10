@@ -57,7 +57,7 @@ void	ft_lstclear_str_tmp(t_mem_mgr *mgr, t_list **lst)
 		tmp = next;
 	}
 	*lst = NULL;
-	dprint("%s: Lst deleted successfully\n", __FUNCTION__);
+	dvprint("%s: Lst deleted successfully\n", __FUNCTION__);
 }
 
 /* Returns new linked list node with f(content). */

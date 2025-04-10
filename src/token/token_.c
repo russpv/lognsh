@@ -12,7 +12,7 @@
 
 #include "token_int.h"
 
-#define DMSG_CT ": %s: %s_ typ_%d len_%ld\n"
+#define DMSG_CT ": %s: %s_ typ_%02d len_%ld\n"
 
 static void	_init_group_token(t_tok *token, size_t pos)
 {
@@ -42,25 +42,27 @@ t_tok	*create_token(t_mem_mgr *mgr, const char *s, int type, size_t pos)
 {
 	t_tok	*token;
 
-	if (!s || !mgr)
+	if (!mgr)
 		return (NULL);
 	token = mgr->f(&mgr->list, sizeof(t_tok));
 	if (token)
 	{
 		if (type == TOK_GROUP_WORD)
 		{
-			dprint(_MOD_ ": %s: (grp) typ_%d \n", __FUNCTION__, type);
+			dprint(_MOD_ ": %s: (grp) typ_%02d \n", __FUNCTION__, type);
 			_init_group_token(token, pos);
 		}
 		else
 		{
+			token->t.tok.raw = NULL;
 			token->t.tok.raw_len = ft_strnlen(s, MAX_INPUT_SZ);
 			dprint(_MOD_ DMSG_CT, __FUNCTION__, s, type, token->t.tok.raw_len);
 			if (token->t.tok.raw_len > MAX_INT_BUFLEN)
 				return (pbufflow(s), mgr->dealloc(&mgr->list, token), NULL);
-			token->t.tok.raw = ft_strdup_tmp(mgr, s);
-			if (!token->t.tok.raw)
-				exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+			if (token->t.tok.raw_len == 0 && TOK_EOF != type)
+				type = TOK_EMPTY;
+			else
+				token->t.tok.raw = ft_strdup_tmp(mgr, s);
 			_init_normal_token(token, type, pos);
 		}
 	}
@@ -78,7 +80,7 @@ void	*create_tmp_token(t_mem_mgr *mgr, const void *s)
 	token = mgr->f(&mgr->list, sizeof(t_tok));
 	if (token)
 	{
-		dprint(_MOD_ ": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s,
+		dvprint(_MOD_ ": %s: %s_ typ_%d \n", __FUNCTION__, (const char *)s,
 			TOK_WORD);
 		if (ft_strnlen(s, MAX_INPUT_SZ) > MAX_INT_BUFLEN)
 			return (pbufflow(s), mgr->dealloc(&mgr->list, token), NULL);

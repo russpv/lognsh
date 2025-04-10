@@ -82,6 +82,6 @@ void	dprint_arglist(t_list *head)
 			current = current->next;
 			i++;
 		}
-		dprint("List printed.\n");
+		dvprint("List printed.\n");
 	}
 }

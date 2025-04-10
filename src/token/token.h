@@ -100,6 +100,7 @@ enum					e_tok_type
 	TOK_FOR,			
 	TOK_IN,				
 	TOK_EOF,
+	TOK_EMPTY,
 	TOK_UNKNOWN,
 	TOK_ERR
 };

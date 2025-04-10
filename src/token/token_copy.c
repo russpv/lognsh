@@ -54,7 +54,7 @@ void	*copy_token(t_mem_mgr *mgr, const void *tok)
 		_init_meta(mgr, t, new_t);
 	else
 		_init_norm(mgr, t, new_t);
-	dprint(_MOD_ ": %s: Copied token _%s_ @ _%ld_\n", __FUNCTION__,
+	dvprint(_MOD_ ": %s: Copied token _%s_ @ _%ld_\n", __FUNCTION__,
 		tok_get_raw(new_t), tok_get_pos(new_t));
 	return (new_t);
 }

@@ -36,9 +36,11 @@ static int	_do_wordsplits(t_state *s, t_arg_data *grparg)
 	if (!grparg || !s)
 		return (ERR_ARGS);
 	if (grparg->do_expansion && !grparg->in_dquotes)
+	{
 		ft_lstiter_ins_rwd_tmp(get_mem(s), &grparg->lst_tokens,
 			tok_do_wordsplits);
-	tok_print_list(grparg->lst_tokens);
+		tok_print_list(grparg->lst_tokens);
+	}
 	lgprint("Wordsplits Done.\n");
 	return (0);
 }
@@ -76,8 +78,8 @@ static int	_do_combine(t_state *s, t_arg_data *grparg)
 		if (*str)
 			ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s),
 					create_tmp_token(get_mem(s), str)));
+		tok_print_list(*tok_lst);
 	}
-	tok_print_list(*tok_lst);
 	lgprint("Combines and Inserts Done.\n");
 	return (0);
 }
@@ -102,7 +104,7 @@ int	p_do_grparg_processing(t_state *s, t_list **this_arg, void *c)
 	grparg = (t_arg_data *)c;
 	if (NULL == c || false == grparg->is_grouparg || NULL == grparg->lst_tokens)
 		return (0);
-	dprint(_MOD_ ": %s: got list: %p exp:%d glob:%d\n", __FUNCTION__,
+	dvprint(_MOD_ ": %s: got list: %p exp:%d glob:%d\n", __FUNCTION__,
 		grparg->lst_tokens, grparg->do_expansion, grparg->do_globbing);
 	res = _do_expansions(s, grparg);
 	if (0 != res)

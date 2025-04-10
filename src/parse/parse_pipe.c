@@ -63,7 +63,7 @@ static int	_process_pipe(t_state *s, t_parser *p, t_ast_node *pipe_node)
 	while (!is_at_end(p) && is_pipe_token(peek(p)))
 	{
 		advance(p);
-		dprint("%s: %s: getting next cmd...", _MOD_, __FUNCTION__);
+		dprint("%s: %s: getting next cmd...\n", _MOD_, __FUNCTION__);
 		if (NULL == parse_full_cmd(s, p))
 		{
 			print_parse_error(s, tok_get_raw((p->curr_tok)->prev->content),

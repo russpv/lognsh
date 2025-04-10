@@ -15,7 +15,7 @@
 void	clear_current_line(void)
 {
 	rl_on_new_line();
-	rl_replace_line("", RETAIN_HIST);
+	//rl_replace_line("", RETAIN_HIST);
 	rl_redisplay();
 }
 

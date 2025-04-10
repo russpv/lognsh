@@ -63,7 +63,7 @@ static int	_parse_args(t_parser *p, t_ast_node *cmd_node)
 		test_prev_integrity(cmd_node->data.cmd.args);
 		cmd_node->data.cmd.argc++;
 	}
-	dprint(_MOD_ ": %s: done on %d arg(s)\n", __FUNCTION__,
+	dvprint(_MOD_ ": %s: done on %d arg(s)\n", __FUNCTION__,
 		cmd_node->data.cmd.argc);
 	if (cmd_node->data.cmd.argc > initval)
 		return (0);

@@ -20,7 +20,8 @@ void	print_parse_error(t_state *s, const char *word, size_t pos)
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	write(STDERR_FILENO, ": parse error near `",
 		ft_strlen(": parse error near `"));
-	ft_putstr_fd(word, STDERR_FILENO);
+	if (word)
+		ft_putstr_fd(word, STDERR_FILENO);
 	write(STDERR_FILENO, "` in:\n", ft_strlen("` in:\n"));
 	ft_putstr_fd(input, STDERR_FILENO);
 	write(STDERR_FILENO, "\n", 1);

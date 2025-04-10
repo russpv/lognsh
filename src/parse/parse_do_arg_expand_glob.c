@@ -43,7 +43,7 @@ int	p_do_globbing_toks(t_mem_mgr *mgr, t_list **lst_node, void *lst_c)
 	tok = (t_tok *)lst_c;
 	if (!tok_get_raw(tok))
 		return (ERR_ARGS);
-	dprint(DBGMSG_GOTARGS, _MOD_, __FUNCTION__, tok_get_raw(tok),
+	dvprint(DBGMSG_GOTARGS, _MOD_, __FUNCTION__, tok_get_raw(tok),
 		(void *)lst_node);
 	if (true == _has_globbing(tok_get_raw(tok)))
 	{
@@ -128,7 +128,7 @@ int	p_do_globbing_args(t_mem_mgr *mgr, t_list **lst_node, void *lst_c)
 	arg = (t_arg_data *)lst_c;
 	if (!arg->raw)
 		return (ERR_ARGS);
-	dprint(DBGMSG_GOTARGS, __FUNCTION__, arg->raw, (void *)lst_node);
+	dvprint(DBGMSG_GOTARGS, __FUNCTION__, arg->raw, (void *)lst_node);
 	if (true == arg->do_globbing)
 	{
 		lst = match_glob(mgr, arg->raw);

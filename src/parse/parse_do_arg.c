@@ -29,6 +29,7 @@ static int	_helper(t_state *s, t_ast_node *a, t_list **argl)
 		ft_lstiter_ins_rwd_tmp(get_mem(s), argl, p_do_wordsplits);
 	if (a->data.cmd.do_globbing)
 		ft_lstiter_ins_rwd_tmp(get_mem(s), argl, p_do_globbing_args);
+	dprintdiv("\n--- Arg Processing Done ---\n\n");
 	return (res);
 }
 

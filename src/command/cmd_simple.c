@@ -46,6 +46,7 @@ int	proc_args_redirs(t_state *s, t_ast_node *a, t_cmd *c)
 	if (0 != p_do_redir_processing(s, a))
 		return (ERR_REDIR);
 	c->redirs = p_get_redirs(a);
+	dprintdiv("\n--- Redirection Processing Done ---\n\n");
 	return (exit_code);
 }
 

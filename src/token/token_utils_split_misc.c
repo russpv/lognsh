@@ -95,7 +95,7 @@ t_list	*split_word(t_mem_mgr *mgr, const char *word)
 	if (!word || !mgr)
 		return (NULL);
 	lst = NULL;
-	dprint(_MOD_ ": %s: Got _%s_\n", __FUNCTION__, word);
+	dvprint(_MOD_ ": %s: Got _%s_\n", __FUNCTION__, word);
 	if (NULL != ft_strchrs_betw(_skip_delims(word, IFS), _skip_delims_post(word,
 				IFS), IFS))
 	{

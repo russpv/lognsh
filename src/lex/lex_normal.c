@@ -42,7 +42,7 @@ static t_tok	*_match_normal_op(t_state *s, t_lex *lexer)
  */
 static t_tok	*_match_word_or_name_or_exception(t_state *s, t_lex *lexer)
 {
-	dprint(_MOD_ ": ---- %s: got %s\n", __FUNCTION__, lexer->buf);
+	dvprint(_MOD_ ": ---- %s: got %s\n", __FUNCTION__, lexer->buf);
 	if (true == is_normal_delim(lexer, 0) && ft_strlen(lexer->buf) > 0)
 	{
 		return (lex_create_token(get_mem(s), lexer, word_or_name(lexer->buf)));
@@ -64,8 +64,8 @@ static t_tok	*_match_reserved_token(t_state *s, t_lex *lexer)
 	t_tok	*res;
 
 	res = NULL;
-	dprint(_MOD_ ": ---- %s\n", __FUNCTION__);
-	dprint(_MOD_ ": ------ Ptr: '%c'\n", *lexer->ptr);
+	dvprint(_MOD_ ": ---- %s\n", __FUNCTION__);
+	dvprint(_MOD_ ": ------ Ptr: '%c'\n", *lexer->ptr);
 	while (*lexer->ptr && false == is_normal_delim(lexer, 0)
 		&& false == is_transition_delim(lexer))
 	{
@@ -73,7 +73,7 @@ static t_tok	*_match_reserved_token(t_state *s, t_lex *lexer)
 		if (SKIPREST == process_special_operators(lexer))
 			continue ;
 		lexer->buf[(lexer->buf_idx)++] = *lexer->ptr++;
-		dprint(_MOD_ ": ------ Buf: '%s' idx:%d_\n", lexer->buf,
+		dvprint(_MOD_ ": ------ Buf: '%s' idx:%d_\n", lexer->buf,
 			lexer->buf_idx);
 		res = lex_ht_lookup(s, lexer);
 		if (res)
@@ -92,7 +92,7 @@ static t_tok	*_match_normal(t_state *s, t_lex *lexer)
 {
 	t_tok	*res;
 
-	dprint(_MOD_ ": ---- %s\n", __FUNCTION__);
+	dvprint(_MOD_ ": ---- %s\n", __FUNCTION__);
 	res = NULL;
 	while (' ' == *lexer->ptr || '\t' == *lexer->ptr)
 		lexer->ptr++;
@@ -100,15 +100,15 @@ static t_tok	*_match_normal(t_state *s, t_lex *lexer)
 		return (NULL);
 	res = _match_reserved_token(s, lexer);
 	if (res)
-		return (dprint(_MOD_ ": ---- Done, reserved tok. \n"), res);
+		return (dvprint(_MOD_ ": ---- Done, reserved tok. \n"), res);
 	res = _match_word_or_name_or_exception(s, lexer);
 	if (res)
-		return (dprint(_MOD_ ": ---- Done, word tok. \n"), res);
+		return (dvprint(_MOD_ ": ---- Done, word tok. \n"), res);
 	if ((unsigned char)OP_NULL == *lexer->ptr)
-		return (dprint(_MOD_ ": ----FOUND NULL\n"), NULL);
+		return (dvprint(_MOD_ ": ----FOUND NULL\n"), NULL);
 	res = _match_normal_op(s, lexer);
 	if (res)
-		return (dprint(_MOD_ ": ---- Done, op tok. \n"), res);
+		return (dvprint(_MOD_ ": ---- Done, op tok. \n"), res);
 	return (NULL);
 }
 
@@ -134,7 +134,7 @@ int	tokenize_normal(t_state *s, t_lex *lexer)
 				return (ERR_GENERAL);
 		if (OP_NULL == *lexer->ptr)
 		{
-			dprint(_MOD_ ": ##### TOK EOF FOUND\n");
+			dvprint(_MOD_ ": ##### TOK EOF FOUND\n");
 			return (0);
 		}
 	}
