@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:14 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:15 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/10 17:22:25 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	mem_add_mem(t_mem_node *head, void *alloc, size_t size)
 	t_mem_block	*new;
 	t_mem_node	*first;
 
-	if (!head || !alloc || !size)
+	if (!head || !alloc || 0 == size)
 		return (-1);
 	new = mem_init_block();
 	if (NULL != new)
@@ -47,6 +47,7 @@ int	mem_add_mem(t_mem_node *head, void *alloc, size_t size)
 		_assign(new, first, head);
 		return (0);
 	}
+	ft_putstr_fd("Memory allocation failed.\n", STDERR_FILENO);
 	exit_clean(head, ENOMEM, __FUNCTION__, "Malloc");
 	return (ENOMEM);
 }

@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:27:14 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:27:15 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:56:50 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ int		bi_exec(t_state *s, char **args, int argc);
 
 int		process_arg_update_add(t_state *s, const char *arg, char *equal_pos,
 			int *error_occurred);
-int		parse_arg(t_state *s, const char *arg, int *error_occurred);
+int		parse_arg(t_state *s, const char *arg, int *error_occurred,
+			int got_good_arg);
 
 /* This ensures block buffer is flushed during execution
  * as a background process

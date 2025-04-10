@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:26 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:27 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/10 17:51:28 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,9 @@ void	destroy_ast_node(t_mem_mgr *mgr, void **node)
 	dprint(_MOD_ ":  destroy_ast...\n");
 	if (NULL == ast)
 		return ;
-	if (AST_NODE_PROC == ast->type)
+	if (NONE == ast->type)
+		return ;
+	else if (AST_NODE_PROC == ast->type)
 		destroy_proc_node(mgr, (void **)&ast);
 	else if (AST_NODE_CMD == ast->type)
 		destroy_cmd_node(mgr, (void **)&ast);
