@@ -36,7 +36,6 @@ int	waitchildspid(int *status, t_exec *e)
 	i = -1;
 	while (++i < e->cmdc)
 	{
-		assert(e->pids[i] > 0);
 		res = waitchildpid(status, e->pids[i]);
 		if (0 != res)
 			dprint(DBGMSG_EXEC_WAITPID_ERROR, e->pids[i], res);

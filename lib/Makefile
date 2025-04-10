@@ -33,7 +33,9 @@ SOURCES = ft_memcpy.c \
 		  ft_putnbr_fd.c \
 		  ft_putstr_fd.c \
 		  ft_split_mem.c \
+		  ft_split_mem_utils.c \
 		  ft_split_ifs_mem.c \
+		  ft_split_ifs_mem_utils.c \
 		  ft_split.c \
 		  ft_strmapi.c \
 		  ft_striteri.c \

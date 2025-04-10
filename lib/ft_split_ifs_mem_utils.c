@@ -1,35 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmplow.c                                     :+:      :+:    :+:   */
+/*   ft_split_ifs_mem_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 15:51:27 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/03 15:51:29 by dayeo            ###   ########.fr       */
+/*   Created: 2025/04/03 15:50:32 by dayeo             #+#    #+#             */
+/*   Updated: 2025/04/03 15:50:32 by dayeo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/libft.h"
-#include <stdio.h>
 
-int	ft_strcmp_low(const char *s1, const char *s2)
+char	*ft_skip_delims(char const *s, char const *ref)
 {
-	size_t				i;
-	int					res;
-	unsigned char		l;
-	unsigned char		r;
+	char	*delims;
+	char	*word;
 
-	i = 0;
-	while (s1[i] || s2[i])
+	if (!s || !ref)
+		return (NULL);
+	word = (char *)s;
+	while (*word)
 	{
-		l = ft_tolower((unsigned char)s1[i]);
-		r = ft_tolower((unsigned char)s2[i]);
-		if (l != r)
+		delims = (char *)ref;
+		while (*delims)
 		{
-			res = l - r;
-			return (res);
+			if (*word == *delims)
+				break ;
+			delims++;
 		}
-		i++;
+		if (0 == *delims)
+			return (word);
+		word++;
 	}
-	return (0);
+	return (NULL);
 }

@@ -8,7 +8,7 @@
 static int	_locate_cmd(t_state *s, t_ast_node *a, t_cmd *c)
 {
 	int	exit_status;
-	
+
 	exit_status = find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath);
 	if (0 != exit_status)
 		return (s_free_cmd(s), exit_status);

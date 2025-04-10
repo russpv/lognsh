@@ -90,7 +90,6 @@ void	merge(t_list **lst, t_list **beg, t_list *mid, t_list **end)
 	while ((NULL != m.l && NULL != m.r) && (mid->next != m.l
 			&& (*end)->next != m.r) && (++m.i <= m.nodec))
 	{
-		assert(compare(m.l, m.r) != 0);
 		_do_swap(lst, &m);
 		m.tmp = *m.tail;
 		m.tail = &((*m.tail)->next);

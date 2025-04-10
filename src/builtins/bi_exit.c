@@ -11,7 +11,7 @@
 static int	_load_buf(char buf[], const char *str)
 {
 	int	i;
-	int j;
+	int	j;
 	int	buf_idx;
 
 	buf_idx = 0;
@@ -94,8 +94,6 @@ int	bi_exit(t_state *s, char **argv, int argc)
 		write(STDOUT_FILENO, "exit\n", 5);
 	if (argc < 2)
 		_exit_arg_cond(s, NOARG);
-	//if (ft_strnlen(argv[1], MAX_INT_BUFLEN) >= MAX_ARGSZ)
-	//	_exit_arg_cond(s, NONNUM);
 	arg = get_numeric(s, argv[1]);
 	if (NULL == arg)
 		_exit_arg_cond(s, NONNUM);

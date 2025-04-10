@@ -10,51 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/libft.h"
+
 /* SPLIT
 ** Returns new C-strings split by c or NULL (malloc)
 ** Array is null terminated
 ** Allows empty strings from consecutive c's
 */
-static inline void	_arr_free(struct s_mem_utils *m, char **arr, unsigned int i)
-{
-	unsigned int	j;
-
-	j = 0;
-	while (j < i)
-		m->u(m->head, arr[j++]);
-	m->u(m->head, arr);
-}
-
-static inline t_bool	_is_print(char const *p)
-{
-	while (*p)
-		if (ft_isprint(*p++))
-			return (TRUE);
-	return (FALSE);
-}
-
-/* Returns non-empty string count in C-string p*/
-static inline int	_get_word_count(char const *p, char const *set)
-{
-	const char		*temp;
-	int				count;
-
-	count = 0;
-	while (*p)
-	{
-		temp = ft_strchrs(p, set);
-		if (!temp)
-		{
-			if (_is_print(p))
-				count++;
-			break ;
-		}
-		else if (temp - p > 0)
-			count++;
-		p = temp + 1;
-	}
-	return (count);
-}
 
 static inline void	*_copy_word(struct s_mem_utils *m, \
 				char const *s, char **elem, size_t len)
@@ -88,28 +49,27 @@ static char	**_init_arr(struct s_mem_utils *m, size_t count)
 	return (arr);
 }
 
-char	*ft_skip_delims(char const *s, char const *ref)
+/* Returns non-empty string count in C-string p*/
+static int	_get_word_count_ifs(char const *p, char const *set)
 {
-	char	*delims;
-	char	*word;
+	const char		*temp;
+	int				count;
 
-	if (!s || !ref)
-		return (NULL);
-	word = (char *)s;
-	while (*word)
+	count = 0;
+	while (*p)
 	{
-		delims = (char *)ref;
-		while (*delims)
+		temp = ft_strchrs(p, set);
+		if (!temp)
 		{
-			if (*word == *delims)
-				break ;
-			delims++;
+			if (is_print_split(p))
+				count++;
+			break ;
 		}
-		if (0 == *delims)
-			return (word);
-		word++;
+		else if (temp - p > 0)
+			count++;
+		p = temp + 1;
 	}
-	return (NULL);
+	return (count);
 }
 
 /* SPLIT IFS
@@ -124,10 +84,9 @@ char	**ft_split_ifs_mem(struct s_mem_utils *m, \
 	char			*temp;
 	size_t			count;
 	unsigned int	i;
-	char			*s2;
+	const char		*s2 = ft_skip_delims(s, set);
 
-	s2 = ft_skip_delims(s, set);
-	count = _get_word_count(s2, set);
+	count = _get_word_count_ifs(s2, set);
 	arr = _init_arr(m, count);
 	if (!arr)
 		return (NULL);
@@ -140,7 +99,7 @@ char	**ft_split_ifs_mem(struct s_mem_utils *m, \
 		if (temp - s2 > 0)
 		{
 			if (!_copy_word(m, s2, &(arr[i++]), temp - s2))
-				return (_arr_free(m, arr, i), NULL);
+				return (arr_free_split(m, arr, i), NULL);
 			--count;
 		}
 		s2 = temp + 1;

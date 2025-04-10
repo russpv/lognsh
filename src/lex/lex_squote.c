@@ -1,6 +1,6 @@
 #include "lex_int.h"
 
-# define STOP 1
+#define STOP 1
 
 /* Loads a char into buf.
  * Checks for the closing single quote. advances ptr and Returns 1 if found

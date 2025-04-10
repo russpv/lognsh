@@ -52,14 +52,16 @@ typedef enum e_bool
 }							t_bool;
 typedef unsigned char		t_uint8_t; /* 1 byte */
 typedef unsigned int		t_uint32_t; /* 4 bytes */
+/* 16 bytes */
 typedef struct s_16
 {
 	t_uint8_t				data[16];
-}	t_block_16; /* 16 bytes */
+}	t_block_16;
+/* 32 bytes */
 typedef struct s_32
 {
 	t_uint8_t				data[32];
-}	t_block_32; /* 32 bytes */
+}	t_block_32;
 
 typedef unsigned long	long(t_uint64_t); /* Must be at least 8-bytes */
 typedef unsigned long	long(t_uintptr_t); /* 64-bit ptr */
@@ -171,6 +173,11 @@ char						**ft_split_mem(struct s_mem_utils *m, char const *s,
 								char c);
 char						**ft_split_ifs_mem(struct s_mem_utils *m, \
 								char const *s, char const *set);
+int							get_word_count_split(char const *p, char ch);
+char						*ft_skip_delims(char const *s, char const *ref);
+t_bool						is_print_split(char const *p);
+void						arr_free_split(struct s_mem_utils *m, char **arr, unsigned int i);
+
 char						*ft_strtrim_mem(struct s_mem_utils *m, \
 								char const *s1, char const *set);
 

@@ -76,7 +76,6 @@ int	tokenize_heredoc(t_state *s, t_lex *lexer)
 	token = lex_create_token(get_mem(s), lexer, TOK_HEREDOC_WORD);
 	if (token)
 	{
-		assert(NULL != lexer && NULL != token);
 		if (0 != add_token(get_mem(s), lexer, token))
 			return (ERR_GENERAL);
 		set_got_heredoc(s);

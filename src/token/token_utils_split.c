@@ -73,7 +73,6 @@ int	tok_do_wordsplits(t_mem_mgr *mgr, t_list **lst_pos, void *lst_c)
 	const t_tok	*tok = (t_tok *)lst_c;
 
 	str_lst = NULL;
-	assert(NORMAL == tok->class);
 	dprint(_MOD_ ": %s: Got _%s_\n", __FUNCTION__, tok->t.tok.raw);
 	tok_print_list(*lst_pos);
 	if (false == tok->t.tok.in_dquotes)

@@ -104,7 +104,7 @@ void							print_value_toolong(void);
 
 void							pbufflow(const char *s);
 void							print_is_dir(char *p);
-void 							print_inv_cmd(void);
+void							print_inv_cmd(void);
 
 bool							is_error(int v);
 int								get_wincols(void);

@@ -37,9 +37,9 @@ void	print_command_not_found(const char *cmd)
 
 int	get_wincols(void)
 {
-	struct winsize ws;
+	struct winsize	ws;
 
-	if (-1 == ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws)) 
+	if (-1 == ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws))
 	{
 		perror("ioctl");
 		return (ERR_GENERAL);
@@ -47,7 +47,7 @@ int	get_wincols(void)
 	return (ws.ws_row);
 }
 
-void print_inv_cmd(void)
+void	print_inv_cmd(void)
 {
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	ft_putstr_fd(": Invalid command.\n", STDERR_FILENO);

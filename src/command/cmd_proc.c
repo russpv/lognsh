@@ -44,7 +44,6 @@ static int	_execute(t_state *s, t_ast_node *parent, const t_list *cmd,
 	{
 		cmd_node = cmd->content;
 		dprint(DBGMSG_CPROC_GOT, _MOD_, __FUNCTION__, p_get_type(cmd_node));
-		assert(p_get_args(parent) == NULL);
 		c = get_cmd(s);
 		e = exec_init(get_mem(s), p_get_proc_cmdc(parent), c, parent);
 		exec_set_executor(e, cmd_execute_full);

@@ -2,7 +2,6 @@
 
 static int	_add_subtoken(t_mem_mgr *m, t_lex *lexer, t_tok *subtok)
 {
-	assert(NULL != lexer->last_grp_tok);
 	tok_add_subtok(m, lexer->last_grp_tok, subtok);
 	tok_incr_tokc(lexer->last_grp_tok);
 	return (0);
@@ -45,7 +44,7 @@ int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 	dprint(_MOD_ ": %s\n", __FUNCTION__);
 	if (token && lexer)
 	{
-		memset(lexer->buf, 0, LEX_BUFSZ);
+		ft_memset(lexer->buf, 0, LEX_BUFSZ);
 		lexer->buf_idx = 0;
 		if (lexer->tokc < LEX_MAX_TOKC)
 		{

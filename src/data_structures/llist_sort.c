@@ -21,9 +21,6 @@ static t_list	*_get_midptr(t_list *lst, t_list *end)
 	mid = lst;
 	tmp = lst;
 	ft_lstprint_betw(lst, end);
-	assert(tmp != NULL && end != NULL);
-	assert(tmp->next != NULL);
-	assert(tmp->next->next != NULL);
 	if (NULL == tmp || NULL == tmp->next)
 		return (lst);
 	if (NULL == tmp->next->next)

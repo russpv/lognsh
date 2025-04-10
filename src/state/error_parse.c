@@ -77,7 +77,7 @@ void	print_lex_error(t_lex *l, char *word)
 	write(STDERR_FILENO, "^\n", 2);
 }
 
-void print_value_toolong(void)
+void	print_value_toolong(void)
 {
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	ft_putstr_fd(": Value too long.\n", STDERR_FILENO);

@@ -23,7 +23,6 @@ bool	on_cmd_op(t_lex *l)
 // Returns true if buf[0] is '$' and ptr on '?'
 bool	is_dollar_question(t_lex *lexer)
 {
-	getchar();
 	return (lexer->buf[0] == '$' && *(lexer->ptr) == '?');
 }
 

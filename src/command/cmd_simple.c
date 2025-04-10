@@ -34,7 +34,6 @@ int	proc_args_redirs(t_state *s, t_ast_node *a, t_cmd *c)
 	if (0 != p_do_redir_processing(s, a))
 		return (ERR_REDIR);
 	c->redirs = p_get_redirs(a);
-	assert(c_get_node(c) == a);
 	return (exit_code);
 }
 
@@ -66,7 +65,6 @@ int	cmd_exec_simple(t_state *s, t_ast_node *a)
 	if (ERR_REDIR == exit_code || NO_CMD == exit_code)
 		return (exit_code);
 	log_command_info((t_cmd *)c, a);
-	assert(c_get_node(c) == a);
 	cf = init_cmd_fns(s);
 	bi = get_builtin(p_get_cmd(a));
 	if (bi)
