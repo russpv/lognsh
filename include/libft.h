@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 15:17:07 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/03 15:20:25 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/04/10 16:37:15 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,8 @@ char						**ft_split_ifs_mem(struct s_mem_utils *m, \
 int							get_word_count_split(char const *p, char ch);
 char						*ft_skip_delims(char const *s, char const *ref);
 t_bool						is_print_split(char const *p);
-void						arr_free_split(struct s_mem_utils *m, char **arr, unsigned int i);
+void						arr_free_split(struct s_mem_utils *m, char **arr, \
+								unsigned int i);
 
 char						*ft_strtrim_mem(struct s_mem_utils *m, \
 								char const *s1, char const *set);
