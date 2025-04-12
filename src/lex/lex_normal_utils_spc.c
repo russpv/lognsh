@@ -31,6 +31,8 @@ int	process_special_operators(t_lex *lexer)
 	if ((unsigned char)OP_ENV == *lexer->ptr && ft_varnamelen((lexer->ptr + 1))
 		&& false == lexer->escape_mode)
 		lexer->do_expansion = true;
+	if ((unsigned char)OP_EQUALS == *lexer->ptr && false == lexer->escape_mode)
+		lexer->is_assignment = true;
 	if ((unsigned char)OP_STAR == *lexer->ptr && false == lexer->escape_mode)
 		lexer->do_globbing = true;
 	if ((unsigned char)OP_HASH == *lexer->ptr && false == lexer->escape_mode)

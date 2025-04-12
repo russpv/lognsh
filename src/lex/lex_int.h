@@ -106,11 +106,13 @@ typedef struct s_lex
 	int						do_heredoc_expansion;
 	bool					do_wordsplit;
 	bool					is_subtoken;
+	int						is_assignment;
 
 	char					*eof_word;
 	int						lines;
 
 	bool					input_incomplete;
+	int						lex_err;
 	int						keep_dollar;
 
 	t_list					*token_list;
@@ -166,7 +168,7 @@ bool						is_logicalop(unsigned char c, unsigned char next);
 bool						is_dollar_question(t_lex *lexer);
 
 int							word_or_name(const char *s);
-bool						is_too_long(const char *input);
+bool						is_too_long(t_lex *l, const char *input);
 
 void						process_escape_sequence(t_lex *l);
 int							process_special_operators(t_lex *lexer);
@@ -185,5 +187,6 @@ bool						is_varnamechar(unsigned char c);
 int							put_on_buf(t_lex *l);
 unsigned char				is_valid_next(t_lex *l, int offset);
 unsigned char				is_valid_prev(t_lex *l, int offset);
+void						lex_set_err(t_lex *l);
 
 #endif

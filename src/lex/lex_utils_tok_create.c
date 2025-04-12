@@ -16,7 +16,7 @@ static void	_init_token(t_lex *lexer, t_tok *token)
 {
 	if (true == lexer->is_subtoken)
 		tok_set_subtoken(token);
-	if (false == lexer->do_wordsplit)
+	if (false == lexer->do_wordsplit || true == lexer->is_assignment)
 		tok_set_dquotes(token);
 	if (true == lexer->do_globbing)
 	{
@@ -39,30 +39,27 @@ static void	_init_token(t_lex *lexer, t_tok *token)
  * Looks ahead for normal delim to reset subtoken flag.
  * Note: skip any terminator that is not to be part of token (\")
  */
-t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
+t_tok	*lex_create_token(t_mem_mgr *m, t_lex *l, int type)
 {
-	t_tok	*token;
+	t_tok	*t;
 	t_tok	*grp_token;
 
 	dvprint(_MOD_ ": %s\n", __FUNCTION__);
-	if (!lexer)
+	if (!l)
 		return (NULL);
-	if (true == lexer->is_subtoken && NULL == lexer->last_grp_tok)
+	if (true == l->is_subtoken && NULL == l->last_grp_tok)
 	{
-		grp_token = create_token(m, lexer->buf, TOK_GROUP_WORD,
-				(size_t)(lexer->ptr - lexer->raw_string));
+		grp_token = create_token(m, l->buf, TOK_GROUP_WORD,
+				(size_t)(l->ptr - l->raw_string));
 		if (!grp_token)
 			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
-		lexer->last_grp_tok = grp_token;
+		l->last_grp_tok = grp_token;
 		dprint(_MOD_ ": %s: Created GROUP token\n", __FUNCTION__);
 	}
-	if (0 == ft_strlen(lexer->buf))
+	if (0 == ft_strlen(l->buf))
 		(void)0;
-	token = create_token(m, lexer->buf, type, (size_t)(lexer->ptr
-				- lexer->raw_string));
-	if (token)
-	{
-		_init_token(lexer, token);
-	}
-	return (token);
+	t = create_token(m, l->buf, type, (size_t)(l->ptr - l->raw_string));
+	if (t)
+		_init_token(l, t);
+	return (t);
 }

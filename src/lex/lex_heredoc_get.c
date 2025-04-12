@@ -18,7 +18,7 @@
 /* Puts readline line onto buf. Omits '\0' from readline. */
 static inline int	_load_line(t_lex *l, const char *line)
 {
-	if (true == is_too_long(line))
+	if (true == is_too_long(l, line))
 		return (ERR_BUFFLOW);
 	while (*line)
 		l->buf[(l->buf_idx)++] = *line++;
@@ -63,7 +63,8 @@ int	match_heredoc(t_mem_mgr *m, t_lex *l)
 			free(line);
 			return (0);
 		}
-		_load_line(l, line);
+		if (0 != _load_line(l, line))
+			return(free(line), ERR_RL_ABORTED);
 		free(line);
 	}
 }

@@ -25,6 +25,7 @@ int	add_grptoken(t_mem_mgr *m, t_lex *lexer)
 	ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m, lexer->last_grp_tok));
 	lexer->is_subtoken = false;
 	lexer->last_grp_tok = NULL;
+	lexer->is_assignment = false;
 	lexer->tokc++;
 	return (0);
 }
@@ -50,6 +51,7 @@ static void	_commit_token_or_subtoken(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 		if (ft_lstadd_back(&lexer->token_list, ft_lstnew_tmp(m,
 					token)) > 0)
 			lexer->tokc++;
+		lexer->is_assignment = false;
 	}
 }
 
@@ -59,6 +61,8 @@ int	add_token(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 	dvprint(_MOD_ ": %s\n", __FUNCTION__);
 	if (token && lexer)
 	{
+		if (lexer->lex_err)
+			return (ERR_GENERAL);
 		ft_memset(lexer->buf, 0, LEX_BUFSZ);
 		lexer->buf_idx = 0;
 		if (lexer->tokc < LEX_MAX_TOKC)

@@ -34,11 +34,10 @@ static inline int	_load_buf(t_lex *lexer)
 			if ((unsigned char)OP_NULL == *lexer->ptr)
 				return (dprint(_MOD_ ": found null before closing quote\n"),
 					STOP);
-			lexer->buf[(lexer->buf_idx)] = *lexer->ptr;
-			(lexer->buf_idx)++;
+			lexer->buf[(lexer->buf_idx)++] = *lexer->ptr;
 		}
 		else
-			return (print_lex_buffer_overflow(), 1);
+			return (lex_set_err(lexer), pbufflow(NULL), STOP);
 	}
 	return (0);
 }
@@ -59,6 +58,8 @@ int	tokenize_single_quotes(t_state *s, t_lex *lexer)
 	while (++lexer->ptr)
 		if (STOP == _load_buf(lexer))
 			break ;
+	if (lexer->lex_err)
+		return (ERR_GENERAL);
 	if ((unsigned char)OP_NULL == *lexer->ptr)
 	{
 		dprint(_MOD_ ": WARNING: FOUND NULL\n");

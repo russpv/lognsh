@@ -59,28 +59,27 @@ static t_tok	*_match_word_or_name_or_exception(t_state *s, t_lex *lexer)
  * Advances on input until delim or transition char.
  * Leaves tokenization for downstream unless word found in ht.
  */
-static t_tok	*_match_reserved_token(t_state *s, t_lex *lexer)
+static t_tok	*_match_reserved_token(t_state *s, t_lex *l)
 {
 	t_tok	*res;
 
 	res = NULL;
 	dvprint(_MOD_ ": ---- %s\n", __FUNCTION__);
-	dvprint(_MOD_ ": ------ Ptr: '%c'\n", *lexer->ptr);
-	while (*lexer->ptr && false == is_normal_delim(lexer, 0)
-		&& false == is_transition_delim(lexer))
+	dvprint(_MOD_ ": ------ Ptr: '%c'\n", *l->ptr);
+	while (*l->ptr && false == is_normal_delim(l, 0)
+		&& false == is_transition_delim(l))
 	{
-		process_escape_sequence(lexer);
-		if (SKIPREST == process_special_operators(lexer))
+		process_escape_sequence(l);
+		if (SKIPREST == process_special_operators(l))
 			continue ;
-		lexer->buf[(lexer->buf_idx)++] = *lexer->ptr++;
-		if (ft_strnlen(lexer->buf, DEBUG_BUF_SIZE) == DEBUG_BUF_SIZE)
+		l->buf[(l->buf_idx)++] = *l->ptr++;
+		if (ft_strnlen(l->buf, DEBUG_BUF_SIZE) == DEBUG_BUF_SIZE)
 			dvprint("(TOO MUCH TO PRINT)\n");
 		else
-			dvprint(_MOD_ ": ------ Buf: '%s' idx:%d_\n", lexer->buf,
-			lexer->buf_idx);
-		if (ft_strnlen(lexer->buf, LEX_BUFSZ - 1) == LEX_BUFSZ - 1)
-			return (NULL);
-		res = lex_ht_lookup(s, lexer);
+			dvprint(_MOD_ ": ------ Buf: '%s' idx:%d_\n", l->buf, l->buf_idx);
+		if (ft_strnlen(l->buf, LEX_BUFSZ - 2) == LEX_BUFSZ - 2)
+			return (lex_set_err(l), NULL);
+		res = lex_ht_lookup(s, l);
 		if (res)
 			return (res);
 	}
@@ -132,6 +131,8 @@ int	tokenize_normal(t_state *s, t_lex *lexer)
 		if (is_normal_delim(lexer, 0) && lexer->last_grp_tok)
 			add_grptoken(get_mem(s), lexer);
 		token = _match_normal(s, lexer);
+		if (lexer->lex_err)
+			return (pbufflow(NULL), ERR_GENERAL);
 		if (lexer->ptr)
 			dprint(_MOD_ ": ptr at:_%c_\n", *lexer->ptr);
 		if (token)

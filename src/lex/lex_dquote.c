@@ -94,8 +94,8 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 			lexer->escape_mode = false;
 			if (token)
 				return (token);
-			dprint(_MOD_ ":     Got:_%c_\n", *lexer->ptr);
-			put_on_buf(lexer);
+			if (0 != put_on_buf(lexer))
+				return (NULL);
 		}
 		lexer->input_incomplete = true;
 		if (false == is_normal_delim(lexer, 0) || lexer->last_grp_tok)
@@ -125,6 +125,8 @@ int	tokenize_double_quotes(t_state *s, t_lex *lexer)
 	if (lexer)
 	{
 		token = _match_double(s, lexer);
+		if (lexer->lex_err)
+			return (ERR_GENERAL);
 		if (!token)
 		{
 			return (0);

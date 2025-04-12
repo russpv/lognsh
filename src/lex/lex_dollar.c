@@ -28,7 +28,8 @@ int	tokenize_dollar(t_state *s, t_lex *lexer)
 		put_on_buf(lexer);
 	else
 		while (lexer->ptr && is_varnamechar((unsigned char)(*lexer->ptr)))
-			put_on_buf(lexer);
+			if (0 != put_on_buf(lexer))
+				return (ERR_GENERAL);
 	if (0 == ft_strlen(lexer->buf))
 		return (0);
 	lexer->do_expansion = true;

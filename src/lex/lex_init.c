@@ -67,6 +67,8 @@ static inline void	_init_lexer_flags(t_lex *lexer)
 	lexer->do_wordsplit = true;
 	lexer->input_incomplete = false;
 	lexer->is_subtoken = false;
+	lexer->is_assignment = false;
+	lexer->lex_err = 0;
 }
 
 t_lex	*create_lexer(t_state *state, int start_state, const char *s)

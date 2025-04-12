@@ -78,7 +78,7 @@ int	get_eof_word(t_mem_mgr *m, t_lex *l)
 {
 	if (!l->ptr)
 		return (ERR_ARGS);
-	if (true == is_too_long(l->ptr))
+	if (true == is_too_long(l, l->ptr))
 		return (ERR_BUFFLOW);
 	while (ft_isspace(*l->ptr))
 		l->ptr++;
