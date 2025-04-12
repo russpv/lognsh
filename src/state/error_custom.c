@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:34:37 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:34:38 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 21:02:01 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,12 @@ void	print_custom_err_err(const char *dingus, const char *gizmo,
 		write(STDERR_FILENO, msg, ft_strlen(msg));
 		write(STDERR_FILENO, "\n", 1);
 	}
+}
+
+void	print_filename_missing(const char *name)
+{
+	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
+	ft_putstr_fd(": ",STDERR_FILENO);
+	ft_putstr_fd(name, STDERR_FILENO);
+	ft_putstr_fd(": filename argument required\n", STDERR_FILENO);
 }

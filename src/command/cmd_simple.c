@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:29:14 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:29:15 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 23:02:51 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static int	_handle_no_command(t_ast_node *a)
 /* Processes args and redirs. Stores several command parameters.
  * Puts node a into cmd c
  * Used by Proc and Simple.
+ * Note: if any arguments are null, like a null heredoc
  */
 int	proc_args_redirs(t_state *s, t_ast_node *a, t_cmd *c)
 {

@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:43 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:44 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 23:56:18 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	_p_do_redirection(void *content)
  *  - output is a dir, aborts command only
  */
 int	p_do_redirections(t_ast_node *a)
-{
+{	
 	if (!a)
 		return (err(EMSG_REDIR_NULLNODE), ERR_ARGS);
 	if (a->type != AST_NODE_CMD && a->type != AST_NODE_PROC)

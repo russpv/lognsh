@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:34:18 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:34:19 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/13 00:13:33 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ t_ast_node	*parse(t_state *s, char *input)
 		return (set_exit_status(s, ERR_GENERAL), print_inv_cmd(), ast);
 	while (!is_at_end(parser) && !parser->parse_error)
 		ast = parse_full_cmd(s, parser);
+	if (NULL == ast)
+		set_exit_status(s, EX_ERNDM);
 	dprintdiv("\n--- Token Parsing Finished ---\n\n");
 	parser->ast = ast;
 	set_parser(s, parser);

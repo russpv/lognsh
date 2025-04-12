@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:34:17 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:34:18 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 23:18:09 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,21 @@ char	**list_to_array(t_mem_mgr *m, t_list *args, int argc)
 	}
 	array[argc] = NULL;
 	return (array);
+}
+
+int	ft_lstiter_redir(t_list *lst, t_redir_ctx *ctx, int (*f)(void *, t_redir_ctx *))
+{
+	int res;
+	
+	res = 0;
+	if (lst == NULL)
+		return (-1);
+	while (lst)
+	{
+		res = f((lst)->content, ctx);
+		if (0 != res)
+			return (res);
+		lst = (lst)->next;
+	}
+	return (0);
 }

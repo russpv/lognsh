@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:32:47 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:32:53 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/13 02:12:57 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,13 @@ static t_tok	*_match_reserved_token(t_state *s, t_lex *lexer)
 		if (SKIPREST == process_special_operators(lexer))
 			continue ;
 		lexer->buf[(lexer->buf_idx)++] = *lexer->ptr++;
-		dvprint(_MOD_ ": ------ Buf: '%s' idx:%d_\n", lexer->buf,
+		if (ft_strnlen(lexer->buf, DEBUG_BUF_SIZE) == DEBUG_BUF_SIZE)
+			dvprint("(TOO MUCH TO PRINT)\n");
+		else
+			dvprint(_MOD_ ": ------ Buf: '%s' idx:%d_\n", lexer->buf,
 			lexer->buf_idx);
+		if (ft_strnlen(lexer->buf, LEX_BUFSZ - 1) == LEX_BUFSZ - 1)
+			return (NULL);
 		res = lex_ht_lookup(s, lexer);
 		if (res)
 			return (res);

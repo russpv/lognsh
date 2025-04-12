@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:31:46 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:31:47 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 23:44:52 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,22 @@ static int	_redirect_pipes(t_state *s, int i)
 {
 	const t_cmd	*c = get_cmd(s);
 	int			**fildes;
-	int			r;
+	int			res;
 
 	fildes = (int **)(get_cmd_fns(s))->c_get_fildes(c);
-	r = -1;
+	res = -1;
 	if (0 == i)
-		r = redirect(&fildes[i][1], NULL, STDOUT_FILENO, NO_APND);
+		res = redirect(&fildes[i][1], NULL, STDOUT_FILENO, NO_APND);
 	else if (i < (get_cmd_fns(s))->c_get_cmdc(c) - 1)
 	{
-		r = redirect(&fildes[i - 1][0], NULL, STDIN_FILENO, NO_APND);
-		if (-1 == r)
+		res = redirect(&fildes[i - 1][0], NULL, STDIN_FILENO, NO_APND);
+		if (-1 == res)
 			return (err(EMSG_EPIPE_REDIR), -1);
-		r = redirect(&fildes[i][1], NULL, STDOUT_FILENO, NO_APND);
+		res = redirect(&fildes[i][1], NULL, STDOUT_FILENO, NO_APND);
 	}
 	else if (i == (get_cmd_fns(s))->c_get_cmdc(c) - 1)
-		r = redirect(&fildes[i - 1][0], NULL, STDIN_FILENO, NO_APND);
-	if (-1 == r)
+		res = redirect(&fildes[i - 1][0], NULL, STDIN_FILENO, NO_APND);
+	if (res < 0)
 		return (err(EMSG_EPIPE_REDIR2), -1);
 	return (0);
 }

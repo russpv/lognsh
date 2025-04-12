@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:54 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/12 17:43:33 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 23:55:50 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,15 @@
 ** Output redirections cause the file to be created or truncated.
 ** Any split words resulting from a filename expansion throw an error
 */
+
+typedef struct s_redir_ctx
+{
+	int						last_in_fd;
+	int						last_out_fd;
+	int						last_append_fd;
+	int						last_heredoc_fd;
+	int						result;
+}							t_redir_ctx;
 
 typedef struct s_pstack
 {
@@ -269,6 +278,8 @@ int							lstiter_state_rwd_trim(t_state *s, t_list **lst,
 int							ft_lstiter_state_ins_rwd_mem(t_state *s,
 								t_list **lst, int (*f)(t_state *, t_list **,
 									void *));
+int							ft_lstiter_redir(t_list *lst, t_redir_ctx *ctx,
+								int (*f)(void *, t_redir_ctx *));
 int							p_is_arg_null(void *c);
 
 /* AST list frees */

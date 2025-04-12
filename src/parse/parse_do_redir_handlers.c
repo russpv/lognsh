@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:42 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:43 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 23:54:44 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	handle_redirect_in(const t_redir_data *node)
 
 	if (!node->filename)
 		return (err(NOFN), ERR_ARGS);
-	if (0 != redirect(NULL, node->filename, STDIN_FILENO, append))
+	if (redirect(NULL, node->filename, STDIN_FILENO, append) < 0)
 		return (err("Input redirection issue\n"), ERR_REDIR);
 	return (0);
 }
@@ -40,7 +40,7 @@ int	handle_heredoc(const t_redir_data *node)
 			MAX_OUTPUT_SZ));
 	if (0 != close(fildes[1]))
 		return (perror(EMSG_CLOSE), ERR_CLOSE);
-	if (0 != redirect(&fildes[0], NULL, STDIN_FILENO, append))
+	if (redirect(&fildes[0], NULL, STDIN_FILENO, append) < 0)
 		return (err("Heredoc redirection issue\n"), ERR_REDIR);
 	return (0);
 }
@@ -51,7 +51,7 @@ int	handle_redirect_out(const t_redir_data *node)
 
 	if (!node->filename)
 		return (err(NOFN), ERR_ARGS);
-	if (0 != redirect(NULL, node->filename, STDOUT_FILENO, append))
+	if (redirect(NULL, node->filename, STDOUT_FILENO, append) < 0)
 		return (err("Output redirection issue\n"), ERR_REDIR);
 	return (0);
 }
@@ -62,7 +62,7 @@ int	handle_redirect_append(const t_redir_data *node)
 
 	if (!node->filename)
 		return (err(NOFN), ERR_ARGS);
-	if (0 != redirect(NULL, node->filename, STDOUT_FILENO, append))
+	if (redirect(NULL, node->filename, STDOUT_FILENO, append) < 0)
 		return (err("Append redirection issue\n"), ERR_REDIR);
 	return (0);
 }

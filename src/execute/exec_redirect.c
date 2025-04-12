@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:31:48 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:32:02 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 23:51:51 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ static inline int	_redirect_logic(char *topath, int from, bool append)
 }
 
 /* REDIRECT()
- * Encapsulates open() and dup2() and returns origin fd
- * or -1
+ * Encapsulates open() and dup2() and returns 0
+ * or negative error codes.
  * Either:
  * 1. Opens input file for reading
  * 2. Opens output file for writing

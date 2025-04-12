@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:29:07 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:29:08 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 21:04:56 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@ static int	_search_path(t_state *s, const char *cmd, char **fullpath)
 
 	i = -1;
 	paths = get_path(s);
-	if (NULL == paths)
+	if (NULL == paths || 0 == ft_strcmp(cmd, "."))
 		return (ERR_CMD_NOT_FOUND);
+	if (0 == ft_strcmp(cmd, ".."))
+		return (ERR_FN_ARG_REQD);
 	while (paths[++i])
 	{
 		tmp = ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, paths[i], "/");
@@ -100,5 +102,7 @@ int	find_and_validate_cmd(t_state *s, const char *name, char **fullpath)
 	}
 	if (ERR_CMD_NOT_FOUND == res)
 		print_command_not_found(name);
+	if (ERR_FN_ARG_REQD == res)
+		print_filename_missing(name);
 	return (res);
 }

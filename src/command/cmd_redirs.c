@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:29:03 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:29:04 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 22:36:01 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ int	save_redirs(t_cmd *c)
 	}
 	return (0);
 }
+/*restore_stdin()
+{
+	
+}*/
+
+
+
 
 int	restore_redirs(t_cmd *c)
 {

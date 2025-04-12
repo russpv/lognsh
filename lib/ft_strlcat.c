@@ -3,13 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 15:52:12 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/03 15:52:12 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/04/12 22:40:17 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../include/libft.h"
+
 /* STRLCAT
 ** Appends src (c-string) to dest of size size (not length)
 ** null-terminates dest **as long as there is room**

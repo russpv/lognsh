@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:29:18 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:29:19 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 22:52:51 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a, char **args)
 	t_mem_mgr			*m;
 
 	if (!s || !a || !cmd)
-		return (ERR_ARGS);
+		return (err("c_argstoargv NULL args\n"), ERR_ARGS);
 	m = get_mem(s);
 	ctxt.args = args;
 	ctxt.argc = p_get_argc(a);

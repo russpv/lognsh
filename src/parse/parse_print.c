@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:34:02 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:34:03 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/13 01:29:47 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	_print_log(t_ast_node *ast, int depth)
 			cprintf(CYAN, "%s", symbol);
 			op_node = op_node->next;
 		}
-		printf("\n");
+		cprintf(RESET, "\n");
 	}
 	cmd_node = ast->data.log.cmds;
 	while (cmd_node != NULL)

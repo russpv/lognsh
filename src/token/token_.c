@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:35:07 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/12 14:12:18 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 23:01:41 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_tok	*create_token(t_mem_mgr *mgr, const char *s, int type, size_t pos)
 			dprint(_MOD_ DMSG_CT, __FUNCTION__, s, type, token->t.tok.raw_len);
 			if (token->t.tok.raw_len > MAX_INT_BUFLEN)
 				return (pbufflow(s), mgr->dealloc(&mgr->list, token), NULL);
-			if (token->t.tok.raw_len == 0 && TOK_EOF != type)
+			if (token->t.tok.raw_len == 0 && TOK_NAME == type && TOK_WORD == type)
 				type = TOK_EMPTY;
 			else
 				token->t.tok.raw = ft_strdup_tmp(mgr, s);

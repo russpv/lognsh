@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-TARGET = minish
+TARGET = minishell
 TEST_TARGET = testsh
 OUTPUT = executable
 

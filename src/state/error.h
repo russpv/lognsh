@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:34:43 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:34:44 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 21:03:11 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@
 # define ERR_EXIT_RANGE 255
 # define ERR_CMD_IS_A_DIR 126
 
+# define ERR_FN_ARG_REQD 2
+
 # define ERR_RL_ABORTED -2
 # define ERR_CMD_GOTSIG -1
 
@@ -94,6 +96,8 @@ void							print_lex_buffer_overflow(void);
 void							print_ambig_redir(const char *orig_fn);
 void							print_too_many_args(const char *caller);
 void							print_redirect_warning(char *topath);
+void							print_filename_missing(const char *name);
+
 void							print_custom_err(const char *dingus,
 									const char *msg);
 void							print_custom_err_err(const char *dingus,

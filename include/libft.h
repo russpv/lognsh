@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 15:17:07 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/12 20:43:50 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 22:39:45 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+#include <stddef.h>
 
 typedef struct s_mem_node
 {

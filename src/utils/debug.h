@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:35:27 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:35:28 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/13 01:58:20 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 # endif
 
 # define DEBUG_BUF_SIZE 80
+
+extern size_t			ft_strnlen(const char *s, size_t maxlen);
 
 typedef struct s_list	t_list;
 

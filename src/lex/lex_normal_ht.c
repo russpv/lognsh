@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:32:34 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:32:35 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/13 01:57:20 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_tok	*lex_ht_lookup(t_state *s, t_lex *lexer)
 	struct s_ht_entry	*res;
 	void				*elem;
 
-	if (ft_strnlen(lexer->buf, LEX_BUFSZ) == 0)
+	if (ft_strnlen(lexer->buf, LEX_BUFSZ - 1) == 0)
 		return (NULL);
 	res = ht_lookup(lexer->hasht, lexer->buf);
 	if (res)
