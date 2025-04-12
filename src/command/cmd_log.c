@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:28:44 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:28:45 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:47:40 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #define HALT_EXEC -1
 #define DBGMSG_CLOGI_ANNOUNCE "Cmd: \t### cmd_exec_log ###\n"
-#define DBGMSG_CLOGI_DONE "Cmd: \t### cmd_exec_log: got exit, returning\n"
+#define DBGMSG_CLOGI_DONE "Cmd: \t### cmd_exec_log: done cmds, returning\n"
 #define DBGMSG_CLOGI_EXECERR "Cmd: \t### cmd_exec_log: got negative exit,\
 	returning\n"
 #define DBGMSG_CLOGI_GOT "Cmd: \t got %d cmds\n"
@@ -53,10 +53,7 @@ static int	_do_log_commands(t_state *s, t_list *cmds, t_cmd *c)
 	{
 		a = (t_ast_node *)cmds->content;
 		dprint(DBGMSG_CLOGI_GOT2, p_get_cmd(a));
-		if (0 != exec_fork_run(s, a, i, cmd_execute_full))
-			return (-1);
-		if (0 != waitchilds(&exit_status, 1))
-			return (-1);
+		exit_status = cmd_execute_full(s, a);
 		if (HALT_EXEC == _do_more_ops(ops, exit_status))
 			break ;
 		cmds = cmds->next;
@@ -66,6 +63,7 @@ static int	_do_log_commands(t_state *s, t_list *cmds, t_cmd *c)
 	return (exit_status);
 }
 
+/* Does not fork/exec, delegates this to cmd_execute_full */
 int	cmd_exec_log(t_state *s, t_ast_node *node)
 {
 	t_cmd	*cmd;

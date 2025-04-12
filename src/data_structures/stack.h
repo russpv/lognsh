@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:31:24 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:31:25 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:46:56 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_int_stack	t_int_stack;
 
 t_int_stack					*st_int_create(t_mem_mgr *m);
 void						st_int_destroy(t_mem_mgr *m, t_int_stack *s);
+t_int_stack					*st_int_copy(t_mem_mgr *m, t_int_stack *ref);
 int							st_int_push(t_int_stack *s, int thing);
 int							st_int_pop(t_int_stack *s);
 int							st_int_peek(t_int_stack *s);

@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:17 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:18 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:31:30 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_mem_block	*mem_init_block(void)
 {
 	t_mem_block	*new;
 
-	new = malloc(sizeof(struct s_mem_block));
+	new = (t_mem_block *)malloc(sizeof(struct s_mem_block));
 	if (new)
 	{
 		new->node.next = NULL;

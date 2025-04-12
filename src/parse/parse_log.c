@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:56 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:57 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 14:07:41 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,6 @@ t_ast_node	*parse_logical(t_state *s, t_parser *p)
 	res = _process_log(s, p, ast_node);
 	if (0 != res)
 	{
-		//print_parse_error(s, tok_get_raw((p->curr_tok)->prev->content),
-		//	tok_get_pos((p->curr_tok)->prev->content));
 		destroy_ast_node(get_mem(s), (void **)&ast_node);
 		set_error(s, res);
 		return (NULL);

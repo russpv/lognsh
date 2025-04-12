@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:32:05 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:32:06 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:43:46 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int	exec_fork_execve(t_state *s)
 	if (SH_SIGINT == exit_code)
 		write(STDOUT_FILENO, "\n", 1);
 	exit_code = handle_exit(s, exit_code);
-	s_free_cmd(s);
 	sig_set_handlers(INT_DFL);
 	return (exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:34:56 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:34:57 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 17:26:16 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define LVL_KEY "SHLVL"
 # define CWD_KEY "PWD"
 # define _MOD_ "State"
+# define STATE_MAGIC 0xDEADBEEF
 
 struct							s_global_state
 {
@@ -51,6 +52,8 @@ struct							s_global_state
 	t_cmd_fns					*cmd_fns;
 	t_lex_fns					*lex_fns;
 	t_parse_fns					*parse_fns;
+
+	unsigned int				magic;
 };
 
 void	init_env_vars(t_state *s);

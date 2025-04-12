@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:34:31 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:34:32 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 14:05:28 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	clear_current_line(void)
 {
 	rl_on_new_line();
-	//rl_replace_line("", RETAIN_HIST);
+	rl_replace_line("", RETAIN_HIST);
 	rl_redisplay();
 }
 

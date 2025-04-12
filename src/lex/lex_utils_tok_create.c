@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:04 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:05 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 14:06:59 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ t_tok	*lex_create_token(t_mem_mgr *m, t_lex *lexer, int type)
 		lexer->last_grp_tok = grp_token;
 		dprint(_MOD_ ": %s: Created GROUP token\n", __FUNCTION__);
 	}
-	if (0 == ft_strlen(lexer->buf))//TEST THAT THIS NULL TOKEN WORKS INSTEAD OF return (NULL);
-		;
+	if (0 == ft_strlen(lexer->buf))
+		(void)0;
 	token = create_token(m, lexer->buf, type, (size_t)(lexer->ptr
 				- lexer->raw_string));
 	if (token)

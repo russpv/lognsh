@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:32:25 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:32:26 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 16:47:06 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,9 @@ static bool	_is_dquote_transition_delim(t_lex *l)
 	return (false);
 }
 
-/* Note: add special parameters here */
+/* Moves the lexer pointer if an escape present
+ * Note: add special parameters here
+ */
 static inline t_tok	*_process_dquote_logic(t_state *s, t_lex *lexer)
 {
 	if ((unsigned char)TK_ESC == *lexer->ptr)
@@ -96,8 +98,10 @@ static inline t_tok	*_match_double(t_state *s, t_lex *lexer)
 			put_on_buf(lexer);
 		}
 		lexer->input_incomplete = true;
-		if (false == is_normal_delim(lexer, 0))
+		if (false == is_normal_delim(lexer, 0) || lexer->last_grp_tok)
+		{
 			lexer->is_subtoken = true;
+		}
 		token = lex_create_token(get_mem(s), lexer, TOK_WORD);
 	}
 	return (token);

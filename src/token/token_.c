@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:35:07 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:35:08 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 14:12:18 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 #define DMSG_CT ": %s: %s_ typ_%02d len_%ld\n"
 
-static void	_init_group_token(t_tok *token, size_t pos)
+static void	_init_group_token(t_tok *token, size_t pos, int type)
 {
+	dprint(_MOD_ ": %s: (grp) typ_%02d \n", __FUNCTION__, type);
 	token->class = GROUP;
 	token->t.meta.pos = pos;
 	token->t.meta.tokc = 0;
@@ -48,10 +49,7 @@ t_tok	*create_token(t_mem_mgr *mgr, const char *s, int type, size_t pos)
 	if (token)
 	{
 		if (type == TOK_GROUP_WORD)
-		{
-			dprint(_MOD_ ": %s: (grp) typ_%02d \n", __FUNCTION__, type);
-			_init_group_token(token, pos);
-		}
+			_init_group_token(token, pos, type);
 		else
 		{
 			token->t.tok.raw = NULL;

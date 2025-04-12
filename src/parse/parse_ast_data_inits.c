@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:25 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:26 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 17:45:57 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node,
 /* t_arg_data llist copy constructor using a llist of char*.
  * Returns new void *content for llist construction/duplication.
  * Post processing, t_arg_data member values are no longer useful
- * Copies content.
+ * Copies content. Ensures globbing pass is done.
  */
 void	*create_arg_data_node_deep(t_mem_mgr *mgr, const void *content)
 {

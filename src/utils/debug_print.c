@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   debug_print.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/12 14:08:43 by rpeavey           #+#    #+#             */
+/*   Updated: 2025/04/12 14:09:12 by rpeavey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "debug.h"
 
 void	dprintdiv(const char *format, ...)
@@ -16,8 +28,8 @@ void	dprintdiv(const char *format, ...)
 void	dprint(const char *format, ...)
 {
 	va_list	args;
-	size_t n;
-	char buf[DEBUG_BUF_SIZE];
+	size_t	n;
+	char	buf[DEBUG_BUF_SIZE];
 
 	if (DEBUG && isatty(STDERR_FILENO))
 	{

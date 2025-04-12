@@ -6,13 +6,12 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:26:52 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 17:00:23 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 20:30:22 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bi_int.h"
 #define CMD_NAME "export"
-#define EMSG_INVLD "invalid state or arguments\n"
 #define MSG_NOARGS "results are not specified with no arguments(refer to man)\n"
 
 static int	_do_logic(t_state *s, char **argv, int argc, int *error_occurred)
@@ -31,7 +30,9 @@ static int	_do_logic(t_state *s, char **argv, int argc, int *error_occurred)
 			continue ;
 		}
 		if (0 != parse_arg(s, argv[i], error_occurred, got_good_arg))
+		{
 			return (ERR_GENERAL);
+		}
 		got_good_arg = 1;
 		i++;
 	}

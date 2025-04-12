@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:35:03 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:35:04 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 17:25:49 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static inline void	_init_state_ptrs(t_state *s)
 	s->got_heredoc = false;
 	s->tmp_flag = 0;
 	s->path = NULL;
+	s->magic = STATE_MAGIC;
 }
 
 /* Note: fns structs are destroyed by allocator */

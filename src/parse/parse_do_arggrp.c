@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:32 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:33 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:40:29 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,6 @@ static int	_do_wordsplits(t_state *s, t_arg_data *grparg)
 	return (0);
 }
 
-// Saves list in state
-static int	_do_globbing(t_state *s, t_arg_data *grparg)
-{
-	t_list	**saved_lst;
-
-	if (!grparg || !s)
-		return (ERR_ARGS);
-	saved_lst = get_tmp_tok_list(s);
-	if (grparg->do_globbing || grparg->do_expansion)
-	{
-		ft_lstiter_ins_rwd_tmp(get_mem(s), saved_lst, p_do_globbing_toks);
-	}
-	lgprint("Globbing Done.\n");
-	return (0);
-}
-
 // Saves modified token list in state cache
 static int	_do_combine(t_state *s, t_arg_data *grparg)
 {
@@ -81,6 +65,22 @@ static int	_do_combine(t_state *s, t_arg_data *grparg)
 		tok_print_list(*tok_lst);
 	}
 	lgprint("Combines and Inserts Done.\n");
+	return (0);
+}
+
+// Saves list in state
+static int	_do_globbing(t_state *s, t_arg_data *grparg)
+{
+	t_list	**saved_lst;
+
+	if (!grparg || !s)
+		return (ERR_ARGS);
+	saved_lst = get_tmp_tok_list(s);
+	if (grparg->do_globbing || grparg->do_expansion)
+	{
+		ft_lstiter_ins_rwd_tmp(get_mem(s), saved_lst, p_do_globbing_toks);
+	}
+	lgprint("Globbing Done.\n");
 	return (0);
 }
 

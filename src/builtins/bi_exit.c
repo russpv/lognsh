@@ -6,14 +6,14 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:26:32 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:26:33 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 20:45:07 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bi_int.h"
 
 #define CMD_NAME "exit"
-#define EMSG_NONNUM "numeric argument required"
+#define EMSG_NONNUM "numeric argument required\n"
 #define EMSG_CHEEKY "definitely not a valid integer\n"
 #define MAX_ARGSZ 20
 #define MAX_INTSTRLEN 10
@@ -23,14 +23,14 @@
 static int	_load_buf(char buf[], const char *str)
 {
 	int	i;
-	int	j;
 	int	buf_idx;
 
 	buf_idx = 0;
 	i = 0;
-	j = 0;
-	if (str[0] == '-' || str[0] == '+')
-		buf[buf_idx++] = str[++i];
+	if (str[0] == '-')
+		buf[buf_idx++] = str[i++];
+	else if (str[0] == '+')
+		i++;
 	while (str[i] && str[i] == '0')
 		i++;
 	while (str[i] && buf_idx < MAX_ARGSZ - 1)
@@ -38,12 +38,11 @@ static int	_load_buf(char buf[], const char *str)
 		if (str[i] != '\"' && (str[i] < '0' || str[i] > '9'))
 			return (-1);
 		if (str[i] != '\"')
-		{
 			buf[buf_idx++] = str[i++];
-			j++;
-		}
 	}
-	if (j >= MAX_INTSTRLEN)
+	if (buf_idx  > MAX_INTSTRLEN + (buf[0] == '-'))
+		return (print_custom_err(CMD_NAME, EMSG_CHEEKY), -1);
+	if (ft_atoi(buf) > INT_MAX || ft_atoi(buf) < INT_MIN)
 		return (print_custom_err(CMD_NAME, EMSG_CHEEKY), -1);
 	return (0);
 }

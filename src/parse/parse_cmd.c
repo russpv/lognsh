@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:27 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:28 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 17:45:29 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static t_ast_node	*_init_cmd_node(t_mem_mgr *m)
 		node->data.cmd.argc = 0;
 		node->data.cmd.name = NULL;
 		node->data.cmd.do_expansion = false;
-		node->data.cmd.do_globbing = false;
+		node->data.cmd.do_globbing = true;
 		node->data.cmd.do_wordsplit = false;
 		node->data.cmd.do_redir_globbing = false;
 		node->data.cmd.do_redir_expansion = false;

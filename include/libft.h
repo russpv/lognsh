@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 15:17:07 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/10 16:37:15 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 20:43:50 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ t_bool						ft_isspace(int c);
 ** Conversions
 */
 
-int							ft_atoi(const char *str);
+long						ft_atoi(const char *str);
 char						*ft_itoa_mem(t_mem_node *head, t_alloc_fn f,
 								int num);
 void						ft_freearr_mem(t_mem_node *head,

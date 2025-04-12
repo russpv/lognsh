@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:32:57 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:32:58 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 17:12:09 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ int	do_state_transition(t_lex *lexer)
 	if (handle_quote_state(lexer))
 		return (0);
 	lexer->state = NORMAL;
+	lexer->do_wordsplit = true;
 	lexer->tokenizer = tokenize_normal;
 	return (0);
 }

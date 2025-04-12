@@ -23,10 +23,10 @@ TESTDIR = test
 
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address # -DDEBUGMODE -DLOGMODE -DDEBUGVERBOSE #-fsanitize=address  #
+CFLAGS = -Wall -Wextra -Werror -g -DLOGMODE -DDEBUGMODE -DDEBUGVMODE #-fsanitize=address # #-fsanitize=address  #
 TEST_CFLAGS = -Wall  -g -DTESTMODE  # -Werror -Wextra
 EXT_CFLAGS = -DEXTENDEDFUNC
-LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses -fsanitize=address #
+LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses #-fsanitize=address #
 LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
 
 ifeq ($(shell uname), Darwin)  # macOS

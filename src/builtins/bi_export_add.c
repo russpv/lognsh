@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:26:44 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:26:45 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 20:22:37 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 #define CMD_NAME "export"
 #define EMSG_BADMALLOC "memory allocation failed.\n"
-#define EMSG_KEY_NOTVALID "not a valid identifier\n"
 
 // Returns key string, or copy of arg if no equal sign found
 static int	_extract_key(char key[], const char *arg, char *equal_pos)

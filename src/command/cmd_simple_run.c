@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:29:10 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:29:11 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 16:16:21 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	_locate_cmd(t_state *s, t_ast_node *a, t_cmd *c)
 
 	exit_status = find_and_validate_cmd(s, p_get_cmd(a), &c->fullpath);
 	if (0 != exit_status)
-		return (s_free_cmd(s), exit_status);
+		return (exit_status);
 	if (c->fullpath)
 		lgprint(LOGMSG_RUNC_GOT, c->fullpath);
 	return (0);
@@ -68,8 +68,8 @@ int	run_cmd(t_state *s, t_ast_node *a)
 	c = get_cmd(s);
 	exit_status = _locate_cmd(s, a, c);
 	if (0 != exit_status)
-		return (s_free_cmd(s), exit_status);
+		return (exit_status);
 	dprint(_MOD_ ": %s: exec'g\n", __FUNCTION__);
 	exit_status = _execute(s, c);
-	return (s_free_cmd(s), exit_status);
+	return (exit_status);
 }

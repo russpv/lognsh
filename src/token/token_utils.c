@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:35:21 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:35:22 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 14:08:10 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static void	_print_tok(t_tok *tok, bool is_sub)
 {
-	char *name;
-	const char *nil_name = "NIL";
+	char		*name;
+	const char	*nil_name = "NIL";
 
 	if (tok->t.tok.raw)
 		name = tok->t.tok.raw;
@@ -25,16 +25,16 @@ static void	_print_tok(t_tok *tok, bool is_sub)
 	{
 		lgprint(_MOD_": Stok:%02d Exp:%d Glb:%d Sub:%d Dq:%d +:%d Val:(%s)\
 			\n", tok->t.tok.type, tok->t.tok.do_expansion,
-		tok->t.tok.do_globbing, tok->t.tok.is_subtoken,
-		tok->t.tok.in_dquotes, tok->t.tok.is_combinable,
-		name);
+			tok->t.tok.do_globbing, tok->t.tok.is_subtoken,
+			tok->t.tok.in_dquotes, tok->t.tok.is_combinable,
+			name);
 	}
 	else
 		lgprint(_MOD_": Tok:%02d Exp:%d Glb:%d Sub:%d Dq:%d +:%d Val:(%s)\
 			\n", tok->t.tok.type, tok->t.tok.do_expansion,
-		tok->t.tok.do_globbing, tok->t.tok.is_subtoken,
-		tok->t.tok.in_dquotes, tok->t.tok.is_combinable,
-		name);
+			tok->t.tok.do_globbing, tok->t.tok.is_subtoken,
+			tok->t.tok.in_dquotes, tok->t.tok.is_combinable,
+			name);
 }
 
 int	tok_print(void *content)

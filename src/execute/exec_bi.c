@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:31:41 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:31:42 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:43:51 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,5 @@ int	exec_bi_call(t_state *s, t_builtin_fn bi, t_cmd_fns *cf)
 		dprint("Exec: %s: ERR bi()\n", __FUNCTION__);
 	cf->restore_redirs((t_cmd *)c);
 	set_exit_status(s, exit_code);
-	s_free_cmd(s);
 	return (exit_code);
 }

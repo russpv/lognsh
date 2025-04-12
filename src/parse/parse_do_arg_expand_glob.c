@@ -6,14 +6,14 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:28 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:29 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:49:02 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse_int.h"
 
-#define DBGMSG_GOTARGS "%s: %s - arg: %s, lst:%p\n"
-#define DBGMSG_MATCHES "Parse: %s found %d matches, 1st: %s\n"
+#define DBGMSG_GOTARGS "Parse: %s - arg: %s, lst:%p\n"
+#define DM_MS "Parse: %s found %d matches, 1st: %s\n"
 
 // Tests whether globstar is preceded with escape char
 static bool	_has_globbing(const char *raw)
@@ -50,13 +50,33 @@ int	p_do_globbing_toks(t_mem_mgr *mgr, t_list **lst_node, void *lst_c)
 		lst = match_glob(mgr, tok_get_raw(tok));
 		if (lst)
 		{
-			dprint(DBGMSG_MATCHES, ft_lstsize(lst), lst->content);
+			dprint(DM_MS, __FUNCTION__, ft_lstsize(lst), lst->content);
 			res = do_tok_inserts(mgr, lst_node, &lst, create_tmp_token);
 			if (0 != res)
 				return (res);
 		}
 	}
 	return (0);
+}
+
+static void	_do_stuff(t_mem_mgr *mgr, t_list **lst_node, t_list **ins_lst)
+{
+	t_list	*new_arg_data_lst;
+	bool	reattach_head;
+	t_list	*head;
+
+	new_arg_data_lst = NULL;
+	reattach_head = false;
+	new_arg_data_lst = ft_lstmap_tmp(mgr, *ins_lst, create_arg_data_node_deep,
+			destroy_arg);
+	ft_lstadd_insert(lst_node, new_arg_data_lst);
+	head = ft_lstfirst(*lst_node);
+	if (head == *lst_node)
+		reattach_head = true;
+	ft_lstdelone_rwd_tmp(mgr, &head, lst_node, destroy_arg);
+	if (reattach_head)
+		*lst_node = head;
+	ft_lstclear_str_tmp(mgr, ins_lst);
 }
 
 /*
@@ -70,18 +90,12 @@ int	p_do_globbing_toks(t_mem_mgr *mgr, t_list **lst_node, void *lst_c)
 int	do_arg_inserts(t_mem_mgr *mgr, t_list **lst_node, t_list **ins_lst,
 		t_arg_data *content)
 {
-	t_list	*new_arg_data_lst;
 	char	*new_arg;
 
-	new_arg_data_lst = NULL;
 	new_arg = NULL;
 	if (ft_lstsize(*ins_lst) > 1)
 	{
-		ft_lstdelone_rwd_tmp(mgr, lst_node, lst_node, destroy_arg);
-		new_arg_data_lst = ft_lstmap_tmp(mgr, *ins_lst,
-				create_arg_data_node_deep, destroy_arg);
-		ft_lstadd_insert(lst_node, new_arg_data_lst);
-		ft_lstclear_str_tmp(mgr, ins_lst);
+		_do_stuff(mgr, lst_node, ins_lst);
 	}
 	else
 	{
@@ -129,13 +143,12 @@ int	p_do_globbing_args(t_mem_mgr *mgr, t_list **lst_node, void *lst_c)
 	if (!arg->raw)
 		return (ERR_ARGS);
 	dvprint(DBGMSG_GOTARGS, __FUNCTION__, arg->raw, (void *)lst_node);
-	if (true == arg->do_globbing)
+	if (true == arg->do_globbing || true == _has_globbing(arg->raw))
 	{
 		lst = match_glob(mgr, arg->raw);
 		if (lst)
 		{
-			dprint(DBGMSG_MATCHES, __FUNCTION__, ft_lstsize(lst),
-				lst->content);
+			dprint(DM_MS, __FUNCTION__, ft_lstsize(lst), lst->content);
 			res = do_arg_inserts(mgr, lst_node, &lst, arg);
 			if (0 != res)
 				return (res);

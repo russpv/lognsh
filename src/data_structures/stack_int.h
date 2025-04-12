@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:31:20 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:31:21 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:45:26 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 # define STACK_INT_H
 
 # include "stack.h"
+# include "../utils/debug.h"
 
 # define MAX_ST_DEPTH 10
-# include "../utils/debug.h"
+# define DBGMSG_STPUSH_OVERFLOW "ERROR Stack overflow!\n"
+# define DBGMSG_STPOP_UNDERFL "ERROR Stack underflow!\n"
 
 struct						s_int_stack
 {

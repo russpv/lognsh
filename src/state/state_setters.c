@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:35:01 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:35:02 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:39:52 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ void	set_input(t_state *s, char *input)
 	if (len == MAX_INPUT_SZ)
 		return ;
 	s->input = input;
+	if (s == NULL || s->magic != STATE_MAGIC)
+	{
+		dprint("Bad state in set_input! s=%p, magic=0x%X\n", s,
+			s->magic);
+		exit_clean(&s->mem_mgr.list, ENOMEM, __FUNCTION__, NULL);
+	}
 	if (NULL != input)
 		mem_add_mem(&s->mem_mgr.list, input, len + 1);
 }

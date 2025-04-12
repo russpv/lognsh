@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:03 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:04 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:43:26 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,11 @@ static void	_commit_token_or_subtoken(t_mem_mgr *m, t_lex *lexer, t_tok *token)
 		_add_subtoken(m, lexer, token);
 		dprint(_MOD_ ": %s checking delimiter, ptr:%c\n", __FUNCTION__,
 			*lexer->ptr);
-		if (is_normal_delim(lexer, 0))
+		if (NORMAL == lexer->state && is_normal_delim(lexer, 0))
+		{
+			dprint(_MOD_ ": %s adding grptoken\n", __FUNCTION__);
 			add_grptoken(m, lexer);
+		}
 	}
 	else
 	{

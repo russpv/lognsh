@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:26:48 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 17:15:09 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 20:30:43 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,13 @@ static int	_validate_key(const char *key, int got_good_arg)
 		if (ft_isspace(key[0]))
 			if (1 == got_good_arg)
 				return (EMPTY_KEY);
-		print_custom_err(CMD_NAME, EMSG_KEY_NOTVALID);
 		return (ERR_GENERAL);
 	}
 	i = 1;
 	while (key[i])
 	{
-		fprintf(stderr, "testing key[i] got= %s_\n", key);
 		if (!ft_isalnum(key[i]) && key[i] != '_')
-			print_custom_err(CMD_NAME, EMSG_KEY_NOTVALID);
+			return (ERR_GENERAL);
 		i++;
 	}
 	return (0);
@@ -81,8 +79,14 @@ int	parse_arg(t_state *s, const char *arg, int *error_occurred, \
 	if (EMPTY_KEY == res)
 		return (0);
 	else if (0 != res)
+	{
+		print_custom_err(CMD_NAME, EMSG_KEY_NOTVALID);
 		return (ERR_GENERAL);
+	}
 	if (0 != process_arg_update_add(s, arg, equal_pos, error_occurred))
+	{
+		print_custom_err(CMD_NAME, EMSG_INVLD);
 		return (ERR_GENERAL);
+	}
 	return (0);
 }

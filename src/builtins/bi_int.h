@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:27:14 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:56:50 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/12 20:30:54 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # define EMSG_OPT "No options provided. Sorry!"
 # define EMSG_ARGC "No args for you! (Not implemented)"
+# define EMSG_INVLD "invalid state or arguments\n"
 
 int		bi_echo(t_state *s, char **args, int argc);
 int		bi_pwd(t_state *s, char **args, int argc);

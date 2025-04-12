@@ -82,8 +82,6 @@ DEFINE_E2E_TEST(test_ctrl_d_behavior, "echo hello <ctrl-D>");  // ctrl-D should 
 DEFINE_E2E_TEST(test_ctrl_backslash_behavior, "echo hello <ctrl-\\> echo world");  // ctrl-\ does nothing
 
 
-// TODO :syntax error near unexpected token `...:
-// TODO : line 1: /home/rpeavey/.local/bin:/home/rpeavey/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin: No such file or directory
 /* Redirs */
 DEFINE_E2E_TEST(test_input_redirection, "echo hello < input.txt"); // FAIL, need to halt command if redir fails
 DEFINE_E2E_TEST(test_output_redirection, "echo hello > output.txt");

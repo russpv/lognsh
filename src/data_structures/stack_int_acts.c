@@ -1,36 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stack_ptr.c                                        :+:      :+:    :+:   */
+/*   stack_int_acts.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:31:23 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/12 19:45:30 by rpeavey          ###   ########.fr       */
+/*   Created: 2025/04/12 19:45:42 by rpeavey           #+#    #+#             */
+/*   Updated: 2025/04/12 19:46:03 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "stack_int.h"
 
-t_ptr_stack	*st_ptr_create(t_mem_mgr *m)
-{
-	t_ptr_stack	*s;
-
-	s = m->f(&m->list, sizeof(struct s_ptr_stack));
-	if (s)
-	{
-		ft_memset(&s->st, 0, MAX_ST_DEPTH * sizeof(void *));
-		s->depth = 0;
-	}
-	return (s);
-}
-
-void	st_ptr_destroy(t_mem_mgr *m, t_ptr_stack *s)
-{
-	m->dealloc(&m->list, s);
-}
-
-int	st_ptr_push(t_ptr_stack *s, void *thing)
+int	st_int_push(t_int_stack *s, int thing)
 {
 	if (s->depth >= MAX_ST_DEPTH)
 	{
@@ -42,14 +24,14 @@ int	st_ptr_push(t_ptr_stack *s, void *thing)
 	return (0);
 }
 
-void	*st_ptr_pop(t_ptr_stack *s)
+int	st_int_pop(t_int_stack *s)
 {
-	void	*tmp;
+	int	tmp;
 
 	if (s->depth == 0)
 	{
 		dprint(DBGMSG_STPOP_UNDERFL);
-		return (NULL);
+		return (-1);
 	}
 	tmp = s->st[s->depth - 1];
 	s->st[s->depth - 1] = 0;
@@ -57,13 +39,13 @@ void	*st_ptr_pop(t_ptr_stack *s)
 	return (tmp);
 }
 
-/* Returns top ptr on stack or -1 if empty */
-void	*st_ptr_peek(t_ptr_stack *s)
+/* Returns top number on stack or -1 if empty */
+int	st_int_peek(t_int_stack *s)
 {
-	void	*thing;
+	int	thing;
 
 	if (s->depth == 0)
-		return (NULL);
+		return (-1);
 	thing = s->st[s->depth - 1];
 	return (thing);
 }
