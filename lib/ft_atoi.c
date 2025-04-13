@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 15:26:17 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/12 20:43:33 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/13 13:57:36 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 long	ft_atoi(const char *s)
 {
 	long	num;
-	int	flag;
+	int		flag;
 
 	flag = 1;
 	num = 0;

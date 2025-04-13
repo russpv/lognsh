@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:08:43 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/13 02:04:31 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/13 13:57:52 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	dvprint(const char *format, ...)
 
 	if (DEBUGVERBOSE && isatty(STDERR_FILENO))
 	{
-	
 		va_start(args, format);
 		fprintf(stderr, BLUE "[PID %d] [DEBUG] ", getpid());
 		vfprintf(stderr, format, args);

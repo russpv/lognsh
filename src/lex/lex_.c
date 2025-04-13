@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:32:19 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/12 23:39:19 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/13 13:59:34 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_lex	*tokenize(t_state *s, const char *input)
 {
 	enum e_lex_state	state;
 	t_lex				*lexer;
-	int 				res;
+	int					res;
 
 	_init_lexer_state(input, &state);
 	lexer = create_lexer(s, state, input);

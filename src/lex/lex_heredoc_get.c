@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:32:30 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:32:31 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/13 13:59:24 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	match_heredoc(t_mem_mgr *m, t_lex *l)
 			return (0);
 		}
 		if (0 != _load_line(l, line))
-			return(free(line), ERR_RL_ABORTED);
+			return (free(line), ERR_RL_ABORTED);
 		free(line);
 	}
 }

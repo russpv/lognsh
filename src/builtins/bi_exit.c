@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:26:32 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/13 01:41:08 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/13 14:01:14 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	_load_buf(char buf[], const char *str)
 	}
 	if (0 == str[i] && 0 == buf_idx)
 		buf[buf_idx] = '0';
-	if (buf_idx  > MAX_INTSTRLEN + (buf[0] == '-'))
+	if (buf_idx > MAX_INTSTRLEN + (buf[0] == '-'))
 		return (print_custom_err(CMD_NAME, EMSG_CHEEKY), -1);
 	if (ft_atoi(buf) > INT_MAX || ft_atoi(buf) < INT_MIN)
 		return (print_custom_err(CMD_NAME, EMSG_CHEEKY), -1);

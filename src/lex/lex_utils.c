@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:33:05 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:06 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/04/13 14:00:35 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ bool	is_too_long(t_lex *l, const char *input)
 {
 	if (NULL == input)
 		return (true);
-	if (ft_strnlen(input, LEX_BUFSZ) >= LEX_BUFSZ - ft_strnlen(l->buf, LEX_BUFSZ))
+	if (ft_strnlen(input, LEX_BUFSZ) >= \
+		LEX_BUFSZ - ft_strnlen(l->buf, LEX_BUFSZ))
 	{
 		dprint(_MOD_ ": ERROR: Input exceeds buf size.\n");
 		print_lex_buffer_overflow();
@@ -58,9 +59,9 @@ int	put_on_buf(t_lex *l)
 	return (0);
 }
 
-void		lex_set_err(t_lex *l)
+void	lex_set_err(t_lex *l)
 {
 	if (!l)
-		return;
+		return ;
 	l->lex_err = 1;
 }
