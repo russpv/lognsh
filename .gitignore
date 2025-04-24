@@ -14,3 +14,4 @@ libft.a
 lib/libft.a
 bin/
 crap
+*.bak

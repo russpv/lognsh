@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lex.h                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:33:06 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:07 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef LEX_H
 # define LEX_H
@@ -17,6 +6,7 @@
 # include "../data_structures/hashtable.h"
 # include "../data_structures/llist.h"
 # include "../data_structures/stack.h"
+# include "../state/state.h"
 # include "../token/token.h"
 # include <stdbool.h>
 

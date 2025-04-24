@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   globals.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:32:18 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/13 01:54:27 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef GLOBALS_H
 # define GLOBALS_H
@@ -26,8 +15,14 @@
 # define MAX_INPUT_SZ 4096
 # define MAX_OUTPUT_SZ 4096  // pipes
 # define MAX_NAME_LEN 50     // export names, token raws, error msgs, fns,
+# define MAX_VAL_LEN LEX_BUFSZ - MAX_NAME_LEN //export values
 # define MAX_INT_BUFLEN 1024 // token raw len
 # define IFS " \t\n"
+
+/* Lexer */
+# define LEX_MAX_TOKC 1000
+# define LEX_BUFSZ 1024
+# define MAX_HDOCSZ LEX_BUFSZ
 
 extern volatile sig_atomic_t	g_last_signal;
 

@@ -1,37 +1,25 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lex_.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:32:19 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/13 13:59:34 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "lex_int.h"
 
 /*
-** These are the conditions for exiting DOLLAR mode
-** ... (end of valid name)
+** Conditions for exiting DOLLAR mode
+** - ... (end of valid name)
 **
 ** These are the conditions for tokenizing full tokens
-** ...&& not ...&
-** ...|[|]
-** ...<* ...>*
-** ...( or )
-** ...\n or \t or ' '
+** - ...&& not ...&
+** - ...|[|]
+** - ...<* >*
+** - ...( or )
+** - ...\n or \t or ' '
 **
 ** These are the conditions for tokenizing subtokens
-** ...\' ...\'
-** ...\" ...\"
-** ...$?
-** ...$[varname]
+** - ...\' ...\'
+** - ...\" ...\"
+** - ...$? and ...$[varname]
 **
-** Any of the states must stop on the tokenizing delimiters
-** All state transitions otherwise signify subtokens unless
-** a tokenizing delimiter also follows.
+** Any state must stop on tokenizing delimiters.
+** State transitions otherwise imply subtokens unless
+** followed immediately by another tokenizing delimiter.
 */
 
 static void	_init_lexer_state(const char *input, enum e_lex_state *state)

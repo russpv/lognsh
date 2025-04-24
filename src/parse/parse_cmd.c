@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_cmd.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:33:27 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/12 17:45:29 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "parse_int.h"
 
@@ -115,7 +104,7 @@ static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 	if (false == is_cmd_token(peek(p)))
 	{
 		set_exit_status(s, EX_ERNDM);
-		print_nocmd_error(s, tok_get_raw(previous(p)), tok_get_pos(peek(p)));
+		print_nocmd_error(s, tok_get_raw(prev(p)), tok_get_pos(peek(p)));
 		return (err("Expected a command token, but none found\n"), ERR_SYNTAX);
 	}
 	if (false == is_expansion(peek(p)) && false == is_group_token(peek(p)))
@@ -137,7 +126,8 @@ t_ast_node	*parse_cmd(t_state *s, t_parser *p)
 	t_ast_node	*ast_node;
 	int			res;
 
-	st_int_push(p->st, AST_NODE_CMD);
+	if (0 != st_int_push(p->st, AST_NODE_CMD))
+		return (set_parse_err(p), NULL);
 	dprint(_MOD_ ": %s: tok: %s\n", __FUNCTION__, tok_get_raw(peek(p)));
 	ast_node = _init_cmd_node(p->mmgr);
 	if (NULL == ast_node)

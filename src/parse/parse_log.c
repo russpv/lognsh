@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_log.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:33:56 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/12 14:07:41 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "parse_int.h"
 
@@ -33,7 +22,7 @@ static int	_process_cmd(t_parser *p, t_ast_node *log_node)
 		log_node->data.log.cmdc++;
 	}
 	else
-		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LMEM);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LMEM); //consider bubbling up 
 	return (0);
 }
 
@@ -50,22 +39,29 @@ static int	_process_op(t_parser *p, t_ast_node *log_node)
 	if (op)
 		ft_lstadd_back(&log_node->data.log.operators, op);
 	else
-		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LMEMO);
+		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_LMEMO); //consider bubbling up 
 	return (0);
 }
 
-static int	_do_ops(t_state *s, t_parser *p, t_ast_node *log_node)
+static int	_do_next_cmd_ops(t_state *s, t_parser *p, t_ast_node *log_node)
 {
-	if (NULL == parse_full_cmd(s, p))
+	t_tok *res;
+
+	if (false == is_cmd_token(peek(p)))
+		return (print_parse_error(s, tok_get_raw(prev(p)), tok_get_pos(prev(p))), err(EMSG_LOGI_PARSE), ERR_GENERAL);
+	if (NULL == parse_full_cmd(s, p)) //TODO add checks for malformed left cmd
 		return (err(EMSG_LOGI_PARSE), ERR_GENERAL);
-	if (peek(p) == which_lower_priority(log_node, peek(p)))
+	res = which_lower_priority(log_node, peek(p));
+	if (peek(p) == res)
 	{
 		if (0 != _process_cmd(p, log_node))
 			return (ERR_GENERAL);
 	}
+	else if ((void *)-1 == res)
+		return (err(EMSG_LOGI_PARSE), ERR_SYNTAX);
 	else
 	{
-		if (NULL == parse_full_cmd(s, p))
+		if (NULL == parse_full_cmd(s, p)) //TODO add checks for malformed right cmd
 			return (err(EMSG_LOGI_PARSE), ERR_GENERAL);
 		if (0 != _process_cmd(p, log_node))
 			return (ERR_GENERAL);
@@ -74,7 +70,7 @@ static int	_do_ops(t_state *s, t_parser *p, t_ast_node *log_node)
 }
 
 /* Adds commands and logical operator to logical ast_node
- * Must have parsed an ast_node prior.
+ * Must have parsed an (CMD) ast_node prior. 
  * Determines whether to add the following command or to
  * let it associate with higher priority next operator.
  */
@@ -86,6 +82,8 @@ static int	_process_log(t_state *s, t_parser *p, t_ast_node *log_node)
 		return (ERR_ARGS);
 	if (NULL == p->last_node)
 		return (ERR_SYNTAX);
+	if (AST_NODE_CMD != p->last_node->type)
+		return (ERR_SYNTAX);
 	if (0 != _process_cmd(p, log_node))
 		return (ERR_GENERAL);
 	while (!is_at_end(p) && is_log_token(peek(p)))
@@ -94,7 +92,7 @@ static int	_process_log(t_state *s, t_parser *p, t_ast_node *log_node)
 			return (ERR_GENERAL);
 		advance(p);
 		dprint(_MOD_ ": parsing logical: getting next cmd...\n");
-		res = _do_ops(s, p, log_node);
+		res = _do_next_cmd_ops(s, p, log_node);
 		if (0 != res)
 			return (res);
 	}
@@ -103,12 +101,14 @@ static int	_process_log(t_state *s, t_parser *p, t_ast_node *log_node)
 
 /* PARSE LOGICAL
  */
+// TODO there's no test for p->last_node == AST_NODE_CMD
 t_ast_node	*parse_logical(t_state *s, t_parser *p)
 {
 	t_ast_node	*ast_node;
 	int			res;
 
-	st_int_push(p->st, AST_NODE_LOG);
+	if (0 != st_int_push(p->st, AST_NODE_LOG))
+		return (set_parse_err(p), NULL);
 	dprint(_MOD_ ": parse_logical tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = init_log(p->mmgr);
 	if (NULL == ast_node)
@@ -118,7 +118,7 @@ t_ast_node	*parse_logical(t_state *s, t_parser *p)
 	{
 		destroy_ast_node(get_mem(s), (void **)&ast_node);
 		set_error(s, res);
-		return (NULL);
+		return (set_parse_err(p), NULL);
 	}
 	p->last_node = ast_node;
 	st_int_pop(p->st);

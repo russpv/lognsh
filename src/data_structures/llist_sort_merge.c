@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   llist_sort_merge.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:30:57 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:30:58 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "llist_int.h"
 
@@ -91,7 +80,7 @@ void	_terminate_ends(t_list **lst, struct s_merge *m)
  * recursive calls as stack unwinds, or segments may be skipped.
  */
 
-void	merge(t_list **lst, t_list **beg, t_list *mid, t_list **end)
+void	merge_segment(t_list **lst, t_list **beg, t_list *mid, t_list **end)
 {
 	struct s_merge	m;
 

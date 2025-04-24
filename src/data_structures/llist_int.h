@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   llist_int.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:30:22 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:30:23 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef LLIST_INT_H
 # define LLIST_INT_H
@@ -38,7 +27,7 @@ struct		s_merge
 void		init_merge(struct s_merge *m, t_list **beg, t_list **end,
 				t_list *mid);
 
-void		merge(t_list **lst, t_list **beg, t_list *mid, t_list **end);
+void		merge_segment(t_list **lst, t_list **beg, t_list *mid, t_list **end);
 int			compare(t_list *beg, t_list *end);
 void		get_root(char *buf, void *s);
 

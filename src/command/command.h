@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   command.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:29:26 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:29:27 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 // command.h
 #ifndef COMMAND_H
@@ -31,8 +20,8 @@
 ** 4) Arg 0 is set to the command name
 ** 5) Waits for child to exit and keeps exit status.
 **
-** Note: searches built-ins first before path. Does not cache
-** search results in hashtable. Does not invoke
+** Note: unlike Bash, searches built-ins first before path
+** Does not cache search results in hashtable. Does not invoke
 ** command_not_found_handle function (returns 127).
 ** Does not execute shell scripts.
 */

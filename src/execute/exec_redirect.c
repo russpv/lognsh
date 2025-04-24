@@ -1,16 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_redirect.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:31:48 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/12 23:51:51 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "execute_int.h"
+#include <errno.h>
+#include <string.h>
 
 #define LOGMSG_EREDIR_DONE "\tRedirect: dup2 from %d to %d\n"
 

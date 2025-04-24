@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_actions.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:33:21 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:22 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "parse_int.h"
 
@@ -41,7 +30,7 @@ t_tok	*lookahead(t_parser *p)
 		return (p->curr_tok->next->content);
 }
 
-t_tok	*previous(t_parser *p)
+t_tok	*prev(t_parser *p)
 {
 	return (p->curr_tok->prev->content);
 }

@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_proc.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:34:03 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:34:04 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "parse_int.h"
 
@@ -126,7 +115,8 @@ t_ast_node	*parse_proc(t_state *s, t_parser *p)
 	t_ast_node	*ast_node;
 	int			res;
 
-	st_int_push(p->st, AST_NODE_PROC);
+	if (0 != st_int_push(p->st, AST_NODE_PROC))
+		return (set_parse_err(p), NULL);
 	dprint(_MOD_ ": parse_proc tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = _init_proc(p->mmgr);
 	if (NULL == ast_node)

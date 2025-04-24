@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_int.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:33:54 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/12 23:55:50 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef PARSE_INT_H
 # define PARSE_INT_H
@@ -20,6 +9,7 @@
 # define _MOD_ "Parser"
 # define MAX_CMD_ARGS 10
 # define MAX_STACK_DEPTH 100
+
 # define PDMSG_IN "%s: %s: got: %s\n"
 # define PDMSG_OUT "%s: %s: found: %s\n"
 # define LMSG_IN "%s: \t###### %s ####### \n"
@@ -175,7 +165,7 @@ t_arg_data					*init_arg(t_mem_mgr *m, t_parser *p,
 /* Token list navigation */
 t_tok						*peek(t_parser *p);
 t_tok						*lookahead(t_parser *p);
-t_tok						*previous(t_parser *p);
+t_tok						*prev(t_parser *p);
 t_tok						*advance(t_parser *p);
 bool						is_at_end(t_parser *p);
 
@@ -238,7 +228,7 @@ int							check_special_expansions(t_state *s,
 								const char *buf, char **value);
 t_list						*match_glob(t_mem_mgr *mgr, const char *pattern);
 
-/* Tests */
+/* Token Tests */
 bool						is_option(t_tok *tok);
 bool						is_redir_token(t_tok *tok);
 bool						is_filename_token(t_tok *tok);
@@ -300,5 +290,6 @@ void						print_ast_cmd_helper(t_ast_node *ast);
 /* Setters and Getters */
 int							p_update_redc(t_ast_node *a, int amt);
 t_list						**p_get_redirs_ptr(t_ast_node *a);
+void						set_parse_err(t_parser *p);
 
 #endif

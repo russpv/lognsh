@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   token_utils_expand.c                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:36:17 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:36:19 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "token_int.h"
 
@@ -48,18 +37,18 @@ static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf, char **value)
 static int	_do_expansion(t_state *s, const t_tok *content, char *value,
 		size_t raw_len)
 {
-	char	buf[MAX_NAME_LEN];
+	char	keybuf[MAX_NAME_LEN];
 	int		res;
 
 	res = 0;
-	ft_memset(buf, 0, sizeof(buf));
+	ft_memset(keybuf, 0, sizeof(keybuf));
 	if (content->t.tok.do_expansion)
 	{
 		if (raw_len <= lex_get_keepd(get_lexer(s)))
 			return (err("error"), ERR_ARGS);
-		ft_memcpy(buf, content->t.tok.raw + lex_get_keepd(get_lexer(s)), raw_len
+		ft_memcpy(keybuf, content->t.tok.raw + lex_get_keepd(get_lexer(s)), raw_len
 			- lex_get_keepd(get_lexer(s)));
-		res = _do_tok_ops(s, content, buf, &value);
+		res = _do_tok_ops(s, content, keybuf, &value);
 		if (0 != res)
 			return (res);
 		dprint(_MOD_ ": %s: expanded var: %s\n", __FUNCTION__, value);

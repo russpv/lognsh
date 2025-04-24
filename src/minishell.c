@@ -1,25 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:35:30 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:35:31 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "../include/minishell.h"
-
-static void	_do_test(t_state *s)
-{
-	char		input[INPUT_BUF_SZ];
-	t_ast_node	*ast;
-
-	if (MYTEST)
-	{
-		if (NULL == fgets(input, sizeof(input), stdin))
 			return ;
 		ast = parse(s, input);
 		if (!ast)

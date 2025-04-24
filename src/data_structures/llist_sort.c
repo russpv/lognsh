@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   llist_sort.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:31:13 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:31:14 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "llist_int.h"
 
@@ -73,8 +62,14 @@ static void	_solve(t_list **lst, t_list **beg, t_list **end)
 		_solve(lst, &(mid->next), end);
 	}
 	if (*beg != mid && *beg != *end && (*beg)->next != *end)
-		merge(lst, beg, mid, end);
+		merge_segment(lst, beg, mid, end);
 }
+/*
+ * Filename sort order rules:
+ * 1. Special characters like +, ( appear before alphanum
+ * 2. $VAR strings come before plain strings, but after symbols
+ * 3. Case-insensitive sort, unless equal ignoring case → fallback to original
+ */
 
 // Sorts a content->string llist in CUSTOM ascending lexicographic order.
 // Operator chars are superior. Any '$' prefixed string is superior.

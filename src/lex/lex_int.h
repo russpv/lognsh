@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lex_int.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:32:33 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:32:34 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef LEX_INT_H
 # define LEX_INT_H
@@ -20,7 +9,7 @@
 # define NOGLOB 1
 # define NOEXPD 1
 # define FAIL_TOKEN 10
-# define LEX_MAX_TOKC 1000
+# define INITVAL 0
 
 /* LEX
  *
@@ -66,11 +55,6 @@
 //	< for heredoc
 // # handled in NORMAL
 // $ must be followed by alphanum or _ to delim a (sub)token
-
-# define LEX_BUFSZ 1024
-# define MAX_HDOCSZ LEX_BUFSZ
-# define INITVAL 0
-# define MOD "Lexer"
 
 enum						e_lex_state
 {

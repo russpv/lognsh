@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_utils.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:34:17 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/13 13:59:03 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "parse_int.h"
 
@@ -70,3 +59,11 @@ int	ft_lstiter_redir(t_list *lst, t_redir_ctx *ctx, \
 	}
 	return (0);
 }
+
+void	set_parse_err(t_parser *p)
+{
+	if (!p)
+		return ;
+	p->parse_error = 1;
+}
+

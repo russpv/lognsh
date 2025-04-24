@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_pipe.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:33:57 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:58 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "parse_int.h"
 
@@ -52,7 +41,7 @@ static int	_process_pipe(t_state *s, t_parser *p, t_ast_node *pipe_node)
 {
 	if (!p || !pipe_node)
 		return (ERR_ARGS);
-	if (NULL == p->last_node || TOK_PIPE == tok_get_type(previous(p)))
+	if (NULL == p->last_node || TOK_PIPE == tok_get_type(prev(p)))
 	{
 		print_parse_error(s, tok_get_raw((p->curr_tok)->content),
 			tok_get_pos((p->curr_tok)->content));
@@ -83,8 +72,9 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 	int			res;
 
 	if (!p || !p->last_node)
-		return (NULL);
-	st_int_push(p->st, AST_NODE_PIPELINE);
+		return (set_parse_err(p), NULL);
+	if (0 != st_int_push(p->st, AST_NODE_PIPELINE))
+		return (set_parse_err(p), NULL);
 	dprint("%s: %s: tok: %s\n", _MOD_, __FUNCTION__, tok_get_raw(peek(p)));
 	ast_node = _init_pipe(p->mmgr);
 	if (NULL == ast_node)

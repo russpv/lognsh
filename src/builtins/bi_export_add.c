@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   bi_export_add.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:26:44 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/12 20:22:37 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "bi_int.h"
 
@@ -72,7 +61,7 @@ int	process_arg_update_add(t_state *s, const char *arg, char *equal_pos,
 	if (0 == ft_strnlen(key, MAX_NAME_LEN))
 		return (ERR_ARGS);
 	_reset_value_ptr(equal_pos, &value);
-	if (MAX_NAME_LEN == ft_strnlen(value, MAX_NAME_LEN))
+	if (MAX_VAL_LEN == ft_strnlen(value, MAX_VAL_LEN))
 		return (print_value_toolong(), ERR_ARGS);
 	exit_code = env_upsert_value(get_mem(s), get_env_list(s), key, value);
 	if (0 != exit_code)
