@@ -1,0 +1,50 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_get_ast.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/10 16:33:51 by rpeavey           #+#    #+#             */
+/*   Updated: 2025/04/10 16:33:52 by rpeavey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parse_int.h"
+
+bool	p_get_has_redgrptok(t_ast_node *n)
+{
+	if (!n)
+		return (false);
+	if (n->type == AST_NODE_CMD)
+	{
+		return (n->data.cmd.has_redgrouptoks);
+	}
+	else if (n->type == AST_NODE_PROC)
+	{
+		return (n->data.proc.has_redgrouptoks);
+	}
+	return (false);
+}
+
+bool	p_get_do_redir_exp(t_ast_node *n)
+{
+	if (!n)
+		return (false);
+	if (n->type == AST_NODE_CMD)
+		return (n->data.cmd.do_redir_expansion);
+	else if (n->type == AST_NODE_PROC)
+		return (n->data.proc.do_redir_expansion);
+	return (false);
+}
+
+bool	p_get_do_redir_glob(t_ast_node *n)
+{
+	if (!n)
+		return (false);
+	if (n->type == AST_NODE_CMD)
+		return (n->data.cmd.do_redir_globbing);
+	else if (n->type == AST_NODE_PROC)
+		return (n->data.proc.do_redir_globbing);
+	return (false);
+}

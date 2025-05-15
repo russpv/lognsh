@@ -1,0 +1,57 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   state_setters.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/10 16:35:01 by rpeavey           #+#    #+#             */
+/*   Updated: 2025/04/12 19:39:52 by rpeavey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "state_int.h"
+
+void	set_parser(t_state *state, t_parser *p)
+{
+	state->current_parser = p;
+}
+
+void	set_lexer(t_state *state, t_lex *l)
+{
+	state->current_lexer = l;
+}
+
+void	set_command(t_state *s, t_cmd *c)
+{
+	s->current_cmd = c;
+}
+
+void	set_input(t_state *s, char *input)
+{
+	int	len;
+
+	len = 0;
+	if (!s)
+		return ;
+	if (NULL != input)
+		len = ft_strnlen(input, MAX_INPUT_SZ);
+	if (len == MAX_INPUT_SZ)
+		return ;
+	s->input = input;
+	if (s == NULL || s->magic != STATE_MAGIC)
+	{
+		dprint("Bad state in set_input! s=%p, magic=0x%X\n", s,
+			s->magic);
+		exit_clean(&s->mem_mgr.list, ENOMEM, __FUNCTION__, NULL);
+	}
+	if (NULL != input)
+		mem_add_mem(&s->mem_mgr.list, input, len + 1);
+}
+
+void	set_got_heredoc(t_state *s)
+{
+	if (NULL == s)
+		return ;
+	s->got_heredoc = true;
+}

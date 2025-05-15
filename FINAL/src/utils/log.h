@@ -1,0 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   log.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/10 16:35:29 by rpeavey           #+#    #+#             */
+/*   Updated: 2025/04/10 16:35:30 by rpeavey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef LOG_H
+# define LOG_H
+
+# include "../../include/ansi_colors.h"
+# include <assert.h>
+# include <stdarg.h>
+# include <stdio.h>
+# include <unistd.h>
+
+# ifdef LOGMODE
+#  define LOGGING 1
+# else
+#  define LOGGING 0
+# endif
+
+/* Forwards */
+typedef struct s_cmd	t_cmd;
+typedef struct s_node	t_ast_node;
+
+void					log_command_info(t_cmd *c, t_ast_node *a);
+void					lgprint(const char *s, ...);
+void					cprintf(const char *color, const char *format,
+							...);
+void					err(const char *s);
+
+#endif
