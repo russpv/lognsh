@@ -6,12 +6,14 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:35:26 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:35:27 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/05/15 18:43:38 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../data_structures/llist.h"
 #include "debug.h"
+
+extern void	err(const char *s);
 
 void	debug_detect_cycle(t_list *head)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 15:52:07 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/13 15:57:56 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/05/15 17:26:28 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ char const *s1, char const *s2)
 	size_t	len2;
 	char	*s3;
 
+	if (!s1 || !s2 || !n)
+		return (NULL);
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
 	s3 = f(n, sizeof(char) * (len1 + len2 + 1));

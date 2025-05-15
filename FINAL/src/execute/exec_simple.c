@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:32:05 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/13 16:01:18 by dayeo            ###   ########.fr       */
+/*   Updated: 2025/05/15 18:00:07 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	exec_fork_execve(t_state *s)
 	pid_t	p;
 	int		exit_code;
 
+	exit_code = 0;
 	if (SH_SIGINT == g_last_signal)
 		return (SIGINT_BEFORE_FORK);
 	sig_ignore();

@@ -6,7 +6,7 @@
 /*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:35:27 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/13 01:58:20 by rpeavey          ###   ########.fr       */
+/*   Updated: 2025/05/15 18:17:57 by rpeavey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void					dvprint(const char *format, ...);
 void					lgprint(const char *s, ...);
 void					dprintdiv(const char *format, ...);
 
-void					err(const char *s);
 void					cprintf(const char *color, const char *format, ...);
 void					debug_detect_cycle(t_list *head);
 
