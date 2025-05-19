@@ -91,6 +91,7 @@ static int	_do_combine(t_state *s, t_redir_data *grpred, int *res)
 }
 
 // this_red: list of t_redir_data
+// if not single ll node on the tmp ptr, errors
 int	p_do_grpred_processing(t_state *s, t_list **this_red, void *c)
 {
 	t_redir_data	*grpred;
@@ -112,7 +113,7 @@ int	p_do_grpred_processing(t_state *s, t_list **this_red, void *c)
 		return (res);
 	if (0 != _do_globbing(s, grpred, &res))
 		return (res);
-	if (ft_lstsize(*get_tmp_tok_list(s)) > 1)
+	if (ft_lstsize(*get_tmp_tok_list(s)) != 1)
 		return (print_parse_redir_error(s, orig_pos), ERR_REDIR);
 	res = do_redir_inserts(s, this_red);
 	dprint("%s: returning lst_size: %d, %p\n", __FUNCTION__,

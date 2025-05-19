@@ -69,7 +69,7 @@ static int	_add_cmd(t_parser *p, t_ast_node *proc_node)
 {
 	t_list	*cmd_node;
 
-	if (!p || !proc_node)
+	if (!p || !proc_node || !p->last_node)
 		return (ERR_ARGS);
 	dprint(_MOD_ ": Proc got a node of type %d\n", p->last_node->type);
 	cmd_node = ft_lstnew_tmp(p->mmgr, p->last_node);
