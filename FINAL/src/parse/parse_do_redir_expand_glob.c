@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_do_redir_expand_glob.c                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:33:34 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:33:35 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "parse_int.h"
 
 #define EM_AMBIG "ERR multiple redirect targets globbed\n"
@@ -18,6 +6,7 @@
 
 /* The redir version of p_do_globbing_args.
  * Operates on a single t_redir_data node.
+ * Inserts globstar results for the filename.
  */
 int	p_do_globbing_redirs(t_mem_mgr *m, void *c)
 {

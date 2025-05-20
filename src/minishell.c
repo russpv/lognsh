@@ -1,3 +1,14 @@
+
+#include "../include/minishell.h"
+
+static void	_do_test(t_state *s)
+{
+	char		input[INPUT_BUF_SZ];
+	t_ast_node	*ast;
+
+	if (MYTEST)
+	{
+		if (NULL == fgets(input, sizeof(input), stdin))
 			return ;
 		ast = parse(s, input);
 		if (!ast)

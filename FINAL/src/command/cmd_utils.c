@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cmd_utils.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:29:18 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/12 22:52:51 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "command_int.h"
 
 static void	_fill_argv_nocmd(t_mem_mgr *m, int i, struct s_context *ctxt)
@@ -111,4 +99,16 @@ int	c_argstoargv(t_state *s, t_cmd *cmd, t_ast_node *a, char **args)
 	if (NULL == ctxt.cmdname)
 		p_set_cmd(get_mem(s), a, ctxt.argv[0]);
 	return (ft_freearr_mem(&m->list, m->dealloc, (void **)args, -1), 0);
+}
+
+void	print_pipes(t_cmd *c)
+{
+	int	i;
+
+	if (c == NULL || c->fildes == NULL)
+		return (dprint("Error: fildes is NULL\n"));
+	i = -1;
+	while (++i < c->curr_cmdc - 1)
+		dprint("Cmd: \tPipe %d: read fd=%d, write fd=%d\n", i, c->fildes[i][0],
+			c->fildes[i][1]);
 }

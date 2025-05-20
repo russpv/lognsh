@@ -1,29 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lex_utils.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:33:05 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/13 16:01:31 by dayeo            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "lex_int.h"
 
-bool	is_too_long(t_lex *l, const char *input)
+void	lex_print(t_lex *lexer)
 {
-	if (NULL == input)
-		return (true);
-	if (ft_strnlen(input, LEX_BUFSZ) >= \
-LEX_BUFSZ - ft_strnlen(l->buf, LEX_BUFSZ))
-	{
-		dprint(_MOD_ ": ERROR: Input exceeds buf size.\n");
-		print_lex_buffer_overflow();
-		return (true);
-	}
-	return (false);
+	if (NULL == lexer)
+		return ;
+	if (NULL == lexer->token_list)
+		return ;
+	ft_lstiter(lexer->token_list, tok_print);
+	dprintdiv("\n--- Input Lexing Finished ---\n\n");
 }
 
 /* VARNAMELEN

@@ -1,21 +1,11 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:34:31 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/12 14:05:28 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "signal_int.h"
 
 void	clear_current_line(void)
 {
 	rl_on_new_line();
+#ifndef MACOS
 	rl_replace_line("", RETAIN_HIST);
+#endif
 	rl_redisplay();
 }
 
@@ -39,7 +29,7 @@ void	sigint_killchild(int signo)
 	}
 }
 
-// Unblocks readline()
+// Unblocks readline() in heredoc
 void	sigint_killrl(int signo)
 {
 	if (signo == SIGINT)

@@ -1,16 +1,146 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   token_utils_combine.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:35:17 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:35:18 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "token_int.h"
+
+/* -------------------------------------------------------------------------
+ * Function Group: Token combination logic helpers
+ * Description   : Handles arcane bash-style re-combination of expansions  
+ *   and splits
+ * ------------------------------------------------------------------------- */
+
+bool	has_leading_delims(char const *s, char const *set)
+{
+	char	*tmp;
+
+	if (!s || !set)
+		return (ERR_ARGS);
+	tmp = (char *)s;
+	while (ft_is_set(tmp, set))
+		tmp++;
+	if (tmp != s)
+		return (true);
+	return (false);
+}
+
+bool	has_lagging_delims(char const *s, char const *set)
+{
+	char	*end;
+	char	*tmp;
+
+	if (!s || !set)
+		return (ERR_ARGS);
+	end = ft_strchr(s, 0);
+	tmp = end;
+	if (end != s)
+	{
+		while (ft_is_set(--tmp, set))
+			;
+		if (--end != tmp)
+			return (true);
+	}
+	return (false);
+}
+
+bool	is_joinable(t_state *s, char *str)
+{
+	if (!s || !str)
+		return (false);
+	if (UNQUOTED == get_tmp_flag(s))
+	{
+		if (false == has_lagging_delims(str, IFS))
+			return (true);
+	}
+	if (QUOTED == get_tmp_flag(s) || LTRL == get_tmp_flag(s))
+		return (true);
+	return (false);
+}
+
+// Whether contents was a quoted expansion, trims, then commits list
+int	put_str_on_toklst(t_state *s, char **str)
+{
+	char	*tmp;
+	t_list	**tok_lst;
+
+	if (!s || !str)
+		return (ERR_ARGS);
+	tok_lst = get_tmp_tok_list(s);
+	dprint(_MOD_ ": %s: _%s_\n", __FUNCTION__, *str);
+	if (UNQUOTED == get_tmp_flag(s))
+		*str = do_trim(s, *str, IFS, BACK);
+	tmp = ft_strdup_tmp(get_mem(s), *str);
+	if (!tmp)
+		exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s),
+			create_tmp_token(get_mem(s), tmp)));
+	(get_mem(s))->dealloc(&get_mem(s)->list, *str);
+	set_tmp_flag(s, INITVAL);
+	*str = NULL;
+	return (0);
+}
+
+char	*do_join(t_state *s, char *left, char *right)
+{
+	char				*res;
+	struct s_mem_utils	m;
+
+	if (!s || !left || !right)
+		return (NULL);
+	mem_struct_init(get_mem(s), &m);
+	res = ft_strjoin_mem(m.head, m.f, left, right);
+	if (!res)
+		exit_clean(m.head, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	return (res);
+}
+
+char	*do_trim(t_state *s, char *str, char *set, int side)
+{
+	char				*res;
+	struct s_mem_utils	m;
+
+	if (!s || !s || !set)
+		return (NULL);
+	mem_struct_init(get_mem(s), &m);
+	if (FRONT == side)
+		res = ft_strtrimfront_mem(&m, str, set);
+	else
+		res = ft_strtrimback_mem(&m, str, set);
+	if (!res)
+		exit_clean(m.head, ENOMEM, __FUNCTION__, EMSG_MALLOC);
+	return (res);
+}
+
+void	announce(const char *cllr, char *raw, char *str, int msg)
+{
+	if (!cllr)
+		return ;
+	if (SAYGOT == msg)
+	{
+		if (str)
+			dvprint(_MOD_ ": %s: got _%s_, _%s_(cache)\n", cllr, raw, str);
+		else
+			dvprint(_MOD_ ": %s: got _%s_\n", cllr, raw);
+	}
+	else if (SAYDONE == msg)
+		dvprint(_MOD_ ": %s: returning _%s_(cache)\n", cllr, str);
+	else if (SAYCANCOMB == msg)
+		dvprint(_MOD_ ": %s: got comb'ble _%s_\n", cllr, raw);
+	else if (SAYCANNOTCOMB == msg)
+		dvprint(_MOD_ ": %s: got uncomb'ble %s, add'g cached _%s_\n", cllr, raw,
+			str);
+	else if (SAYCOMBINE == msg)
+		dvprint(_MOD_ ": %s: combn'g _%s_ + _%s_(cache)\n", cllr, raw, str);
+	else if (SAYTRIMMED == msg)
+		dvprint(_MOD_ ": %s: only trim frnt _%s_ + rr _%s_\n", cllr, raw, str);
+	else if (SAYCACHEONLY == msg)
+		dvprint(_MOD_ ": %s: only caching _%s_, can't comb _%s_(cache)\n", cllr,
+			raw, str);
+	else
+		dvprint(_MOD_ ": %s: got NULL\n", cllr);
+}
+
+
+/* -------------------------------------------------------------------------
+ * Function Group: Token combination logic
+ * Description   : 
+ * ------------------------------------------------------------------------- */
 
 // If something in cache, join it with raw regardless of delims
 // Else, place in tmp_str

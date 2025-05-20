@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cmd_getters.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rpeavey <rpeavey@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:28:33 by rpeavey           #+#    #+#             */
-/*   Updated: 2025/04/10 16:28:34 by rpeavey          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "command_int.h"
 
 char	*c_get_fullpath(t_cmd *c)
@@ -45,4 +33,30 @@ t_list	*c_get_redirs(const t_cmd *c)
 	if (!c)
 		return (NULL);
 	return (c->redirs);
+}
+
+int	c_get_argvc(const t_cmd *c)
+{
+	if (!c)
+		return (-1);
+	return (c->argvc);
+}
+
+char	**c_get_argv(t_cmd *c)
+{
+	return (c->argv);
+}
+
+int	c_get_cmdc(const t_cmd *c)
+{
+	if (!c)
+		return (-1);
+	return (c->curr_cmdc);
+}
+
+int	c_get_redc(const t_cmd *c)
+{
+	if (!c)
+		return (-1);
+	return (c->redc);
 }
