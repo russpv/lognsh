@@ -1,6 +1,6 @@
 #include "llist_int.h"
 
-r_isalnum(const char *s)
+bool	str_isalnum(const char *s)
 {
 	if (!s)
 		return (false);
