@@ -1,7 +1,7 @@
-#ifndef TOKEN_INT_H
-# define TOKEN_INT_H
+#ifndef TOKENS_INT_H
+# define TOKENS_INT_H
 
-# include "token.h"
+# include "tokens.h"
 
 # define _MOD_ "Token"
 # define GRP_TOK_RAW "(GROUP)"

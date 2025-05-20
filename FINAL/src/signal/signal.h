@@ -1,7 +1,6 @@
 #ifndef SIGNAL_H
 # define SIGNAL_H
 
-# include "../globals/globals.h"
 # include "../state/error.h"
 # include "../utils/debug.h"
 # include <readline/readline.h>
