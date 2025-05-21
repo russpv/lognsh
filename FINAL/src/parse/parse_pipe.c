@@ -82,6 +82,7 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 	{
 		set_error(s, res);
 		destroy_ast_node(get_mem(s), (void **)&ast_node);
+		p->parse_error = true;
 		return (err(EMSG_PPIPE_GEN), NULL);
 	}
 	dprint("%s: %s: parsed %d cmds\n", _MOD_, __FUNCTION__,

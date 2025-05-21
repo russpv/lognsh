@@ -20,6 +20,10 @@
 # include <ctype.h>
 
 /* For compatibility */
-# define MYTEST 0
+# ifndef TESTMODE
+    # define MYTEST 0
+# else
+    # define MYTEST 1
+# endif 
 
 #endif

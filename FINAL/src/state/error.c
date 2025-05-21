@@ -60,6 +60,8 @@ void	print_parse_error(t_state *s, const char *word, size_t pos)
 	const char	*input = (const char *)get_input(s);
 	size_t		i;
 
+	if (!input)
+		return ;
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	write(STDERR_FILENO, ": parse error near `",
 		ft_strlen(": parse error near `"));
@@ -80,6 +82,8 @@ void	print_nocmd_error(t_state *s, const char *word, size_t pos)
 	const char	*alt = "...";
 	size_t		i;
 
+	if (!input)
+		return ;
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	write(STDERR_FILENO, ": expected valid command after `",
 		ft_strlen(": expected valid command after `"));
@@ -102,6 +106,8 @@ void	print_lex_error(t_lex *l, char *word)
 	size_t			i;
 	const size_t	pos = (size_t)(lex_get_ptr(l) - (char *)input);
 
+	if (!input)
+		return ;
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	write(STDERR_FILENO, ": parse error near `",
 		ft_strlen(": parse error near `"));
@@ -128,6 +134,8 @@ void	print_redir_error(t_state *s, const char *word, size_t pos)
 	const char	*input = (const char *)get_input(s);
 	size_t		i;
 
+	if (!input)
+		return ;
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	write(STDERR_FILENO, ": expected valid filename after `",
 		ft_strlen(": expected valid filename after `"));
@@ -147,6 +155,8 @@ void	print_parse_redir_error(t_state *s, size_t pos)
 	size_t			i;
 	const size_t	cols = (size_t)get_wincols();
 
+	if (!input)
+		return ;
 	if (pos > cols)
 		pos = pos % cols;
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
@@ -187,6 +197,8 @@ void	print_hdoc_eof_error(t_lex *l, char *word)
 	size_t			i;
 	const size_t	pos = (size_t)(lex_get_ptr(l) - (char *)input);
 
+	if (!input)
+		return ;
 	write(STDERR_FILENO, SHELL_NAME, ft_strlen(SHELL_NAME));
 	write(STDERR_FILENO, ": invalid delimiter `",
 		ft_strlen(": invalid delimiter `"));

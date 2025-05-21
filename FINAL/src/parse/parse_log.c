@@ -21,7 +21,7 @@ t_ast_node	*init_log(t_mem_mgr *m)
 }
 
 /* Returns cmp if it is a lower priority operator than
- * that represented by ref.
+ * that represented by ref. In case of tie, 
  */
 t_tok	*which_lower_priority(t_ast_node *ref, t_tok *cmp)
 {
@@ -40,7 +40,7 @@ t_tok	*which_lower_priority(t_ast_node *ref, t_tok *cmp)
 /* Stores command. Assumes parser is on
  * correct token.
  */
-static int	_process_cmd(t_parser *p, t_ast_node *log_node)
+static int	_commit_cmd(t_parser *p, t_ast_node *log_node)
 {
 	t_list	*cmd_node;
 
@@ -74,20 +74,26 @@ static int	_process_op(t_parser *p, t_ast_node *log_node)
 	return (0);
 }
 
+// Note: the next node cannot be a logical operator
 static int	_do_ops(t_state *s, t_parser *p, t_ast_node *log_node)
 {
-	if (NULL == parse_full_cmd(s, p))
+	t_ast_node *next;
+
+	if (is_log_token(peek(p)))
+		return (err(EMSG_LOGI_PARSE), ERR_GENERAL);
+	next = parse_full_cmd(s, p);
+	if (NULL == next || AST_NODE_LOG == p_get_type(next))
 		return (err(EMSG_LOGI_PARSE), ERR_GENERAL);
 	if (peek(p) == which_lower_priority(log_node, peek(p)))
 	{
-		if (0 != _process_cmd(p, log_node))
+		if (0 != _commit_cmd(p, log_node))
 			return (ERR_GENERAL);
 	}
 	else
 	{
 		if (NULL == parse_full_cmd(s, p))
 			return (err(EMSG_LOGI_PARSE), ERR_GENERAL);
-		if (0 != _process_cmd(p, log_node))
+		if (0 != _commit_cmd(p, log_node))
 			return (ERR_GENERAL);
 	}
 	return (0);
@@ -104,9 +110,9 @@ static int	_process_log(t_state *s, t_parser *p, t_ast_node *log_node)
 
 	if (!p || !log_node)
 		return (ERR_ARGS);
-	if (NULL == p->last_node)
+	if (NULL == p->last_node || get_err(s))
 		return (ERR_SYNTAX);
-	if (0 != _process_cmd(p, log_node))
+	if (0 != _commit_cmd(p, log_node))
 		return (ERR_GENERAL);
 	while (!is_at_end(p) && is_log_token(peek(p)))
 	{
@@ -140,6 +146,7 @@ t_ast_node	*parse_logical(t_state *s, t_parser *p)
 			print_gen_err(EMSG_LOGI_PARSE);
 		destroy_ast_node(get_mem(s), (void **)&ast_node);
 		set_error(s, res);
+		p->parse_error = true;
 		return (NULL);
 	}
 	p->last_node = ast_node;

@@ -1,5 +1,6 @@
 SUBMIT1/
 TEST/
+FINAL/test/output/default
 *.VSCodeCounter
 *.txt
 .vscode
