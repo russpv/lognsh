@@ -6,7 +6,7 @@
 # include "../data_structures/stack.h"
 # include "../lex/lex.h"
 # include "../state/state.h"
-# include "../token/token.h"
+# include "../tokens/tokens.h"
 # include <dirent.h>
 # include <sys/types.h>
 

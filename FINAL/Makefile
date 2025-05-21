@@ -1,6 +1,7 @@
 SHELL := /bin/bash
 TARGET = minishell
 TEST_TARGET = testsh
+FUZZ_TARGET = fuzzsh
 OUTPUT = executable
 
 # Colors
@@ -23,15 +24,16 @@ TESTDIR = test
 
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -DTESTMODE #-DLOGMODE -DDEBUGMODE -DDEBUGVMODE #-fsanitize=address 
-TEST_CFLAGS = -Wall  -g -DTESTMODE  # -Werror -Wextra
+CFLAGS = -Wall -Wextra -Werror -g -DTESTMODE # -DLOGMODE -DDEBUGMODE -DDEBUGVMODE #-fsanitize=address 
+TEST_CFLAGS = -Wall -g -DTESTMODE  # -Werror -Wextra
 EXT_CFLAGS = -DEXTENDEDFUNC
-LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses #-fsanitize=address #
+LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses # -fsanitize=address
 LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
 
 ifeq ($(shell uname), Darwin)  # macOS
     INC += -I$(INCDIR) -I/usr/local/opt/readline/include/
-	CFLAGS += -DMACOS
+	CFLAGS += -DMACOS -arch arm64
+	LDFLAGS += -arch arm64
 else  # Linux
     INC += -I$(INCDIR) -I/usr/include/readline # $(shell pkg-config --cflags readline)
 endif
@@ -107,6 +109,24 @@ $(TEST_TARGET) : $(UNITY_OBJ) $(LIB_PATH) $(TEST_OBJECTS)
 	chmod +x $(TARGETDIR)/$(TEST_TARGET)
 	@cp $(TARGETDIR)/$(TEST_TARGET) .
 
+# For Fuzzing
+# Fuzzing target using AFL
+fuzz: directories $(FUZZ_TARGET)
+
+# Build the fuzzing binary with AFL instrumentation
+$(FUZZ_TARGET): CFLAGS += -DTESTMODE
+$(FUZZ_TARGET): CC := afl-clang-fast
+$(FUZZ_TARGET): $(OBJECTS) $(LIB_PATH)
+	@echo "Building with AFL instrumentation..."
+	$(CC) -o $(TARGETDIR)/$(FUZZ_TARGET) $^ $(LDFLAGS)
+	chmod +x $(TARGETDIR)/$(FUZZ_TARGET)
+	@cp $(TARGETDIR)/$(FUZZ_TARGET) .
+
+# Run AFL on the fuzzing binary (need case seeds)
+fuzz-run:
+	@echo "Launching AFL fuzzer..."
+	afl-fuzz -i input -o output -- ./$(FUZZ_TARGET)
+
 # Compile Unity
 $(OBJDIR)/$(TESTDIR)/%.$(OBJEXT): $(EXTDIR)/unity/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
@@ -146,7 +166,7 @@ clean:
 # Clean+, objects and binaries
 cleaner: clean
 	@$(RM) -rf $(TARGETDIR)
-	@$(RM) -f $(TARGET) # copied to root for lame evaluators
+	@$(RM) -f $(TARGET)
 	rm -f $(LIB_NAME) # don't delete so!
 	-@rm -f .bonus_made
 # @echo "$(GREEN)$(BOLD)SUCCESS$(RESET)"

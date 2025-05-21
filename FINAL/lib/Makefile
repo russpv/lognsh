@@ -63,6 +63,12 @@ OBJECTS = $(SOURCES:.c=.o)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
+ifeq ($(shell uname), Darwin)  # macOS
+	CFLAGS += -DMACOS -arch arm64
+endif
+
+# ======================== 
+
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
