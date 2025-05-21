@@ -70,6 +70,8 @@ unsigned char	is_valid_prev(t_lex *l, int offset)
 	if (!l || !l->ptr)
 		return (0);
 	ptr = l->ptr;
+	if (ptr == l->raw_string)
+		return (0);
 	ptr--;
 	if (NULL == ptr)
 		return (0);

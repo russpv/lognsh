@@ -114,8 +114,9 @@ $(TEST_TARGET) : $(UNITY_OBJ) $(LIB_PATH) $(TEST_OBJECTS)
 fuzz: directories $(FUZZ_TARGET)
 
 # Build the fuzzing binary with AFL instrumentation
-$(FUZZ_TARGET): CFLAGS += -DTESTMODE
+$(FUZZ_TARGET): CFLAGS := -Wall -Wextra -Werror -g -DTESTMODE -fsanitize=address 
 $(FUZZ_TARGET): CC := afl-clang-fast
+$(FUZZ_TARGET): LDFLAGS += -fsanitize=address
 $(FUZZ_TARGET): $(OBJECTS) $(LIB_PATH)
 	@echo "Building with AFL instrumentation..."
 	$(CC) -o $(TARGETDIR)/$(FUZZ_TARGET) $^ $(LDFLAGS)
