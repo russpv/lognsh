@@ -30,13 +30,13 @@ cat < out.txt
 
 ## 🏗️ Architecture
 
-lex/ – Tokenization and lexical analysis
-token/ – Token groups, quoting, and expansion
-parse/ – Building command trees, handling redirections and heredocs
-execute/ – Process execution and pipe management
-builtins/ – Internal shell commands
-state/, mem/ – Memory tracking and error state
-data_structures/ – Internal lists, stacks, and hashmaps
+lex/ – Tokenization and lexical analysis  
+token/ – Token groups, quoting, and expansion  
+parse/ – Building command trees, handling redirections and heredocs  
+execute/ – Process execution and pipe management  
+builtins/ – Internal shell commands  
+state/, mem/ – Memory tracking and error state  
+data_structures/ – Internal lists, stacks, and hashmaps  
 globals/ – Shell-wide constants and signal flag
 
 ## Design Philosophy
