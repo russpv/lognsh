@@ -1,16 +1,4 @@
 #include "../include/test.h"
-/*
-#define DEFINE_E2E_TEST(test_name, input) \
-    void test_name(void) { \
-        char *my_shell_output = run_my_shell(input); \
-        char *bash_output = run_bash(input); \
-        printf("\n"); \
-        TEST_ASSERT_EQUAL_STRING(bash_output, my_shell_output); \
-        free(my_shell_output); \
-        free(bash_output); \
-    }
-*/
-
 
 #define DEFINE_E2E_TEST(test_name, input) \
  void test_name(void) { \
@@ -51,17 +39,14 @@ DEFINE_E2E_TEST(test_exit_builtin, "exit");
 
 /* Parse errors */
 DEFINE_E2E_TEST(test_missing_command, ">");
-//DEFINE_E2E_TEST(test_unmatched_quotes, "echo 'missing quote");
 DEFINE_E2E_TEST(test_unexpected_token, "echo hello | | echo world");
 
 
 /* quote functionality */
-//DEFINE_E2E_TEST(test_single_quote_open, "echo 'unclosed quote"); // EXPECTED FAIL
-//DEFINE_E2E_TEST(test_double_quote_open, "echo \"unclosed quote"); // EXPECTED FAIL -
 DEFINE_E2E_TEST(test_single_quote_metacharacters, "echo 'hello > world'");
 DEFINE_E2E_TEST(test_double_quote_metacharacters, "echo \"hello $USER\""); // FAIL
-DEFINE_E2E_TEST(test_single_quote_special_chars, "echo 'this should escape \$PATH'");
-DEFINE_E2E_TEST(test_double_quote_special_chars, "echo \"this should not escape \$PATH\""); // FAIL, path retrieval exceeds bounds
+DEFINE_E2E_TEST(test_single_quote_special_chars, "echo 'this should escape \\$PATH'");
+DEFINE_E2E_TEST(test_double_quote_special_chars, "echo \"this should not escape \\$PATH\""); // FAIL, path retrieval exceeds bounds
 
 
 /* expansion */
@@ -88,7 +73,6 @@ DEFINE_E2E_TEST(test_output_redirection, "echo hello > output.txt");
 DEFINE_E2E_TEST(test_append_redirection1, "echo hello >> append.txt");
 DEFINE_E2E_TEST(test_append_redirection2, "cat append.txt");
 DEFINE_E2E_TEST(test_input_redirection_invalid, "echo hello < nonexistent.txt"); // FAIL, halt command
-// DEFINE_E2E_TEST(test_heredoc_redirection, "echo hello << EOF\nworld\nEOF"); // FAIL, minish doesn't defeat readline heredoc in testmode TODO: accept args for non-interactive
 DEFINE_E2E_TEST(test_heredoc_no_delim, "echo hello <<");
 DEFINE_E2E_TEST(test_redirection_error, "echo hello >");
 DEFINE_E2E_TEST(test_redirection_glob, "echo hello > *");
@@ -140,8 +124,6 @@ TEST_GROUP_RUNNER(subshells) {
 }
 
 TEST_GROUP_RUNNER(quoting) {
-   // RUN_TEST(test_single_quote_open);
-    //RUN_TEST(test_double_quote_open);
     RUN_TEST(test_single_quote_metacharacters);
     RUN_TEST(test_double_quote_metacharacters);
     RUN_TEST(test_single_quote_special_chars);
@@ -154,7 +136,6 @@ TEST_GROUP_RUNNER(redirection) {
     RUN_TEST(test_append_redirection1);
 	RUN_TEST(test_append_redirection2);
     RUN_TEST(test_input_redirection_invalid);
-  //  RUN_TEST(test_heredoc_redirection);
     RUN_TEST(test_heredoc_no_delim);
     RUN_TEST(test_redirection_error);
     RUN_TEST(test_redirection_glob);
@@ -217,23 +198,9 @@ TEST_GROUP_RUNNER(wildcards) {
 
 TEST_GROUP_RUNNER(errors) {
     RUN_TEST(test_missing_command);
-    //RUN_TEST(test_unmatched_quotes);
     RUN_TEST(test_unexpected_token);
 }
 
-/*
-// Tests for parsing operators
-TEST_GROUP_RUNNER(expansions_advanced) {
-    RUN_E2E_TEST(test_no_command, "<$HOME");
-    RUN_E2E_TEST(test_basic_expansion, "$PATH");
-}
-
-// Tests for parser error handling
-TEST_GROUP_RUNNER(compound_basic) {
-    RUN_E2E_TEST(test_andif, "echo haha && echo bobo && echo hoho");
-    RUN_E2E_TEST(test_orif, "echo haha || echo bobo");
-}
-*/
 
 int main(void) {
     UNITY_BEGIN();

@@ -12,7 +12,7 @@ static void	_do_test(t_state *s)
 			return ;
 		ast = parse(s, input);
 		if (!ast)
-			err("ERR parse()\n");
+			fprintf(stderr, "ERR parse()\n");
 		set_exit_status(s, cmd_execute(s, ast));
 		s_free_cmd(s);
 	}

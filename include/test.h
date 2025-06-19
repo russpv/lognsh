@@ -30,7 +30,7 @@
 #  define MYTEST 0
 # endif
 
-# define SHELL_EXE "./minish"
+# define SHELL_EXE "./shell_test"
 
 char	*run_bash(const char *cmd);
 char	*run_my_shell(const char *cmd);

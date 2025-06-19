@@ -12,7 +12,7 @@ void print_string_debug(const char *str) {
     printf("\n");
 }
 
-/**
+/*
  * Run command in Bash and return output as a string.
  */
 char *run_bash(const char *cmd) {
@@ -37,10 +37,9 @@ char *run_bash(const char *cmd) {
     return result;
 }
 
-/**
+/*
  * Run command in our shell and return output as a string.
  */
-
 char *run_my_shell(const char *cmd) 
 {
     int outpipefds[2];
@@ -97,7 +96,7 @@ char *run_my_shell(const char *cmd)
         close(outpipefds[0]);
     }
     fprintf(stderr, "%s", BLU);
-    fprintf(stderr, "\tGot from minish:%s", result);
+    fprintf(stderr, "\tGot from yoursh:%s", result);
     fprintf(stderr, "%s", CRESET);
     return result;
 }

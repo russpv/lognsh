@@ -1,6 +1,7 @@
 SHELL := /bin/bash
-TARGET = minishell
-TEST_TARGET = testsh
+TARGET = mysh
+TEST_TARGET = tester
+MAIN_TEST_TARGET = shell_test # match what's in test.h
 OUTPUT = executable
 
 # Colors
@@ -20,11 +21,12 @@ SRCDIR = src
 RESDIR = res
 EXTDIR = external
 TESTDIR = test
+TEST_OBJDIR = $(OBJDIR)/test_mode
 
 # Compiler and flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -DLOGMODE -DDEBUGMODE -DDEBUGVMODE # -fsanitize=address
-TEST_CFLAGS = -Wall  -g -DTESTMODE  # -Werror -Wextra
+TEST_CFLAGS = -Wall -Wextra -Werror -g -DTESTMODE  # -Werror -Wextra
 EXT_CFLAGS = -DEXTENDEDFUNC
 LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses #-fsanitize=address #
 LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
@@ -32,6 +34,7 @@ LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
 ifeq ($(shell uname), Darwin)  # macOS
     INC += -I$(INCDIR) -I/usr/local/opt/readline/include/
 	CFLAGS += -DMACOS
+	TEST_CFLAGS += -DMACOS
 else  # Linux
     INC += -I$(INCDIR) -I/usr/include/readline # $(shell pkg-config --cflags readline)
 endif
@@ -53,12 +56,13 @@ LIB_PATH_SO = $(LIB_DIR)/$(LIB_NAME_SO)
 
 # BONUS_SOURCES = $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 # BONUS_OBJECTS = $(addprefix $(OBJDIR), $(BONUS_SOURCES:.c=.o))
-TEST_SOURCES = $(shell find $(TESTDIR) -type f -name '*.$(SRCEXT)')
+TEST_SOURCES = $(shell find $(TESTDIR) -maxdepth 1 -type f -name '*.$(SRCEXT)')
 TEST_OBJECTS = $(patsubst $(TESTDIR)/%,$(OBJDIR)/test/%,$(TEST_SOURCES:.c=.o))
 SOURCES = $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)" ! -name "test_*.$(SRCEXT)")
 OBJECTS = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEXT)))
 UNITY_SRC = $(shell find $(EXTDIR)/unity/ -type f -name '*.$(SRCEXT)')
 UNITY_OBJ = $(patsubst $(EXTDIR)/unity/%,$(OBJDIR)/test/%,$(UNITY_SRC:.c=.o))
+MAIN_TEST_OBJECTS = $(patsubst $(OBJDIR)/%,$(TEST_OBJDIR)/%,$(OBJECTS)) # separate compiled src w/ test flags
 
 # Default Make
 all: directories $(TARGET)
@@ -76,8 +80,6 @@ directories:
 	@mkdir -p $(TARGETDIR)
 	@mkdir -p $(OBJDIR)
 
-# Pull in dependencies for *existing* .o files
- #-include $(OBJECTS:.$(OBJEXT)=.$(DEPEXT))
 
 # Link the executable
 $(TARGET): $(OBJECTS) $(LIB_PATH)
@@ -96,26 +98,34 @@ $(OBJDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)  # % ensures obj file associates wi
 	@sed -e 's/.*://' -e 's/\\$$//' < $(OBJDIR)/$*.$(DEPEXT).tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $(OBJDIR)/$*.$(DEPEXT)
 	@rm -f $(OBJDIR)/$*.$(DEPEXT).tmp
 
-#@echo "$(GREEN)$(BOLD)SUCCESS$(RESET)"
-#@echo "$(YELLOW)Created: $(words $(OBJECTS) ) object file(s)$(RESET)"
-#@echo "$(YELLOW)Created: $(NAME)$(RESET)"
 
-tst: directories $(TEST_TARGET)
+tst: directories $(TEST_TARGET) $(MAIN_TEST_TARGET)
 
-$(TEST_TARGET) : $(UNITY_OBJ) $(LIB_PATH) $(TEST_OBJECTS)
+# Link test binaries
+$(TEST_TARGET) : $(UNITY_OBJ) $(LIB_PATH) $(TEST_OBJECTS) 
 	$(CC) -o $(TARGETDIR)/$(TEST_TARGET) $^ $(LDFLAGS)
 	chmod +x $(TARGETDIR)/$(TEST_TARGET)
 	@cp $(TARGETDIR)/$(TEST_TARGET) .
+
+$(MAIN_TEST_TARGET): $(MAIN_TEST_OBJECTS) $(LIB_PATH)
+	$(CC) -o $(TARGETDIR)/$(MAIN_TEST_TARGET) $^ $(LDFLAGS)
+	chmod +x $(TARGETDIR)/$(MAIN_TEST_TARGET)
+	@cp $(TARGETDIR)/$(MAIN_TEST_TARGET) .
 
 # Compile Unity
 $(OBJDIR)/$(TESTDIR)/%.$(OBJEXT): $(EXTDIR)/unity/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
 	$(CC) $(TEST_CFLAGS) -I$(EXTDIR)/unity -c $< -o $@
 
+# Compile tst
 $(OBJDIR)/$(TESTDIR)/%.$(OBJEXT): $(TESTDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
-	$(CC) $(TEST_CFLAGS) -I$(EXTDIR)/unity -c $< -o $@
+	$(CC) $(TEST_CFLAGS) -I$(EXTDIR)/unity -I$(INCDIR) -c $< -o $@
 
+# Compile tst versions of src
+$(TEST_OBJDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(dir $@)
+	$(CC) $(TEST_CFLAGS) $(INC) -c $< -o $@
 
 bonus: .bonus_made
 
@@ -123,13 +133,6 @@ bonus: .bonus_made
 	@echo "Creating $(NAME) $(OUTPUT) with extended functionality..."
 	$(MAKE) CFLAGS="$(CFLAGS) $(EXT_CFLAGS)"
 	-@touch .bonus_made
-#	@echo "$(GREEN)$(BOLD)SUCCESS$(RESET)"
-#	@echo "$(YELLOW)Created: $(words $(OBJECTS) $(BONUS_OBJECTS)) object file(s)$(RESET)"
-#	@echo "$(YELLOW)Created: $(NAME)$(RESET)"
-#
-#%(OBJDIR)/%.o: %.c | $(OBJDIR) # -DDEBUGMODE
-#	$(CC) -c $(CFLAGS) $< -o $@ #Initial compilation of .c files
-
 
 # make lib
 $(LIB_PATH):
@@ -149,8 +152,6 @@ cleaner: clean
 	@$(RM) -f $(TARGET) # copied to root for lame evaluators
 	rm -f $(LIB_NAME) # don't delete so!
 	-@rm -f .bonus_made
-# @echo "$(GREEN)$(BOLD)SUCCESS$(RESET)"
-# @echo "$(YELLOW) Deleted: $(words $(OBJECTS) $(BONUS_OBJECTS)) object file(s)$(RESET)"
 
 # Full clean
 fclean: cleaner
@@ -159,9 +160,6 @@ fclean: cleaner
 	rm -f $(LIB_NAME_SO)
 	@$(MAKE) -C $(LIB_DIR) fclean
 	@rm -f $(LIB_DIR)/error.txt
-# @echo "$(GREEN)SUCCESS$(RESET)"
-# @echo "$(YELLOW) Deleted $(words $(NAME)) object files(s)$(RESET)"
-# @echo "$(YELLOW) Deleted: $(NAME)"
 
 re: fclean all
 
