@@ -47,8 +47,11 @@ globals/ – Shell-wide constants and signal flag
 - **Good enough is enough.** The shell rejects Bash's more obscure or magical behaviors (e.g. quote-newline continuation)
 - **Readable C.** Avoided cleverness. Emphasized separation of concerns and traceable behavior.
 
+## 📄 License
+
+MIT License – see LICENSE for details.
+
 ---
 
-## 🧭 Why I Use This as My Login Shell
+    I didn’t write this to replace Bash. I wrote it to understand what a shell really is and to have something I could trust and debug fully. `lognsh` doesn't support scripting or job control. It doesn’t try to guess what you meant. But it’s solid, minimal, and... mine!
 
-I didn’t write this to replace Bash. I wrote it to understand what a shell really is and to have something I could trust and debug fully. `lognsh` doesn't support scripting or job control. It doesn’t try to guess what you meant. But it’s solid, minimal, and... mine!
