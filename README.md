@@ -8,7 +8,7 @@ A minimal interactive Unix shell implemented in C. Designed for login use, not s
 🔸 Pipes (`|`) and redirections (`>`, `<`, `>>`)  
 🔸 Built-in commands (`cd`, `exit`, `export`, `unset`, `pwd`, `echo`, `env`)  
 🔸 Signal handling (`CTRL+C`, heredocs, process kill safety)  
-🔸 Fully memory-managed with (soon) internal garbage collection  
+🔸 Fully memory-managed with internal memory tracking  
 ❌ No job control (`fg`, `&`, `CTRL+Z`, backgrounding)  
 ❌ No scripting / `if`, `for`, or functions
 
@@ -49,7 +49,7 @@ globals/ – Shell-wide constants and signal flag
 
 ## 📄 License
 
-MIT License – see LICENSE for details.
+MIT License – see [LICENSE](LICENSE.md) for details.
 
 ---
 
