@@ -53,5 +53,5 @@ MIT License – see LICENSE for details.
 
 ---
 
-    I didn’t write this to replace Bash. I wrote it to understand what a shell really is and to have something I could trust and debug fully. `lognsh` doesn't support scripting or job control. It doesn’t try to guess what you meant. But it’s solid, minimal, and... mine!
+ I didn’t write this to replace Bash. I wrote it to understand what a shell really is and to have something I could trust and debug fully. `lognsh` doesn't support scripting or job control. It doesn’t try to guess what you meant. But it’s solid, minimal, and... mine!
 
