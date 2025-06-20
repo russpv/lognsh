@@ -1,1 +1,0 @@
-false && echo should_not_run || echo fallback

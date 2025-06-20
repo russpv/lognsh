@@ -1,6 +1,6 @@
 SUBMIT1/
 TEST/
-FINAL/test/output/default
+FINAL/
 *.VSCodeCounter
 *.txt
 .vscode
@@ -14,6 +14,7 @@ obj/
 vgcore.*
 libft.a
 lib/libft.a
+test/testglob
 bin/
 *.bak
 lognsh
