@@ -127,13 +127,6 @@ $(TEST_OBJDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
 	$(CC) $(TEST_CFLAGS) $(INC) -c $< -o $@
 
-bonus: .bonus_made
-
-.bonus_made:
-	@echo "Creating $(NAME) $(OUTPUT) with extended functionality..."
-	$(MAKE) CFLAGS="$(CFLAGS) $(EXT_CFLAGS)"
-	-@touch .bonus_made
-
 # make lib
 $(LIB_PATH):
 	@$(MAKE) -C $(LIB_DIR)
@@ -149,15 +142,14 @@ clean:
 # Clean+, objects and binaries
 cleaner: clean
 	@$(RM) -rf $(TARGETDIR)
-	@$(RM) -f $(TARGET) # copied to root for lame evaluators
+	@$(RM) -f $(TARGET)
 	rm -f $(LIB_NAME) # don't delete so!
 	-@rm -f .bonus_made
 
 # Full clean
 fclean: cleaner
-	rm -f $(LIB_PATH)
-	rm -f $(LIB_NAME)
-	rm -f $(LIB_NAME_SO)
+	rm -f $(LIB_PATH) $(LIB_NAME) $(LIB_NAME_SO)
+	rm -f $(TARGET) $(TEST_TARGET) $(MAIN_TEST_TARGET)
 	@$(MAKE) -C $(LIB_DIR) fclean
 	@rm -f $(LIB_DIR)/error.txt
 
@@ -167,4 +159,4 @@ so:
 	$(CC) -fPIC $(CFLAGS) -c $(SOURCES) $(BONUS_SOURCES)
 	$(CC) -nostartfiles -shared -o pipex.so $(OBJECTS) $(BONUS_OBJECTS)
 
-.PHONY: all tst bonus clean cleaner fclean re resources so
+.PHONY: all tst clean cleaner fclean re resources so
