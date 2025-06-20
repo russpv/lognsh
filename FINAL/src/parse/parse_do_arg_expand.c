@@ -23,7 +23,7 @@ static int	_do_arg_ops(t_state *s, const t_arg_data *c, char *buf,
 		*value = get_env_val(s, buf);
 		if (*value)
 		{
-			new_raw = ft_strdup_tmp(get_mem(s), *value);
+			new_raw = ft_strdup_mem(get_mem(s), *value);
 			if (!new_raw)
 				exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__,
 					EMSG_PATH_MALLOC);

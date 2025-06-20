@@ -9,7 +9,7 @@ static void	_check_envp(t_state *s, const t_tok *c, char *buf, char **value)
 	*value = get_env_val(s, buf);
 	if (*value)
 	{
-		new_raw = ft_strdup_tmp(get_mem(s), *value);
+		new_raw = ft_strdup_mem(get_mem(s), *value);
 		if (!new_raw)
 			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}

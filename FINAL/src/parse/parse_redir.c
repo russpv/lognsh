@@ -16,7 +16,7 @@ static void	_set_tok(t_parser *p, t_redir_data *red, t_ast_node *n,
 	red->target_ptr = n;
 	p_set_do_redir_expansion(n, red->do_expansion);
 	p_set_do_redir_globbing(n, red->do_globbing);
-	red->filename = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok_fname));
+	red->filename = ft_strdup_mem(p->mmgr, tok_get_raw((t_tok *)tok_fname));
 	if (!red->filename)
 		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_REDIR_FN);
 }
@@ -87,7 +87,7 @@ static int	_process_heredoc_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 	red->do_expansion = tok_get_expansion(tok);
 	p_set_do_redir_expansion(n, red->do_expansion);
 	red->do_globbing = false;
-	red->heredoc_body = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok));
+	red->heredoc_body = ft_strdup_mem(p->mmgr, tok_get_raw((t_tok *)tok));
 	if (!red->heredoc_body)
 		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EM_HDC_M);
 	return (0);
@@ -104,7 +104,7 @@ int	process_normal_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 
 	if (!p || !red || !tok)
 		return (ERR_ARGS);
-	red->symbol = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok));
+	red->symbol = ft_strdup_mem(p->mmgr, tok_get_raw((t_tok *)tok));
 	if (!red->symbol)
 		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EMSG_REDIR_SYM_MALLOC);
 	dprint("%s: %s: redir typ:%d sym:%s\n", _MOD_, __FUNCTION__, red->type,

@@ -108,7 +108,7 @@ static int	_process_cmd(t_state *s, t_parser *p, t_ast_node *cmd_node)
 	}
 	if (false == is_expansion(peek(p)) && false == is_group_token(peek(p)))
 	{
-		cmd_node->data.cmd.name = ft_strdup_tmp(p->mmgr,
+		cmd_node->data.cmd.name = ft_strdup_mem(p->mmgr,
 				tok_get_raw(advance(p)));
 		if (NULL == cmd_node->data.cmd.name)
 			exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);

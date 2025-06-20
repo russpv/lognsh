@@ -54,11 +54,11 @@ t_env	*create_env_node(t_mem_mgr *m, const char *key, const char *value)
 	new_node = m->f(&m->list, sizeof(t_env));
 	if (!new_node)
 		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Malloc");
-	new_node->key = ft_strdup_tmp(m, key);
+	new_node->key = ft_strdup_mem(m, key);
 	if (!new_node->key)
 		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Malloc");
 	if (value)
-		new_node->value = ft_strdup_tmp(m, value);
+		new_node->value = ft_strdup_mem(m, value);
 	if (NULL == new_node->value)
 		exit_clean(&m->list, ENOMEM, __FUNCTION__, "Malloc");
 	new_node->next = NULL;

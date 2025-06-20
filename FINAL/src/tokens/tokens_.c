@@ -70,7 +70,7 @@ t_tok	*create_token(t_mem_mgr *mgr, const char *s, int type, size_t pos)
 && TOK_WORD == type)
 				type = TOK_EMPTY;
 			else
-				token->t.tok.raw = ft_strdup_tmp(mgr, s);
+				token->t.tok.raw = ft_strdup_mem(mgr, s);
 			_init_normal_token(token, type, pos);
 		}
 	}
@@ -92,7 +92,7 @@ void	*create_tmp_token(t_mem_mgr *mgr, const void *s)
 			TOK_WORD);
 		if (ft_strnlen(s, MAX_INPUT_SZ) > MAX_INT_BUFLEN)
 			return (pbufflow(s), mgr->dealloc(&mgr->list, token), NULL);
-		token->t.tok.raw = ft_strdup_tmp(mgr, s);
+		token->t.tok.raw = ft_strdup_mem(mgr, s);
 		if (!token->t.tok.raw)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		_init_normal_token(token, TOK_WORD, -1);
@@ -116,7 +116,7 @@ void	*create_split_token(t_mem_mgr *mgr, const void *s)
 			TOK_WORD);
 		if (ft_strnlen(s, MAX_INPUT_SZ) > MAX_INT_BUFLEN)
 			return (pbufflow(s), mgr->dealloc(&mgr->list, token), NULL);
-		token->t.tok.raw = ft_strdup_tmp(mgr, s);
+		token->t.tok.raw = ft_strdup_mem(mgr, s);
 		if (!token->t.tok.raw)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		_init_normal_token(token, TOK_WORD, -1);
@@ -154,7 +154,7 @@ static void	_init_meta(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
 static void	_init_norm(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
 {
 	new_t->class = t->class;
-	new_t->t.tok.raw = ft_strdup_tmp(mgr, t->t.tok.raw);
+	new_t->t.tok.raw = ft_strdup_mem(mgr, t->t.tok.raw);
 	if (NULL == new_t->t.tok.raw)
 		exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	new_t->t.tok.type = t->t.tok.type;

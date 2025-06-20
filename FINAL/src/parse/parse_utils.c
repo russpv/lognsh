@@ -28,7 +28,7 @@ char	**list_to_array(t_mem_mgr *m, t_list *args, int argc)
 		new_s = NULL;
 		array[i] = new_s;
 		if (NULL == array[i])
-			array[i] = ft_strdup_tmp(m, ((t_arg_data *)args->content)->raw);
+			array[i] = ft_strdup_mem(m, ((t_arg_data *)args->content)->raw);
 		if (NULL == array[i])
 		{
 			_destroy_arr(m, array);

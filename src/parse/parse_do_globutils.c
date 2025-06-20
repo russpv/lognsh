@@ -77,7 +77,7 @@ static void	_add_readdir_globs(DIR *dir, t_mem_mgr *m, const char *pattern,
 		if (true == _matches_pattern(dres->d_name, pattern))
 		{
 			dprint(DBGMSG_GLOBMATCH, _MOD_, dres->d_name);
-			name = ft_strdup_tmp(m, dres->d_name);
+			name = ft_strdup_mem(m, dres->d_name);
 			new = ft_lstnew_tmp(m, name);
 			if (NULL == new || NULL == name)
 				exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);

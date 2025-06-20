@@ -15,7 +15,7 @@ static void	_init_meta(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
 static void	_init_norm(t_mem_mgr *mgr, t_tok *t, t_tok *new_t)
 {
 	new_t->class = t->class;
-	new_t->t.tok.raw = ft_strdup_tmp(mgr, t->t.tok.raw);
+	new_t->t.tok.raw = ft_strdup_mem(mgr, t->t.tok.raw);
 	if (NULL == new_t->t.tok.raw)
 		exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	new_t->t.tok.type = t->t.tok.type;

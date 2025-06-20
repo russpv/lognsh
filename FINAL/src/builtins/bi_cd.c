@@ -57,7 +57,7 @@ static int	_change_dir(t_state *s, const char *target)
 
 	if (!target)
 		return (ERR_GENERAL);
-	new_dir = ft_strdup_tmp(get_mem(s), target);
+	new_dir = ft_strdup_mem(get_mem(s), target);
 	if (0 == ft_strcmp(target, "-"))
 		if (!old_pwd || ft_strcmp(old_pwd, "") == 0)
 			return (print_custom_err(CMD_NAME, EMSG_OLDPWDNOTSET), 1);

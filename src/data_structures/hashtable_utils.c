@@ -34,7 +34,7 @@ static int	_init_node(t_mem_mgr *m, t_ht ht, struct s_ht_entry **np,
 	*np = (struct s_ht_entry *)m->f(&m->list, sizeof(struct s_ht_entry));
 	if (NULL == np)
 		return (-1);
-	(*np)->name = ft_strdup_tmp(m, name);
+	(*np)->name = ft_strdup_mem(m, name);
 	if (NULL == (*np)->name)
 	{
 		m->dealloc(&m->list, np);

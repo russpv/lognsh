@@ -6,7 +6,7 @@ int	p_set_cmd(t_mem_mgr *m, t_ast_node *a, const char *cmd)
 {
 	if (a->type != AST_NODE_CMD || !cmd)
 		return (-1);
-	a->data.cmd.name = ft_strdup_tmp(m, cmd);
+	a->data.cmd.name = ft_strdup_mem(m, cmd);
 	if (!a->data.cmd.name)
 		exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	return (0);

@@ -13,7 +13,7 @@ int	put_str_on_toklst(t_state *s, char **str)
 	dprint(_MOD_ ": %s: _%s_\n", __FUNCTION__, *str);
 	if (UNQUOTED == get_tmp_flag(s))
 		*str = do_trim(s, *str, IFS, BACK);
-	tmp = ft_strdup_tmp(get_mem(s), *str);
+	tmp = ft_strdup_mem(get_mem(s), *str);
 	if (!tmp)
 		exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	ft_lstadd_back(tok_lst, ft_lstnew_tmp(get_mem(s),

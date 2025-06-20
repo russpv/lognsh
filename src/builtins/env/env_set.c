@@ -18,9 +18,9 @@ void	env_set_node_value(t_mem_mgr *m, t_env *node, const char *value)
 	if (node->value)
 		m->dealloc(&m->list, node->value);
 	if (value)
-		new_value = ft_strdup_tmp(m, value);
+		new_value = ft_strdup_mem(m, value);
 	else
-		new_value = ft_strdup_tmp(m, "");
+		new_value = ft_strdup_mem(m, "");
 	if (!new_value)
 		return ;
 	node->value = new_value;

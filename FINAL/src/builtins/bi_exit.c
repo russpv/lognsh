@@ -50,7 +50,7 @@ static char	*get_numeric(t_state *s, const char *str)
 		return (res);
 	if (*buf)
 	{
-		res = ft_strdup_tmp(get_mem(s), buf);
+		res = ft_strdup_mem(get_mem(s), buf);
 		if (!res)
 			exit_clean(&get_mem(s)->list, ENOMEM, CMD_NAME, EMSG_MALLOC);
 	}

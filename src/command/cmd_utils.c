@@ -5,13 +5,13 @@ static void	_fill_argv_nocmd(t_mem_mgr *m, int i, struct s_context *ctxt)
 {
 	if (i == 0)
 	{
-		ctxt->argv[0] = ft_strdup_tmp(m, ctxt->args[0]);
+		ctxt->argv[0] = ft_strdup_mem(m, ctxt->args[0]);
 		if (!ctxt->argv[0])
 			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	else if (ctxt->args && i < ctxt->argc)
 	{
-		ctxt->argv[i] = ft_strdup_tmp(m, ctxt->args[i]);
+		ctxt->argv[i] = ft_strdup_mem(m, ctxt->args[i]);
 		if (!ctxt->argv[i])
 			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
@@ -27,13 +27,13 @@ static void	_fill_argv_cmdname(t_mem_mgr *m, int i, struct s_context *ctxt)
 {
 	if (i == 0)
 	{
-		ctxt->argv[0] = ft_strdup_tmp(m, ctxt->cmdname);
+		ctxt->argv[0] = ft_strdup_mem(m, ctxt->cmdname);
 		if (!ctxt->argv[0])
 			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}
 	else if (ctxt->args)
 	{
-		ctxt->argv[i] = ft_strdup_tmp(m, ctxt->args[i - 1]);
+		ctxt->argv[i] = ft_strdup_mem(m, ctxt->args[i - 1]);
 		if (!ctxt->argv[i])
 			exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	}

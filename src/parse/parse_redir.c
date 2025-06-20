@@ -42,7 +42,7 @@ static int	_process_heredoc_redir(t_parser *p, t_tok *tok, t_redir_data *red,
 	red->do_expansion = tok_get_expansion(tok);
 	p_set_do_redir_expansion(n, red->do_expansion);
 	red->do_globbing = false;
-	red->heredoc_body = ft_strdup_tmp(p->mmgr, tok_get_raw((t_tok *)tok));
+	red->heredoc_body = ft_strdup_mem(p->mmgr, tok_get_raw((t_tok *)tok));
 	if (!red->heredoc_body)
 		exit_clean(&p->mmgr->list, ENOMEM, __FUNCTION__, EM_HDC_M);
 	return (0);

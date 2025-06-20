@@ -7,7 +7,7 @@
 static void	_commit_body(t_state *s, t_redir_data *r, char *new_body)
 {
 	(get_mem(s))->dealloc(&get_mem(s)->list, r->heredoc_body);
-	r->heredoc_body = ft_strdup_tmp(get_mem(s), new_body);
+	r->heredoc_body = ft_strdup_mem(get_mem(s), new_body);
 	if (NULL == r->heredoc_body)
 		exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 }

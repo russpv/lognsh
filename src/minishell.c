@@ -18,6 +18,24 @@ static void	_do_test(t_state *s)
 	}
 }
 
+static int	_do_one_loop(t_state *s, char *input)
+{
+	t_ast_node	*ast;
+	
+	g_last_signal = -1;
+	set_input(s, ft_strdup(input));
+	if (NULL == get_input(s))
+		return (SIGEOF_AT_INPUT);
+	g_last_signal = -1;
+	if (get_input(s)[0] == '\0')
+		return (0);
+	ast = parse(s, get_input(s));
+	if (ast)
+		set_exit_status(s, cmd_execute(s, ast));
+	s_free_cmd_lex_parse(s);
+	return (*get_status(s));
+}
+
 static int	_do_loop(t_state *s)
 {
 	t_ast_node	*ast;
@@ -47,14 +65,14 @@ int	main(int argc, char **argv, char **envp)
 	t_state	*s;
 	int		res;
 
-	(void)argv;
-	(void)argc;
 	res = 0;
 	s = init_state(envp);
 	if (s)
 	{
 		if (MYTEST)
 			_do_test(s);
+		else if (argc > 1)
+			res = _do_one_loop(s, argv[1]);
 		else
 		{
 			while (1)

@@ -54,7 +54,7 @@ t_arg_data	*init_arg(t_mem_mgr *m, t_parser *p, t_ast_node *cmd_node,
 	{
 		if (tok_get_raw(tok))
 		{
-			arg->raw = ft_strdup_tmp(m, tok_get_raw(tok));
+			arg->raw = ft_strdup_mem(m, tok_get_raw(tok));
 			if (!arg->raw)
 				exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		}
@@ -86,7 +86,7 @@ void	*create_arg_data_node_deep(t_mem_mgr *mgr, const void *content)
 	arg_data = mgr->f(&mgr->list, sizeof(t_arg_data));
 	if (arg_data)
 	{
-		arg_data->raw = ft_strdup_tmp(mgr, raw);
+		arg_data->raw = ft_strdup_mem(mgr, raw);
 		if (!arg_data->raw)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		arg_data->do_expansion = false;
@@ -115,7 +115,7 @@ void	*create_redir_data_node_deep(t_mem_mgr *mgr, const void *content)
 	red_data = mgr->f(&mgr->list, sizeof(t_redir_data));
 	if (red_data)
 	{
-		red_data->filename = ft_strdup_tmp(mgr, fn);
+		red_data->filename = ft_strdup_mem(mgr, fn);
 		if (!red_data->filename)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		red_data->do_expansion = false;

@@ -87,7 +87,7 @@ int	do_arg_inserts(t_mem_mgr *mgr, t_list **lst_node, t_list **ins_lst,
 	}
 	else
 	{
-		new_arg = ft_strdup_tmp(mgr, (*ins_lst)->content);
+		new_arg = ft_strdup_mem(mgr, (*ins_lst)->content);
 		if (!new_arg)
 			exit_clean(&mgr->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 		mgr->dealloc(&mgr->list, content->raw);

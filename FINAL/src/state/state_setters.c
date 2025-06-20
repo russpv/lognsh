@@ -50,7 +50,7 @@ void	set_tmp(t_state *s, char *str)
 {
 	if (NULL != s->tmp)
 		(get_mem(s))->dealloc(&get_mem(s)->list, s->tmp);
-	s->tmp = ft_strdup_tmp(get_mem(s), str);
+	s->tmp = ft_strdup_mem(get_mem(s), str);
 }
 
 void	set_tmp_flag(t_state *s, int val)
@@ -91,12 +91,12 @@ void	set_pwd(t_state *s)
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (perror("Cannot retrieve working directory\n"));
-	tmp = ft_strdup_tmp(get_mem(s), pwd);
+	tmp = ft_strdup_mem(get_mem(s), pwd);
 	if (!tmp)
 		exit_clean(&get_mem(s)->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 	free(pwd);
 	env_upsert_value(get_mem(s), lst, CWD_KEY, tmp);
-	tmp2 = ft_strdup_tmp(get_mem(s), tmp);
+	tmp2 = ft_strdup_mem(get_mem(s), tmp);
 	s->pwd = tmp2;
 	dprint("Set pwd:%s\n", s->pwd);
 }

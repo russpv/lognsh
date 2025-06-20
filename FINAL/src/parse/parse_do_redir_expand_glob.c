@@ -26,7 +26,7 @@ int	p_do_globbing_redirs(t_mem_mgr *m, void *c)
 				return (err(EM_AMBIG), ERR_AMBIGUOUS_REDIR);
 			else
 			{
-				new_fn = ft_strdup_tmp(m, r->lst_glob->content);
+				new_fn = ft_strdup_mem(m, r->lst_glob->content);
 				if (!new_fn)
 					exit_clean(&m->list, ENOMEM, __FUNCTION__, EMSG_MALLOC);
 				m->dealloc(&m->list, r->filename);

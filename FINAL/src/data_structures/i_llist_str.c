@@ -72,7 +72,7 @@ t_list	*ft_lstnew_copystr_mem(t_mem_mgr *m, void *content,
 ** This returns pointer to new string
 ** malloc handles errno
 */
-char	*ft_strdup_tmp(t_mem_mgr *mgr, const char *s)
+char	*ft_strdup_mem(t_mem_mgr *mgr, const char *s)
 {
 	char	*newstr;
 	size_t	len;

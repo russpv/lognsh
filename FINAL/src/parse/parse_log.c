@@ -66,7 +66,7 @@ static int	_process_op(t_parser *p, t_ast_node *log_node)
 
 	if (!p || !log_node)
 		return (ERR_ARGS);
-	op = ft_lstnew_copystr_mem(p->mmgr, tok_get_raw(peek(p)), ft_strdup_tmp);
+	op = ft_lstnew_copystr_mem(p->mmgr, tok_get_raw(peek(p)), ft_strdup_mem);
 	if (op)
 		ft_lstadd_back(&log_node->data.log.operators, op);
 	else

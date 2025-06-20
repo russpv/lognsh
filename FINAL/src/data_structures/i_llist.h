@@ -54,6 +54,6 @@ t_list				*ft_lstmap_tmp(t_mem_mgr *mgr, t_list *lst,
 						void *(*f)(t_mem_mgr *, const void *),
 						void (*del)(t_mem_mgr *, void **));
 
-char				*ft_strdup_tmp(t_mem_mgr *mgr, const char *s);
+char				*ft_strdup_mem(t_mem_mgr *mgr, const char *s);
 
 #endif
