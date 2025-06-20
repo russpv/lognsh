@@ -1,1 +1,0 @@
-cc  -Wall -Wextra -g    -DDEBUGMODE -DLOGMODE  -Iinclude -I/usr/include/readline  -c -o obj/builtins/bi.o src/builtins/bi.c
