@@ -1,6 +1,6 @@
 # Lognsh
 
-A minimal interactive Unix shell implemented in C. Designed for login use, not scripting. No job control, no weirdness, just fundament.
+A minimal interactive Unix shell implemented in C. Designed for login use, not scripting.
 
 
 ## ✅ Feature Summary
