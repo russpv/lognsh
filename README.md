@@ -5,7 +5,7 @@ A minimal interactive Unix shell implemented in C. Designed for login use, not s
 
 ## ✅ Feature Summary
 🔸 Tokenization, expansion, and parsing with explicit internal structure  
-🔸 Pipes (`|`) and redirections (`>`, `<`, `>>`)  
+🔸 Pipes (`|`), redirections (`>`, `<`, `>>`), wildcards, logicals (`&&`, `||`), subs (`()`)  
 🔸 Built-in commands (`cd`, `exit`, `export`, `unset`, `pwd`, `echo`, `env`)  
 🔸 Signal handling (`CTRL+C`, heredocs, process kill safety)  
 🔸 Fully memory-managed with internal memory tracking  
@@ -68,6 +68,10 @@ globals/ – Shell-wide constants and signal flag
 ## 📄 License
 
 MIT License – see [LICENSE](LICENSE.md) for details.
+
+## Contributors
+
+- archshire - built-in commands and env scaffolding
 
 ---
 
