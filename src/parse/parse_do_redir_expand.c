@@ -71,14 +71,14 @@ static int	_helper(t_state *s, const t_redir_data	*r_data, char *buf, \
 int	p_do_red_expansion(t_state *s, void *r)
 {
 	const t_redir_data	*r_data = (t_redir_data *)r;
-	char				buf[MAX_NAME_LEN];
+	char				buf[MAX_FILENAME_LEN + 1];
 	size_t				fn_len;
 
 	if (NULL == r || NULL == s)
 		return (ERR_ARGS);
 	if (NULL == r_data->filename)
 		return (p_do_heredoc_expansion(s, (t_redir_data *)r));
-	fn_len = ft_strnlen(r_data->filename, MAX_NAME_LEN);
+	fn_len = ft_strnlen(r_data->filename, MAX_FILENAME_LEN);
 	ft_memset(buf, 0, sizeof(buf));
 	dprint(MSG_IN, _MOD_, r_data->filename);
 	if (r_data->do_expansion)

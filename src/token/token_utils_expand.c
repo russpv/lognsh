@@ -37,7 +37,7 @@ static int	_do_tok_ops(t_state *s, const t_tok *c, char *buf, char **value)
 static int	_do_expansion(t_state *s, const t_tok *content, char *value,
 		size_t raw_len)
 {
-	char	keybuf[MAX_NAME_LEN];
+	char	keybuf[MAX_ENV_NAME_LEN + 1];
 	int		res;
 
 	res = 0;
@@ -69,7 +69,7 @@ int	tok_do_expansion(t_state *s, void *c)
 		return (0);
 	if (GROUP == content->class)
 		return (0);
-	raw_len = ft_strnlen(content->t.tok.raw, MAX_NAME_LEN);
+	raw_len = ft_strnlen(content->t.tok.raw, MAX_ENV_NAME_LEN);
 	dprint(_MOD_ ": %s:  %s\n", __FUNCTION__, content->t.tok.raw);
 	res = _do_expansion(s, content, value, raw_len);
 	return (res);

@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-TARGET = mysh
+TARGET = lognsh
 TEST_TARGET = tester
 MAIN_TEST_TARGET = shell_test # match what's in test.h
 OUTPUT = executable
@@ -28,7 +28,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -O2 #-g -DLOGMODE -DDEBUGMODE -DDEBUGVMODE # -fsanitize=address
 TEST_CFLAGS = -Wall -Wextra -Werror -g -DTESTMODE  # -Werror -Wextra
 EXT_CFLAGS = -DEXTENDEDFUNC
-LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses #-fsanitize=address #
+LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses # -fsanitize=address
 LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
 
 ifeq ($(shell uname), Darwin)  # macOS
@@ -36,7 +36,7 @@ ifeq ($(shell uname), Darwin)  # macOS
 	CFLAGS += -DMACOS
 	TEST_CFLAGS += -DMACOS
 else  # Linux
-    INC += -I$(INCDIR) -I/usr/include/readline # $(shell pkg-config --cflags readline)
+    INC += -I$(INCDIR) -I/usr/include/readline
 endif
 
 INCDEP = -I$(INCDIR)

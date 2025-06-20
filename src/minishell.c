@@ -3,7 +3,7 @@
 
 static void	_do_test(t_state *s)
 {
-	char		input[INPUT_BUF_SZ];
+	char		input[INPUT_BUF_LIM];
 	t_ast_node	*ast;
 
 	if (MYTEST)

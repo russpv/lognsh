@@ -21,9 +21,9 @@ static int	_go_up(char *pwdbuf)
 	len = (size_t)(marker - pwdbuf);
 	if (0 == len)
 		return (ERR_GENERAL);
-	if (len > INPUT_BUF_SZ - 1)
+	if (len > INPUT_BUF_LIM - 1)
 		return (ERR_BUFFLOW);
-	del_len = ft_strnlen(pwdbuf, INPUT_BUF_SZ) - len;
+	del_len = ft_strnlen(pwdbuf, INPUT_BUF_LIM) - len;
 	ft_memset(pwdbuf + len, 0, del_len);
 	return (0);
 }
@@ -32,9 +32,9 @@ static int	_go_up(char *pwdbuf)
 char	*make_absolute(t_state *s, const char *relpath)
 {
 	char	*pwd;
-	char	buf[INPUT_BUF_SZ];
+	char	buf[INPUT_BUF_LIM];
 
-	ft_memset(buf, 0, INPUT_BUF_SZ);
+	ft_memset(buf, 0, INPUT_BUF_LIM);
 	pwd = get_env_val(s, PWD_KEY);
 	ft_memmove(buf, pwd, ft_strlen(pwd));
 	while (*relpath && 0 == ft_strncmp(relpath, "..", 2))
@@ -45,7 +45,7 @@ char	*make_absolute(t_state *s, const char *relpath)
 		if (0 == ft_strncmp(relpath, "/", 1))
 			relpath++;
 	}
-	buf[ft_strnlen(buf, INPUT_BUF_SZ)] = '/';
+	buf[ft_strnlen(buf, INPUT_BUF_LIM)] = '/';
 	return (ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, buf, relpath));
 }
 

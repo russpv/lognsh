@@ -194,8 +194,11 @@ size_t	read_heredoc(int fd, t_lex *l)
 			perror("Pipe read");
 		sz += bytes;
 	}
-	if (sz > LEX_BUFSZ)
-		sz = LEX_BUFSZ;
+	if (sz > sizeof(l->buf))
+	{
+	    dprint("[WARN] Heredoc input truncated at %d bytes\n", sizeof(l->buf));
+		sz = sizeof(l->buf);
+	}
 	l->lines = _getncount(buf, '\n', sz);
 	if (0 != buf[0] && sz > 0)
 		ft_memmove(l->buf, buf, sz);

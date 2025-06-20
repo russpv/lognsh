@@ -4,25 +4,27 @@
 
 # include <signal.h>
 
-# define SHELL_NAME "minish"
+# define SHELL_NAME "lognsh"
 # define DFL_PROMPT "\001\033[32m\002minish> \001\033[0m\002"
 # define HDOC_PROMPT "> "
 
-// Used in cd, test mode argv,
-// upper bound to capture input for testing
-# define INPUT_BUF_SZ 2048
+// used in cd, test mode argv, token raw str copying
+# define INPUT_BUF_LIM 2048 // what we're willing to work with
 
-# define MAX_INPUT_SZ 4096
+# define MAX_INPUT_SZ 4096   // hard cap for raw input
 # define MAX_OUTPUT_SZ 4096  // pipes
-# define MAX_NAME_LEN 50     // export names, token raws, error msgs, fns,
-# define MAX_VAL_LEN LEX_BUFSZ - MAX_NAME_LEN //export values
-# define MAX_INT_BUFLEN 1024 // token raw len
-# define IFS " \t\n"
+# define MAX_FILENAME_LEN 255
+# define MAX_NAME_LEN 128     // err msgs, tok splits
+# define MAX_ENV_NAME_LEN 256
+# define MAX_ENV_VAL_LEN (LEX_BUFSZ - MAX_ENV_NAME_LEN)
+# define MAX_INT_BUFLEN 1024 // hard cap for tok raw
 
 /* Lexer */
-# define LEX_MAX_TOKC 1000
-# define LEX_BUFSZ 1024
-# define MAX_HDOCSZ LEX_BUFSZ
+# define LEX_MAX_TOKC 1000  // can be wordy
+# define LEX_BUFSZ 1024		// conservative, I know
+# define MAX_HDOCSZ LEX_BUFSZ // rn, hdocs are stuffed into lex_buf
+
+# define IFS " \t\n"
 
 extern volatile sig_atomic_t	g_last_signal;
 

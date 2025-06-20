@@ -11,7 +11,7 @@ static void	_print_args(char **argv, int *first_arg, int argc, int i)
 	{
 		if (!*first_arg)
 			write(STDOUT_FILENO, " ", 1);
-		write(STDOUT_FILENO, argv[i], ft_strnlen(argv[i], INPUT_BUF_SZ));
+		write(STDOUT_FILENO, argv[i], ft_strnlen(argv[i], INPUT_BUF_LIM));
 		*first_arg = 0;
 		i++;
 	}

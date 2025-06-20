@@ -22,7 +22,7 @@ static int	_get_new_val(t_state *s, char *buf, char **new_val)
 		return (res);
 	else if (res == 0)
 		*new_val = get_env_val(s, buf);
-	if (ft_strnlen(*new_val, MAX_INPUT_SZ) > INPUT_BUF_SZ)
+	if (ft_strnlen(*new_val, MAX_INPUT_SZ) > INPUT_BUF_LIM)
 		return (ERR_BUFFLOW);
 	return (0);
 }
@@ -42,7 +42,7 @@ static int	_insert_expanded_var(t_state *s, char *buf, char **ptr,
 	if (0 != res)
 		return (res);
 	offset = *ptr - r->heredoc_body;
-	if (ft_strnlen(r->heredoc_body, INPUT_BUF_SZ) + ft_strlen(new_val)
+	if (ft_strnlen(r->heredoc_body, INPUT_BUF_LIM) + ft_strlen(new_val)
 		+ 1 > MAX_INPUT_SZ)
 		return (pbufflow(NULL), ERR_BUFFLOW);
 	ft_strlcpy(new_body, r->heredoc_body, offset);

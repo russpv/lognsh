@@ -9,7 +9,7 @@
 
 // Used in cd, test mode argv,
 // upper bound to capture input for testing
-# define INPUT_BUF_SZ 2048
+# define INPUT_BUF_LIM 2048
 
 # define MAX_INPUT_SZ 4096
 # define MAX_OUTPUT_SZ 4096  // pipes
