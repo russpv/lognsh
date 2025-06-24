@@ -1,4 +1,3 @@
-
 #include "parse_int.h"
 
 #define EM_AMBIG "ERR multiple redirect targets globbed\n"
@@ -7,6 +6,7 @@
 
 /* The redir version of p_do_globbing_args.
  * Operates on a single t_redir_data node.
+ * Inserts globstar results for the filename.
  */
 int	p_do_globbing_redirs(t_mem_mgr *m, void *c)
 {
@@ -14,7 +14,7 @@ int	p_do_globbing_redirs(t_mem_mgr *m, void *c)
 	char			*new_fn;
 
 	r = (t_redir_data *)c;
-	dprint(DM_RDR_G, _MOD_, r->type, r->filename, r->heredoc_body,
+	dprint(DM_RDR_G, _MOD_, __FUNCTION__, r->type, r->filename, r->heredoc_body,
 		r->do_globbing);
 	if (true == r->do_globbing)
 	{

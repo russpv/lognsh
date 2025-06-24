@@ -1,7 +1,4 @@
-
 #include "execute_int.h"
-#include <errno.h>
-#include <string.h>
 
 #define LOGMSG_EREDIR_DONE "\tRedirect: dup2 from %d to %d\n"
 

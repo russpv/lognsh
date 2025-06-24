@@ -1,4 +1,3 @@
-
 #ifndef SIGNAL_INT_H
 # define SIGNAL_INT_H
 

@@ -1,4 +1,3 @@
-
 #include "parse_int.h"
 
 #define CONT 10
@@ -65,7 +64,7 @@ static int	_do_expansion(t_state *s, t_redir_data *r, char *buf, char *ptr)
 		len = ft_varnamelen((const char *)(ptr + 1));
 		len |= (int)(check_special_expansions(s, ft_memcpy(buf, ptr + 1, 1),
 					NULL) < 0);
-		if (len <= 0 || len >= MAX_ENV_NAME_LEN)
+		if (len <= 0 || len >= MAX_NAME_LEN)
 			return (ZEROLEN);
 		++ptr;
 		ft_memcpy(buf, ptr, len);
@@ -82,7 +81,7 @@ static int	_do_expansion(t_state *s, t_redir_data *r, char *buf, char *ptr)
 int	p_do_heredoc_expansion(t_state *s, t_redir_data *r)
 {
 	char	*ptr;
-	char	buf[MAX_ENV_NAME_LEN];
+	char	buf[MAX_NAME_LEN];
 	int		res;
 
 	ft_memset(buf, 0, sizeof(buf));

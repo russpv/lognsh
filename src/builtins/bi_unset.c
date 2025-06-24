@@ -1,4 +1,3 @@
-
 #include "bi_int.h"
 
 #define _CMD_NAME_ "unset"

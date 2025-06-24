@@ -1,4 +1,3 @@
-
 #include "lex_int.h"
 
 /* terminates a lexer run */

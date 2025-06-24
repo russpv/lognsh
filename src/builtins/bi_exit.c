@@ -1,4 +1,3 @@
-
 #include "bi_int.h"
 
 #define CMD_NAME "exit"

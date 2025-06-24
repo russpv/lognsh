@@ -1,4 +1,3 @@
-
 #ifndef BI_INT_H
 # define BI_INT_H
 

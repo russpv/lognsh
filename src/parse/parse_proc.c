@@ -1,4 +1,3 @@
-
 #include "parse_int.h"
 
 /*
@@ -58,7 +57,7 @@ static int	_add_cmd(t_parser *p, t_ast_node *proc_node)
 {
 	t_list	*cmd_node;
 
-	if (!p || !proc_node)
+	if (!p || !proc_node || !p->last_node)
 		return (ERR_ARGS);
 	dprint(_MOD_ ": Proc got a node of type %d\n", p->last_node->type);
 	cmd_node = ft_lstnew_tmp(p->mmgr, p->last_node);
@@ -115,8 +114,7 @@ t_ast_node	*parse_proc(t_state *s, t_parser *p)
 	t_ast_node	*ast_node;
 	int			res;
 
-	if (0 != st_int_push(p->st, AST_NODE_PROC))
-		return (set_parse_err(p), NULL);
+	st_int_push(p->st, AST_NODE_PROC);
 	dprint(_MOD_ ": parse_proc tok: %s\n", tok_get_raw(peek(p)));
 	ast_node = _init_proc(p->mmgr);
 	if (NULL == ast_node)
@@ -127,6 +125,7 @@ t_ast_node	*parse_proc(t_state *s, t_parser *p)
 	{
 		set_error(s, res);
 		destroy_ast_node(get_mem(s), (void **)&ast_node);
+		p->parse_error = true;
 		return (NULL);
 	}
 	dprint(_MOD_ ": curr peek tok: %s\n", tok_get_raw(peek(p)));

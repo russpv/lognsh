@@ -1,5 +1,44 @@
-
 #include "llist_int.h"
+
+bool	str_isalnum(const char *s)
+{
+	if (!s)
+		return (false);
+	while (*s)
+	{
+		if (!ft_isalnum(*s))
+			return (false);
+		s++;
+	}
+	return (true);
+}
+
+bool	str_hasalnum(const char *s)
+{
+	if (!s)
+		return (false);
+	while (*s)
+	{
+		if (ft_isalnum(*s))
+			return (true);
+		s++;
+	}
+	return (false);
+}
+
+void	init_merge(struct s_merge *m, t_list **beg, t_list **end, t_list *mid)
+{
+	m->i = 0;
+	m->tail = beg;
+	m->tmp = NULL;
+	m->l = *beg;
+	m->r = mid->next;
+	m->tmp2 = &(*((*end)->next));
+	m->nodec = ft_lstsize_betw(*beg, *end);
+	m->mid = mid;
+	m->beg = beg;
+	m->end = end;
+}
 
 static int	_swap(t_list *beg, t_list *end)
 {
@@ -62,14 +101,8 @@ static void	_solve(t_list **lst, t_list **beg, t_list **end)
 		_solve(lst, &(mid->next), end);
 	}
 	if (*beg != mid && *beg != *end && (*beg)->next != *end)
-		merge_segment(lst, beg, mid, end);
+		merge(lst, beg, mid, end);
 }
-/*
- * Filename sort order rules:
- * 1. Special characters like +, ( appear before alphanum
- * 2. $VAR strings come before plain strings, but after symbols
- * 3. Case-insensitive sort, unless equal ignoring case → fallback to original
- */
 
 // Sorts a content->string llist in CUSTOM ascending lexicographic order.
 // Operator chars are superior. Any '$' prefixed string is superior.

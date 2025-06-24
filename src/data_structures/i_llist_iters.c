@@ -1,4 +1,3 @@
-
 #include "i_llist.h"
 
 /* LSTDELONE RWD

@@ -1,4 +1,3 @@
-
 #include "command_int.h"
 
 void	destroy_cmd_fns(t_mem_mgr *m, t_cmd_fns *f)

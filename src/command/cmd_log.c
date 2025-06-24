@@ -1,4 +1,3 @@
-
 #include "command_int.h"
 
 #define HALT_EXEC -1

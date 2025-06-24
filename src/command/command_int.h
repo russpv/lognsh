@@ -1,9 +1,7 @@
-
 #ifndef COMMAND_INT_H
 # define COMMAND_INT_H
 
 # include "command.h"
-
 # define _MOD_ "Command"
 # define NO_CMD -10
 

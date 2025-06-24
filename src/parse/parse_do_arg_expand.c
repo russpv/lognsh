@@ -1,4 +1,3 @@
-
 #include "parse_int.h"
 
 #define EMSG_PATH_MALLOC "Allocation for path value failed.\n"

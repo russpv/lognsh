@@ -1,6 +1,7 @@
 SUBMIT1/
 TEST/
 FINAL/
+OLD/
 *.VSCodeCounter
 *.txt
 .vscode

@@ -1,4 +1,3 @@
-
 #ifndef LEX_H
 # define LEX_H
 
@@ -6,8 +5,7 @@
 # include "../data_structures/hashtable.h"
 # include "../data_structures/llist.h"
 # include "../data_structures/stack.h"
-# include "../state/state.h"
-# include "../token/token.h"
+# include "../tokens/tokens.h"
 # include <stdbool.h>
 
 # define LEXKEEPDOLLR 1 // 1 for keeping '$' in expansions

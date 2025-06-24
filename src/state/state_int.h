@@ -1,4 +1,3 @@
-
 #ifndef STATE_INT_H
 # define STATE_INT_H
 

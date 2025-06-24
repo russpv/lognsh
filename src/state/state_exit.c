@@ -1,4 +1,3 @@
-
 #include "state.h"
 
 /* Exits without leaks. */

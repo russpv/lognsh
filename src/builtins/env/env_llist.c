@@ -1,4 +1,3 @@
-
 #include "env_int.h"
 
 // Adds node to back of llist
@@ -90,7 +89,7 @@ static int	_extract_key_value(const char *env_str, char key[], char value[])
 t_env	*copy_envp(t_mem_mgr *m, char **envp)
 {
 	t_env	*env_list;
-	char	key[MAX_ENV_NAME_LEN];
+	char	key[MAX_NAME_LEN];
 	char	value[MAX_INPUT_SZ];
 	int		i;
 	t_env	*new_node;

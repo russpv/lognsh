@@ -1,4 +1,3 @@
-
 #include "execute_int.h"
 
 /* Executes redirects, if any, and calls built-in */

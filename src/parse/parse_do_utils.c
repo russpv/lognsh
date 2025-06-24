@@ -1,4 +1,3 @@
-
 #include "parse_int.h"
 
 int	p_is_arg_null(void *c)

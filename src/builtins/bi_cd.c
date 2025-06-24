@@ -1,4 +1,3 @@
-
 #include "bi_int.h"
 
 #define CMD_NAME "cd"
@@ -49,29 +48,30 @@ char	*make_absolute(t_state *s, const char *relpath)
 	return (ft_strjoin_mem(&get_mem(s)->list, get_mem(s)->f, buf, relpath));
 }
 
-// Wraps chdir()
+// Dupes target (in case it comes from OLDPWD/PWD) and sends to chdir()
 static int	_change_dir(t_state *s, const char *target)
 {
-	char	*new_dir;
-	char	*alt_dir;
+	char		*new_dir;
+	char		*alt_dir;
+	const char	*old_pwd = env_find_value(OLDPWD_KEY, get_env_list(s));
 
+	if (!target)
+		return (ERR_GENERAL);
+	new_dir = ft_strdup_mem(get_mem(s), target);
 	if (0 == ft_strcmp(target, "-"))
-	{
-		new_dir = env_find_value(OLDPWD_KEY, get_env_list(s));
-		if (!new_dir || ft_strcmp(new_dir, "") == 0)
+		if (!old_pwd || ft_strcmp(old_pwd, "") == 0)
 			return (print_custom_err(CMD_NAME, EMSG_OLDPWDNOTSET), 1);
-	}
-	else
-		new_dir = (char *)target;
 	set_oldpwd(s, CMD_NAME);
-	if (0 != chdir(new_dir))
+	if (0 == chdir(new_dir))
+		return (set_pwd(s), 0);
+	if (NULL == ft_strchr(new_dir, '/'))
 	{
-		if (NULL == ft_strchr(new_dir, '/'))
+		alt_dir = make_absolute(s, new_dir);
+		if (0 != chdir(alt_dir))
 		{
-			alt_dir = make_absolute(s, new_dir);
-			if (0 != chdir(alt_dir))
-				return (print_custom_err_err(CMD_NAME, target, strerror(errno)),
-					ERR_GENERAL);
+			get_mem(s)->dealloc(&get_mem(s)->list, alt_dir);
+			return (print_custom_err_err(CMD_NAME, target, strerror(errno)),
+				ERR_GENERAL);
 		}
 	}
 	set_pwd(s);

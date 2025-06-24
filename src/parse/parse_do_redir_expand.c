@@ -1,4 +1,3 @@
-
 #include "parse_int.h"
 
 #define EMSG_PATH_MALLOC "Allocation for path value failed.\n"
@@ -46,7 +45,7 @@ static int	_get_expanded_fn(t_state *s, const t_redir_data *r, char *buf,
 }
 
 static int	_helper(t_state *s, const t_redir_data	*r_data, char *buf, \
-	size_t fn_len)
+size_t fn_len)
 {
 	char	*value;
 	int		res;
@@ -71,14 +70,14 @@ static int	_helper(t_state *s, const t_redir_data	*r_data, char *buf, \
 int	p_do_red_expansion(t_state *s, void *r)
 {
 	const t_redir_data	*r_data = (t_redir_data *)r;
-	char				buf[MAX_FILENAME_LEN + 1];
+	char				buf[MAX_NAME_LEN];
 	size_t				fn_len;
 
 	if (NULL == r || NULL == s)
 		return (ERR_ARGS);
 	if (NULL == r_data->filename)
 		return (p_do_heredoc_expansion(s, (t_redir_data *)r));
-	fn_len = ft_strnlen(r_data->filename, MAX_FILENAME_LEN);
+	fn_len = ft_strnlen(r_data->filename, MAX_NAME_LEN);
 	ft_memset(buf, 0, sizeof(buf));
 	dprint(MSG_IN, _MOD_, r_data->filename);
 	if (r_data->do_expansion)

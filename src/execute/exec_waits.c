@@ -1,4 +1,3 @@
-
 #include "execute.h"
 
 #define DBGMSG_EXEC_EXITCODE "Exec: Child %d exited w/ stat:%d\n"

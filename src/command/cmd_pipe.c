@@ -1,4 +1,3 @@
-
 #include "command_int.h"
 
 #define LOGMSG_CPIPE_ANNOUNCE "Cmd: \t### cmd_exec_pipe ###\n"

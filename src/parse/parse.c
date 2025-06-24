@@ -1,4 +1,3 @@
-
 #include "parse_int.h"
 
 /* Returns AST node.
@@ -39,17 +38,6 @@ t_ast_node	*parse_full_cmd(t_state *s, t_parser *p)
 	p->parse_error = true;
 	set_exit_status(s, EX_EINVAL);
 	return (NULL);
-}
-
-/* Inserts easily into test function */
-t_ast_node	*test_parse(t_state *s, t_parser *parser)
-{
-	t_ast_node	*ast;
-
-	while (!is_at_end(parser) && !parser->parse_error)
-		ast = parse_full_cmd(s, parser);
-	parser->ast = ast;
-	return (ast);
 }
 
 t_ast_node	*parse(t_state *s, char *input)

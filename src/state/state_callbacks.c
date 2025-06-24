@@ -1,4 +1,3 @@
-
 #include "state_int.h"
 
 void	register_parser_destroy(t_state *s, t_destroy_fn fn)

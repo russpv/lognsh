@@ -1,4 +1,3 @@
-
 #include "stack_int.h"
 
 t_ptr_stack	*st_ptr_create(t_mem_mgr *m)

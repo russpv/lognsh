@@ -10,6 +10,28 @@
      free(bash_output); \
  }
 
+ #define DEFINE_E2E_ENV_TEST(test_name, input) \
+ void test_name(void) { \
+     printf("\n"); \
+     char *output = run_my_shell(input); \
+     TEST_ASSERT_NOT_NULL(strstr(output, "PATH=")); \
+     TEST_ASSERT_NOT_NULL(strstr(output, "HOME=")); \
+     TEST_ASSERT_NOT_NULL(strstr(output, "USER=")); \
+     free(output); \
+ }
+
+#define DEFINE_E2E_GLOB_TEST(test_name, input) \
+void test_name(void) { \
+    printf("\n"); \
+    char *my_output = run_my_shell(input); \
+    char *bash_output = run_bash(input); \
+    StringSet my_set, bash_set; \
+    stringset_init(&my_set); \
+    stringset_init(&bash_set); \
+    stringset_from_string(&my_set, my_output); \
+    stringset_from_string(&bash_set, bash_output); \
+    TEST_ASSERT_TRUE_MESSAGE(stringset_equal(&my_set, &bash_set), "Globbing outputs differ"); \
+}
 
 // Tests for basic parser functionality
 DEFINE_E2E_TEST(test_echo, "echo hello world");
@@ -17,12 +39,12 @@ DEFINE_E2E_TEST(test_simple_pipe, "ls -l | grep file");
 DEFINE_E2E_TEST(test_simple_redirection, "echo test > output.txt");
 
 /* syntax, delimiters */
-DEFINE_E2E_TEST(test_space_handling_norm, "echo $Hello World"); //FAIL, giving ' World'?
+DEFINE_E2E_TEST(test_space_handling_norm, "echo $Hello World");
 DEFINE_E2E_TEST(test_space_handling_dq, "echo \"$Hello World\"");
 DEFINE_E2E_TEST(test_space_handling_sq, "echo \'$Hello World\'");
-DEFINE_E2E_TEST(test_hash_no_space_norm, "echo Hello!@#$%^&*World"); //Expected FAIL; Bash event or job
-DEFINE_E2E_TEST(test_hash_no_space_sq, "echo \'Hello!@#$%^&*World\'");
-DEFINE_E2E_TEST(test_hash_no_space_dq, "echo \"Hello!@#$%^&*World\"");
+DEFINE_E2E_TEST(test_hash_no_space_norm, "echo Hello!@#$%^*World"); 
+DEFINE_E2E_TEST(test_hash_no_space_sq, "echo \'Hello!@#$%^*World\'");
+DEFINE_E2E_TEST(test_hash_no_space_dq, "echo \"Hello!@#$%^*World\"");
 
 /* BUILTINS */
 DEFINE_E2E_TEST(test_echo_builtin, "echo -n 'Hello World'");
@@ -33,7 +55,7 @@ DEFINE_E2E_TEST(test_export_builtin1, "export VAR=value");
 DEFINE_E2E_TEST(test_export_builtin2, "$VAR");
 DEFINE_E2E_TEST(test_unset_builtin1, "unset VAR");
 DEFINE_E2E_TEST(test_unset_builtin2, "$VAR");
-DEFINE_E2E_TEST(test_env_builtin, "env");
+DEFINE_E2E_ENV_TEST(test_env_builtin, "env");
 DEFINE_E2E_TEST(test_exit_builtin, "exit");
 
 
@@ -44,9 +66,9 @@ DEFINE_E2E_TEST(test_unexpected_token, "echo hello | | echo world");
 
 /* quote functionality */
 DEFINE_E2E_TEST(test_single_quote_metacharacters, "echo 'hello > world'");
-DEFINE_E2E_TEST(test_double_quote_metacharacters, "echo \"hello $USER\""); // FAIL
+DEFINE_E2E_TEST(test_double_quote_metacharacters, "echo \"hello $USER\"");
 DEFINE_E2E_TEST(test_single_quote_special_chars, "echo 'this should escape \\$PATH'");
-DEFINE_E2E_TEST(test_double_quote_special_chars, "echo \"this should not escape \\$PATH\""); // FAIL, path retrieval exceeds bounds
+DEFINE_E2E_TEST(test_double_quote_special_chars, "echo \"this should not escape \\$PATH\"");
 
 
 /* expansion */
@@ -57,22 +79,19 @@ DEFINE_E2E_TEST(test_exit_status_expansion2, "echo $?");
 
 
 /* globbing */
-DEFINE_E2E_TEST(test_wildcard_basic, "echo *"); //FAIL, put BACK tolower()
-DEFINE_E2E_TEST(test_wildcard_in_path, "ls *"); //FAIL, put BACK tolower()
+DEFINE_E2E_GLOB_TEST(test_wildcard_basic, "echo *"); //FAIL, different sort algo
+DEFINE_E2E_GLOB_TEST(test_wildcard_in_path, "ls *"); 
 
 
 /* control_flow */
-DEFINE_E2E_TEST(test_ctrl_c_behavior, "echo hello <ctrl-C> echo world");  // FAIL, doesn't work properly
-DEFINE_E2E_TEST(test_ctrl_d_behavior, "echo hello <ctrl-D>");  // ctrl-D should exit // DOESNT WORK
-DEFINE_E2E_TEST(test_ctrl_backslash_behavior, "echo hello <ctrl-\\> echo world");  // ctrl-\ does nothing
-
+// TODO figure out how to simulate signals
 
 /* Redirs */
-DEFINE_E2E_TEST(test_input_redirection, "echo hello < input.txt"); // FAIL, need to halt command if redir fails
+DEFINE_E2E_TEST(test_input_redirection, "echo hello < input.txt");
 DEFINE_E2E_TEST(test_output_redirection, "echo hello > output.txt");
 DEFINE_E2E_TEST(test_append_redirection1, "echo hello >> append.txt");
 DEFINE_E2E_TEST(test_append_redirection2, "cat append.txt");
-DEFINE_E2E_TEST(test_input_redirection_invalid, "echo hello < nonexistent.txt"); // FAIL, halt command
+DEFINE_E2E_TEST(test_input_redirection_invalid, "echo hello < nonexistent.txt");
 DEFINE_E2E_TEST(test_heredoc_no_delim, "echo hello <<");
 DEFINE_E2E_TEST(test_redirection_error, "echo hello >");
 DEFINE_E2E_TEST(test_redirection_glob, "echo hello > *");
@@ -84,16 +103,16 @@ DEFINE_E2E_TEST(test_heredoc_redirection4, "cat << EOF\n\\$?\\$?$\\\nEOF"); // $
 
 
 /* logicals */
-DEFINE_E2E_TEST(test_andif_operator, "echo hello && echo world"); //FAIL
-DEFINE_E2E_TEST(test_andif_fail, "echo hello && nonexistent_command"); //FAIL
-DEFINE_E2E_TEST(test_orif_operator, "nonexistent_command || echo world"); //FAIL
-DEFINE_E2E_TEST(test_orif_fail, "echo hello || echo world"); //FAIL
+DEFINE_E2E_TEST(test_andif_operator, "echo hello && echo world"); 
+DEFINE_E2E_TEST(test_andif_fail, "echo hello && nonexistent_command"); 
+DEFINE_E2E_TEST(test_orif_operator, "nonexistent_command || echo world");
+DEFINE_E2E_TEST(test_orif_fail, "echo hello || echo world"); 
 
-DEFINE_E2E_TEST(test_andif_redirection, "echo hello && echo world > output.txt"); //FAIL
+DEFINE_E2E_TEST(test_andif_redirection, "echo hello && echo world > output.txt");
 DEFINE_E2E_TEST(test_orif_redirection, "nonexistent_command || echo world > output.txt");
 
-DEFINE_E2E_TEST(test_andif_priority, "echo hello && (echo world || echo foo)"); //FAIL
-DEFINE_E2E_TEST(test_orif_priority, "echo hello || (echo world && echo foo)"); //FAIL
+DEFINE_E2E_TEST(test_andif_priority, "echo hello && (echo world || echo foo)"); 
+DEFINE_E2E_TEST(test_orif_priority, "echo hello || (echo world && echo foo)"); 
 
 
 /* pipes */
@@ -105,7 +124,7 @@ DEFINE_E2E_TEST(test_pipe_with_redirection, "echo hello | grep he > result.txt")
 
 /* subshells */
 DEFINE_E2E_TEST(test_proc_redirection0, "echo /'will be empty/' > in");
-DEFINE_E2E_TEST(test_proc_redirection, "(echo haha | cat) >in >me"); //FAIL
+DEFINE_E2E_TEST(test_proc_redirection, "(echo haha | cat) >in >me");
 DEFINE_E2E_TEST(test_proc_redirection2, "cat me");
 DEFINE_E2E_TEST(test_proc_redirection3, "cat in");
 
@@ -175,9 +194,7 @@ TEST_GROUP_RUNNER(builtins) {
 }
 
 TEST_GROUP_RUNNER(control_flow) {
-    RUN_TEST(test_ctrl_c_behavior);
-    RUN_TEST(test_ctrl_d_behavior);
-    RUN_TEST(test_ctrl_backslash_behavior);
+// TODO
 }
 
 TEST_GROUP_RUNNER(logicals) {

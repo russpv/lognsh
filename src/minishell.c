@@ -1,4 +1,3 @@
-
 #include "../include/minishell.h"
 
 static void	_do_test(t_state *s)
@@ -10,6 +9,7 @@ static void	_do_test(t_state *s)
 	{
 		if (NULL == fgets(input, sizeof(input), stdin))
 			return ;
+		set_input(s, ft_strdup(input));
 		ast = parse(s, input);
 		if (!ast)
 			fprintf(stderr, "ERR parse()\n");

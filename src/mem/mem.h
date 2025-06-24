@@ -1,9 +1,9 @@
-
 #ifndef MEM_H
 # define MEM_H
 
 # include "../data_structures/i_llist.h"
 # include <errno.h>
+# include <stdint.h>
 
 # define MSG_FAIL "Memory allocation failed.\n"
 

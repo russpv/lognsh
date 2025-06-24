@@ -1,4 +1,3 @@
-
 #include "../command/command.h"
 #include "../parse/parse.h"
 #include "log.h"

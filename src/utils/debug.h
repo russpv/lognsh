@@ -1,4 +1,3 @@
-
 #ifndef DEBUG_H
 # define DEBUG_H
 
@@ -32,7 +31,6 @@ void					dvprint(const char *format, ...);
 void					lgprint(const char *s, ...);
 void					dprintdiv(const char *format, ...);
 
-void					err(const char *s);
 void					cprintf(const char *color, const char *format, ...);
 void					debug_detect_cycle(t_list *head);
 

@@ -4,7 +4,7 @@
 MALLOC_LIB="./malloc_override.so"  # Replace with the correct path if necessary
 
 # Path to the compiled program (e.g., your shell executable)
-PROGRAM="../../minish"  # Replace with the correct path to your shell program
+PROGRAM="../../lognsh"  # Replace with the correct path to your shell program
 
 # Example command to run with your shell (adjust as needed)
 ARGS="echo haha>out"

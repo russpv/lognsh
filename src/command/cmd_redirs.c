@@ -1,4 +1,3 @@
-
 #include "command_int.h"
 
 #define EMSG_REDIRSV_NULLARG "save_redirs: ERR null command parameters\n"

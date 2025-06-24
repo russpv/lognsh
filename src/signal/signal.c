@@ -1,4 +1,3 @@
-
 #include "signal_int.h"
 
 void	clear_current_line(void)
@@ -30,7 +29,7 @@ void	sigint_killchild(int signo)
 	}
 }
 
-// Unblocks readline()
+// Unblocks readline() in heredoc
 void	sigint_killrl(int signo)
 {
 	if (signo == SIGINT)

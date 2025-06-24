@@ -1,4 +1,3 @@
-
 #ifndef LLIST_INT_H
 # define LLIST_INT_H
 
@@ -27,7 +26,7 @@ struct		s_merge
 void		init_merge(struct s_merge *m, t_list **beg, t_list **end,
 				t_list *mid);
 
-void		merge_segment(t_list **lst, t_list **beg, t_list *mid, t_list **end);
+void		merge(t_list **lst, t_list **beg, t_list *mid, t_list **end);
 int			compare(t_list *beg, t_list *end);
 void		get_root(char *buf, void *s);
 

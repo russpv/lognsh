@@ -1,4 +1,3 @@
-
 #include "lex_int.h"
 
 // Handles ENV vars and $ substitutions

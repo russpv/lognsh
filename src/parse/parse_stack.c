@@ -1,4 +1,3 @@
-
 #include "parse_int.h"
 
 t_pstack	*create_stack(t_mem_mgr *m)

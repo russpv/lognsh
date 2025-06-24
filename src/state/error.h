@@ -1,4 +1,3 @@
-
 #ifndef ERROR_H
 # define ERROR_H
 
@@ -87,6 +86,7 @@ void							print_too_many_args(const char *caller);
 void							print_redirect_warning(char *topath);
 void							print_filename_missing(const char *name);
 
+void							print_gen_err(const char *msg);
 void							print_custom_err(const char *dingus,
 									const char *msg);
 void							print_custom_err_err(const char *dingus,
@@ -123,6 +123,5 @@ extern const char				*lex_get_raw(t_lex *l);
 extern void						ft_putstr_fd(char const *s, int fd);
 extern char						*ft_strchr(const char *s, int c_in);
 extern size_t					ft_strnlen(const char *s, size_t maxlen);
-//void							perror(const char *);
 
 #endif

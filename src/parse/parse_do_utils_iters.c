@@ -1,4 +1,3 @@
-
 #include "parse_int.h"
 
 /* Custom llist iterator with t_state function ptr

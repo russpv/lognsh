@@ -1,4 +1,3 @@
-
 #include "parse_int.h"
 
 #define EM_PP_M "Memory allocation error while creating pipe's command node\n"
@@ -9,7 +8,7 @@ static t_ast_node	*_init_pipe(t_mem_mgr *m)
 {
 	t_ast_node	*pipe_node;
 
-	pipe_node = m->f(&m->list, sizeof(t_ast_node));
+	pipe_node = m->f(&m->list, sizeof(struct s_node));
 	if (pipe_node)
 	{
 		pipe_node->type = AST_NODE_PIPELINE;
@@ -41,7 +40,7 @@ static int	_process_pipe(t_state *s, t_parser *p, t_ast_node *pipe_node)
 {
 	if (!p || !pipe_node)
 		return (ERR_ARGS);
-	if (NULL == p->last_node || TOK_PIPE == tok_get_type(prev(p)))
+	if (NULL == p->last_node || TOK_PIPE == tok_get_type(previous(p)))
 	{
 		print_parse_error(s, tok_get_raw((p->curr_tok)->content),
 			tok_get_pos((p->curr_tok)->content));
@@ -72,9 +71,8 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 	int			res;
 
 	if (!p || !p->last_node)
-		return (set_parse_err(p), NULL);
-	if (0 != st_int_push(p->st, AST_NODE_PIPELINE))
-		return (set_parse_err(p), NULL);
+		return (NULL);
+	st_int_push(p->st, AST_NODE_PIPELINE);
 	dprint("%s: %s: tok: %s\n", _MOD_, __FUNCTION__, tok_get_raw(peek(p)));
 	ast_node = _init_pipe(p->mmgr);
 	if (NULL == ast_node)
@@ -84,6 +82,7 @@ t_ast_node	*parse_pipeline(t_state *s, t_parser *p)
 	{
 		set_error(s, res);
 		destroy_ast_node(get_mem(s), (void **)&ast_node);
+		p->parse_error = true;
 		return (err(EMSG_PPIPE_GEN), NULL);
 	}
 	dprint("%s: %s: parsed %d cmds\n", _MOD_, __FUNCTION__,

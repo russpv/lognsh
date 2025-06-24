@@ -1,4 +1,3 @@
-
 #include "mem.h"
 
 static void	_assign(t_mem_block *new, t_mem_node *first, t_mem_node *head)
@@ -33,6 +32,9 @@ int	mem_add_mem(t_mem_node *head, void *alloc, size_t size)
 		new->payload = alloc;
 		new->size = size;
 		first = head->next;
+		assert(new != NULL);
+		assert(head != NULL);
+		assert(head->next != NULL); 
 		_assign(new, first, head);
 		return (0);
 	}
@@ -75,13 +77,18 @@ t_mem_block	*mem_get_alloc(t_mem_node *head, void *alloc)
 	if (!head || !alloc)
 		return (NULL);
 	node = head->next;
-	while (node != head)
-	{
+	int i = 0;
+	
+	while (node != head && i++ < 10000) 
+	{  // safety limit to prevent infinite loop
 		block = get_mem_block_from_node(node);
-		if (!block)
-			return (NULL);
+		if (!block) 
+		{
+			fprintf(stderr, "mem_get_alloc: Invalid block (node=%p)\n", node);
+			break;
+		}
 		if (alloc == block->payload)
-			return (block);
+			return block;
 		node = node->next;
 	}
 	dprint("%s: block not found (%s) \n", __FUNCTION__, (char *)alloc);

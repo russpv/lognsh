@@ -1,4 +1,3 @@
-
 #ifndef STATE_H
 # define STATE_H
 
@@ -132,6 +131,7 @@ t_lex							*get_lexer(t_state *s);
 char							*get_pwd(t_state *s);
 char							*get_prompt(t_state *s);
 bool							get_heredoc(t_state *s);
+int								get_err(t_state *s);
 
 void							register_command_destroy(t_state *s,
 									t_destroy_fn fn);

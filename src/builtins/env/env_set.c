@@ -1,4 +1,3 @@
-
 #include "env_int.h"
 
 void	env_set_node_next(t_env *node, t_env *next)
@@ -29,7 +28,7 @@ void	env_set_node_value(t_mem_mgr *m, t_env *node, const char *value)
 // Returns 0 if error.
 // updates an existing environment variable's value
 static int	_update_existing_var(t_mem_mgr *m, t_env *existing_key, \
-				const char *value)
+const char *value)
 {
 	char	*new_value;
 

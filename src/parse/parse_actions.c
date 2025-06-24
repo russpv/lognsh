@@ -1,4 +1,3 @@
-
 #include "parse_int.h"
 
 /* Moves ptr and returns previous object */
@@ -30,7 +29,7 @@ t_tok	*lookahead(t_parser *p)
 		return (p->curr_tok->next->content);
 }
 
-t_tok	*prev(t_parser *p)
+t_tok	*previous(t_parser *p)
 {
 	return (p->curr_tok->prev->content);
 }

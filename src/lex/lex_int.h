@@ -1,4 +1,3 @@
-
 #ifndef LEX_INT_H
 # define LEX_INT_H
 
@@ -9,7 +8,7 @@
 # define NOGLOB 1
 # define NOEXPD 1
 # define FAIL_TOKEN 10
-# define INITVAL 0
+# define LEX_MAX_TOKC 1000
 
 /* LEX
  *
@@ -55,6 +54,11 @@
 //	< for heredoc
 // # handled in NORMAL
 // $ must be followed by alphanum or _ to delim a (sub)token
+
+# define LEX_BUFSZ 1024
+# define MAX_HDOCSZ LEX_BUFSZ
+# define INITVAL 0
+# define MOD "Lexer"
 
 enum						e_lex_state
 {
@@ -136,7 +140,6 @@ int							tokenize_double_quotes(t_state *s, t_lex *lexer);
 int							tokenize_null(t_state *s, t_lex *lexer);
 int							tokenize_heredoc(t_state *s, t_lex *lexer);
 int							tokenize_dollar(t_state *s, t_lex *lexer);
-bool						handle_quote_state(t_lex *lexer);
 
 /* Tokenize ops */
 t_tok						*lex_create_token(t_mem_mgr *st, t_lex *lexer,

@@ -1,4 +1,3 @@
-
 #include "command_int.h"
 
 static int	_handle_no_command(t_ast_node *a)

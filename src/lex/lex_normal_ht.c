@@ -1,4 +1,3 @@
-
 #include "lex_int.h"
 
 /* True if s is in the set of tokens that do not need to be delimited */

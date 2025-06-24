@@ -1,4 +1,3 @@
-
 #include "execute_int.h"
 
 static int	_handle_rl_errs_and_write(t_state *s, t_lex *l, int *fildes)

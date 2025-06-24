@@ -1,4 +1,3 @@
-
 #include "lex_int.h"
 
 /* Returns true if closing quote found at l->ptr 

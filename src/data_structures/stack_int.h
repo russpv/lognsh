@@ -1,4 +1,3 @@
-
 #ifndef STACK_INT_H
 # define STACK_INT_H
 
@@ -6,7 +5,6 @@
 # include "../utils/debug.h"
 
 # define MAX_ST_DEPTH 10
-
 # define DBGMSG_STPUSH_OVERFLOW "ERROR Stack overflow!\n"
 # define DBGMSG_STPOP_UNDERFL "ERROR Stack underflow!\n"
 

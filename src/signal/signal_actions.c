@@ -1,4 +1,3 @@
-
 #include "signal_int.h"
 
 void	sig_set_handlers(int option)

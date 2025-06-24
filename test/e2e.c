@@ -17,12 +17,14 @@ void print_string_debug(const char *str) {
  */
 char *run_bash(const char *cmd) {
     char buffer[1024];
+    char fullcmd[2048];
     char *result = malloc(MAX_BUF);
     result[0] = '\0';
 
 	memset(result, 0, MAX_BUF);
 	memset(buffer, 0, sizeof(buffer));
-    FILE *pipe = popen(cmd, "r"); // Run command in bash
+    snprintf(fullcmd, sizeof(fullcmd), "bash -c \"%s\"", cmd);
+    FILE *pipe = popen(fullcmd, "r"); // Run command in bash
     if (!pipe) return NULL;
 
     while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
@@ -101,3 +103,64 @@ char *run_my_shell(const char *cmd)
     return result;
 }
 
+
+/* -------------------------------------------------------------------------
+ * Function Group: Globbing test utils
+ * Description   : 
+ * ------------------------------------------------------------------------- */
+
+void stringset_init(StringSet *set) 
+{
+    set->items = NULL;
+    set->size = 0;
+    set->capacity = 0;
+}
+/*
+void stringset_free(StringSet *set) 
+{
+    for (size_t i = 0; i < set->size; i++) free(set->items[i]);
+    free(set->items);
+}*/
+
+// Add item if not present (keeps array sorted)
+void stringset_add(StringSet *set, const char *item)
+{
+    // Binary search for item
+    size_t low = 0, high = set->size;
+    while (low < high) {
+        size_t mid = (low + high) / 2;
+        int cmp = strcmp(set->items[mid], item);
+        if (cmp == 0) return; // Already in set
+        else if (cmp < 0) low = mid + 1;
+        else high = mid;
+    }
+    // Insert at position low
+    if (set->size == set->capacity) {
+        set->capacity = set->capacity ? set->capacity * 2 : 4;
+        set->items = realloc(set->items, set->capacity * sizeof(char *));
+    }
+    // Move items up
+    memmove(&set->items[low+1], &set->items[low], (set->size - low) * sizeof(char *));
+    set->items[low] = strdup(item);
+    set->size++;
+}
+
+bool stringset_equal(const StringSet *a, const StringSet *b)
+ {
+    if (a->size != b->size) return false;
+    for (size_t i = 0; i < a->size; i++) {
+        if (strcmp(a->items[i], b->items[i]) != 0) return false;
+    }
+    return true;
+}
+
+// Tokenize string by whitespace, add tokens to set
+void stringset_from_string(StringSet *set, const char *str)
+{
+    char *copy = strdup(str);
+    char *token = strtok(copy, " \t\r\n");
+    while (token) {
+        stringset_add(set, token);
+        token = strtok(NULL, " \t\r\n");
+    }
+}
