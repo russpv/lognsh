@@ -222,6 +222,12 @@ TEST_GROUP_RUNNER(errors) {
 
 
 int main(void) {
+    system("mkdir -p tmp");
+    if (chdir("tmp") != 0) 
+    {
+        perror("chdir to tmp failed");
+        return 1;
+    }
     UNITY_BEGIN();
 
     printf(UYEL"\n### Running Basic Tests ###\n"RESET);
@@ -269,6 +275,8 @@ int main(void) {
     RUN_TEST_GROUP(subshells);
 
     printf("\n### All Tests Complete ###\n");
-
-    return UNITY_END();
+    UNITY_END();
+    chdir("..");
+    system("rm -rf tmp");
+    return 0;
 }

@@ -18,7 +18,7 @@
 #  define MYTEST 0
 # endif
 
-# define SHELL_EXE "./shell_test"
+# define SHELL_EXE "../shell_test"
 
 typedef struct
 {
