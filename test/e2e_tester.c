@@ -38,7 +38,7 @@ DEFINE_E2E_TEST(test_echo, "echo hello world");
 DEFINE_E2E_TEST(test_simple_pipe, "ls -l | grep file");
 DEFINE_E2E_TEST(test_simple_redirection, "echo test > output.txt");
 
-/* syntax, delimiters */
+//syntax, delimiters 
 DEFINE_E2E_TEST(test_space_handling_norm, "echo $Hello World");
 DEFINE_E2E_TEST(test_space_handling_dq, "echo \"$Hello World\"");
 DEFINE_E2E_TEST(test_space_handling_sq, "echo \'$Hello World\'");
@@ -46,7 +46,7 @@ DEFINE_E2E_TEST(test_hash_no_space_norm, "echo Hello!@#$%^*World");
 DEFINE_E2E_TEST(test_hash_no_space_sq, "echo \'Hello!@#$%^*World\'");
 DEFINE_E2E_TEST(test_hash_no_space_dq, "echo \"Hello!@#$%^*World\"");
 
-/* BUILTINS */
+// BUILTINS
 DEFINE_E2E_TEST(test_echo_builtin, "echo -n 'Hello World'");
 DEFINE_E2E_TEST(test_echo_builtin2, "echo -nnnn 'Hello World'");
 DEFINE_E2E_TEST(test_cd_builtin, "cd /home");
@@ -59,34 +59,34 @@ DEFINE_E2E_ENV_TEST(test_env_builtin, "env");
 DEFINE_E2E_TEST(test_exit_builtin, "exit");
 
 
-/* Parse errors */
+// Parse errors 
 DEFINE_E2E_TEST(test_missing_command, ">");
 DEFINE_E2E_TEST(test_unexpected_token, "echo hello | | echo world");
 
 
-/* quote functionality */
+// quote functionality 
 DEFINE_E2E_TEST(test_single_quote_metacharacters, "echo 'hello > world'");
 DEFINE_E2E_TEST(test_double_quote_metacharacters, "echo \"hello $USER\"");
 DEFINE_E2E_TEST(test_single_quote_special_chars, "echo 'this should escape \\$PATH'");
 DEFINE_E2E_TEST(test_double_quote_special_chars, "echo \"this should not escape \\$PATH\"");
 
 
-/* expansion */
+// expansion 
 DEFINE_E2E_TEST(test_variable_expansion, "echo $HOME");
 DEFINE_E2E_TEST(test_variable_expansion_multiple, "echo $HOME $PATH");
 DEFINE_E2E_TEST(test_exit_status_expansion, "echo hello");
 DEFINE_E2E_TEST(test_exit_status_expansion2, "echo $?");
 
 
-/* globbing */
+// globbing 
 DEFINE_E2E_GLOB_TEST(test_wildcard_basic, "echo *"); //FAIL, different sort algo
 DEFINE_E2E_GLOB_TEST(test_wildcard_in_path, "ls *"); 
 
 
-/* control_flow */
+// control_flow 
 // TODO figure out how to simulate signals
 
-/* Redirs */
+// Redirs 
 DEFINE_E2E_TEST(test_input_redirection, "echo hello < input.txt");
 DEFINE_E2E_TEST(test_output_redirection, "echo hello > output.txt");
 DEFINE_E2E_TEST(test_append_redirection1, "echo hello >> append.txt");
@@ -102,7 +102,7 @@ DEFINE_E2E_TEST(test_heredoc_redirection4, "cat << EOF\n\\$?\\$?$\\\nEOF"); // $
 
 
 
-/* logicals */
+// logicals 
 DEFINE_E2E_TEST(test_andif_operator, "echo hello && echo world"); 
 DEFINE_E2E_TEST(test_andif_fail, "echo hello && nonexistent_command"); 
 DEFINE_E2E_TEST(test_orif_operator, "nonexistent_command || echo world");
@@ -115,18 +115,20 @@ DEFINE_E2E_TEST(test_andif_priority, "echo hello && (echo world || echo foo)");
 DEFINE_E2E_TEST(test_orif_priority, "echo hello || (echo world && echo foo)"); 
 
 
-/* pipes */
+// pipes 
 DEFINE_E2E_TEST(test_multiple_pipes, "echo hello | grep he | wc -c");
 DEFINE_E2E_TEST(test_empty_pipe, "echo hello | grep nonexistent | wc -c");
 DEFINE_E2E_TEST(test_pipe_invalid, "echo hello | | echo world");
 DEFINE_E2E_TEST(test_simple_pipe_invalid, "echo hello | nonexistent_command");
 DEFINE_E2E_TEST(test_pipe_with_redirection, "echo hello | grep he > result.txt");
 
-/* subshells */
+// subshells 
 DEFINE_E2E_TEST(test_proc_redirection0, "echo /'will be empty/' > in");
 DEFINE_E2E_TEST(test_proc_redirection, "(echo haha | cat) >in >me");
 DEFINE_E2E_TEST(test_proc_redirection2, "cat me");
 DEFINE_E2E_TEST(test_proc_redirection3, "cat in");
+
+
 
 
 TEST_GROUP_RUNNER(basic) {

@@ -26,7 +26,7 @@ TEST_OBJDIR = $(OBJDIR)/test_mode
 # Compiler and flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -DLOGMODE -DDEBUGMODE -DDEBUGVMODE #-O2 -g -DLOGMODE -DDEBUGMODE -DDEBUGVMODE # -fsanitize=address
-TEST_CFLAGS = -Wall -Wextra -Werror -g -DTESTMODE  # -Werror -Wextra
+TEST_CFLAGS = -Wall -Wextra -Werror -g #-DTESTMODE  # -Werror -Wextra
 EXT_CFLAGS = -DEXTENDEDFUNC
 LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses # -fsanitize=address
 LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
