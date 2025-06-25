@@ -36,7 +36,7 @@ hello
 ```bash
 # git clone https://github.com/russpv/lognsh.git <directory>
 make      # make tst
-./lognsh  # ./tester   <-- inspect end-to-end tests 
+./lognsh  # ./tester   <-- inspect end-to-end tests (has also been fuzzed)
 ```
 
 Ctrl + D to exit. Try:
