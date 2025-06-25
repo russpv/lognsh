@@ -34,8 +34,9 @@ hello
 ## 🚀 Quick Start
 
 ```bash
+# git clone https://github.com/russpv/lognsh.git <directory>
 make      # make tst
-./lognsh  # ./tester
+./lognsh  # ./tester   <-- inspect end-to-end tests 
 ```
 
 Ctrl + D to exit. Try:
