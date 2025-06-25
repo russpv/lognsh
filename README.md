@@ -41,7 +41,7 @@ make      # make tst
 
 Ctrl + D to exit. Try:
 ```
-ls | grep *lib > out.txt && (echo "Done.")
+ls | grep *lib > out.txt && (echo "Done, $USER.")
 cat < out.txt
 ```
 
