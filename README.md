@@ -34,8 +34,8 @@ hello
 ## 🚀 Quick Start
 
 ```bash
-make
-./lognsh
+make      # make tst
+./lognsh  # ./tester
 ```
 
 Ctrl + D to exit. Try:
@@ -56,7 +56,7 @@ execute/ – Process and pipe execution
 builtins/ – Internal shell commands  
 state/, mem/ – Memory tracking and error state  
 data_structures/ – Internal lists, stacks, and hashmaps  
-globals/ – Shell-wide constants and signal flag
+globals/ – Shell-wide constants and signal and debug flags
 
 ## Design Philosophy
 
