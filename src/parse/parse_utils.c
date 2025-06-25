@@ -64,6 +64,7 @@ t_ast_node	*test_parse(t_state *s, t_parser *parser)
 {
 	t_ast_node	*ast;
 
+	ast = NULL;
 	while (!is_at_end(parser) && !parser->parse_error)
 		ast = parse_full_cmd(s, parser);
 	parser->ast = ast;

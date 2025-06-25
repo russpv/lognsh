@@ -2,6 +2,7 @@
 # define DEBUG_H
 
 # include "../../include/ansi_colors.h"
+# include "../globals/globals.h"
 # include <assert.h>
 # include <stdarg.h>
 # include <stdbool.h>

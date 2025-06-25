@@ -1,15 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 15:52:37 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/03 15:52:37 by dayeo            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 #include "../include/libft.h"
+
 /* STRNCMP
 ** Returns diff betw values of the first pair of differing bytes
 ** (as unsigned char) of s1 - s2, comparing no more than n bytes

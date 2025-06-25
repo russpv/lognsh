@@ -7,6 +7,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <stddef.h>
+# include <errno.h>
 
 typedef struct s_mem_node
 {
@@ -62,6 +63,8 @@ typedef unsigned long	long(t_uintptr_t); /* 64-bit ptr */
 # define SUBBLOCKSZ 8
 # define PTRSZ 8 /* 8-byte ptr */
 # define ULSZ 4
+
+# define MAX_DIGITS 100 // For itoa_mem()
 
 /*
  * Extras / TODO

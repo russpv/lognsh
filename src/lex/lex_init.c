@@ -168,6 +168,7 @@ static inline int	_insert_builtins(t_mem_mgr *m, t_ht_utils *u)
 		BI_ENV,
 		BI_EXIT,
 		BI_EXEC,
+		BI_SET,
 	};
 
 	i = -1;

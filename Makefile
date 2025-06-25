@@ -25,8 +25,8 @@ TEST_OBJDIR = $(OBJDIR)/test_mode
 
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -DLOGMODE -DDEBUGMODE -DDEBUGVMODE #-O2 -g -DLOGMODE -DDEBUGMODE -DDEBUGVMODE # -fsanitize=address
-TEST_CFLAGS = -Wall -Wextra -Werror -g #-DTESTMODE  # -Werror -Wextra
+CFLAGS = -Wall -Wextra -Werror -O2 # -g -DLOGMODE -DDEBUGMODE -DDEBUGVMODE -fsanitize=address
+TEST_CFLAGS = -Wall -Wextra -Werror -g # -DTESTMODE
 EXT_CFLAGS = -DEXTENDEDFUNC
 LDFLAGS = -L$(LIB_DIR) -lft -lreadline -lncurses # -fsanitize=address
 LDFLAGS_SO = -L$(LIB_DIR) -lft -Wl,-rpath,$(LIB_DIR) -lreadline -lncurses
@@ -54,8 +54,6 @@ LIB_PATH_SO = $(LIB_DIR)/$(LIB_NAME_SO)
 #  DO NOT EDIT BELOW
 # ----------------------------------------------------------------
 
-# BONUS_SOURCES = $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
-# BONUS_OBJECTS = $(addprefix $(OBJDIR), $(BONUS_SOURCES:.c=.o))
 TEST_SOURCES = $(shell find $(TESTDIR) -maxdepth 1 -type f -name '*.$(SRCEXT)')
 TEST_OBJECTS = $(patsubst $(TESTDIR)/%,$(OBJDIR)/test/%,$(TEST_SOURCES:.c=.o))
 SOURCES = $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)" ! -name "test_*.$(SRCEXT)")

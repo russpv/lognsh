@@ -6,9 +6,10 @@ A minimal interactive Unix shell implemented in C. Designed for login use, not s
 ## ✅ Feature Summary
 🔸 Tokenization, expansion, and parsing with explicit internal structure  
 🔸 Pipes (`|`), redirections (`>`, `<`, `>>`), wildcards, logicals (`&&`, `||`), subs (`()`)  
-🔸 Built-in commands (`cd`, `exit`, `export`, `unset`, `pwd`, `echo`, `env`)  
+🔸 Built-in commands (`cd`, `exit`, `export`, `unset`, `pwd`, `echo`, `env`, `set`)  
 🔸 Signal handling (`CTRL+C`, heredocs, process kill safety)  
 🔸 Fully memory-managed with internal memory tracking  
+🔸 Toggle-able log, debug, verbose debug modes  
 ❌ No job control (`fg`, `&`, `CTRL+Z`, backgrounding)  
 ❌ No scripting / `if`, `for`, or functions
 
@@ -34,14 +35,16 @@ hello
 ## 🚀 Quick Start
 
 ```bash
-make
-./lognsh
+# git clone https://github.com/russpv/lognsh.git <directory>
+make      # make tst
+./lognsh  # ./tester   <-- inspect end-to-end tests (has also been fuzzed)
 ```
 
 Ctrl + D to exit. Try:
 ```
-ls | grep .c > out.txt
+ls | grep *lib > out.txt && (echo "Done, $USER.")
 cat < out.txt
+set debug
 ```
 
 ---
@@ -56,7 +59,7 @@ execute/ – Process and pipe execution
 builtins/ – Internal shell commands  
 state/, mem/ – Memory tracking and error state  
 data_structures/ – Internal lists, stacks, and hashmaps  
-globals/ – Shell-wide constants and signal flag
+globals/ – Shell-wide constants and signal and debug flags
 
 ## Design Philosophy
 
@@ -75,5 +78,5 @@ MIT License – see [LICENSE](LICENSE.md) for details.
 
 ---
 
-> I didn’t write this to replace Bash. I wrote it to understand what a shell really is and to have something I could trust and debug fully. `lognsh` doesn't support scripting or job control. But it’s solid, minimal, and... mine!
+> I wrote this to understand what a shell really is and to have something I could trust and debug fully. `lognsh` doesn't support scripting or job control. But it’s solid, minimal, and... mine!
 
