@@ -9,6 +9,12 @@
 # define EMSG_ARGC "No args for you! (Not implemented)"
 # define EMSG_INVLD "invalid state or arguments\n"
 
+# define LOGON "log"
+# define LOGOFF "logoff"
+# define DEBUGHI "vdebug"
+# define DEBUGON "debug"
+# define DEBUGOFF "debugoff"
+
 int		bi_echo(t_state *s, char **args, int argc);
 int		bi_pwd(t_state *s, char **args, int argc);
 int		bi_env(t_state *s, char **argv, int argc);
@@ -17,6 +23,7 @@ int		bi_unset(t_state *s, char **argv, int argc);
 int		bi_cd(t_state *s, char **args, int argc);
 int		bi_exit(t_state *s, char **args, int argc);
 int		bi_exec(t_state *s, char **args, int argc);
+int		bi_set(t_state *s, char **argv, int argc);
 
 int		process_arg_update_add(t_state *s, const char *arg, char *equal_pos,
 			int *error_occurred);

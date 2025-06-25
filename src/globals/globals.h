@@ -3,8 +3,8 @@
 
 # include <signal.h>
 
-# define SHELL_NAME "minish"
-# define DFL_PROMPT "\001\033[32m\002minish> \001\033[0m\002"
+# define SHELL_NAME "lognsh"
+# define DFL_PROMPT "\001\033[32m\002" SHELL_NAME "> " "\001\033[0m\002"
 # define HDOC_PROMPT "> "
 
 // Used in cd, test mode argv,
@@ -17,6 +17,17 @@
 # define MAX_INT_BUFLEN 1024 // token raw len
 # define IFS " \t\n"
 
+typedef enum {
+	DEBUG_OFF = 0,
+	DEBUG_LOG = 1, // logging
+	DEBUG_ONE = 2, // debug
+	DEBUG_VER = 3, // verbose
+	DEBUG_VVR = 4  // very verbose
+} e_dbg_lvl; 
+
 extern volatile sig_atomic_t	g_last_signal;
+
+void set_debug_level(e_dbg_lvl lvl);
+e_dbg_lvl get_debug_level(void);
 
 #endif

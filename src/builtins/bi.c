@@ -22,6 +22,8 @@ t_builtin_fn	get_builtin(char *command)
 			return (&bi_unset);
 		if (ft_strcmp(command, BI_EXPORT) == 0)
 			return (&bi_export);
+		if (ft_strcmp(command, BI_SET) == 0)
+			return (&bi_set);
 	}
 	dprint(_MOD_ ": %s found nothing\n", __FUNCTION__);
 	return (NULL);

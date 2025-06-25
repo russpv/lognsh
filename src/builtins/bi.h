@@ -14,6 +14,7 @@
 # define BI_ENV "env"
 # define BI_EXIT "exit"
 # define BI_EXEC "exec"
+# define BI_SET "set"
 # define BI_COUNT 8
 
 /* Forwards */

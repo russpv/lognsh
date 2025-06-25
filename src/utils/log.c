@@ -28,7 +28,7 @@ void	log_command_info(t_cmd *c, t_ast_node *a)
 {
 	int	i;
 
-	if (LOGGING)
+	if (get_debug_level() >= DEBUG_LOG || LOGGING)
 	{
 		if (p_get_cmd(a))
 			cprintf(YELLOW, "\tExecuting command: %s\n", p_get_cmd(a));
@@ -54,7 +54,7 @@ void	lgprint(const char *s, ...)
 {
 	va_list	args;
 
-	if (LOGGING && isatty(STDERR_FILENO))
+	if ((get_debug_level() >= DEBUG_LOG || LOGGING) && isatty(STDERR_FILENO))
 	{
 		va_start(args, s);
 		fprintf(stderr, CYAN "[LOG] ");
@@ -69,7 +69,7 @@ void	cprintf(const char *color, const char *format, ...)
 {
 	va_list	args;
 
-	if (LOGGING && isatty(STDERR_FILENO))
+	if ((get_debug_level() >= DEBUG_LOG || LOGGING) && isatty(STDERR_FILENO))
 	{
 		va_start(args, format);
 		fprintf(stderr, "%s", color);
@@ -82,7 +82,7 @@ void	cprintf(const char *color, const char *format, ...)
 
 void	err(const char *s)
 {
-	if (LOGGING)
+	if (get_debug_level() >= DEBUG_LOG || LOGGING)
 		fprintf(stderr, RED "%s" RESET, s);
 	else
 		(void)s;
