@@ -1,5 +1,5 @@
 #include "../include/libft.h"
-#include <stdio.h> 
+
 /* STRJOIN
 ** Returns a new C-string of s1 and s2
 ** concatenation.

@@ -1,9 +1,5 @@
 #include "../include/libft.h"
 
-#define WIDTH 16
-#define PRINT 1
-#define CONVERT 0
-
 /* PRINT MEMORY
 ** This displays memory metadata for void *addr argument:
 ** address (hex) of first location
