@@ -37,6 +37,7 @@ static int	_do_log_commands(t_state *s, t_list *cmds, t_cmd *c)
 	int				i;
 
 	i = -1;
+	exit_status = 1;
 	while (cmds && ++i < c->curr_cmdc)
 	{
 		a = (t_ast_node *)cmds->content;
