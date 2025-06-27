@@ -1,16 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strcmp_casefold.c                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 15:51:02 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/03 15:51:03 by dayeo            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 #include "../include/libft.h"
-#include <stdio.h>
 
 /* Places upper case after lower case */
 int	ft_strcmp_casefold(const char *s1, const char *s2)

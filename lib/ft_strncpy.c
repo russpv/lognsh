@@ -1,15 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strncpy.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 15:52:43 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/03 15:52:44 by dayeo            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 #include "../include/libft.h"
+
 /* STRNCPY
 ** This copies src into dest up to n places; assumes space for null
 ** inefficient in that it writes to every dest byte

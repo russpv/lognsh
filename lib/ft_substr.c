@@ -1,15 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dayeo <dayeo@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 15:53:50 by dayeo             #+#    #+#             */
-/*   Updated: 2025/04/03 15:53:50 by dayeo            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 #include "../include/libft.h"
+
 /* SUBSTR
 ** Returns heap C-string of part of s beginning at start
 ** for maximum of len (or len(s - start))
