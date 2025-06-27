@@ -9,7 +9,7 @@ A minimal interactive Unix shell implemented in C. Designed for login use, not s
 🔸 Built-in commands (`cd`, `exit`, `export`, `unset`, `pwd`, `echo`, `env`, `set`)  
 🔸 Signal handling (`CTRL+C`, heredocs, process kill safety)  
 🔸 Fully memory-managed with internal memory tracking  
-🔸 Toggle-able log, debug, verbose debug modes
+🔸 Toggle-able log, debug, verbose debug modes  
 ❌ No job control (`fg`, `&`, `CTRL+Z`, backgrounding)  
 ❌ No scripting / `if`, `for`, or functions
 
