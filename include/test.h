@@ -6,7 +6,7 @@
 # include "../external/unity/unity_fixture_internals.h"
 # include "../external/unity/unity_internals.h"
 # include "ansi_colors.h"
-# include "minishell.h"
+# include "shell.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>

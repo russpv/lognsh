@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "shell.h"
 
 static void	_do_test(t_state *s)
 {

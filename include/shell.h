@@ -1,5 +1,5 @@
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef SHELL_H
+# define SHELL_H
 
 # include "../src/signal/signal.h"
 # include "../src/state/state.h" 
