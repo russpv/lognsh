@@ -51,15 +51,15 @@ set debug
 
 ## 🏗️ Architecture
 
-lex/ – Tokenization and lexical analysis  
-token/ – Token ADT: groups, quoting, and expansion methods  
-parse/ – Building command trees, handling redirections and heredocs  
-command/ - Building commands and orchestration  
-execute/ – Process and pipe execution  
-builtins/ – Internal shell commands  
-state/, mem/ – Memory tracking and error state  
-data_structures/ – Internal lists, stacks, and hashmaps  
-globals/ – Shell-wide constants and signal and debug flags
+`lex/` – Tokenization and lexical analysis  
+`token/` – Token ADT: groups, quoting, and expansion methods  
+`parse/` – Building command trees, handling redirections and heredocs  
+`command/` - Building commands and orchestration  
+`execute/` – Process and pipe execution  
+`builtins/` – Internal shell commands  
+`state/, mem/` – Memory tracking and error state  
+`data_structures/` – Internal lists, stacks, and hashmaps  
+`globals/` – Shell-wide constants and signal and debug flags
 
 ## Design Philosophy
 
