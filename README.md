@@ -1,6 +1,6 @@
 # Lognsh
 
-A minimal interactive Unix shell implemented in C from scratch besides GNU readline. Designed for login use, not scripting.
+A minimal interactive Unix shell implemented in C from scratch on top of GNU `readline`.
 
 
 ## ✅ Feature Summary
@@ -64,9 +64,9 @@ set debug
 ## Design Philosophy
 
 - **Explicit control over state.** No global parser state. Memory is allocated and freed with discipline.
-- **Modular structure.** Each subsystem lives in its own First-class ADT module 
-- **Good enough is enough.** The shell rejects Bash's more obscure or magical behaviors (e.g. quote-newline continuation)
-- **Readable C.** Avoided cleverness. Emphasized separation of concerns and traceable behavior.
+- **Modular structure.** Each subsystem lives in its own First-class ADT module.
+- **DOTADIW.** The shell rejects Bash's more obscure or magical behaviors (e.g. quote-newline continuation).
+- **Readable C.** Emphasis on separation of concerns and traceable behavior.
 
 ## 📄 License
 
@@ -78,5 +78,5 @@ MIT License – see [LICENSE](LICENSE.md) for details.
 
 ---
 
-> I wrote this to understand what a shell really is and to have something I could trust and debug fully. `lognsh` doesn't support scripting or job control. But it’s solid, minimal, and... mine!
+> Programs are too bloated today. Here's a simple shell with just enough to get things done. You're welcome.
 
