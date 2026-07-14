@@ -3,7 +3,7 @@
 A minimal interactive Unix shell implemented in C from scratch on top of GNU `readline`.
 
 
-## ✅ Feature Summary
+## Feature Summary
 🔸 Tokenization, expansion, and parsing with explicit internal structure  
 🔸 Pipes (`|`), redirections (`>`, `<`, `>>`), wildcards, logicals (`&&`, `||`), subs (`()`)  
 🔸 Built-in commands (`cd`, `exit`, `export`, `unset`, `pwd`, `echo`, `env`, `set`)  
@@ -13,7 +13,7 @@ A minimal interactive Unix shell implemented in C from scratch on top of GNU `re
 ❌ No job control (`fg`, `&`, `CTRL+Z`, backgrounding)  
 ❌ No scripting / `if`, `for`, or functions
 
-## ⚡ Performance 
+## Performance 
 
 Snapshot: `lognsh` is optimized for fast startup and execution. It consistently matches bash in cold and warm runs:
 
@@ -27,12 +27,12 @@ hello
 ./lognsh "echo hello"  0.00s user 0.00s system 72% cpu 0.003 total
 ```
 
-- 🧠 Heap allocations are freed in bulk between commands to reduce fragmentation and malloc churn.
-- 🧪 Tokenization and expansion are stable even under large, deeply quoted command lines.
-- 🐚 Shell startup completes in <1ms on modern systems, with <2MB memory footprint.
-- 🧵 Pipes and redirections are processed with minimal setup overhead, deferring to OS scheduling.
+- Heap allocations are freed in bulk between commands to reduce fragmentation and malloc churn.
+- Tokenization and expansion are stable even under large, deeply quoted command lines.
+- Shell startup completes in <1ms on modern systems, with <2MB memory footprint.
+- Pipes and redirections are processed with minimal setup overhead, deferring to OS scheduling.
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # git clone https://github.com/russpv/lognsh.git <directory>
@@ -49,7 +49,7 @@ set debug
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 `lex/` – Tokenization and lexical analysis  
 `token/` – Token ADT: groups, quoting, and expansion methods  
@@ -68,7 +68,7 @@ set debug
 - **DOTADIW.** The shell rejects Bash's more obscure or magical behaviors (e.g. quote-newline continuation).
 - **Readable C.** Emphasis on separation of concerns and traceable behavior.
 
-## 📄 License
+## License
 
 MIT License – see [LICENSE](LICENSE.md) for details.
 
